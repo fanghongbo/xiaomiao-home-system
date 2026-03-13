@@ -236,18 +236,6 @@ func (u *roleRepo) DeleteRole(ctx context.Context, req *v1.DeleteRoleRequest) (*
 		return nil, err
 	}
 
-	// 删除角色用户关系
-	if err := u.DeleteRoleUsers(tx, req.Id); err != nil {
-		tx.Rollback()
-		return nil, err
-	}
-
-	// 删除角色组关系
-	if err := u.DeleteRoleGroups(tx, req.Id); err != nil {
-		tx.Rollback()
-		return nil, err
-	}
-
 	if err := tx.Commit().Error; err != nil {
 		tx.Rollback()
 		return nil, err
@@ -315,7 +303,7 @@ func (u *roleRepo) CreateRolePermissions(tx *gorm.DB, roleId int64, permissions 
 		return nil
 	}
 
-	return tx.Model(&RolePermissionRelation{}).Create(rolePermissions).Error
+	return tx.Model(&RolePermission{}).Create(rolePermissions).Error
 }
 
 // UpdateRolePermissions 更新角色权限
@@ -359,7 +347,7 @@ func (u *roleRepo) UpdateRolePermissions(tx *gorm.DB, roleId int64, permissions 
 		return nil
 	}
 
-	return tx.Model(&RolePermissionRelation{}).Create(rolePermissions).Error
+	return tx.Model(&RolePermission{}).Create(rolePermissions).Error
 }
 
 // DeleteRolePermissions 删除角色权限
@@ -373,14 +361,14 @@ func (u *roleRepo) DeleteRolePermissions(tx *gorm.DB, roleId int64) error {
 		"deleted_time": time.Now(),
 	}
 
-	return tx.Model(&RolePermissionRelation{}).Where("role_id = ?", roleId).Where("deleted_flag = ?", 0).Updates(roleUpdates).Error
+	return tx.Model(&RolePermission{}).Where("role_id = ?", roleId).Where("deleted_flag = ?", 0).Updates(roleUpdates).Error
 }
 
 // GetRolePermissionsCodes 获取角色权限代码列表
 func (u *roleRepo) GetRolePermissionsCodes(roleId int64) ([]string, error) {
 	var permissions []string
 
-	if err := u.data.db.Model(&RolePermissionRelation{}).Where("role_id = ?", roleId).Where("deleted_flag = ?", 0).Pluck("permission_code", &permissions).Error; err != nil {
+	if err := u.data.db.Model(&RolePermission{}).Where("role_id = ?", roleId).Where("deleted_flag = ?", 0).Pluck("permission_code", &permissions).Error; err != nil {
 		return nil, err
 	}
 
@@ -426,28 +414,4 @@ func (u *roleRepo) GetRoles(ctx context.Context, req *v1.GetRolesRequest) (*v1.G
 		Code: 200, Success: true,
 		Data: roles,
 	}, nil
-}
-
-// DeleteRoleUsers 删除角色用户关系
-func (u *roleRepo) DeleteRoleUsers(tx *gorm.DB, roleId int64) error {
-	if roleId == 0 {
-		return fmt.Errorf("role id is required")
-	}
-
-	return tx.Model(&UserRoleRelation{}).Where("role_id = ?", roleId).Where("deleted_flag = ?", 0).Updates(map[string]interface{}{
-		"deleted_flag": 1,
-		"deleted_time": time.Now(),
-	}).Error
-}
-
-// DeleteRoleGroups 删除角色组关系
-func (u *roleRepo) DeleteRoleGroups(tx *gorm.DB, roleId int64) error {
-	if roleId == 0 {
-		return fmt.Errorf("role id is required")
-	}
-
-	return tx.Model(&UserGroupRoleRelation{}).Where("role_id = ?", roleId).Where("deleted_flag = ?", 0).Updates(map[string]interface{}{
-		"deleted_flag": 1,
-		"deleted_time": time.Now(),
-	}).Error
 }

@@ -126,6 +126,11 @@ func NewData(dbConfig *conf.Data, config *conf.Config, static *conf.Static, logg
 		log:      log,
 	}
 
+	if err := InitData(d); err != nil {
+		log.Errorf("failed to init data: %v", err)
+		return nil, nil, err
+	}
+
 	return d, func() {
 		log.Info("message", "closing the data resources")
 

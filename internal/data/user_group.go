@@ -89,11 +89,6 @@ func (u *userGroupRepo) GetUserGroupList(ctx context.Context, req *v1.GetUserGro
 			return nil, err
 		}
 
-		roles, err := u.GetUserGroupRolesRelation(id)
-		if err != nil {
-			return nil, err
-		}
-
 		users, err := u.GetUserGroupUsersRelation(id)
 		if err != nil {
 			return nil, err
@@ -104,7 +99,6 @@ func (u *userGroupRepo) GetUserGroupList(ctx context.Context, req *v1.GetUserGro
 			GroupName:   groupName,
 			Status:      int32(status),
 			Remark:      remark,
-			Roles:       roles,
 			Users:       users,
 			UserCount:   int64(len(users)),
 			CreatedTime: createdTime.Format("2006-01-02 15:04:05"),
@@ -155,11 +149,6 @@ func (u *userGroupRepo) CreateUserGroup(ctx context.Context, req *v1.CreateUserG
 		return nil, err
 	}
 
-	if err := u.CreateUserGroupRolesRelation(tx, int64(id), req.Roles); err != nil {
-		tx.Rollback()
-		return nil, err
-	}
-
 	if err := u.CreateUserGroupUsersRelation(tx, int64(id), req.Users); err != nil {
 		tx.Rollback()
 		return nil, err
@@ -204,11 +193,6 @@ func (u *userGroupRepo) UpdateUserGroup(ctx context.Context, req *v1.UpdateUserG
 		return nil, err
 	}
 
-	if err := u.UpdateUserGroupRolesRelation(tx, req.Id, req.Roles); err != nil {
-		tx.Rollback()
-		return nil, err
-	}
-
 	if err := u.UpdateUserGroupUsersRelation(tx, req.Id, req.Users); err != nil {
 		tx.Rollback()
 		return nil, err
@@ -241,11 +225,6 @@ func (u *userGroupRepo) DeleteUserGroup(ctx context.Context, req *v1.DeleteUserG
 	if result.Error != nil {
 		tx.Rollback()
 		return nil, result.Error
-	}
-
-	if err := u.DeleteUserGroupRolesRelation(tx, req.Id); err != nil {
-		tx.Rollback()
-		return nil, err
 	}
 
 	if err := u.DeleteUserGroupUsersRelation(tx, req.Id); err != nil {
@@ -318,40 +297,6 @@ func (u *userGroupRepo) GetUserGroups(ctx context.Context, req *v1.GetUserGroups
 	}, nil
 }
 
-// CreateUserGroupRolesRelation 创建用户组角色关系
-func (u *userGroupRepo) CreateUserGroupRolesRelation(tx *gorm.DB, groupId int64, roles []int64) error {
-	if groupId == 0 {
-		return fmt.Errorf("group id is required")
-	}
-
-	if len(roles) == 0 {
-		return nil
-	}
-
-	userGroupRoles := make([]map[string]interface{}, 0)
-
-	for _, role := range roles {
-		relationId, err := u.data.gid.NextID()
-		if err != nil {
-			return err
-		}
-
-		userGroupRoles = append(userGroupRoles, map[string]interface{}{
-			"id":           int64(relationId),
-			"group_id":     groupId,
-			"role_id":      role,
-			"created_time": time.Now(),
-			"updated_time": time.Now(),
-		})
-	}
-
-	if len(userGroupRoles) == 0 {
-		return nil
-	}
-
-	return tx.Model(&UserGroupRoleRelation{}).Create(userGroupRoles).Error
-}
-
 // CreateUserGroupUsersRelation 创建用户组用户关系
 func (u *userGroupRepo) CreateUserGroupUsersRelation(tx *gorm.DB, groupId int64, users []int64) error {
 	if groupId == 0 {
@@ -383,19 +328,7 @@ func (u *userGroupRepo) CreateUserGroupUsersRelation(tx *gorm.DB, groupId int64,
 		return nil
 	}
 
-	return tx.Model(&UserUserGroupRelation{}).Create(userGroupUsers).Error
-}
-
-// DeleteUserGroupRolesRelation 删除用户组角色关系
-func (u *userGroupRepo) DeleteUserGroupRolesRelation(tx *gorm.DB, groupId int64) error {
-	if groupId == 0 {
-		return fmt.Errorf("group id is required")
-	}
-
-	return tx.Model(&UserGroupRoleRelation{}).Where("group_id = ?", groupId).Where("deleted_flag = ?", 0).Updates(map[string]interface{}{
-		"deleted_flag": 1,
-		"deleted_time": time.Now(),
-	}).Error
+	return tx.Model(&UserGroupUsers{}).Create(userGroupUsers).Error
 }
 
 // DeleteUserGroupUsersRelation 删除用户组用户关系
@@ -404,27 +337,10 @@ func (u *userGroupRepo) DeleteUserGroupUsersRelation(tx *gorm.DB, groupId int64)
 		return fmt.Errorf("group id is required")
 	}
 
-	return tx.Model(&UserUserGroupRelation{}).Where("group_id = ?", groupId).Where("deleted_flag = ?", 0).Updates(map[string]interface{}{
+	return tx.Model(&UserGroupUsers{}).Where("group_id = ?", groupId).Where("deleted_flag = ?", 0).Updates(map[string]interface{}{
 		"deleted_flag": 1,
 		"deleted_time": time.Now(),
 	}).Error
-}
-
-// UpdateUserGroupRolesRelation 更新用户组角色关系
-func (u *userGroupRepo) UpdateUserGroupRolesRelation(tx *gorm.DB, groupId int64, roles []int64) error {
-	if groupId == 0 {
-		return fmt.Errorf("group id is required")
-	}
-
-	if err := u.DeleteUserGroupRolesRelation(tx, groupId); err != nil {
-		return err
-	}
-
-	if err := u.CreateUserGroupRolesRelation(tx, groupId, roles); err != nil {
-		return err
-	}
-
-	return nil
 }
 
 // UpdateUserGroupUsersRelation 更新用户组用户关系
@@ -444,21 +360,6 @@ func (u *userGroupRepo) UpdateUserGroupUsersRelation(tx *gorm.DB, groupId int64,
 	return nil
 }
 
-// GetUserGroupRolesRelation 获取用户组角色关系
-func (u *userGroupRepo) GetUserGroupRolesRelation(groupId int64) ([]int64, error) {
-	if groupId == 0 {
-		return nil, fmt.Errorf("group id is required")
-	}
-
-	var roles []int64
-
-	if err := u.data.db.Model(&UserGroupRoleRelation{}).Where("group_id = ?", groupId).Where("deleted_flag = ?", 0).Pluck("role_id", &roles).Error; err != nil {
-		return nil, err
-	}
-
-	return roles, nil
-}
-
 // GetUserGroupUsersRelation 获取用户组用户关系
 func (u *userGroupRepo) GetUserGroupUsersRelation(groupId int64) ([]int64, error) {
 	if groupId == 0 {
@@ -467,7 +368,7 @@ func (u *userGroupRepo) GetUserGroupUsersRelation(groupId int64) ([]int64, error
 
 	var users []int64
 
-	if err := u.data.db.Model(&UserUserGroupRelation{}).Where("group_id = ?", groupId).Where("deleted_flag = ?", 0).Pluck("user_id", &users).Error; err != nil {
+	if err := u.data.db.Model(&UserGroupUsers{}).Where("group_id = ?", groupId).Where("deleted_flag = ?", 0).Pluck("user_id", &users).Error; err != nil {
 		return nil, err
 	}
 

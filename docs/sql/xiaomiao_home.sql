@@ -8,7 +8,7 @@ CREATE TABLE
 (
     id           bigint PRIMARY KEY COMMENT '用户id',
     username     varchar(64) NOT NULL COMMENT '用户名称',
-    display_name varchar(64) NOT NULL COMMENT '显示名称',
+    nickname     varchar(64) NOT NULL COMMENT '显示名称',
     password     varchar(255) COMMENT '密码',
     salt         varchar(32) COMMENT '密码加盐字段',
     telephone    varchar(32) COMMENT '手机号',
@@ -20,7 +20,7 @@ CREATE TABLE
     bio          varchar(255) COMMENT '个人简介',
     mfa_status   tinyint(1)  default 1 COMMENT 'mfa状态, 0-禁用, 1-启用',
     mfa_secret   varchar(255) COMMENT 'mfa加密密钥',
-    description  longtext COMMENT '描述',
+    remark  longtext COMMENT '描述',
     deleted_flag tinyint(1)                   DEFAULT 0 COMMENT '删除标记, 0: 未删除,  1: 已删除',
     created_user bigint NOT NULL COMMENT '创建用户',
     updated_user bigint NOT NULL COMMENT '更新用户',
@@ -42,7 +42,7 @@ CREATE TABLE
     id           bigint PRIMARY KEY COMMENT '角色id',
     name         varchar(64) NOT NULL COMMENT '角色名',
     status       tinyint(1)  default 0 COMMENT '角色状态, 0-禁用, 1-启用',
-    description  longtext COMMENT '描述',
+    remark  longtext COMMENT '描述',
     deleted_flag tinyint(1)                   DEFAULT 0 COMMENT '删除标记, 0: 未删除,  1: 已删除',
     created_user bigint NOT NULL COMMENT '创建用户',
     updated_user bigint NOT NULL COMMENT '更新用户',
@@ -63,7 +63,7 @@ CREATE TABLE
 (
     id           bigint PRIMARY KEY COMMENT '主键',
     group_name   VARCHAR(50) NOT NULL COMMENT '组名',
-    remark       VARCHAR(255) default '' COMMENT '备注',
+    remark  longtext COMMENT '描述',
     status       tinyint(1)    NOT NULL COMMENT '状态; 0 禁用 1 正常',
     created_user bigint NOT NULL COMMENT '创建用户',
     updated_user bigint NOT NULL COMMENT '更新用户',
@@ -81,7 +81,7 @@ CREATE TABLE
 
 -- 用户组角色关系表
 CREATE TABLE
-    IF NOT EXISTS t_user_group_roles
+    IF NOT EXISTS t_user_group_role_relation
 (
     id           bigint PRIMARY KEY COMMENT '主键',
     group_id   bigint NOT NULL COMMENT '用户组ID',
@@ -96,11 +96,11 @@ CREATE TABLE
 ) ENGINE = innodb
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci
-  ROW_FORMAT = DYNAMIC COMMENT ='用户组角色表';
+  ROW_FORMAT = DYNAMIC COMMENT ='用户组角色关系表';
 
--- 用户组用户关系关系表
+-- 用户组用户关系表
 CREATE TABLE
-    IF NOT EXISTS t_user_group_users
+    IF NOT EXISTS t_user_group_user_relation
 (
     id           bigint PRIMARY KEY COMMENT '主键',
     user_id   bigint NOT NULL COMMENT '用户ID',
@@ -145,14 +145,11 @@ CREATE TABLE
 (
     id           bigint PRIMARY KEY COMMENT '主键',
     user_id bigint NOT NULL COMMENT '用户ID',
-    notification_name varchar(100) NOT NULL COMMENT '通知名称',
-    notification_type   VARCHAR(100) NOT NULL COMMENT '通知类型',
+    name varchar(100) NOT NULL COMMENT '通知名称',
+    type   VARCHAR(100) NOT NULL COMMENT '通知类型',
     content longtext NOT NULL COMMENT '消息内容',
     status tinyint(1) NOT NULL COMMENT '状态; 0: 未读 1: 已读',
     read_time datetime DEFAULT NULL COMMENT '阅读时间',
-    created_user bigint NOT NULL COMMENT '创建用户',
-    updated_user bigint NOT NULL COMMENT '更新用户',
-    deleted_user bigint DEFAULT NULL COMMENT '删除用户',
     deleted_flag tinyint(1)           DEFAULT 0 COMMENT '删除标记; 0 未删除；1 已删除',
     created_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     updated_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -161,3 +158,43 @@ CREATE TABLE
     DEFAULT CHARSET = utf8mb4
     COLLATE = utf8mb4_unicode_ci
     ROW_FORMAT = DYNAMIC COMMENT ='消息通知表';
+
+-- 系统设置表
+CREATE TABLE
+    IF NOT EXISTS t_system_setting
+(
+    id           bigint PRIMARY KEY COMMENT '设置id',
+    name         varchar(64) NOT NULL COMMENT '设置名称',
+    value        varchar(255) DEFAULT NULL COMMENT '设置值',
+    remark  longtext COMMENT '描述',
+    deleted_flag tinyint(1)           DEFAULT 0 COMMENT '删除标记; 0 未删除；1 已删除',
+    created_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    deleted_time datetime             DEFAULT '1970-01-01 08:00:00' COMMENT '删除时间',
+    KEY idx_setting_name (name) USING BTREE,
+    UNIQUE KEY uk_setting_name (name, deleted_flag, deleted_time) USING BTREE
+) ENGINE = innodb
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci
+  ROW_FORMAT = DYNAMIC COMMENT ='系统设置表';
+
+-- 用户设置表
+CREATE TABLE
+    IF NOT EXISTS t_user_setting
+(
+    id           varchar(50) PRIMARY KEY COMMENT '设置id',
+    user_id      varchar(50) NOT NULL COMMENT '用户id',
+    name         varchar(64) NOT NULL COMMENT '设置名称',
+    value        varchar(255) DEFAULT NULL COMMENT '设置值',
+    remark  longtext COMMENT '描述',
+    deleted_flag tinyint(1)           DEFAULT 0 COMMENT '删除标记, 0: 未删除,  1: 已删除',
+    created_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    deleted_time datetime                     DEFAULT  '1970-01-01 08:00:00' COMMENT '删除时间',
+    KEY idx_setting_name (name) USING BTREE,
+    KEY idx_setting_user (user_id) USING BTREE,
+    UNIQUE KEY uk_setting_name (name, user_id, deleted_flag, deleted_time) USING BTREE
+) ENGINE = innodb
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci
+  ROW_FORMAT = DYNAMIC COMMENT ='用户设置表';
