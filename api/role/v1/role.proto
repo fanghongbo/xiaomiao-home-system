@@ -1,0 +1,162 @@
+syntax = "proto3";
+
+package api.role.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "xiaomiao-home-system/api/role/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.role.v1";
+option java_outer_classname = "RoleProtoV1";
+
+service Role {
+	// GetRoleList 查询用户组列表
+	rpc GetRoleList (GetRoleListRequest) returns (GetRoleListReply) {
+		option (google.api.http) = {
+			get: "/api/v1/role/list",
+		};
+	}
+
+	// CreateRole 创建用户组
+	rpc CreateRole (CreateRoleRequest) returns (CreateRoleReply) {
+		option (google.api.http) = {
+			post: "/api/v1/role",
+			body: "*"
+		};	
+	}
+
+	// UpdateUser 更新用户组
+	rpc UpdateRole (UpdateRoleRequest) returns (UpdateRoleReply) {
+		option (google.api.http) = {
+			put: "/api/v1/role/{id}",
+			body: "*"
+		};	
+	}
+
+	// DeleteRole 删除用户组
+	rpc DeleteRole (DeleteRoleRequest) returns (DeleteRoleReply) {
+		option (google.api.http) = {
+			delete: "/api/v1/role/{id}"
+		};	
+	}
+
+	// UpdateRoleStatus 更新用户组状态
+	rpc UpdateRoleStatus (UpdateRoleStatusRequest) returns (UpdateRoleStatusReply) {
+		option (google.api.http) = {
+			put: "/api/v1/role/status/{id}",
+			body: "*"
+		};	
+	}
+
+	// GetRoles 查询所有角色
+	rpc GetRoles (GetRolesRequest) returns (GetRolesReply) {
+		option (google.api.http) = {
+			get: "/api/v1/roles",
+		};	
+	}
+}
+
+// 基础请求体
+message BaseRequest {}
+
+// 基础响应体
+message BaseResponse {}
+
+message GetRoleListRequest {
+	string roleName = 1;
+	int64 page = 2 [(validate.rules).int64 = {gte: 1}];
+	int64 pageSize = 3 [(validate.rules).int64 = {gte: 10, lte: 200}];
+	string status = 4;
+	string remark = 5;
+	int64 startTime = 6;
+	int64 endTime = 7;
+}
+
+message RoleListItem {
+	int64 id = 1;
+	string roleName = 2;
+	int32 status = 3;
+	string remark = 4;
+	repeated string permissions = 5;
+	string createdTime = 6;
+	string updatedTime = 7;
+}
+
+message RoleList {
+	repeated RoleListItem items = 1;
+	int64 total = 2;
+}
+
+message GetRoleListReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	RoleList data = 4;
+}
+
+message CreateRoleRequest {
+	string roleName = 1 [(validate.rules).string = {min_len: 1}];
+	int32 status = 2;
+	string remark = 3;
+	repeated string permissions = 4;
+}
+
+message CreateRoleReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	string data = 4;
+}
+
+message UpdateRoleRequest {
+	int64 id = 1 [(validate.rules).int64 = {gt: 0}];
+	string roleName = 2 [(validate.rules).string = {min_len: 1}];
+	int32 status = 3;
+	string remark = 4;
+	repeated string permissions = 5;
+}
+
+message UpdateRoleReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	string data = 4;
+}
+
+message DeleteRoleRequest {
+	int64 id = 1 [(validate.rules).int64 = {gt: 0}];
+}
+
+message DeleteRoleReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	string data = 4;
+}
+
+message UpdateRoleStatusRequest {
+	int64 id = 1 [(validate.rules).int64 = {gt: 0}];
+	int32 status = 2;
+}
+
+message UpdateRoleStatusReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	string data = 4;
+}
+
+message GetRolesRequest {}
+
+message RoleItem {
+	int64 id = 1;
+	string name  = 2;
+}
+
+message GetRolesReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	repeated RoleItem data = 4;
+}

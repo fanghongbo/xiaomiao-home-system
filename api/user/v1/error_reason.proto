@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package user.v1;
+import "errors/errors.proto";
+
+option go_package = "xiaomiao-home-system/api/user/v1;v1";
+option java_multiple_files = true;
+option java_package = "user.v1";
+option objc_class_prefix = "APIUSERV1";
+
+enum ErrorReason {
+  option (errors.default_code) = 500;
+
+  ERR_BUILD_FORWARD_REQUEST = 0 [(errors.code) = 500];
+  ERR_FORWARD_REQUEST = 1 [(errors.code) = 500];
+  ERR_REQUEST_DAYU = 2 [(errors.code) = 500];
+  ERR_INVALID_SESSION = 3 [(errors.code) = 400];
+  ERR_INVALID_REQUEST = 4 [(errors.code) = 400];
+}

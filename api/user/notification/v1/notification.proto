@@ -1,0 +1,142 @@
+syntax = "proto3";
+
+package api.user.notification.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "xiaomiao-home-system/api/user/notification/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.user.notification.v1";
+option java_outer_classname = "UserNotificationProtoV1";
+
+service UserNotification {
+	// GetUserNotificationList 查询用户消息列表
+	rpc GetUserNotificationList (GetUserNotificationListRequest) returns (GetUserNotificationListReply) {
+		option (google.api.http) = {
+			get: "/api/v1/user/notification/list",
+		};
+	}
+
+	// DeleteUserNotification 删除用户消息
+	rpc DeleteUserNotification (DeleteUserNotificationRequest) returns (DeleteUserNotificationReply) {
+		option (google.api.http) = {
+			delete: "/api/v1/user/notification/{id}"
+		};	
+	}
+
+	// UpdateUserNotificationStatus 更新用户消息状态
+	rpc UpdateUserNotificationStatus (UpdateUserNotificationStatusRequest) returns (UpdateUserNotificationStatusReply) {
+		option (google.api.http) = {
+			put: "/api/v1/user/notification/status/{id}",
+			body: "*"
+		};	
+	}
+
+	// BatchUserNotifications 批量操作
+	rpc BatchUserNotifications (BatchUserNotificationsRequest) returns (BatchUserNotificationsReply) {
+		option (google.api.http) = {
+			post: "/api/v1/user/notification/batch",
+			body: "*"
+		};	
+	}
+
+	// UpdateUserAllNotificationStatus 更新所有消息已读
+	rpc UpdateUserAllNotificationStatus (UpdateUserAllNotificationStatusRequest) returns (UpdateUserAllNotificationStatusReply) {
+		option (google.api.http) = {
+			post: "/api/v1/user/notification",
+			body: "*"
+		};	
+	}
+}
+
+// 基础请求体
+message BaseRequest {}
+
+// 基础响应体
+message BaseResponse {}
+
+message GetUserNotificationListRequest {
+	string name = 1;
+	int64 page = 2 [(validate.rules).int64 = {gte: 1}];
+	int64 pageSize = 3 [(validate.rules).int64 = {gte: 10, lte: 200}];
+	string status = 4;
+	string content = 5;
+	int64 startTime = 6;
+	int64 endTime = 7;
+}
+
+message UserNotificationListItem {
+	int64 id = 1;
+	string notificationName = 2;
+	string notificationType = 3;
+	int32 status = 4;
+	string content = 5;
+	string createdTime = 6;
+	string updatedTime = 7;
+}
+
+message UserNotificationList {
+	repeated UserNotificationListItem items = 1;
+	int64 total = 2;
+}
+
+message GetUserNotificationListReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	UserNotificationList data = 4;
+}
+
+message DeleteUserNotificationRequest {
+	int64 id = 1 [(validate.rules).int64 = {gt: 0}];
+}
+
+message DeleteUserNotificationReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	string data = 4;
+}
+
+message UpdateUserNotificationStatusRequest {
+	int64 id = 1 [(validate.rules).int64 = {gt: 0}];
+	int32 status = 2;
+}
+
+message UpdateUserNotificationStatusReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	string data = 4;
+}
+
+message CreateUserNotificationRequest {
+	string notificationName = 1;
+	string notificationType = 2;
+	string content = 3;
+	int64 userId = 4;
+}
+
+message BatchUserNotificationsRequest {
+	repeated int64 items = 1 [(validate.rules).repeated = {min_items: 1, max_items: 100}];
+	string action = 2 [(validate.rules).string = {min_len: 1}];
+}
+
+message BatchUserNotificationsReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	string data = 4;
+}
+
+message UpdateUserAllNotificationStatusRequest {
+	int32 status = 1;
+}
+
+message UpdateUserAllNotificationStatusReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	string data = 4;
+}

@@ -1,0 +1,20 @@
+syntax = "proto3";
+package kratos.api;
+
+option go_package = "xiaomiao-home-system/internal/conf;conf";
+
+message Register {
+  Nacos nacos = 1;
+}
+
+message Nacos {
+  string addr = 1;
+  string namespace_id = 2;
+  string username = 3;
+  string password = 4;
+  string log_dir = 5;
+  string cache_dir = 6;
+  string log_level = 7;
+  string group = 8;
+  string data_id = 9;
+}

@@ -1,0 +1,23 @@
+server:
+  http:
+    addr: 0.0.0.0:8080
+    timeout: 1s
+  grpc:
+    addr: 0.0.0.0:9000
+    timeout: 1s
+data:
+  database:
+    driver: mysql
+    source: root:xxx@tcp(127.0.0.1:3306)/xiaomiao_home?parseTime=True&loc=Local
+    secret_key: 4297F44B13955235245B2497399D7A93
+  redis:
+    addr: 127.0.0.1:6379
+    password: xxx
+    db: 0
+    dial_timeout: 5s
+    read_timeout: 0.2s
+    write_timeout: 0.2s
+auth:
+  service_key: a112345
+static:
+  base_dir: d:/uploads/images/
