@@ -11,14 +11,11 @@ import (
 	"github.com/patrickmn/go-cache"
 )
 
-type authKey struct{}
-
 const (
 	// reason holds the error reason.
 	reason string = "UNAUTHORIZED"
 
 	userKey   string = "x-md-global-user"
-	dayuKey   string = "x-md-global-dayu-url"
 	cookieKey string = "x-md-global-cookie"
 )
 

@@ -148,56 +148,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.role.v1.GetRolesReply'
-    /api/v1/secret/key:
-        get:
-            tags:
-                - User
-            description: GetSecretKey 查询加密密钥
-            operationId: User_GetSecretKey
-            parameters:
-                - name: T
-                  in: query
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.user.v1.GetSecretKeyReply'
-    /api/v1/user:
-        post:
-            tags:
-                - User
-            description: CreateUser 创建用户
-            operationId: User_CreateUser
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.user.v1.CreateUserRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.user.v1.CreateUserReply'
-    /api/v1/user/getAuthMenuList:
-        get:
-            tags:
-                - User
-            description: GetAuthMenuList 查询菜单列表
-            operationId: User_GetAuthMenuList
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.user.v1.GetAuthMenuListReply'
     /api/v1/user/group:
         post:
             tags:
@@ -340,65 +290,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.user.group.v1.GetUserGroupsReply'
-    /api/v1/user/info:
-        get:
-            tags:
-                - User
-            description: GetLoginUserInfo 查询用户信息
-            operationId: User_GetLoginUserInfo
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.user.v1.GetLoginUserInfoReply'
-    /api/v1/user/list:
-        get:
-            tags:
-                - User
-            description: GetUserList 查询用户列表
-            operationId: User_GetUserList
-            parameters:
-                - name: username
-                  in: query
-                  schema:
-                    type: string
-                - name: page
-                  in: query
-                  schema:
-                    type: string
-                - name: pageSize
-                  in: query
-                  schema:
-                    type: string
-                - name: status
-                  in: query
-                  schema:
-                    type: string
-                - name: nickname
-                  in: query
-                  schema:
-                    type: string
-                - name: remark
-                  in: query
-                  schema:
-                    type: string
-                - name: startTime
-                  in: query
-                  schema:
-                    type: string
-                - name: endTime
-                  in: query
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.user.v1.GetUserListReply'
     /api/v1/user/login:
         post:
             tags:
@@ -418,25 +309,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.user.v1.LoginReply'
-    /api/v1/user/logout:
-        post:
-            tags:
-                - User
-            description: Logout 登出接口
-            operationId: User_Logout
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.user.v1.LogoutRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.user.v1.LogoutReply'
     /api/v1/user/notification:
         post:
             tags:
@@ -517,31 +389,12 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.user.notification.v1.GetUserNotificationListReply'
-    /api/v1/user/notification/status:
-        post:
-            tags:
-                - User
-            description: UpdateUserAllNotificationStatus 更新用户所有消息状态
-            operationId: User_UpdateUserAllNotificationStatus
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.user.v1.UpdateUserAllNotificationStatusRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.user.v1.UpdateUserAllNotificationStatusReply'
     /api/v1/user/notification/status/{id}:
         put:
             tags:
-                - User
+                - UserNotification
             description: UpdateUserNotificationStatus 更新用户消息状态
-            operationId: User_UpdateUserNotificationStatus
+            operationId: UserNotification_UpdateUserNotificationStatus
             parameters:
                 - name: id
                   in: path
@@ -552,7 +405,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.user.v1.UpdateUserNotificationStatusRequest'
+                            $ref: '#/components/schemas/api.user.notification.v1.UpdateUserNotificationStatusRequest'
                 required: true
             responses:
                 "200":
@@ -560,7 +413,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.user.v1.UpdateUserNotificationStatusReply'
+                                $ref: '#/components/schemas/api.user.notification.v1.UpdateUserNotificationStatusReply'
     /api/v1/user/notification/{id}:
         delete:
             tags:
@@ -580,105 +433,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.user.notification.v1.DeleteUserNotificationReply'
-    /api/v1/user/notifications:
-        get:
-            tags:
-                - User
-            description: GetUserNotifications 查询用户通知
-            operationId: User_GetUserNotifications
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.user.v1.GetUserNotificationsReply'
-    /api/v1/user/status/{id}:
-        put:
-            tags:
-                - User
-            description: UpdateUserStatus 更新用户状态
-            operationId: User_UpdateUserStatus
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.user.v1.UpdateUserStatusRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.user.v1.UpdateUserStatusReply'
-    /api/v1/user/{id}:
-        put:
-            tags:
-                - User
-            description: UpdateUser 更新用户
-            operationId: User_UpdateUser
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.user.v1.UpdateUserRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.user.v1.UpdateUserReply'
-        delete:
-            tags:
-                - User
-            description: DeleteUser 删除用户
-            operationId: User_DeleteUser
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.user.v1.DeleteUserReply'
-    /api/v1/users:
-        get:
-            tags:
-                - User
-            description: GetUsers 查询所有用户
-            operationId: User_GetUsers
-            parameters:
-                - name: name
-                  in: query
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.user.v1.GetUsersReply'
 components:
     schemas:
         api.role.v1.CreateRoleReply:
@@ -1101,145 +855,15 @@ components:
                     type: string
                 updatedTime:
                     type: string
-        api.user.v1.AuthMenuListItem:
+        api.user.v1.LoginInfo:
             type: object
             properties:
-                path:
+                mfa:
+                    $ref: '#/components/schemas/api.user.v1.UserMfaInfo'
+                token:
                     type: string
-                name:
+                loginValidPeriod:
                     type: string
-                title:
-                    type: string
-                order:
-                    type: string
-                children:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/api.user.v1.AuthMenuListItem'
-                showQueryData:
-                    type: boolean
-        api.user.v1.CreateUserReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                success:
-                    type: boolean
-                data:
-                    type: string
-        api.user.v1.CreateUserRequest:
-            type: object
-            properties:
-                username:
-                    type: string
-                nickname:
-                    type: string
-                status:
-                    type: integer
-                    format: int32
-                remark:
-                    type: string
-                roles:
-                    type: array
-                    items:
-                        type: string
-                groups:
-                    type: array
-                    items:
-                        type: string
-        api.user.v1.DeleteUserReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                success:
-                    type: boolean
-                data:
-                    type: string
-        api.user.v1.GetAuthMenuListReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                success:
-                    type: boolean
-                data:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/api.user.v1.AuthMenuListItem'
-        api.user.v1.GetLoginUserInfoReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                success:
-                    type: boolean
-                data:
-                    $ref: '#/components/schemas/api.user.v1.LoginUserInfo'
-        api.user.v1.GetSecretKeyReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                success:
-                    type: boolean
-                data:
-                    type: string
-        api.user.v1.GetUserListReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                success:
-                    type: boolean
-                data:
-                    $ref: '#/components/schemas/api.user.v1.UserList'
-        api.user.v1.GetUserNotificationsReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                success:
-                    type: boolean
-                data:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/api.user.v1.UserNotificationItem'
-        api.user.v1.GetUsersReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                success:
-                    type: boolean
-                data:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/api.user.v1.UserItem'
         api.user.v1.LoginReply:
             type: object
             properties:
@@ -1251,7 +875,7 @@ components:
                 success:
                     type: boolean
                 data:
-                    type: string
+                    $ref: '#/components/schemas/api.user.v1.LoginInfo'
         api.user.v1.LoginRequest:
             type: object
             properties:
@@ -1259,207 +883,14 @@ components:
                     type: string
                 password:
                     type: string
-                rememberMe:
-                    type: string
-        api.user.v1.LoginUserInfo:
-            type: object
-            properties:
-                id:
-                    type: string
-                name:
-                    type: string
-                username:
-                    type: string
-                authenticationType:
-                    type: string
-                realUsername:
-                    type: string
-                description:
-                    type: string
-                permissionLoadTime:
-                    type: string
-                resourceList:
-                    type: array
-                    items:
-                        type: string
-                roleResourceAcls:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/api.user.v1.RoleResourceAclItem'
-        api.user.v1.LogoutReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                success:
-                    type: boolean
-                data:
-                    type: string
-        api.user.v1.LogoutRequest:
-            type: object
-            properties: {}
-        api.user.v1.RoleResourceAclItem:
-            type: object
-            properties:
-                roleName:
-                    type: string
-                pattern:
-                    type: string
-                resourceCodes:
-                    type: string
-        api.user.v1.UpdateUserAllNotificationStatusReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                success:
-                    type: boolean
-                data:
-                    type: string
-        api.user.v1.UpdateUserAllNotificationStatusRequest:
-            type: object
-            properties:
-                status:
-                    type: integer
-                    format: int32
-        api.user.v1.UpdateUserNotificationStatusReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                success:
-                    type: boolean
-                data:
-                    type: string
-        api.user.v1.UpdateUserNotificationStatusRequest:
-            type: object
-            properties:
-                id:
-                    type: string
-                status:
-                    type: integer
-                    format: int32
-        api.user.v1.UpdateUserReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                success:
-                    type: boolean
-                data:
-                    type: string
-        api.user.v1.UpdateUserRequest:
-            type: object
-            properties:
-                id:
-                    type: string
-                username:
-                    type: string
-                nickname:
-                    type: string
-                status:
-                    type: integer
-                    format: int32
-                remark:
-                    type: string
-                roles:
-                    type: array
-                    items:
-                        type: string
-                groups:
-                    type: array
-                    items:
-                        type: string
-        api.user.v1.UpdateUserStatusReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                success:
-                    type: boolean
-                data:
-                    type: string
-        api.user.v1.UpdateUserStatusRequest:
-            type: object
-            properties:
-                id:
-                    type: string
-                status:
-                    type: integer
-                    format: int32
-        api.user.v1.UserItem:
-            type: object
-            properties:
-                id:
-                    type: string
-                username:
-                    type: string
-                nickname:
-                    type: string
-        api.user.v1.UserList:
-            type: object
-            properties:
-                items:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/api.user.v1.UserListItem'
-                total:
-                    type: string
-        api.user.v1.UserListItem:
-            type: object
-            properties:
-                id:
-                    type: string
-                username:
-                    type: string
-                nickname:
-                    type: string
-                status:
-                    type: integer
-                    format: int32
-                roles:
-                    type: array
-                    items:
-                        type: string
-                groups:
-                    type: array
-                    items:
-                        type: string
-                remark:
-                    type: string
-                createdTime:
-                    type: string
-                updatedTime:
-                    type: string
-        api.user.v1.UserNotificationItem:
-            type: object
-            properties:
-                id:
-                    type: string
-                title:
-                    type: string
-                avatar:
-                    type: string
                 type:
                     type: string
-                date:
+        api.user.v1.UserMfaInfo:
+            type: object
+            properties:
+                token:
                     type: string
-                message:
+                step:
                     type: string
 tags:
     - name: Role
