@@ -1,5 +1,7 @@
 package utils
 
+import "strconv"
+
 func RemoveDuplicate[T comparable](slice []T) []T {
 	keys := make(map[T]bool)
 	list := []T{}
@@ -19,4 +21,8 @@ func CheckExists[T comparable](slice []T, item T) bool {
 		}
 	}
 	return false
+}
+
+func StrToInt64(str string) (int64, error) {
+	return strconv.ParseInt(str, 10, 64)
 }

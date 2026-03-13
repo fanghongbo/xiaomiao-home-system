@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package api.system.setting.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "xiaomiao-home-system/api/system/setting/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.system.setting.v1";
+option java_outer_classname = "SystemSettingProtoV1";
+
+service SystemSetting {
+}
+
+// 基础请求体
+message BaseRequest {}
+
+// 基础响应体
+message BaseResponse {}
+
+message SystemSettingItem {
+	string name = 1;
+	string value = 2;
+}
+
+message SystemSettingInfo {
+	int64 id = 1;
+	string name = 2;
+	string value = 3;
+}
+
+message BaseSettingInfo {
+	string siteName = 1;
+	string siteUrl = 2;
+}
+
+message LoginSettingInfo {
+	int64 loginValidPeriod = 1;
+	int64 sessionIdlePeriod = 2;
+	int64 loginBanDuration = 3;
+	int64 invalidLoginCount = 4;
+}
+
+message SecuritySettingInfo {
+	bool mfaAuth = 1;
+	int64 mfaValidPeriod = 2;
+	int64 casValidPeriod = 3;
+}
