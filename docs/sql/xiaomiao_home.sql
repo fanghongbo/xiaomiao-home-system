@@ -9,22 +9,12 @@ CREATE TABLE
     id           bigint PRIMARY KEY COMMENT '用户id',
     username     varchar(64) NOT NULL COMMENT '用户名称',
     nickname     varchar(64) NOT NULL COMMENT '显示名称',
-    password     varchar(255) COMMENT '密码',
-    salt         varchar(32) COMMENT '密码加盐字段',
-    telephone    varchar(32) COMMENT '手机号',
-    email        varchar(30) COMMENT '邮件',
+    password     varchar(255) DEFAULT NULL COMMENT '密码',
+    salt         varchar(32) DEFAULT NULL COMMENT '密码加盐字段',
     status       tinyint(1)  default 0 COMMENT '账户状态, 0-禁用, 1-启用',
-    signature    varchar(64) COMMENT '个人签名',
     avatar       varchar(255) COMMENT '头像地址',
-    position     varchar(32) COMMENT '职位',
-    bio          varchar(255) COMMENT '个人简介',
-    mfa_status   tinyint(1)  default 1 COMMENT 'mfa状态, 0-禁用, 1-启用',
-    mfa_secret   varchar(255) COMMENT 'mfa加密密钥',
     remark  longtext COMMENT '描述',
     deleted_flag tinyint(1)                   DEFAULT 0 COMMENT '删除标记, 0: 未删除,  1: 已删除',
-    created_user bigint NOT NULL COMMENT '创建用户',
-    updated_user bigint NOT NULL COMMENT '更新用户',
-    deleted_user bigint DEFAULT NULL COMMENT '删除用户',
     created_time datetime    NOT NULL         DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     updated_time datetime    NOT NULL         DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     deleted_time datetime                     DEFAULT  '1970-01-01 08:00:00' COMMENT '删除时间',
@@ -35,6 +25,27 @@ CREATE TABLE
   COLLATE = utf8mb4_unicode_ci
   ROW_FORMAT = DYNAMIC COMMENT ='用户表';
 
+-- 用户身份表
+CREATE TABLE
+    IF NOT EXISTS t_user_identity
+(
+    id           bigint PRIMARY KEY COMMENT '用户身份id',
+    user_id      bigint NOT NULL COMMENT '用户id',
+    identity_type     varchar(32) NOT NULL COMMENT '身份类型 1:账号 2:手机号 3:微信 4:QQ 5:邮箱',
+    identity_id    varchar(32) NOT NULL COMMENT '身份id 账号:用户名 手机号:手机号 微信:openid QQ:openid 邮箱:email',
+    verified_flag  tinyint(1) DEFAULT 0 COMMENT '是否完成验证 0:未验证 1:已验证',
+    remark  longtext COMMENT '描述',
+    deleted_flag tinyint(1)                   DEFAULT 0 COMMENT '删除标记, 0: 未删除,  1: 已删除',
+    created_time datetime    NOT NULL         DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_time datetime    NOT NULL         DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    deleted_time datetime                     DEFAULT  '1970-01-01 08:00:00' COMMENT '删除时间',
+    KEY idx_user_id (user_id) USING BTREE,
+    UNIQUE KEY uk_user_id_identity_type_identity_id (user_id, identity_type, identity_id, deleted_flag, deleted_time) USING BTREE
+) ENGINE = innodb
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci
+  ROW_FORMAT = DYNAMIC COMMENT ='用户身份表';
+
 -- 角色表
 CREATE TABLE
     IF NOT EXISTS t_role
@@ -44,9 +55,6 @@ CREATE TABLE
     status       tinyint(1)  default 0 COMMENT '角色状态, 0-禁用, 1-启用',
     remark  longtext COMMENT '描述',
     deleted_flag tinyint(1)                   DEFAULT 0 COMMENT '删除标记, 0: 未删除,  1: 已删除',
-    created_user bigint NOT NULL COMMENT '创建用户',
-    updated_user bigint NOT NULL COMMENT '更新用户',
-    deleted_user bigint DEFAULT NULL COMMENT '删除用户',
     created_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     updated_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     deleted_time datetime             DEFAULT '1970-01-01 08:00:00' COMMENT '删除时间',
@@ -56,66 +64,6 @@ CREATE TABLE
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci
   ROW_FORMAT = DYNAMIC COMMENT ='角色表';
-
--- 用户组表
-CREATE TABLE
-    IF NOT EXISTS t_user_group
-(
-    id           bigint PRIMARY KEY COMMENT '主键',
-    group_name   VARCHAR(50) NOT NULL COMMENT '组名',
-    remark  longtext COMMENT '描述',
-    status       tinyint(1)    NOT NULL COMMENT '状态; 0 禁用 1 正常',
-    created_user bigint NOT NULL COMMENT '创建用户',
-    updated_user bigint NOT NULL COMMENT '更新用户',
-    deleted_user bigint DEFAULT NULL COMMENT '删除用户',
-    deleted_flag tinyint(1)           DEFAULT 0 COMMENT '删除标记; 0 未删除；1 已删除',
-    created_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    updated_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    deleted_time datetime             DEFAULT '1970-01-01 08:00:00' COMMENT '删除时间',
-    KEY idx_group_name (group_name) USING BTREE,
-    UNIQUE KEY uk_group_name (group_name, deleted_flag, deleted_time)
-) ENGINE = innodb
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_unicode_ci
-  ROW_FORMAT = DYNAMIC COMMENT ='用户组表';
-
--- 用户组角色关系表
-CREATE TABLE
-    IF NOT EXISTS t_user_group_role_relation
-(
-    id           bigint PRIMARY KEY COMMENT '主键',
-    group_id   bigint NOT NULL COMMENT '用户组ID',
-    role_id   bigint NOT NULL COMMENT '角色ID',
-    deleted_flag tinyint(1)           DEFAULT 0 COMMENT '删除标记; 0 未删除；1 已删除',
-    created_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    updated_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    deleted_time datetime             DEFAULT '1970-01-01 08:00:00' COMMENT '删除时间',
-    KEY idx_role_id (role_id) USING BTREE,
-    KEY idx_group_id (group_id) USING BTREE,
-    UNIQUE KEY uk_group_id_role_id (group_id, role_id, deleted_flag, deleted_time)
-) ENGINE = innodb
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_unicode_ci
-  ROW_FORMAT = DYNAMIC COMMENT ='用户组角色关系表';
-
--- 用户组用户关系表
-CREATE TABLE
-    IF NOT EXISTS t_user_group_user_relation
-(
-    id           bigint PRIMARY KEY COMMENT '主键',
-    user_id   bigint NOT NULL COMMENT '用户ID',
-    group_id   bigint NOT NULL COMMENT '用户组ID',
-    deleted_flag tinyint(1)           DEFAULT 0 COMMENT '删除标记; 0 未删除；1 已删除',
-    created_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    updated_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    deleted_time datetime             DEFAULT '1970-01-01 08:00:00' COMMENT '删除时间',
-    KEY idx_user_id (user_id) USING BTREE,
-    KEY idx_group_id (group_id) USING BTREE,
-    UNIQUE KEY uk_user_id_group_id (user_id, group_id, deleted_flag, deleted_time)
-) ENGINE = innodb
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_unicode_ci
-  ROW_FORMAT = DYNAMIC COMMENT ='用户组用户关系表';
 
 -- 角色权限表
 CREATE TABLE
@@ -182,7 +130,7 @@ CREATE TABLE
 CREATE TABLE
     IF NOT EXISTS t_user_setting
 (
-    id           varchar(50) PRIMARY KEY COMMENT '设置id',
+    id           bigint PRIMARY KEY COMMENT '设置id',
     user_id      varchar(50) NOT NULL COMMENT '用户id',
     name         varchar(64) NOT NULL COMMENT '设置名称',
     value        varchar(255) DEFAULT NULL COMMENT '设置值',
