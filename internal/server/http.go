@@ -3,7 +3,6 @@ package server
 import (
 	"context"
 	roleV1 "xiaomiao-home-system/api/role/v1"
-	usergroupV1 "xiaomiao-home-system/api/user/group/v1"
 	userNotificationV1 "xiaomiao-home-system/api/user/notification/v1"
 	userV1 "xiaomiao-home-system/api/user/v1"
 	"xiaomiao-home-system/internal/conf"
@@ -36,7 +35,7 @@ func NewWhiteListMatcher() selector.MatchFunc {
 }
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Server, config *conf.Config, user *service.UserService, usergroup *service.UserGroupService, role *service.RoleService, userNotification *service.UserNotificationService, logger log.Logger) *http.Server {
+func NewHTTPServer(c *conf.Server, config *conf.Config, user *service.UserService, role *service.RoleService, userNotification *service.UserNotificationService, logger log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
@@ -67,7 +66,6 @@ func NewHTTPServer(c *conf.Server, config *conf.Config, user *service.UserServic
 	srv := http.NewServer(opts...)
 
 	userV1.RegisterUserHTTPServer(srv, user)
-	usergroupV1.RegisterUserGroupHTTPServer(srv, usergroup)
 	roleV1.RegisterRoleHTTPServer(srv, role)
 	userNotificationV1.RegisterUserNotificationHTTPServer(srv, userNotification)
 

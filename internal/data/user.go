@@ -91,20 +91,12 @@ func (u *userRepo) GetUserByUsername(ctx context.Context, username string) (*v1.
 	}
 
 	return &v1.UserInfo{
-		Id:        user.Id,
-		Username:  user.Username,
-		Nickname:  user.Nickname,
-		Avatar:    user.Avatar,
-		Telephone: user.Telephone,
-		Position:  user.Position,
-		Email:     user.Email,
-		Bio:       user.Bio,
-		Signature: user.Signature,
-		MfaStatus: int64(user.MfaStatus),
-		Groups:    []*v1.GroupItem{},
-		Roles:     []*v1.RoleItem{},
-		Status:    int64(user.Status),
-		Remark:    user.Remark,
+		Id:       user.Id,
+		Username: user.Username,
+		Nickname: user.Nickname,
+		Avatar:   user.Avatar,
+		Roles:    []*v1.RoleItem{},
+		Status:   int64(user.Status),
 	}, nil
 }
 
@@ -124,7 +116,6 @@ func (u *userRepo) CheckLogin(ctx context.Context, login *v1.LoginRequest, maxIn
 	}
 
 	fmt.Println("ip =>", userIp)
-	fmt.Println(userInfo.Email)
 
 	return userInfo, nil
 }

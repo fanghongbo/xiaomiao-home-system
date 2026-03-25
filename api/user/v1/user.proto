@@ -50,11 +50,6 @@ message LoginReply {
 	LoginInfo data = 4;
 }
 
-message GroupItem {
-	int64 id = 1;
-	string name = 2;
-}
-
 message RoleItem {
 	int64 id = 1;
 	string name = 2;
@@ -65,15 +60,6 @@ message UserInfo  {
 	string username = 2;
 	string nickname = 3; 
 	string avatar = 4;
-	string salt = 5;
-	string telephone = 6;
-	string position = 7;
-	string email = 8;
-	string bio = 9;
-	string signature = 10;
-	int64 mfaStatus = 11;
-	repeated GroupItem groups = 12;
-	repeated RoleItem roles = 13;
-	int64 status = 14;
-	string remark = 15;
+	repeated RoleItem roles = 5;
+	int64 status = 6;
 }

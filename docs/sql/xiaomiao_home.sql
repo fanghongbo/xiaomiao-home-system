@@ -13,6 +13,7 @@ CREATE TABLE
     salt         varchar(32) DEFAULT NULL COMMENT '密码加盐字段',
     status       tinyint(1)  default 0 COMMENT '账户状态, 0-禁用, 1-启用',
     avatar       varchar(255) COMMENT '头像地址',
+    signature    varchar(255) COMMENT '个人签名',
     remark  longtext COMMENT '描述',
     deleted_flag tinyint(1)                   DEFAULT 0 COMMENT '删除标记, 0: 未删除,  1: 已删除',
     created_time datetime    NOT NULL         DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

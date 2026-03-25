@@ -2,7 +2,6 @@ package server
 
 import (
 	roleV1 "xiaomiao-home-system/api/role/v1"
-	usergroupV1 "xiaomiao-home-system/api/user/group/v1"
 	userNotificationV1 "xiaomiao-home-system/api/user/notification/v1"
 	userV1 "xiaomiao-home-system/api/user/v1"
 	"xiaomiao-home-system/internal/conf"
@@ -18,7 +17,7 @@ import (
 )
 
 // NewGRPCServer new a gRPC server.
-func NewGRPCServer(c *conf.Server, user *service.UserService, usergroup *service.UserGroupService, role *service.RoleService, userNotification *service.UserNotificationService, logger log.Logger) *grpc.Server {
+func NewGRPCServer(c *conf.Server, user *service.UserService, role *service.RoleService, userNotification *service.UserNotificationService, logger log.Logger) *grpc.Server {
 	var opts = []grpc.ServerOption{
 		grpc.Middleware(
 			recovery.Recovery(),
@@ -43,7 +42,6 @@ func NewGRPCServer(c *conf.Server, user *service.UserService, usergroup *service
 	srv := grpc.NewServer(opts...)
 
 	userV1.RegisterUserServer(srv, user)
-	usergroupV1.RegisterUserGroupServer(srv, usergroup)
 	roleV1.RegisterRoleServer(srv, role)
 	userNotificationV1.RegisterUserNotificationServer(srv, userNotification)
 	return srv
