@@ -30,7 +30,7 @@ func initAdminUser(d *Data) error {
 		return err
 	}
 
-	password, err := password.New("123456", salt)
+	password, err := password.New("style_admin@2026", salt)
 	if err != nil {
 		return err
 	}
@@ -43,8 +43,6 @@ func initAdminUser(d *Data) error {
 		"salt":         salt,
 		"status":       1,
 		"remark":       "超级管理员",
-		"created_user": userId,
-		"updated_user": userId,
 		"created_time": time.Now(),
 		"updated_time": time.Now(),
 	}
@@ -64,7 +62,7 @@ func initSystemSetting(d *Data) error {
 	settings := []map[string]interface{}{
 		{
 			"name":   "site_name",
-			"value":  "统一认证系统",
+			"value":  "小猫回家",
 			"remark": "当前站点名称",
 		},
 		{
@@ -83,14 +81,9 @@ func initSystemSetting(d *Data) error {
 			"remark": "不活跃重登时间 (单位:分钟)",
 		},
 		{
-			"name":   "mfa_auth",
-			"value":  "0",
-			"remark": "全局启用MFA (0:禁用, 1:启用)",
-		},
-		{
-			"name":   "mfa_valid_period",
-			"value":  "1",
-			"remark": "MFA校验有效期 (单位:分钟)",
+			"name":   "login_valid_period",
+			"value":  "5",
+			"remark": "登陆校验有效期 (单位:分钟)",
 		},
 		{
 			"name":   "invalid_login_count",
@@ -101,11 +94,6 @@ func initSystemSetting(d *Data) error {
 			"name":   "login_ban_duration",
 			"value":  "5",
 			"remark": "限制登录时间 (单位:分钟)",
-		},
-		{
-			"name":   "cas_valid_period",
-			"value":  "1",
-			"remark": "单点登录校验有效期 (单位:分钟)",
 		},
 	}
 
