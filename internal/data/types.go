@@ -6,8 +6,6 @@ type User struct {
 	Id          int64     `gorm:"column:id"`
 	Username    string    `gorm:"column:username"`
 	Nickname    string    `gorm:"column:nickname"`
-	Password    string    `gorm:"column:password"`
-	Salt        string    `gorm:"column:salt"`
 	Avatar      string    `gorm:"column:avatar"`
 	Remark      string    `gorm:"column:remark"`
 	Status      int       `gorm:"column:status"` // 0: 正常 1: 禁用
@@ -19,6 +17,22 @@ type User struct {
 
 func (u User) TableName() string {
 	return "t_user"
+}
+
+// UserPassword 账号密码凭据；无密码登录方式的用户可无对应行。
+type UserPassword struct {
+	Id          int64     `gorm:"column:id"`
+	UserId      int64     `gorm:"column:user_id"`
+	Password    string    `gorm:"column:password"`
+	Salt        string    `gorm:"column:salt"`
+	CreatedTime time.Time `gorm:"column:created_time"`
+	UpdatedTime time.Time `gorm:"column:updated_time"`
+	DeletedFlag int       `gorm:"column:deleted_flag"`
+	DeletedTime time.Time `gorm:"column:deleted_time"`
+}
+
+func (UserPassword) TableName() string {
+	return "t_user_password"
 }
 
 type UserIdentity struct {

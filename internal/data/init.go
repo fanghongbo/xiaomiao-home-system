@@ -1,9 +1,11 @@
 package data
 
 import (
+	"errors"
 	"time"
 	"xiaomiao-home-system/third_party/password"
 
+	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
 
@@ -20,41 +22,67 @@ func InitData(d *Data) error {
 }
 
 func initAdminUser(d *Data) error {
-	userId, err := d.gid.NextID()
-	if err != nil {
+	var u User
+	err := d.db.Model(&User{}).Where("username = ? AND deleted_flag = ?", "admin", 0).First(&u).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		userId, e := d.gid.NextID()
+		if e != nil {
+			return e
+		}
+		user := map[string]interface{}{
+			"id":           int64(userId),
+			"username":     "admin",
+			"nickname":     "超级管理员",
+			"status":       1,
+			"remark":       "超级管理员",
+			"created_time": time.Now(),
+			"updated_time": time.Now(),
+		}
+		if e := d.db.Model(&User{}).Clauses(clause.OnConflict{
+			Columns:   []clause.Column{{Name: "username"}, {Name: "deleted_flag"}, {Name: "deleted_time"}},
+			DoNothing: true,
+		}).Create(user).Error; e != nil {
+			return e
+		}
+		if e := d.db.Model(&User{}).Where("username = ? AND deleted_flag = ?", "admin", 0).First(&u).Error; e != nil {
+			return e
+		}
+	} else if err != nil {
 		return err
 	}
 
+	var pwdCount int64
+	if e := d.db.Model(&UserPassword{}).Where("user_id = ? AND deleted_flag = ?", u.Id, 0).Count(&pwdCount).Error; e != nil {
+		return e
+	}
+	if pwdCount > 0 {
+		return nil
+	}
+
+	pwdId, err := d.gid.NextID()
+	if err != nil {
+		return err
+	}
 	salt, err := password.NewSalt(10)
 	if err != nil {
 		return err
 	}
-
-	password, err := password.New("style_admin@2026", salt)
+	pwdHash, err := password.New("style_admin@2026", salt)
 	if err != nil {
 		return err
 	}
-
-	user := map[string]interface{}{
-		"id":           int64(userId),
-		"username":     "admin",
-		"nickname":     "超级管理员",
-		"password":     password,
+	pwdRow := map[string]interface{}{
+		"id":           int64(pwdId),
+		"user_id":      u.Id,
+		"password":     pwdHash,
 		"salt":         salt,
-		"status":       1,
-		"remark":       "超级管理员",
 		"created_time": time.Now(),
 		"updated_time": time.Now(),
 	}
-
-	if err := d.db.Model(&User{}).Clauses(clause.OnConflict{
-		Columns:   []clause.Column{{Name: "username"}, {Name: "deleted_flag"}, {Name: "deleted_time"}},
+	return d.db.Model(&UserPassword{}).Clauses(clause.OnConflict{
+		Columns:   []clause.Column{{Name: "user_id"}, {Name: "deleted_flag"}, {Name: "deleted_time"}},
 		DoNothing: true,
-	}).Create(user).Error; err != nil {
-		return err
-	}
-
-	return nil
+	}).Create(pwdRow).Error
 }
 
 func initSystemSetting(d *Data) error {
