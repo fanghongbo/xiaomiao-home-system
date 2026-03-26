@@ -341,6 +341,19 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.user.v1.WebLogoutReply'
+    /api/v1/web/check/login:
+        get:
+            tags:
+                - User
+            description: Web登陆检测
+            operationId: User_WebCheckLogin
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.v1.WebCheckLoginReply'
     /api/v1/web/user/info:
         get:
             tags:
@@ -638,6 +651,18 @@ components:
         api.user.v1.MpLoginRequest:
             type: object
             properties: {}
+        api.user.v1.WebCheckLoginReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: string
         api.user.v1.WebLoginInfo:
             type: object
             properties:

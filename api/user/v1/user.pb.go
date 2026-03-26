@@ -975,6 +975,110 @@ func (x *WebLogoutReply) GetData() string {
 	return ""
 }
 
+type WebCheckLoginRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WebCheckLoginRequest) Reset() {
+	*x = WebCheckLoginRequest{}
+	mi := &file_user_v1_user_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WebCheckLoginRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WebCheckLoginRequest) ProtoMessage() {}
+
+func (x *WebCheckLoginRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_user_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WebCheckLoginRequest.ProtoReflect.Descriptor instead.
+func (*WebCheckLoginRequest) Descriptor() ([]byte, []int) {
+	return file_user_v1_user_proto_rawDescGZIP(), []int{17}
+}
+
+type WebCheckLoginReply struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Code          int32                  `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Success       bool                   `protobuf:"varint,3,opt,name=success,proto3" json:"success,omitempty"`
+	Data          string                 `protobuf:"bytes,4,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WebCheckLoginReply) Reset() {
+	*x = WebCheckLoginReply{}
+	mi := &file_user_v1_user_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WebCheckLoginReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WebCheckLoginReply) ProtoMessage() {}
+
+func (x *WebCheckLoginReply) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_user_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WebCheckLoginReply.ProtoReflect.Descriptor instead.
+func (*WebCheckLoginReply) Descriptor() ([]byte, []int) {
+	return file_user_v1_user_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *WebCheckLoginReply) GetCode() int32 {
+	if x != nil {
+		return x.Code
+	}
+	return 0
+}
+
+func (x *WebCheckLoginReply) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *WebCheckLoginReply) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *WebCheckLoginReply) GetData() string {
+	if x != nil {
+		return x.Data
+	}
+	return ""
+}
+
 var File_user_v1_user_proto protoreflect.FileDescriptor
 
 const file_user_v1_user_proto_rawDesc = "" +
@@ -1033,15 +1137,22 @@ const file_user_v1_user_proto_rawDesc = "" +
 	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12\x18\n" +
 	"\asuccess\x18\x03 \x01(\bR\asuccess\x12\x12\n" +
+	"\x04data\x18\x04 \x01(\tR\x04data\"\x16\n" +
+	"\x14WebCheckLoginRequest\"p\n" +
+	"\x12WebCheckLoginReply\x12\x12\n" +
+	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12\x18\n" +
+	"\asuccess\x18\x03 \x01(\bR\asuccess\x12\x12\n" +
 	"\x04data\x18\x04 \x01(\tR\x04data*}\n" +
 	"\tLoginType\x12\x1a\n" +
 	"\x16LOGIN_TYPE_UNSPECIFIED\x10\x00\x12\x16\n" +
 	"\x12LOGIN_TYPE_ACCOUNT\x10\x01\x12\x12\n" +
 	"\x0eLOGIN_TYPE_SMS\x10\x02\x12\x15\n" +
 	"\x11LOGIN_TYPE_WECHAT\x10\x03\x12\x11\n" +
-	"\rLOGIN_TYPE_QQ\x10\x042\xae\x04\n" +
+	"\rLOGIN_TYPE_QQ\x10\x042\xa4\x05\n" +
 	"\x04User\x12g\n" +
-	"\bWebLogin\x12\x1c.api.user.v1.WebLoginRequest\x1a\x1a.api.user.v1.WebLoginReply\"!\x82\xd3\xe4\x93\x02\x1b:\x01*\"\x16/api/v1/web/auth/login\x12h\n" +
+	"\bWebLogin\x12\x1c.api.user.v1.WebLoginRequest\x1a\x1a.api.user.v1.WebLoginReply\"!\x82\xd3\xe4\x93\x02\x1b:\x01*\"\x16/api/v1/web/auth/login\x12t\n" +
+	"\rWebCheckLogin\x12!.api.user.v1.WebCheckLoginRequest\x1a\x1f.api.user.v1.WebCheckLoginReply\"\x1f\x82\xd3\xe4\x93\x02\x19\x12\x17/api/v1/web/check/login\x12h\n" +
 	"\tWebLogout\x12\x1d.api.user.v1.WebLogoutRequest\x1a\x1b.api.user.v1.WebLogoutReply\"\x1f\x82\xd3\xe4\x93\x02\x19\x12\x17/api/v1/web/auth/logout\x12g\n" +
 	"\bAppLogin\x12\x1c.api.user.v1.AppLoginRequest\x1a\x1a.api.user.v1.AppLoginReply\"!\x82\xd3\xe4\x93\x02\x1b:\x01*\"\x16/api/v1/app/auth/login\x12c\n" +
 	"\aMpLogin\x12\x1b.api.user.v1.MpLoginRequest\x1a\x19.api.user.v1.MpLoginReply\" \x82\xd3\xe4\x93\x02\x1a:\x01*\"\x15/api/v1/mp/auth/login\x12\x84\x01\n" +
@@ -1061,7 +1172,7 @@ func file_user_v1_user_proto_rawDescGZIP() []byte {
 }
 
 var file_user_v1_user_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_user_v1_user_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
+var file_user_v1_user_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
 var file_user_v1_user_proto_goTypes = []any{
 	(LoginType)(0),                     // 0: api.user.v1.LoginType
 	(*BaseRequest)(nil),                // 1: api.user.v1.BaseRequest
@@ -1081,23 +1192,27 @@ var file_user_v1_user_proto_goTypes = []any{
 	(*GetWebLoginUserInfoReply)(nil),   // 15: api.user.v1.GetWebLoginUserInfoReply
 	(*WebLogoutRequest)(nil),           // 16: api.user.v1.WebLogoutRequest
 	(*WebLogoutReply)(nil),             // 17: api.user.v1.WebLogoutReply
+	(*WebCheckLoginRequest)(nil),       // 18: api.user.v1.WebCheckLoginRequest
+	(*WebCheckLoginReply)(nil),         // 19: api.user.v1.WebCheckLoginReply
 }
 var file_user_v1_user_proto_depIdxs = []int32{
 	0,  // 0: api.user.v1.WebLoginRequest.login_type:type_name -> api.user.v1.LoginType
 	4,  // 1: api.user.v1.WebLoginReply.data:type_name -> api.user.v1.WebLoginInfo
 	14, // 2: api.user.v1.GetWebLoginUserInfoReply.data:type_name -> api.user.v1.WebLoginUserInfo
 	3,  // 3: api.user.v1.User.WebLogin:input_type -> api.user.v1.WebLoginRequest
-	16, // 4: api.user.v1.User.WebLogout:input_type -> api.user.v1.WebLogoutRequest
-	9,  // 5: api.user.v1.User.AppLogin:input_type -> api.user.v1.AppLoginRequest
-	11, // 6: api.user.v1.User.MpLogin:input_type -> api.user.v1.MpLoginRequest
-	13, // 7: api.user.v1.User.GetWebLoginUserInfo:input_type -> api.user.v1.GetWebLoginUserInfoRequest
-	5,  // 8: api.user.v1.User.WebLogin:output_type -> api.user.v1.WebLoginReply
-	17, // 9: api.user.v1.User.WebLogout:output_type -> api.user.v1.WebLogoutReply
-	10, // 10: api.user.v1.User.AppLogin:output_type -> api.user.v1.AppLoginReply
-	12, // 11: api.user.v1.User.MpLogin:output_type -> api.user.v1.MpLoginReply
-	15, // 12: api.user.v1.User.GetWebLoginUserInfo:output_type -> api.user.v1.GetWebLoginUserInfoReply
-	8,  // [8:13] is the sub-list for method output_type
-	3,  // [3:8] is the sub-list for method input_type
+	18, // 4: api.user.v1.User.WebCheckLogin:input_type -> api.user.v1.WebCheckLoginRequest
+	16, // 5: api.user.v1.User.WebLogout:input_type -> api.user.v1.WebLogoutRequest
+	9,  // 6: api.user.v1.User.AppLogin:input_type -> api.user.v1.AppLoginRequest
+	11, // 7: api.user.v1.User.MpLogin:input_type -> api.user.v1.MpLoginRequest
+	13, // 8: api.user.v1.User.GetWebLoginUserInfo:input_type -> api.user.v1.GetWebLoginUserInfoRequest
+	5,  // 9: api.user.v1.User.WebLogin:output_type -> api.user.v1.WebLoginReply
+	19, // 10: api.user.v1.User.WebCheckLogin:output_type -> api.user.v1.WebCheckLoginReply
+	17, // 11: api.user.v1.User.WebLogout:output_type -> api.user.v1.WebLogoutReply
+	10, // 12: api.user.v1.User.AppLogin:output_type -> api.user.v1.AppLoginReply
+	12, // 13: api.user.v1.User.MpLogin:output_type -> api.user.v1.MpLoginReply
+	15, // 14: api.user.v1.User.GetWebLoginUserInfo:output_type -> api.user.v1.GetWebLoginUserInfoReply
+	9,  // [9:15] is the sub-list for method output_type
+	3,  // [3:9] is the sub-list for method input_type
 	3,  // [3:3] is the sub-list for extension type_name
 	3,  // [3:3] is the sub-list for extension extendee
 	0,  // [0:3] is the sub-list for field type_name
@@ -1114,7 +1229,7 @@ func file_user_v1_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_v1_user_proto_rawDesc), len(file_user_v1_user_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   17,
+			NumMessages:   19,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -19,6 +19,13 @@ service User {
 		};
 	};
 
+	// Web登陆检测
+	rpc WebCheckLogin (WebCheckLoginRequest) returns (WebCheckLoginReply) {
+		option (google.api.http) = {
+			get: "/api/v1/web/check/login",
+		};
+	};
+
 	rpc WebLogout (WebLogoutRequest) returns (WebLogoutReply) {
 		option (google.api.http) = {
 			get: "/api/v1/web/auth/logout",
@@ -145,6 +152,15 @@ message GetWebLoginUserInfoReply {
 message WebLogoutRequest {}
 
 message WebLogoutReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	string data = 4;
+}
+
+message WebCheckLoginRequest {}
+
+message WebCheckLoginReply {
 	int32 code = 1;
 	string message = 2;
 	bool success = 3;

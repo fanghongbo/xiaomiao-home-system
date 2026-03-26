@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	User_WebLogin_FullMethodName            = "/api.user.v1.User/WebLogin"
+	User_WebCheckLogin_FullMethodName       = "/api.user.v1.User/WebCheckLogin"
 	User_WebLogout_FullMethodName           = "/api.user.v1.User/WebLogout"
 	User_AppLogin_FullMethodName            = "/api.user.v1.User/AppLogin"
 	User_MpLogin_FullMethodName             = "/api.user.v1.User/MpLogin"
@@ -32,6 +33,8 @@ const (
 type UserClient interface {
 	// Web登录接口
 	WebLogin(ctx context.Context, in *WebLoginRequest, opts ...grpc.CallOption) (*WebLoginReply, error)
+	// Web登陆检测
+	WebCheckLogin(ctx context.Context, in *WebCheckLoginRequest, opts ...grpc.CallOption) (*WebCheckLoginReply, error)
 	WebLogout(ctx context.Context, in *WebLogoutRequest, opts ...grpc.CallOption) (*WebLogoutReply, error)
 	// App登录
 	AppLogin(ctx context.Context, in *AppLoginRequest, opts ...grpc.CallOption) (*AppLoginReply, error)
@@ -53,6 +56,16 @@ func (c *userClient) WebLogin(ctx context.Context, in *WebLoginRequest, opts ...
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(WebLoginReply)
 	err := c.cc.Invoke(ctx, User_WebLogin_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userClient) WebCheckLogin(ctx context.Context, in *WebCheckLoginRequest, opts ...grpc.CallOption) (*WebCheckLoginReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(WebCheckLoginReply)
+	err := c.cc.Invoke(ctx, User_WebCheckLogin_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -105,6 +118,8 @@ func (c *userClient) GetWebLoginUserInfo(ctx context.Context, in *GetWebLoginUse
 type UserServer interface {
 	// Web登录接口
 	WebLogin(context.Context, *WebLoginRequest) (*WebLoginReply, error)
+	// Web登陆检测
+	WebCheckLogin(context.Context, *WebCheckLoginRequest) (*WebCheckLoginReply, error)
 	WebLogout(context.Context, *WebLogoutRequest) (*WebLogoutReply, error)
 	// App登录
 	AppLogin(context.Context, *AppLoginRequest) (*AppLoginReply, error)
@@ -124,6 +139,9 @@ type UnimplementedUserServer struct{}
 
 func (UnimplementedUserServer) WebLogin(context.Context, *WebLoginRequest) (*WebLoginReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method WebLogin not implemented")
+}
+func (UnimplementedUserServer) WebCheckLogin(context.Context, *WebCheckLoginRequest) (*WebCheckLoginReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method WebCheckLogin not implemented")
 }
 func (UnimplementedUserServer) WebLogout(context.Context, *WebLogoutRequest) (*WebLogoutReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method WebLogout not implemented")
@@ -172,6 +190,24 @@ func _User_WebLogin_Handler(srv interface{}, ctx context.Context, dec func(inter
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServer).WebLogin(ctx, req.(*WebLoginRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _User_WebCheckLogin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WebCheckLoginRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).WebCheckLogin(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: User_WebCheckLogin_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).WebCheckLogin(ctx, req.(*WebCheckLoginRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -258,6 +294,10 @@ var User_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "WebLogin",
 			Handler:    _User_WebLogin_Handler,
+		},
+		{
+			MethodName: "WebCheckLogin",
+			Handler:    _User_WebCheckLogin_Handler,
 		},
 		{
 			MethodName: "WebLogout",

@@ -31,6 +31,8 @@ type UserRepo interface {
 	GetWebLoginUserInfo(context.Context, *v1.GetWebLoginUserInfoRequest) (*v1.GetWebLoginUserInfoReply, error)
 	// WebLogout 退出登录
 	WebLogout(context.Context, *v1.WebLogoutRequest) (*v1.WebLogoutReply, error)
+	// WebCheckLogin web端登录检测
+	WebCheckLogin(context.Context, *v1.WebCheckLoginRequest) (*v1.WebCheckLoginReply, error)
 }
 
 // UserUsecase is a User usecase.
@@ -67,4 +69,9 @@ func (u *UserUsecase) GetWebLoginUserInfo(ctx context.Context, req *v1.GetWebLog
 // WebLogout 退出登录
 func (u *UserUsecase) WebLogout(ctx context.Context, req *v1.WebLogoutRequest) (*v1.WebLogoutReply, error) {
 	return u.repo.WebLogout(ctx, req)
+}
+
+// WebCheckLogin web端登录检测
+func (u *UserUsecase) WebCheckLogin(ctx context.Context, req *v1.WebCheckLoginRequest) (*v1.WebCheckLoginReply, error) {
+	return u.repo.WebCheckLogin(ctx, req)
 }

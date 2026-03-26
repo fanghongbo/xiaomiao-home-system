@@ -383,3 +383,22 @@ func (u *userRepo) WebLogout(ctx context.Context, req *v1.WebLogoutRequest) (*v1
 		Data:    "",
 	}, nil
 }
+
+// WebCheckLogin web端登陆检测
+func (u *userRepo) WebCheckLogin(ctx context.Context, req *v1.WebCheckLoginRequest) (*v1.WebCheckLoginReply, error) {
+	// 由于此接口需要JWT认证，如果能执行到这里说明用户已登录
+	userId, err := utils.GetCurrentUserId(ctx)
+	if err != nil {
+		u.log.Error("get current user id failed: %v", err)
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_INVALID_SESSION.String(), "未登录")
+	}
+
+	u.log.Infof("user check login: userId=%d", userId)
+
+	return &v1.WebCheckLoginReply{
+		Code:    200,
+		Message: "已登录",
+		Success: true,
+		Data:    "",
+	}, nil
+}

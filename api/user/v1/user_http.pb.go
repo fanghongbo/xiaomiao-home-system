@@ -22,6 +22,7 @@ const _ = http.SupportPackageIsVersion1
 const OperationUserAppLogin = "/api.user.v1.User/AppLogin"
 const OperationUserGetWebLoginUserInfo = "/api.user.v1.User/GetWebLoginUserInfo"
 const OperationUserMpLogin = "/api.user.v1.User/MpLogin"
+const OperationUserWebCheckLogin = "/api.user.v1.User/WebCheckLogin"
 const OperationUserWebLogin = "/api.user.v1.User/WebLogin"
 const OperationUserWebLogout = "/api.user.v1.User/WebLogout"
 
@@ -32,6 +33,8 @@ type UserHTTPServer interface {
 	GetWebLoginUserInfo(context.Context, *GetWebLoginUserInfoRequest) (*GetWebLoginUserInfoReply, error)
 	// MpLogin 小程序登录
 	MpLogin(context.Context, *MpLoginRequest) (*MpLoginReply, error)
+	// WebCheckLogin Web登陆检测
+	WebCheckLogin(context.Context, *WebCheckLoginRequest) (*WebCheckLoginReply, error)
 	// WebLogin Web登录接口
 	WebLogin(context.Context, *WebLoginRequest) (*WebLoginReply, error)
 	WebLogout(context.Context, *WebLogoutRequest) (*WebLogoutReply, error)
@@ -40,6 +43,7 @@ type UserHTTPServer interface {
 func RegisterUserHTTPServer(s *http.Server, srv UserHTTPServer) {
 	r := s.Route("/")
 	r.POST("/api/v1/web/auth/login", _User_WebLogin0_HTTP_Handler(srv))
+	r.GET("/api/v1/web/check/login", _User_WebCheckLogin0_HTTP_Handler(srv))
 	r.GET("/api/v1/web/auth/logout", _User_WebLogout0_HTTP_Handler(srv))
 	r.POST("/api/v1/app/auth/login", _User_AppLogin0_HTTP_Handler(srv))
 	r.POST("/api/v1/mp/auth/login", _User_MpLogin0_HTTP_Handler(srv))
@@ -64,6 +68,25 @@ func _User_WebLogin0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) err
 			return err
 		}
 		reply := out.(*WebLoginReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _User_WebCheckLogin0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in WebCheckLoginRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationUserWebCheckLogin)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.WebCheckLogin(ctx, req.(*WebCheckLoginRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*WebCheckLoginReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -157,6 +180,8 @@ type UserHTTPClient interface {
 	GetWebLoginUserInfo(ctx context.Context, req *GetWebLoginUserInfoRequest, opts ...http.CallOption) (rsp *GetWebLoginUserInfoReply, err error)
 	// MpLogin 小程序登录
 	MpLogin(ctx context.Context, req *MpLoginRequest, opts ...http.CallOption) (rsp *MpLoginReply, err error)
+	// WebCheckLogin Web登陆检测
+	WebCheckLogin(ctx context.Context, req *WebCheckLoginRequest, opts ...http.CallOption) (rsp *WebCheckLoginReply, err error)
 	// WebLogin Web登录接口
 	WebLogin(ctx context.Context, req *WebLoginRequest, opts ...http.CallOption) (rsp *WebLoginReply, err error)
 	WebLogout(ctx context.Context, req *WebLogoutRequest, opts ...http.CallOption) (rsp *WebLogoutReply, err error)
@@ -206,6 +231,20 @@ func (c *UserHTTPClientImpl) MpLogin(ctx context.Context, in *MpLoginRequest, op
 	opts = append(opts, http.Operation(OperationUserMpLogin))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// WebCheckLogin Web登陆检测
+func (c *UserHTTPClientImpl) WebCheckLogin(ctx context.Context, in *WebCheckLoginRequest, opts ...http.CallOption) (*WebCheckLoginReply, error) {
+	var out WebCheckLoginReply
+	pattern := "/api/v1/web/check/login"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationUserWebCheckLogin))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

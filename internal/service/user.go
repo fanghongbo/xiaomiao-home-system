@@ -49,3 +49,8 @@ func (s *UserService) GetWebLoginUserInfo(ctx context.Context, req *pb.GetWebLog
 func (s *UserService) WebLogout(ctx context.Context, req *pb.WebLogoutRequest) (*pb.WebLogoutReply, error) {
 	return s.user.WebLogout(ctx, req)
 }
+
+// WebCheckLogin web端登录检测
+func (s *UserService) WebCheckLogin(ctx context.Context, req *pb.WebCheckLoginRequest) (*pb.WebCheckLoginReply, error) {
+	return s.user.WebCheckLogin(ctx, req)
+}
