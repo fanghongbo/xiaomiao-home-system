@@ -7,26 +7,25 @@
 package main
 
 import (
-	"github.com/go-kratos/kratos/contrib/registry/nacos/v2"
-	"github.com/go-kratos/kratos/v2"
-	"github.com/go-kratos/kratos/v2/log"
 	"xiaomiao-home-system/internal/biz"
 	"xiaomiao-home-system/internal/conf"
 	"xiaomiao-home-system/internal/data"
 	"xiaomiao-home-system/internal/server"
 	"xiaomiao-home-system/internal/service"
 	"xiaomiao-home-system/internal/task"
-)
 
-import (
+	"github.com/go-kratos/kratos/contrib/registry/nacos/v2"
+	"github.com/go-kratos/kratos/v2"
+	"github.com/go-kratos/kratos/v2/log"
+
 	_ "go.uber.org/automaxprocs"
 )
 
 // Injectors from wire.go:
 
 // wireApp init kratos application.
-func wireApp(confServer *conf.Server, confData *conf.Data, config *conf.Config, static *conf.Static, registry *nacos.Registry, logger log.Logger) (*kratos.App, func(), error) {
-	dataData, cleanup, err := data.NewData(confData, config, static, logger)
+func wireApp(confServer *conf.Server, confData *conf.Data, config *conf.Config, jwt *conf.Jwt, static *conf.Static, registry *nacos.Registry, logger log.Logger) (*kratos.App, func(), error) {
+	dataData, cleanup, err := data.NewData(confData, config, static, jwt, logger)
 	if err != nil {
 		return nil, nil, err
 	}

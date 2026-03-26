@@ -7,7 +7,7 @@ import (
 	userV1 "xiaomiao-home-system/api/user/v1"
 	"xiaomiao-home-system/internal/conf"
 	"xiaomiao-home-system/internal/server/encoder"
-	"xiaomiao-home-system/internal/server/middleware/cookie"
+	"xiaomiao-home-system/internal/server/middleware/token"
 	"xiaomiao-home-system/internal/service"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v2"
@@ -23,7 +23,9 @@ import (
 func NewWhiteListMatcher() selector.MatchFunc {
 	whiteList := map[string]interface{}{
 		"/api.user.v1.User/GetSecretKey": struct{}{},
-		"/api.user.v1.User/Login":        struct{}{},
+		"/api.user.v1.User/WebLogin":     struct{}{},
+		"/api.user.v1.User/AppLogin":     struct{}{},
+		"/api.user.v1.User/MpLogin":      struct{}{},
 	}
 
 	return func(ctx context.Context, operation string) bool {
@@ -43,7 +45,7 @@ func NewHTTPServer(c *conf.Server, config *conf.Config, user *service.UserServic
 			logging.Server(logger),
 			ratelimit.Server(),
 			selector.Server(
-				cookie.Server(config),
+				token.Server(config),
 			).
 				Match(NewWhiteListMatcher()).
 				Build(),

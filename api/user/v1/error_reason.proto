@@ -11,9 +11,8 @@ option objc_class_prefix = "APIUSERV1";
 enum ErrorReason {
   option (errors.default_code) = 500;
 
-  ERR_BUILD_FORWARD_REQUEST = 0 [(errors.code) = 500];
-  ERR_FORWARD_REQUEST = 1 [(errors.code) = 500];
-  ERR_REQUEST_DAYU = 2 [(errors.code) = 500];
-  ERR_INVALID_SESSION = 3 [(errors.code) = 400];
-  ERR_INVALID_REQUEST = 4 [(errors.code) = 400];
+  ERR_INVALID_SESSION = 0 [(errors.code) = 400];
+  ERR_INVALID_REQUEST = 1 [(errors.code) = 400];
+  ERR_BAD_REQUEST = 2 [(errors.code) = 400];
+  ERR_SYSTEM_EXCEPTION = 3 [(errors.code) = 500];
 }

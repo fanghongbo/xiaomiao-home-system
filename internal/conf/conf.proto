@@ -9,7 +9,7 @@ message Bootstrap {
   Server server = 1;
   Data data = 2;
   Config config = 3;
-  Auth auth = 4;
+  Jwt jwt = 4;
   Static static = 5;
 }
 
@@ -47,9 +47,8 @@ message Data {
   Redis redis = 2;
 }
 
-message Auth {
-  string service_key = 1;
-  string api_key = 2;
+message Jwt {
+  string secret_key = 1;
 }
 
 message Config {

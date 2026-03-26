@@ -6,6 +6,44 @@ info:
     title: ""
     version: 0.0.1
 paths:
+    /api/v1/app/auth/login:
+        post:
+            tags:
+                - User
+            description: App登录
+            operationId: User_AppLogin
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.user.v1.AppLoginRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.v1.AppLoginReply'
+    /api/v1/mp/auth/login:
+        post:
+            tags:
+                - User
+            description: 小程序登录
+            operationId: User_MpLogin
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.user.v1.MpLoginRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.v1.MpLoginReply'
     /api/v1/role:
         post:
             tags:
@@ -148,25 +186,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.role.v1.GetRolesReply'
-    /api/v1/user/login:
-        post:
-            tags:
-                - User
-            description: Login 登录接口
-            operationId: User_Login
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.user.v1.LoginRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.user.v1.LoginReply'
     /api/v1/user/notification:
         post:
             tags:
@@ -291,6 +310,25 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.user.notification.v1.DeleteUserNotificationReply'
+    /api/v1/web/auth/login:
+        post:
+            tags:
+                - User
+            description: Web登录接口
+            operationId: User_WebLogin
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.user.v1.WebLoginRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.v1.WebLoginReply'
 components:
     schemas:
         api.role.v1.CreateRoleReply:
@@ -551,16 +589,26 @@ components:
                     type: string
                 updatedTime:
                     type: string
-        api.user.v1.LoginInfo:
+        api.user.v1.AppLoginReply:
+            type: object
+            properties: {}
+        api.user.v1.AppLoginRequest:
+            type: object
+            properties: {}
+        api.user.v1.MpLoginReply:
+            type: object
+            properties: {}
+        api.user.v1.MpLoginRequest:
+            type: object
+            properties: {}
+        api.user.v1.WebLoginInfo:
             type: object
             properties:
-                mfa:
-                    $ref: '#/components/schemas/api.user.v1.UserMfaInfo'
                 token:
                     type: string
                 loginValidPeriod:
                     type: string
-        api.user.v1.LoginReply:
+        api.user.v1.WebLoginReply:
             type: object
             properties:
                 code:
@@ -571,23 +619,32 @@ components:
                 success:
                     type: boolean
                 data:
-                    $ref: '#/components/schemas/api.user.v1.LoginInfo'
-        api.user.v1.LoginRequest:
+                    $ref: '#/components/schemas/api.user.v1.WebLoginInfo'
+        api.user.v1.WebLoginRequest:
             type: object
             properties:
-                username:
+                loginType:
+                    type: integer
+                    description: 登录方式
+                    format: enum
+                loginIdentity:
                     type: string
+                    description: |-
+                        统一身份标识：
+                         账号登录: username
+                         邮箱登录: email
+                         短信登录: mobile
+                         微信登录: unionid/openid
+                         QQ登录: openid
                 password:
                     type: string
-                type:
+                    description: 账号/邮箱密码登录时使用（其余方式可不传）
+                verifyCode:
                     type: string
-        api.user.v1.UserMfaInfo:
-            type: object
-            properties:
-                token:
+                    description: 短信/邮箱验证码登录时使用（其余方式可不传）
+                authCode:
                     type: string
-                step:
-                    type: string
+                    description: 第三方平台授权码（微信/QQ 推荐使用）
 tags:
     - name: Role
     - name: User

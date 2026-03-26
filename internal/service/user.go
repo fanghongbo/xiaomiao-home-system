@@ -26,11 +26,16 @@ func NewUserService(user *biz.UserUsecase, config *conf.Config, logger log.Logge
 }
 
 // Login 登录接口
-func (s *UserService) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginReply, error) {
-	res, err := s.user.Login(ctx, req)
-	if err != nil {
-		return nil, err
-	}
+func (s *UserService) WebLogin(ctx context.Context, req *pb.WebLoginRequest) (*pb.WebLoginReply, error) {
+	return s.user.WebLogin(ctx, req)
+}
 
-	return res, nil
+// AppLogin 登录接口
+func (s *UserService) AppLogin(ctx context.Context, req *pb.AppLoginRequest) (*pb.AppLoginReply, error) {
+	return s.user.AppLogin(ctx, req)
+}
+
+// MpLogin 登录接口
+func (s *UserService) MpLogin(ctx context.Context, req *pb.MpLoginRequest) (*pb.MpLoginReply, error) {
+	return s.user.MpLogin(ctx, req)
 }

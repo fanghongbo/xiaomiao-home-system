@@ -29,6 +29,7 @@ type Data struct {
 	config   *conf.Config
 	dbConfig *conf.Data
 	static   *conf.Static
+	jwt      *conf.Jwt
 	gid      *snowflake.Sonyflake
 }
 
@@ -113,7 +114,7 @@ func NewRDB(conf *conf.Data, logger klog.Logger) *redis.Client {
 }
 
 // NewData .
-func NewData(dbConfig *conf.Data, config *conf.Config, static *conf.Static, logger klog.Logger) (*Data, func(), error) {
+func NewData(dbConfig *conf.Data, config *conf.Config, static *conf.Static, jwt *conf.Jwt, logger klog.Logger) (*Data, func(), error) {
 	log := klog.NewHelper(klog.With(logger, "module", "xiaomiao-home-system/data"))
 
 	d := &Data{
@@ -123,6 +124,7 @@ func NewData(dbConfig *conf.Data, config *conf.Config, static *conf.Static, logg
 		config:   config,
 		dbConfig: dbConfig,
 		static:   static,
+		jwt:      jwt,
 		log:      log,
 	}
 

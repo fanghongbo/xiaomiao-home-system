@@ -11,10 +11,26 @@ option java_package = "api.user.v1";
 option java_outer_classname = "UserProtoV1";
 
 service User {
-	// Login 登录接口
-	rpc Login (LoginRequest) returns (LoginReply) {
+	// Web登录接口
+	rpc WebLogin (WebLoginRequest) returns (WebLoginReply) {
 		option (google.api.http) = {
-			post: "/api/v1/user/login",
+			post: "/api/v1/web/auth/login",
+			body: "*"
+		};
+	};
+
+	// App登录
+	rpc AppLogin (AppLoginRequest) returns (AppLoginReply) {
+		option (google.api.http) = {
+			post: "/api/v1/app/auth/login",
+			body: "*"
+		};
+	};
+
+	// 小程序登录
+	rpc MpLogin (MpLoginRequest) returns (MpLoginReply) {
+		option (google.api.http) = {
+			post: "/api/v1/mp/auth/login",
 			body: "*"
 		};
 	};
@@ -26,28 +42,48 @@ message BaseRequest {}
 // 基础响应体
 message BaseResponse {}
 
-message LoginRequest {
-	string username = 1 [(validate.rules).string = {pattern: "^[a-zA-Z0-9_]+$", min_len: 3}];
-	string password = 2 [(validate.rules).string = {min_len: 6}];
-	int64 type = 3;
+// 登录类型
+enum LoginType {
+	LOGIN_TYPE_UNSPECIFIED = 0;
+	LOGIN_TYPE_ACCOUNT = 1; // 账号密码
+	LOGIN_TYPE_EMAIL = 2;   // 邮箱登录（密码或验证码，按业务约定）
+	LOGIN_TYPE_SMS = 3;     // 手机验证码
+	LOGIN_TYPE_WECHAT = 4;  // 微信授权
+	LOGIN_TYPE_QQ = 5;      // QQ授权
 }
 
-message UserMfaInfo {
-	string token = 1;
-	int64 step = 2;
+message WebLoginRequest {
+	// 登录方式
+	LoginType login_type = 1;
+
+	// 统一身份标识：
+	// 账号登录: username
+	// 邮箱登录: email
+	// 短信登录: mobile
+	// 微信登录: unionid/openid
+	// QQ登录: openid
+	string login_identity = 2 [(validate.rules).string = {min_len: 1, max_len: 191}];
+
+	// 账号/邮箱密码登录时使用（其余方式可不传）
+	string password = 3;
+
+	// 短信/邮箱验证码登录时使用（其余方式可不传）
+	string verify_code = 4;
+
+	// 第三方平台授权码（微信/QQ 推荐使用）
+	string auth_code = 5;
 }
 
-message LoginInfo {
-	UserMfaInfo mfa = 1;
+message WebLoginInfo {
 	string token = 2;
 	int64 loginValidPeriod = 3;
 }
 
-message LoginReply {
+message WebLoginReply {
 	int32 code = 1;
 	string message = 2;
 	bool success = 3;
-	LoginInfo data = 4;
+	WebLoginInfo data = 4;
 }
 
 message RoleItem {
@@ -57,9 +93,22 @@ message RoleItem {
 
 message UserInfo  {
 	int64 id = 1;
-	string username = 2;
-	string nickname = 3; 
-	string avatar = 4;
-	repeated RoleItem roles = 5;
-	int64 status = 6;
+	string nickname = 2; 
+	string avatar = 3;
+	string signature = 4;
+	int32 status = 5;
+	repeated string access_codes = 6;
 }
+
+message UserPasswordInfo {
+	string slat = 1;
+	string password = 2;
+}
+
+message AppLoginRequest {}
+
+message AppLoginReply {}
+
+message MpLoginRequest {}
+
+message MpLoginReply {}

@@ -21,8 +21,12 @@ type UserLoginRequest struct {
 
 // UserRepo is a Greater repo.
 type UserRepo interface {
-	// Login 登录接口
-	Login(context.Context, *v1.LoginRequest) (*v1.LoginReply, error)
+	// WebLogin 登录接口
+	WebLogin(context.Context, *v1.WebLoginRequest) (*v1.WebLoginReply, error)
+	// AppLogin 登录接口
+	AppLogin(context.Context, *v1.AppLoginRequest) (*v1.AppLoginReply, error)
+	// MpLogin 登录接口
+	MpLogin(context.Context, *v1.MpLoginRequest) (*v1.MpLoginReply, error)
 	// GetUserId 查询用户ID
 	GetUserId(context.Context) (int64, error)
 }
@@ -38,16 +42,19 @@ func NewUserUsecase(repo UserRepo, logger log.Logger) *UserUsecase {
 	return &UserUsecase{repo: repo, log: log.NewHelper(log.With(logger, "biz", "UserUsecase"))}
 }
 
-// Login 用户登录
-func (u *UserUsecase) Login(ctx context.Context, req *v1.LoginRequest) (*v1.LoginReply, error) {
-	u.log.WithContext(ctx).Infof("user login: %v", req.Username)
+// WebLogin 用户登录
+func (u *UserUsecase) WebLogin(ctx context.Context, req *v1.WebLoginRequest) (*v1.WebLoginReply, error) {
+	return u.repo.WebLogin(ctx, req)
+}
 
-	res, err := u.repo.Login(ctx, req)
-	if err != nil {
-		return nil, err
-	}
+// AppLogin 用户登录
+func (u *UserUsecase) AppLogin(ctx context.Context, req *v1.AppLoginRequest) (*v1.AppLoginReply, error) {
+	return u.repo.AppLogin(ctx, req)
+}
 
-	return res, nil
+// MpLogin 用户登录
+func (u *UserUsecase) MpLogin(ctx context.Context, req *v1.MpLoginRequest) (*v1.MpLoginReply, error) {
+	return u.repo.MpLogin(ctx, req)
 }
 
 // GetUserId 查询用户ID

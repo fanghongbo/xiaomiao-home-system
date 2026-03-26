@@ -6,6 +6,7 @@ type User struct {
 	Id          int64     `gorm:"column:id"`
 	Nickname    string    `gorm:"column:nickname"`
 	Avatar      string    `gorm:"column:avatar"`
+	Signature   string    `gorm:"column:signature"`
 	Remark      string    `gorm:"column:remark"`
 	Status      int       `gorm:"column:status"` // 0: 正常 1: 禁用
 	CreatedTime time.Time `gorm:"column:created_time"`
@@ -125,4 +126,9 @@ type SystemSetting struct {
 
 func (u SystemSetting) TableName() string {
 	return "t_system_setting"
+}
+
+type UserInfo struct {
+	Id       int64  `gorm:"column:id"`
+	Nickname string `gorm:"column:nickname"`
 }
