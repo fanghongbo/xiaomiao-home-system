@@ -44,3 +44,8 @@ func (s *UserService) MpLogin(ctx context.Context, req *pb.MpLoginRequest) (*pb.
 func (s *UserService) GetWebLoginUserInfo(ctx context.Context, req *pb.GetWebLoginUserInfoRequest) (*pb.GetWebLoginUserInfoReply, error) {
 	return s.user.GetWebLoginUserInfo(ctx, req)
 }
+
+// WebLogout 退出登录
+func (s *UserService) WebLogout(ctx context.Context, req *pb.WebLogoutRequest) (*pb.WebLogoutReply, error) {
+	return s.user.WebLogout(ctx, req)
+}

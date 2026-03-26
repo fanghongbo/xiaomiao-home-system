@@ -29,6 +29,8 @@ type UserRepo interface {
 	MpLogin(context.Context, *v1.MpLoginRequest) (*v1.MpLoginReply, error)
 	// GetWebLoginUserInfo 查询登陆用户信息
 	GetWebLoginUserInfo(context.Context, *v1.GetWebLoginUserInfoRequest) (*v1.GetWebLoginUserInfoReply, error)
+	// WebLogout 退出登录
+	WebLogout(context.Context, *v1.WebLogoutRequest) (*v1.WebLogoutReply, error)
 }
 
 // UserUsecase is a User usecase.
@@ -60,4 +62,9 @@ func (u *UserUsecase) MpLogin(ctx context.Context, req *v1.MpLoginRequest) (*v1.
 // GetWebLoginUserInfo 查询登陆用户信息
 func (u *UserUsecase) GetWebLoginUserInfo(ctx context.Context, req *v1.GetWebLoginUserInfoRequest) (*v1.GetWebLoginUserInfoReply, error) {
 	return u.repo.GetWebLoginUserInfo(ctx, req)
+}
+
+// WebLogout 退出登录
+func (u *UserUsecase) WebLogout(ctx context.Context, req *v1.WebLogoutRequest) (*v1.WebLogoutReply, error) {
+	return u.repo.WebLogout(ctx, req)
 }

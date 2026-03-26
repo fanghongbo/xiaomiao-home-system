@@ -19,6 +19,12 @@ service User {
 		};
 	};
 
+	rpc WebLogout (WebLogoutRequest) returns (WebLogoutReply) {
+		option (google.api.http) = {
+			get: "/api/v1/web/auth/logout",
+		};
+	};
+
 	// App登录
 	rpc AppLogin (AppLoginRequest) returns (AppLoginReply) {
 		option (google.api.http) = {
@@ -134,4 +140,13 @@ message GetWebLoginUserInfoReply {
 	string message = 2;
 	bool success = 3;
 	WebLoginUserInfo data = 4;
+}
+
+message WebLogoutRequest {}
+
+message WebLogoutReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	string data = 4;
 }

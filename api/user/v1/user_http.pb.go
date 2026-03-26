@@ -23,6 +23,7 @@ const OperationUserAppLogin = "/api.user.v1.User/AppLogin"
 const OperationUserGetWebLoginUserInfo = "/api.user.v1.User/GetWebLoginUserInfo"
 const OperationUserMpLogin = "/api.user.v1.User/MpLogin"
 const OperationUserWebLogin = "/api.user.v1.User/WebLogin"
+const OperationUserWebLogout = "/api.user.v1.User/WebLogout"
 
 type UserHTTPServer interface {
 	// AppLogin App登录
@@ -33,11 +34,13 @@ type UserHTTPServer interface {
 	MpLogin(context.Context, *MpLoginRequest) (*MpLoginReply, error)
 	// WebLogin Web登录接口
 	WebLogin(context.Context, *WebLoginRequest) (*WebLoginReply, error)
+	WebLogout(context.Context, *WebLogoutRequest) (*WebLogoutReply, error)
 }
 
 func RegisterUserHTTPServer(s *http.Server, srv UserHTTPServer) {
 	r := s.Route("/")
 	r.POST("/api/v1/web/auth/login", _User_WebLogin0_HTTP_Handler(srv))
+	r.GET("/api/v1/web/auth/logout", _User_WebLogout0_HTTP_Handler(srv))
 	r.POST("/api/v1/app/auth/login", _User_AppLogin0_HTTP_Handler(srv))
 	r.POST("/api/v1/mp/auth/login", _User_MpLogin0_HTTP_Handler(srv))
 	r.GET("/api/v1/web/user/info", _User_GetWebLoginUserInfo0_HTTP_Handler(srv))
@@ -61,6 +64,25 @@ func _User_WebLogin0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) err
 			return err
 		}
 		reply := out.(*WebLoginReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _User_WebLogout0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in WebLogoutRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationUserWebLogout)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.WebLogout(ctx, req.(*WebLogoutRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*WebLogoutReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -137,6 +159,7 @@ type UserHTTPClient interface {
 	MpLogin(ctx context.Context, req *MpLoginRequest, opts ...http.CallOption) (rsp *MpLoginReply, err error)
 	// WebLogin Web登录接口
 	WebLogin(ctx context.Context, req *WebLoginRequest, opts ...http.CallOption) (rsp *WebLoginReply, err error)
+	WebLogout(ctx context.Context, req *WebLogoutRequest, opts ...http.CallOption) (rsp *WebLogoutReply, err error)
 }
 
 type UserHTTPClientImpl struct {
@@ -197,6 +220,19 @@ func (c *UserHTTPClientImpl) WebLogin(ctx context.Context, in *WebLoginRequest, 
 	opts = append(opts, http.Operation(OperationUserWebLogin))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *UserHTTPClientImpl) WebLogout(ctx context.Context, in *WebLogoutRequest, opts ...http.CallOption) (*WebLogoutReply, error) {
+	var out WebLogoutReply
+	pattern := "/api/v1/web/auth/logout"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationUserWebLogout))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

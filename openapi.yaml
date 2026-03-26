@@ -329,6 +329,18 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.user.v1.WebLoginReply'
+    /api/v1/web/auth/logout:
+        get:
+            tags:
+                - User
+            operationId: User_WebLogout
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.v1.WebLogoutReply'
     /api/v1/web/user/info:
         get:
             tags:
@@ -685,6 +697,18 @@ components:
                     type: array
                     items:
                         type: string
+        api.user.v1.WebLogoutReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: string
 tags:
     - name: Role
     - name: User

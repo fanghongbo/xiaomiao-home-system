@@ -362,3 +362,24 @@ func (u *userRepo) GetWebLoginUserInfo(ctx context.Context, req *v1.GetWebLoginU
 		},
 	}, nil
 }
+
+// WebLogout 退出登陆
+func (u *userRepo) WebLogout(ctx context.Context, req *v1.WebLogoutRequest) (*v1.WebLogoutReply, error) {
+	// 获取当前用户ID（用于日志记录）
+	userId, err := utils.GetCurrentUserId(ctx)
+	if err != nil {
+		u.log.Error("get current user id failed: %v", err)
+	} else {
+		u.log.Infof("user logout: userId=%d", userId)
+	}
+
+	// TODO: 如果需要实现token黑名单，可以在这里将当前token加入Redis黑名单
+	// 黑名单的key可以是token本身，过期时间设置为token的剩余有效期
+
+	return &v1.WebLogoutReply{
+		Code:    200,
+		Message: "退出登录成功",
+		Success: true,
+		Data:    "",
+	}, nil
+}
