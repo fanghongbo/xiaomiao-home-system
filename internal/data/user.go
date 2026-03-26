@@ -316,16 +316,49 @@ func (u *userRepo) MpLogin(ctx context.Context, req *v1.MpLoginRequest) (*v1.MpL
 	return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "暂不支持当前登录方式, 请联系管理员")
 }
 
+// 查询用户信息
+func (u *userRepo) GetUserInfo(ctx context.Context, userId int64) (*v1.UserInfo, error) {
+	var user User
+	if err := u.data.db.Table("t_user").Select("id, nickname, avatar, signature, status").Where("id = ?", userId).Where("deleted_flag = ?", 0).First(&user).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "用户不存在")
+		}
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+	}
+
+	return &v1.UserInfo{
+		Id:        user.Id,
+		Nickname:  user.Nickname,
+		Avatar:    user.Avatar,
+		Signature: user.Signature,
+		Status:    int32(user.Status),
+	}, nil
+}
+
 // GetWebLoginUserInfo 查询登陆用户信息
 func (u *userRepo) GetWebLoginUserInfo(ctx context.Context, req *v1.GetWebLoginUserInfoRequest) (*v1.GetWebLoginUserInfoReply, error) {
-
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
 		u.log.Error("get current user id failed: %v", err)
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
 	}
 
-	fmt.Println("userId =>", userId)
+	userInfo, err := u.GetUserInfo(ctx, userId)
+	if err != nil {
+		u.log.Error("get user info failed: %v", err)
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+	}
 
-	return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "1111")
+	return &v1.GetWebLoginUserInfoReply{
+		Code:    200,
+		Message: "查询成功",
+		Success: true,
+		Data: &v1.WebLoginUserInfo{
+			Id:          userInfo.Id,
+			Nickname:    userInfo.Nickname,
+			Avatar:      userInfo.Avatar,
+			Signature:   userInfo.Signature,
+			AccessCodes: []string{},
+		},
+	}, nil
 }

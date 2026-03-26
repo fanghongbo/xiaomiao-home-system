@@ -2,6 +2,7 @@ package utils
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net"
 	"strings"
@@ -10,13 +11,18 @@ import (
 )
 
 // GetCurrentUserId 查询当前用户Id
-func GetCurrentUserId(ctx context.Context) (string, error) {
+func GetCurrentUserId(ctx context.Context) (int64, error) {
 	userId := ctx.Value("x-md-global-user")
 	if userId == nil {
-		return "", fmt.Errorf("failed to get user id from ctx")
+		return 0, errors.New("user id not found in ctx")
 	}
 
-	return fmt.Sprintf("%v", userId), nil
+	id, ok := userId.(int64)
+	if !ok {
+		return 0, errors.New("user id is not int64")
+	}
+
+	return id, nil
 }
 
 // GetUserIP 获取用户IP
