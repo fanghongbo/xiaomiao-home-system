@@ -18,6 +18,15 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 )
 
+type AccountType string
+
+const (
+	// 账号类型
+	ACCOUNT_TYPE_USERNAME AccountType = "username"
+	ACCOUNT_TYPE_EMAIL    AccountType = "email"
+	ACCOUNT_TYPE_SMS      AccountType = "sms"
+)
+
 type userRepo struct {
 	data *Data
 	log  *log.Helper
@@ -31,21 +40,21 @@ func NewUserRepo(data *Data, logger log.Logger) biz.UserRepo {
 	}
 }
 
-// 判断登录身份类型
-func (u *userRepo) CheckLoginIdentityType(loginIdentity string) v1.LoginType {
+// 判断登录账号类型, 允许用户使用账号、手机号、邮箱作为账号登陆名
+func (u *userRepo) CheckLoginAccountType(loginIdentity string) AccountType {
 
 	// 检查登录身份是否是邮箱地址
 	if utils.IsEmail(loginIdentity) {
-		return v1.LoginType_LOGIN_TYPE_EMAIL
+		return ACCOUNT_TYPE_EMAIL
 	}
 
 	// 检查登录身份是否是手机号
 	if utils.IsMobile(loginIdentity) {
-		return v1.LoginType_LOGIN_TYPE_SMS
+		return ACCOUNT_TYPE_SMS
 	}
 
 	// 检查登录身份是否是账号
-	return v1.LoginType_LOGIN_TYPE_ACCOUNT
+	return ACCOUNT_TYPE_USERNAME
 }
 
 // Login 登录接口
@@ -91,9 +100,9 @@ func (u *userRepo) WebLogin(ctx context.Context, req *v1.WebLoginRequest) (*v1.W
 	var res *v1.WebLoginReply
 
 	switch req.LoginType {
-	case v1.LoginType_LOGIN_TYPE_ACCOUNT:
+	case v1.LoginType_LOGIN_TYPE_ACCOUNT: // 账户登陆
 		res, err = u.WebLoginAccount(ctx, req, loginValidPeriod)
-	case v1.LoginType_LOGIN_TYPE_SMS:
+	case v1.LoginType_LOGIN_TYPE_SMS: // 短信登陆
 		res, err = u.WebLoginSms(ctx, req)
 	default:
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "暂不支持当前登录方式, 请联系管理员")
@@ -157,20 +166,18 @@ func (u *userRepo) ClearLoginErrorCount(ctx context.Context, loginType v1.LoginT
 }
 
 // GetUserPassword 查询用户密码信息
-func (u *userRepo) GetUserPasswordInfo(ctx context.Context, req *v1.WebLoginRequest) (*v1.UserPasswordInfo, error) {
+func (u *userRepo) GetUserPasswordInfo(ctx context.Context, accountType AccountType, req *v1.WebLoginRequest) (*v1.UserPasswordInfo, error) {
 	var userPassword UserPassword
 
-	loginType := u.CheckLoginIdentityType(req.LoginIdentity)
+	query := u.data.db.Table("t_user_password as t1").Joins("inner join t_user_identity as t2 on t1.user_id = t2.user_id").Select("t1.salt, t1.password").Where("t2.identity_id = ?", req.LoginIdentity).Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0)
 
-	query := u.data.db.Table("t_user_password as t1").Joins("inner join t_user_identity as t2 on t1.user_id = t2.user_id").Select("t1.salt, t1.password").Where("t2.identity_type = ?", "password").Where("t2.identity_id = ?", req.LoginIdentity).Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0)
-
-	switch loginType {
-	case v1.LoginType_LOGIN_TYPE_EMAIL:
-		query.Where("t2.identity_type = ?", "email")
-	case v1.LoginType_LOGIN_TYPE_SMS:
-		query.Where("t2.identity_type = ?", "sms")
-	case v1.LoginType_LOGIN_TYPE_ACCOUNT:
-		query.Where("t2.identity_type = ?", "account")
+	switch accountType {
+	case ACCOUNT_TYPE_EMAIL:
+		query = query.Where("t2.identity_type = ?", "email")
+	case ACCOUNT_TYPE_SMS:
+		query = query.Where("t2.identity_type = ?", "sms")
+	case ACCOUNT_TYPE_USERNAME:
+		query = query.Where("t2.identity_type = ?", "password")
 	}
 
 	if err := query.First(&userPassword).Error; err != nil {
@@ -182,8 +189,8 @@ func (u *userRepo) GetUserPasswordInfo(ctx context.Context, req *v1.WebLoginRequ
 	return &v1.UserPasswordInfo{Slat: userPassword.Salt, Password: userPassword.Password}, nil
 }
 
-func (u *userRepo) CheckUserPassword(ctx context.Context, req *v1.WebLoginRequest) (bool, error) {
-	userPasswordInfo, err := u.GetUserPasswordInfo(ctx, req)
+func (u *userRepo) CheckUserPassword(ctx context.Context, accountType AccountType, req *v1.WebLoginRequest) (bool, error) {
+	userPasswordInfo, err := u.GetUserPasswordInfo(ctx, accountType, req)
 	if err != nil {
 		u.log.Error("get user password info failed: %v", err)
 		return false, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "用户名或密码错误, 请检查后重试")
@@ -198,13 +205,45 @@ func (u *userRepo) CheckUserPassword(ctx context.Context, req *v1.WebLoginReques
 	return pwd == userPasswordInfo.Password, nil
 }
 
+// 获取web登陆用户信息
+func (u *userRepo) GetWebLoginAccountInfo(ctx context.Context, accountType AccountType, req *v1.WebLoginRequest) (*UserInfo, error) {
+	var userInfo *UserInfo
+
+	query := u.data.db.Table("t_user as t1").Joins("inner join t_user_identity as t2 on t1.id = t2.user_id").
+		Select("t1.id, t1.nickname").
+		Where("t2.identity_id = ?", req.LoginIdentity).
+		Where("t1.deleted_flag = ?", 0).
+		Where("t2.deleted_flag = ?", 0)
+
+	switch accountType {
+	case ACCOUNT_TYPE_EMAIL:
+		query = query.Where("t2.identity_type = ?", "email")
+	case ACCOUNT_TYPE_SMS:
+		query = query.Where("t2.identity_type = ?", "sms")
+	case ACCOUNT_TYPE_USERNAME:
+		query = query.Where("t2.identity_type = ?", "password")
+	}
+
+	if err := query.First(&userInfo).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "用户不存在")
+		}
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+	}
+
+	return userInfo, nil
+}
+
 // WebLoginAccount 账号密码登录
 func (u *userRepo) WebLoginAccount(ctx context.Context, req *v1.WebLoginRequest, loginValidPeriod int64) (*v1.WebLoginReply, error) {
 	if loginValidPeriod <= 0 {
 		loginValidPeriod = 8
 	}
 
-	if ok, err := u.CheckUserPassword(ctx, req); err != nil {
+	// 账号类型
+	accountType := u.CheckLoginAccountType(req.LoginIdentity)
+
+	if ok, err := u.CheckUserPassword(ctx, accountType, req); err != nil {
 		u.log.Error("check user password failed: %v", err)
 		return nil, err
 	} else if !ok {
@@ -212,19 +251,9 @@ func (u *userRepo) WebLoginAccount(ctx context.Context, req *v1.WebLoginRequest,
 	}
 
 	// 查询用户信息
-	var userInfo UserInfo
-
-	if err := u.data.db.Table("t_user as t1").Joins("inner join t_user_identity as t2 on t1.id = t2.user_id").
-		Select("t1.id, t1.nickname").
-		Where("t2.identity_type = ?", "password").
-		Where("t2.identity_id = ?", req.LoginIdentity).
-		Where("t1.deleted_flag = ?", 0).
-		Where("t2.deleted_flag = ?", 0).
-		First(&userInfo).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "用户不存在")
-		}
-		u.log.Error("get user identity failed: %v", err)
+	userInfo, err := u.GetWebLoginAccountInfo(ctx, accountType, req)
+	if err != nil {
+		u.log.Error("get web login user info failed: %v", err)
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
 	}
 
@@ -256,21 +285,6 @@ func (u *userRepo) WebLoginSms(ctx context.Context, req *v1.WebLoginRequest) (*v
 	return nil, nil
 }
 
-// GetUserId 查询当前用户ID
-func (u *userRepo) GetUserId(ctx context.Context) (int64, error) {
-	username, err := utils.GetCurrentUser(ctx)
-	if err != nil {
-		return 0, err
-	}
-
-	var user User
-	if err := u.data.db.Model(&User{}).Where("username = ?", username).Where("deleted_flag = ?", 0).First(&user).Error; err != nil {
-		return 0, err
-	}
-
-	return user.Id, nil
-}
-
 func (u *userRepo) GetUserByNickname(ctx context.Context, nickname string) (*v1.UserInfo, error) {
 	var user User
 
@@ -300,4 +314,18 @@ func (u *userRepo) AppLogin(ctx context.Context, req *v1.AppLoginRequest) (*v1.A
 // MpLogin 登录接口
 func (u *userRepo) MpLogin(ctx context.Context, req *v1.MpLoginRequest) (*v1.MpLoginReply, error) {
 	return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "暂不支持当前登录方式, 请联系管理员")
+}
+
+// GetWebLoginUserInfo 查询登陆用户信息
+func (u *userRepo) GetWebLoginUserInfo(ctx context.Context, req *v1.GetWebLoginUserInfoRequest) (*v1.GetWebLoginUserInfoReply, error) {
+
+	userId, err := utils.GetCurrentUserId(ctx)
+	if err != nil {
+		u.log.Error("get current user id failed: %v", err)
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+	}
+
+	fmt.Println("userId =>", userId)
+
+	return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "1111")
 }

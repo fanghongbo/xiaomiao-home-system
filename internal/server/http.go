@@ -37,7 +37,7 @@ func NewWhiteListMatcher() selector.MatchFunc {
 }
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Server, config *conf.Config, user *service.UserService, role *service.RoleService, userNotification *service.UserNotificationService, logger log.Logger) *http.Server {
+func NewHTTPServer(c *conf.Server, config *conf.Jwt, user *service.UserService, role *service.RoleService, userNotification *service.UserNotificationService, logger log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),

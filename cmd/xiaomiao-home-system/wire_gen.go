@@ -7,17 +7,18 @@
 package main
 
 import (
+	"github.com/go-kratos/kratos/contrib/registry/nacos/v2"
+	"github.com/go-kratos/kratos/v2"
+	"github.com/go-kratos/kratos/v2/log"
 	"xiaomiao-home-system/internal/biz"
 	"xiaomiao-home-system/internal/conf"
 	"xiaomiao-home-system/internal/data"
 	"xiaomiao-home-system/internal/server"
 	"xiaomiao-home-system/internal/service"
 	"xiaomiao-home-system/internal/task"
+)
 
-	"github.com/go-kratos/kratos/contrib/registry/nacos/v2"
-	"github.com/go-kratos/kratos/v2"
-	"github.com/go-kratos/kratos/v2/log"
-
+import (
 	_ "go.uber.org/automaxprocs"
 )
 
@@ -40,7 +41,7 @@ func wireApp(confServer *conf.Server, confData *conf.Data, config *conf.Config, 
 	userNotificationUsecase := biz.NewUserNotificationUsecase(userNotificationRepo, logger)
 	userNotificationService := service.NewUserNotificationService(userNotificationUsecase, config, logger)
 	grpcServer := server.NewGRPCServer(confServer, userService, roleService, userNotificationService, logger)
-	httpServer := server.NewHTTPServer(confServer, config, userService, roleService, userNotificationService, logger)
+	httpServer := server.NewHTTPServer(confServer, jwt, userService, roleService, userNotificationService, logger)
 	app := newApp(logger, taskManager, grpcServer, httpServer, registry)
 	return app, func() {
 		cleanup()

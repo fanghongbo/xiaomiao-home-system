@@ -1304,3 +1304,350 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = MpLoginReplyValidationError{}
+
+// Validate checks the field values on GetWebLoginUserInfoRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *GetWebLoginUserInfoRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetWebLoginUserInfoRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetWebLoginUserInfoRequestMultiError, or nil if none found.
+func (m *GetWebLoginUserInfoRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetWebLoginUserInfoRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return GetWebLoginUserInfoRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetWebLoginUserInfoRequestMultiError is an error wrapping multiple
+// validation errors returned by GetWebLoginUserInfoRequest.ValidateAll() if
+// the designated constraints aren't met.
+type GetWebLoginUserInfoRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetWebLoginUserInfoRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetWebLoginUserInfoRequestMultiError) AllErrors() []error { return m }
+
+// GetWebLoginUserInfoRequestValidationError is the validation error returned
+// by GetWebLoginUserInfoRequest.Validate if the designated constraints aren't met.
+type GetWebLoginUserInfoRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetWebLoginUserInfoRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetWebLoginUserInfoRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetWebLoginUserInfoRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetWebLoginUserInfoRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetWebLoginUserInfoRequestValidationError) ErrorName() string {
+	return "GetWebLoginUserInfoRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetWebLoginUserInfoRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetWebLoginUserInfoRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetWebLoginUserInfoRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetWebLoginUserInfoRequestValidationError{}
+
+// Validate checks the field values on WebLoginUserInfo with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *WebLoginUserInfo) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on WebLoginUserInfo with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// WebLoginUserInfoMultiError, or nil if none found.
+func (m *WebLoginUserInfo) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *WebLoginUserInfo) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	// no validation rules for Nickname
+
+	// no validation rules for Avatar
+
+	// no validation rules for Signature
+
+	if len(errors) > 0 {
+		return WebLoginUserInfoMultiError(errors)
+	}
+
+	return nil
+}
+
+// WebLoginUserInfoMultiError is an error wrapping multiple validation errors
+// returned by WebLoginUserInfo.ValidateAll() if the designated constraints
+// aren't met.
+type WebLoginUserInfoMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m WebLoginUserInfoMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m WebLoginUserInfoMultiError) AllErrors() []error { return m }
+
+// WebLoginUserInfoValidationError is the validation error returned by
+// WebLoginUserInfo.Validate if the designated constraints aren't met.
+type WebLoginUserInfoValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e WebLoginUserInfoValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e WebLoginUserInfoValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e WebLoginUserInfoValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e WebLoginUserInfoValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e WebLoginUserInfoValidationError) ErrorName() string { return "WebLoginUserInfoValidationError" }
+
+// Error satisfies the builtin error interface
+func (e WebLoginUserInfoValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sWebLoginUserInfo.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = WebLoginUserInfoValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = WebLoginUserInfoValidationError{}
+
+// Validate checks the field values on GetWebLoginUserInfoReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *GetWebLoginUserInfoReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetWebLoginUserInfoReply with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetWebLoginUserInfoReplyMultiError, or nil if none found.
+func (m *GetWebLoginUserInfoReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetWebLoginUserInfoReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Code
+
+	// no validation rules for Message
+
+	// no validation rules for Success
+
+	if all {
+		switch v := interface{}(m.GetData()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetWebLoginUserInfoReplyValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetWebLoginUserInfoReplyValidationError{
+					field:  "Data",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetWebLoginUserInfoReplyValidationError{
+				field:  "Data",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return GetWebLoginUserInfoReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetWebLoginUserInfoReplyMultiError is an error wrapping multiple validation
+// errors returned by GetWebLoginUserInfoReply.ValidateAll() if the designated
+// constraints aren't met.
+type GetWebLoginUserInfoReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetWebLoginUserInfoReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetWebLoginUserInfoReplyMultiError) AllErrors() []error { return m }
+
+// GetWebLoginUserInfoReplyValidationError is the validation error returned by
+// GetWebLoginUserInfoReply.Validate if the designated constraints aren't met.
+type GetWebLoginUserInfoReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetWebLoginUserInfoReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetWebLoginUserInfoReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetWebLoginUserInfoReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetWebLoginUserInfoReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetWebLoginUserInfoReplyValidationError) ErrorName() string {
+	return "GetWebLoginUserInfoReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetWebLoginUserInfoReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetWebLoginUserInfoReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetWebLoginUserInfoReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetWebLoginUserInfoReplyValidationError{}

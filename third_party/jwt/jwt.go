@@ -61,13 +61,13 @@ func GenerateToken(config *Config, userId int64, nickname string) (string, error
 }
 
 // ParseToken 解析并校验 token，返回 claims。
-func ParseToken(config *Config, tokenString string) (*Claims, error) {
+func ParseToken(secretKey string, tokenString string) (*Claims, error) {
 	tokenString = strings.TrimSpace(tokenString)
 	if tokenString == "" {
 		return nil, ErrInvalidToken
 	}
 
-	secret := config.SecretKey
+	secret := []byte(secretKey)
 	if len(secret) == 0 {
 		return nil, ErrSecretNotSet
 	}
@@ -100,8 +100,8 @@ func ParseToken(config *Config, tokenString string) (*Claims, error) {
 }
 
 // ValidateToken 校验 token 并返回 userID。
-func ValidateToken(config *Config, tokenString string) (int64, error) {
-	claims, err := ParseToken(config, tokenString)
+func ValidateToken(secretKey string, tokenString string) (int64, error) {
+	claims, err := ParseToken(secretKey, tokenString)
 	if err != nil {
 		return 0, err
 	}

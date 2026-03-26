@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 	v1 "xiaomiao-home-system/api/user/notification/v1"
+	"xiaomiao-home-system/utils"
 
 	"xiaomiao-home-system/internal/biz"
 
@@ -26,9 +27,7 @@ func NewUserNotificationRepo(data *Data, logger log.Logger) biz.UserNotification
 
 // GetUserNotificationList 查询用户消息列表
 func (u *userNotificationRepo) GetUserNotificationList(ctx context.Context, req *v1.GetUserNotificationListRequest) (*v1.GetUserNotificationListReply, error) {
-	userRepo := NewUserRepo(u.data, u.log.Logger())
-
-	userId, err := userRepo.GetUserId(ctx)
+	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -250,8 +249,7 @@ func (u *userNotificationRepo) UpdateUserAllNotificationStatus(ctx context.Conte
 		return nil, fmt.Errorf("status is required")
 	}
 
-	userRepo := NewUserRepo(u.data, u.log.Logger())
-	userId, err := userRepo.GetUserId(ctx)
+	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
 		return nil, err
 	}

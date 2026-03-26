@@ -9,14 +9,14 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
-// GetCurrentUser 查询当前用户
-func GetCurrentUser(ctx context.Context) (string, error) {
-	user := ctx.Value("x-md-global-user")
-	if user == nil {
-		return "", fmt.Errorf("failed to get current user from ctx")
+// GetCurrentUserId 查询当前用户Id
+func GetCurrentUserId(ctx context.Context) (string, error) {
+	userId := ctx.Value("x-md-global-user")
+	if userId == nil {
+		return "", fmt.Errorf("failed to get user id from ctx")
 	}
 
-	return fmt.Sprintf("%v", user), nil
+	return fmt.Sprintf("%v", userId), nil
 }
 
 // GetUserIP 获取用户IP

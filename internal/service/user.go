@@ -39,3 +39,8 @@ func (s *UserService) AppLogin(ctx context.Context, req *pb.AppLoginRequest) (*p
 func (s *UserService) MpLogin(ctx context.Context, req *pb.MpLoginRequest) (*pb.MpLoginReply, error) {
 	return s.user.MpLogin(ctx, req)
 }
+
+// GetWebLoginUserInfo 查询登陆用户信息
+func (s *UserService) GetWebLoginUserInfo(ctx context.Context, req *pb.GetWebLoginUserInfoRequest) (*pb.GetWebLoginUserInfoReply, error) {
+	return s.user.GetWebLoginUserInfo(ctx, req)
+}

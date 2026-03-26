@@ -34,6 +34,13 @@ service User {
 			body: "*"
 		};
 	};
+
+	// 查询用户信息
+	rpc GetWebLoginUserInfo (GetWebLoginUserInfoRequest) returns (GetWebLoginUserInfoReply) {
+		option (google.api.http) = {
+			get: "/api/v1/web/user/info"
+		};
+	}
 }
 
 // 基础请求体
@@ -45,11 +52,10 @@ message BaseResponse {}
 // 登录类型
 enum LoginType {
 	LOGIN_TYPE_UNSPECIFIED = 0;
-	LOGIN_TYPE_ACCOUNT = 1; // 账号密码
-	LOGIN_TYPE_EMAIL = 2;   // 邮箱登录（密码或验证码，按业务约定）
-	LOGIN_TYPE_SMS = 3;     // 手机验证码
-	LOGIN_TYPE_WECHAT = 4;  // 微信授权
-	LOGIN_TYPE_QQ = 5;      // QQ授权
+	LOGIN_TYPE_ACCOUNT = 1; // 账号密码 (支持账号|手机号｜邮箱)
+	LOGIN_TYPE_SMS = 2;     // 手机验证码
+	LOGIN_TYPE_WECHAT = 3;  // 微信授权
+	LOGIN_TYPE_QQ = 4;      // QQ授权
 }
 
 message WebLoginRequest {
@@ -112,3 +118,20 @@ message AppLoginReply {}
 message MpLoginRequest {}
 
 message MpLoginReply {}
+
+message GetWebLoginUserInfoRequest {}
+
+message WebLoginUserInfo {
+	int64 id = 1;
+	string nickname = 2;
+	string avatar = 3;
+	string signature = 4;
+	repeated string access_codes = 5;
+}
+
+message GetWebLoginUserInfoReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	WebLoginUserInfo data = 4;
+}

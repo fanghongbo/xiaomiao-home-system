@@ -46,8 +46,8 @@ CREATE TABLE
 (
     id           bigint PRIMARY KEY COMMENT '用户身份id',
     user_id      bigint NOT NULL COMMENT '用户id',
-    identity_type   varchar(32) NOT NULL COMMENT '身份类型 password:密码登录 sms:短信登录 wechat:微信登录 qq:QQ登录 email:邮箱登录',
-    identity_id    varchar(191) NOT NULL COMMENT '身份id 账号:用户名 手机号:手机号 微信:unionid QQ:openid 邮箱:email',
+    identity_type   varchar(32) NOT NULL COMMENT '身份类型 password:密码校验 sms:短信校验 wechat:微信校验 qq:QQ校验 email:邮箱校验',
+    identity_id    varchar(191) NOT NULL COMMENT '身份id 手机号:手机号 微信:unionid QQ:openid email:邮箱地址 password:用户名',
     verified_flag  tinyint(1) DEFAULT 0 COMMENT '是否完成验证 0:未验证 1:已验证',
     remark  longtext COMMENT '描述',
     deleted_flag tinyint(1)                   DEFAULT 0 COMMENT '删除标记, 0: 未删除,  1: 已删除',

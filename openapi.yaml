@@ -329,6 +329,19 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.user.v1.WebLoginReply'
+    /api/v1/web/user/info:
+        get:
+            tags:
+                - User
+            description: 查询用户信息
+            operationId: User_GetWebLoginUserInfo
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.v1.GetWebLoginUserInfoReply'
 components:
     schemas:
         api.role.v1.CreateRoleReply:
@@ -595,6 +608,18 @@ components:
         api.user.v1.AppLoginRequest:
             type: object
             properties: {}
+        api.user.v1.GetWebLoginUserInfoReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    $ref: '#/components/schemas/api.user.v1.WebLoginUserInfo'
         api.user.v1.MpLoginReply:
             type: object
             properties: {}
@@ -645,6 +670,21 @@ components:
                 authCode:
                     type: string
                     description: 第三方平台授权码（微信/QQ 推荐使用）
+        api.user.v1.WebLoginUserInfo:
+            type: object
+            properties:
+                id:
+                    type: string
+                nickname:
+                    type: string
+                avatar:
+                    type: string
+                signature:
+                    type: string
+                accessCodes:
+                    type: array
+                    items:
+                        type: string
 tags:
     - name: Role
     - name: User

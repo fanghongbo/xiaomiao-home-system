@@ -27,8 +27,8 @@ type UserRepo interface {
 	AppLogin(context.Context, *v1.AppLoginRequest) (*v1.AppLoginReply, error)
 	// MpLogin 登录接口
 	MpLogin(context.Context, *v1.MpLoginRequest) (*v1.MpLoginReply, error)
-	// GetUserId 查询用户ID
-	GetUserId(context.Context) (int64, error)
+	// GetWebLoginUserInfo 查询登陆用户信息
+	GetWebLoginUserInfo(context.Context, *v1.GetWebLoginUserInfoRequest) (*v1.GetWebLoginUserInfoReply, error)
 }
 
 // UserUsecase is a User usecase.
@@ -57,7 +57,7 @@ func (u *UserUsecase) MpLogin(ctx context.Context, req *v1.MpLoginRequest) (*v1.
 	return u.repo.MpLogin(ctx, req)
 }
 
-// GetUserId 查询用户ID
-func (u *UserUsecase) GetUserId(ctx context.Context) (int64, error) {
-	return u.repo.GetUserId(ctx)
+// GetWebLoginUserInfo 查询登陆用户信息
+func (u *UserUsecase) GetWebLoginUserInfo(ctx context.Context, req *v1.GetWebLoginUserInfoRequest) (*v1.GetWebLoginUserInfoReply, error) {
+	return u.repo.GetWebLoginUserInfo(ctx, req)
 }
