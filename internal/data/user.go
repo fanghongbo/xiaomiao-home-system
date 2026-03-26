@@ -83,16 +83,15 @@ func (u *userRepo) GetUserId(ctx context.Context) (int64, error) {
 	return user.Id, nil
 }
 
-func (u *userRepo) GetUserByUsername(ctx context.Context, username string) (*v1.UserInfo, error) {
+func (u *userRepo) GetUserByUsername(ctx context.Context, nickname string) (*v1.UserInfo, error) {
 	var user User
 
-	if err := u.data.db.Model(&User{}).Where("username = ?", username).Where("deleted_flag = ?", 0).First(&user).Error; err != nil {
+	if err := u.data.db.Model(&User{}).Where("nickname = ?", nickname).Where("deleted_flag = ?", 0).First(&user).Error; err != nil {
 		return nil, err
 	}
 
 	return &v1.UserInfo{
 		Id:       user.Id,
-		Username: user.Username,
 		Nickname: user.Nickname,
 		Avatar:   user.Avatar,
 		Roles:    []*v1.RoleItem{},

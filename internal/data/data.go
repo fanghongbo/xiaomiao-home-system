@@ -42,17 +42,17 @@ func NewGID(logger klog.Logger) *snowflake.Sonyflake {
 	}
 
 	// 将主机名转换为数字
-	var machineID uint16
+	var machineId uint16
 	for _, c := range hostname {
-		machineID = machineID*31 + uint16(c)
+		machineId = machineId*31 + uint16(c)
 	}
 
 	// 加上进程ID
-	machineID += uint16(os.Getpid())
+	machineId += uint16(os.Getpid())
 
 	sf := snowflake.NewSonyflake(snowflake.Settings{
 		MachineID: func() (uint16, error) {
-			return machineID, nil
+			return machineId, nil
 		},
 	})
 
@@ -124,11 +124,6 @@ func NewData(dbConfig *conf.Data, config *conf.Config, static *conf.Static, logg
 		dbConfig: dbConfig,
 		static:   static,
 		log:      log,
-	}
-
-	if err := InitData(d); err != nil {
-		log.Errorf("failed to init data: %v", err)
-		return nil, nil, err
 	}
 
 	return d, func() {
