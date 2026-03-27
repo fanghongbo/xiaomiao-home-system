@@ -8,6 +8,8 @@ CREATE TABLE
 (
     id           bigint PRIMARY KEY COMMENT '用户id',
     nickname     varchar(64) NOT NULL COMMENT '昵称',
+    gender       tinyint(1)  default 0 COMMENT '性别, 0: 保密, 1: 男, 2: 女',
+    birthday     date DEFAULT NULL COMMENT '生日',
     status       tinyint(1)  default 0 COMMENT '账户状态, 0: 禁用, 1: 启用',
     avatar       varchar(255) COMMENT '头像地址',
     signature    varchar(255) COMMENT '个人签名',

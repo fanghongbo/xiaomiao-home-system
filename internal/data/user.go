@@ -288,7 +288,7 @@ func (u *userRepo) WebLoginSms(ctx context.Context, req *v1.WebLoginRequest) (*v
 func (u *userRepo) GetUserByNickname(ctx context.Context, nickname string) (*v1.UserInfo, error) {
 	var user User
 
-	if err := u.data.db.Table("t_user as t1").Joins("inner join t_user_password as t2 on t1.id = t2.user_id").Select("t1.id, t1.nickname, t1.avatar, t1.signature, t1.status").Where("t1.nickname = ?", nickname).Where("t1.deleted_flag = ?", 0).First(&user).Error; err != nil {
+	if err := u.data.db.Table("t_user as t1").Joins("inner join t_user_password as t2 on t1.id = t2.user_id").Select("t1.id, t1.nickname, t1.avatar, t1.gender, t1.birthday, t1.signature, t1.status").Where("t1.nickname = ?", nickname).Where("t1.deleted_flag = ?", 0).First(&user).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			u.log.Error("user not found: %v", err)
 			return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "用户不存在")
@@ -301,6 +301,8 @@ func (u *userRepo) GetUserByNickname(ctx context.Context, nickname string) (*v1.
 		Id:        user.Id,
 		Nickname:  user.Nickname,
 		Avatar:    user.Avatar,
+		Gender:    int32(user.Gender),
+		Birthday:  user.Birthday.Format("2006-01-02"),
 		Signature: user.Signature,
 		Status:    int32(user.Status),
 	}, nil
@@ -319,7 +321,7 @@ func (u *userRepo) MpLogin(ctx context.Context, req *v1.MpLoginRequest) (*v1.MpL
 // 查询用户信息
 func (u *userRepo) GetUserInfo(ctx context.Context, userId int64) (*v1.UserInfo, error) {
 	var user User
-	if err := u.data.db.Table("t_user").Select("id, nickname, avatar, signature, status").Where("id = ?", userId).Where("deleted_flag = ?", 0).First(&user).Error; err != nil {
+	if err := u.data.db.Table("t_user").Select("id, nickname, avatar, gender, birthday, signature, status").Where("id = ?", userId).Where("deleted_flag = ?", 0).First(&user).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "用户不存在")
 		}
@@ -330,6 +332,8 @@ func (u *userRepo) GetUserInfo(ctx context.Context, userId int64) (*v1.UserInfo,
 		Id:        user.Id,
 		Nickname:  user.Nickname,
 		Avatar:    user.Avatar,
+		Gender:    int32(user.Gender),
+		Birthday:  user.Birthday.Format("2006-01-02"),
 		Signature: user.Signature,
 		Status:    int32(user.Status),
 	}, nil
@@ -357,6 +361,8 @@ func (u *userRepo) GetWebLoginUserInfo(ctx context.Context, req *v1.GetWebLoginU
 			Id:          userInfo.Id,
 			Nickname:    userInfo.Nickname,
 			Avatar:      userInfo.Avatar,
+			Gender:      int32(userInfo.Gender),
+			Birthday:    userInfo.Birthday,
 			Signature:   userInfo.Signature,
 			AccessCodes: []string{},
 		},

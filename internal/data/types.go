@@ -5,6 +5,8 @@ import "time"
 type User struct {
 	Id          int64     `gorm:"column:id"`
 	Nickname    string    `gorm:"column:nickname"`
+	Gender      int       `gorm:"column:gender"`
+	Birthday    time.Time `gorm:"column:birthday"`
 	Avatar      string    `gorm:"column:avatar"`
 	Signature   string    `gorm:"column:signature"`
 	Remark      string    `gorm:"column:remark"`

@@ -716,6 +716,11 @@ components:
                     type: string
                 avatar:
                     type: string
+                gender:
+                    type: integer
+                    format: int32
+                birthday:
+                    type: string
                 signature:
                     type: string
                 accessCodes:

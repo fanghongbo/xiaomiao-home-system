@@ -114,9 +114,11 @@ message UserInfo  {
 	int64 id = 1;
 	string nickname = 2; 
 	string avatar = 3;
-	string signature = 4;
-	int32 status = 5;
-	repeated string access_codes = 6;
+	int32 gender = 4;
+	string birthday = 5;
+	string signature = 6;
+	int32 status = 7;
+	repeated string access_codes = 8;
 }
 
 message UserPasswordInfo {
@@ -138,8 +140,10 @@ message WebLoginUserInfo {
 	int64 id = 1;
 	string nickname = 2;
 	string avatar = 3;
-	string signature = 4;
-	repeated string access_codes = 5;
+	int32 gender = 4;
+	string birthday = 5;
+	string signature = 6;
+	repeated string access_codes = 7;
 }
 
 message GetWebLoginUserInfoReply {
