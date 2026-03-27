@@ -112,6 +112,36 @@ func (u *userSettingRepo) UpdateUserPassword(ctx context.Context, req *v1.Update
 	}, nil
 }
 
+func (u *userSettingRepo) upsertNotifySetting(userId int64, settingName string, enable int32) error {
+	var setting UserSetting
+	err := u.data.db.Model(&UserSetting{}).
+		Where("user_id = ?", userId).
+		Where("name = ?", settingName).
+		Where("deleted_flag = ?", 0).
+		First(&setting).Error
+	if err != nil {
+		if err != gorm.ErrRecordNotFound {
+			return err
+		}
+
+		settingId, e := u.data.gid.NextID()
+		if e != nil {
+			return e
+		}
+
+		return u.data.db.Model(&UserSetting{}).Create(map[string]interface{}{
+			"id":      settingId,
+			"user_id": userId,
+			"name":    settingName,
+			"value":   enable,
+		}).Error
+	}
+
+	return u.data.db.Model(&UserSetting{}).
+		Where("id = ?", setting.Id).
+		Updates(map[string]interface{}{"value": enable}).Error
+}
+
 // UpdateUserSystemNotifyRecevieSetting 更新用户系统通知
 func (u *userSettingRepo) UpdateUserSystemNotifyRecevieSetting(ctx context.Context, req *v1.UpdateUserSystemNotifyRecevieSettingRequest) (*v1.UpdateUserSystemNotifyRecevieSettingReply, error) {
 	userId, err := utils.GetCurrentUserId(ctx)
@@ -120,18 +150,7 @@ func (u *userSettingRepo) UpdateUserSystemNotifyRecevieSetting(ctx context.Conte
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
 	}
 
-	settingId, err := u.data.gid.NextID()
-	if err != nil {
-		u.log.Error("generate setting id failed: %v", err)
-		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
-	}
-
-	if err := u.data.db.Model(&UserSetting{}).Where("user_id = ?", userId).Where("name = ?", "system_notify_receive").FirstOrCreate(map[string]interface{}{
-		"id":      settingId,
-		"user_id": userId,
-		"name":    "system_notify_receive",
-		"value":   req.Enable,
-	}).Error; err != nil {
+	if err := u.upsertNotifySetting(userId, "system_notify_receive", req.Enable); err != nil {
 		u.log.Error("set receive user system notify failed: %v", err)
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
 	}
@@ -152,18 +171,7 @@ func (u *userSettingRepo) UpdateUserInteractNotifyRecevieSetting(ctx context.Con
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
 	}
 
-	settingId, err := u.data.gid.NextID()
-	if err != nil {
-		u.log.Error("generate setting id failed: %v", err)
-		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
-	}
-
-	if err := u.data.db.Model(&UserSetting{}).Where("user_id = ?", userId).Where("name = ?", "interact_notify_receive").FirstOrCreate(map[string]interface{}{
-		"id":      settingId,
-		"user_id": userId,
-		"name":    "interact_notify_receive",
-		"value":   req.Enable,
-	}).Error; err != nil {
+	if err := u.upsertNotifySetting(userId, "interact_notify_receive", req.Enable); err != nil {
 		u.log.Error("set receive user interact notify failed: %v", err)
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
 	}
@@ -184,18 +192,7 @@ func (u *userSettingRepo) UpdateUserAdoptNotifyRecevieSetting(ctx context.Contex
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
 	}
 
-	settingId, err := u.data.gid.NextID()
-	if err != nil {
-		u.log.Error("generate setting id failed: %v", err)
-		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
-	}
-
-	if err := u.data.db.Model(&UserSetting{}).Where("user_id = ?", userId).Where("name = ?", "adopt_notify_receive").FirstOrCreate(map[string]interface{}{
-		"id":      settingId,
-		"user_id": userId,
-		"name":    "adopt_notify_receive",
-		"value":   req.Enable,
-	}).Error; err != nil {
+	if err := u.upsertNotifySetting(userId, "adopt_notify_receive", req.Enable); err != nil {
 		u.log.Error("set receive user adopt notify failed: %v", err)
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
 	}
@@ -216,18 +213,7 @@ func (u *userSettingRepo) UpdateUserEmailNotifyRecevieSetting(ctx context.Contex
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
 	}
 
-	settingId, err := u.data.gid.NextID()
-	if err != nil {
-		u.log.Error("generate setting id failed: %v", err)
-		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
-	}
-
-	if err := u.data.db.Model(&UserSetting{}).Where("user_id = ?", userId).Where("name = ?", "email_notify_receive").FirstOrCreate(map[string]interface{}{
-		"id":      settingId,
-		"user_id": userId,
-		"name":    "email_notify_receive",
-		"value":   req.Enable,
-	}).Error; err != nil {
+	if err := u.upsertNotifySetting(userId, "email_notify_receive", req.Enable); err != nil {
 		u.log.Error("set receive user email notify failed: %v", err)
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
 	}
