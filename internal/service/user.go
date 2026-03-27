@@ -54,3 +54,8 @@ func (s *UserService) WebLogout(ctx context.Context, req *pb.WebLogoutRequest) (
 func (s *UserService) WebCheckLogin(ctx context.Context, req *pb.WebCheckLoginRequest) (*pb.WebCheckLoginReply, error) {
 	return s.user.WebCheckLogin(ctx, req)
 }
+
+// UpdateUserBaseSetting 更新用户基础设置
+func (s *UserService) UpdateUserBaseSetting(ctx context.Context, req *pb.UpdateUserBaseSettingRequest) (*pb.UpdateUserBaseSettingReply, error) {
+	return s.user.UpdateUserBaseSetting(ctx, req)
+}

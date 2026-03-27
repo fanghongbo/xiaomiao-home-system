@@ -19,12 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	User_WebLogin_FullMethodName            = "/api.user.v1.User/WebLogin"
-	User_WebCheckLogin_FullMethodName       = "/api.user.v1.User/WebCheckLogin"
-	User_WebLogout_FullMethodName           = "/api.user.v1.User/WebLogout"
-	User_AppLogin_FullMethodName            = "/api.user.v1.User/AppLogin"
-	User_MpLogin_FullMethodName             = "/api.user.v1.User/MpLogin"
-	User_GetWebLoginUserInfo_FullMethodName = "/api.user.v1.User/GetWebLoginUserInfo"
+	User_WebLogin_FullMethodName              = "/api.user.v1.User/WebLogin"
+	User_WebCheckLogin_FullMethodName         = "/api.user.v1.User/WebCheckLogin"
+	User_WebLogout_FullMethodName             = "/api.user.v1.User/WebLogout"
+	User_AppLogin_FullMethodName              = "/api.user.v1.User/AppLogin"
+	User_MpLogin_FullMethodName               = "/api.user.v1.User/MpLogin"
+	User_GetWebLoginUserInfo_FullMethodName   = "/api.user.v1.User/GetWebLoginUserInfo"
+	User_UpdateUserBaseSetting_FullMethodName = "/api.user.v1.User/UpdateUserBaseSetting"
 )
 
 // UserClient is the client API for User service.
@@ -42,6 +43,8 @@ type UserClient interface {
 	MpLogin(ctx context.Context, in *MpLoginRequest, opts ...grpc.CallOption) (*MpLoginReply, error)
 	// 查询用户信息
 	GetWebLoginUserInfo(ctx context.Context, in *GetWebLoginUserInfoRequest, opts ...grpc.CallOption) (*GetWebLoginUserInfoReply, error)
+	// 更新基础设置
+	UpdateUserBaseSetting(ctx context.Context, in *UpdateUserBaseSettingRequest, opts ...grpc.CallOption) (*UpdateUserBaseSettingReply, error)
 }
 
 type userClient struct {
@@ -112,6 +115,16 @@ func (c *userClient) GetWebLoginUserInfo(ctx context.Context, in *GetWebLoginUse
 	return out, nil
 }
 
+func (c *userClient) UpdateUserBaseSetting(ctx context.Context, in *UpdateUserBaseSettingRequest, opts ...grpc.CallOption) (*UpdateUserBaseSettingReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateUserBaseSettingReply)
+	err := c.cc.Invoke(ctx, User_UpdateUserBaseSetting_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServer is the server API for User service.
 // All implementations must embed UnimplementedUserServer
 // for forward compatibility.
@@ -127,6 +140,8 @@ type UserServer interface {
 	MpLogin(context.Context, *MpLoginRequest) (*MpLoginReply, error)
 	// 查询用户信息
 	GetWebLoginUserInfo(context.Context, *GetWebLoginUserInfoRequest) (*GetWebLoginUserInfoReply, error)
+	// 更新基础设置
+	UpdateUserBaseSetting(context.Context, *UpdateUserBaseSettingRequest) (*UpdateUserBaseSettingReply, error)
 	mustEmbedUnimplementedUserServer()
 }
 
@@ -154,6 +169,9 @@ func (UnimplementedUserServer) MpLogin(context.Context, *MpLoginRequest) (*MpLog
 }
 func (UnimplementedUserServer) GetWebLoginUserInfo(context.Context, *GetWebLoginUserInfoRequest) (*GetWebLoginUserInfoReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetWebLoginUserInfo not implemented")
+}
+func (UnimplementedUserServer) UpdateUserBaseSetting(context.Context, *UpdateUserBaseSettingRequest) (*UpdateUserBaseSettingReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateUserBaseSetting not implemented")
 }
 func (UnimplementedUserServer) mustEmbedUnimplementedUserServer() {}
 func (UnimplementedUserServer) testEmbeddedByValue()              {}
@@ -284,6 +302,24 @@ func _User_GetWebLoginUserInfo_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _User_UpdateUserBaseSetting_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateUserBaseSettingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).UpdateUserBaseSetting(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: User_UpdateUserBaseSetting_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).UpdateUserBaseSetting(ctx, req.(*UpdateUserBaseSettingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // User_ServiceDesc is the grpc.ServiceDesc for User service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -314,6 +350,10 @@ var User_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetWebLoginUserInfo",
 			Handler:    _User_GetWebLoginUserInfo_Handler,
+		},
+		{
+			MethodName: "UpdateUserBaseSetting",
+			Handler:    _User_UpdateUserBaseSetting_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

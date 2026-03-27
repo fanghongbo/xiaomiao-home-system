@@ -408,3 +408,31 @@ func (u *userRepo) WebCheckLogin(ctx context.Context, req *v1.WebCheckLoginReque
 		Data:    "",
 	}, nil
 }
+
+// UpdateUserBaseSetting 更新用户基础设置
+func (u *userRepo) UpdateUserBaseSetting(ctx context.Context, req *v1.UpdateUserBaseSettingRequest) (*v1.UpdateUserBaseSettingReply, error) {
+	userId, err := utils.GetCurrentUserId(ctx)
+	if err != nil {
+		u.log.Error("get current user id failed: %v", err)
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+	}
+
+	userInfo := map[string]interface{}{
+		"nickname":  req.Nickname,
+		"gender":    req.Gender,
+		"birthday":  req.Birthday,
+		"signature": req.Signature,
+	}
+
+	if err := u.data.db.Table("t_user").Where("id = ?", userId).Updates(userInfo).Error; err != nil {
+		u.log.Error("update user base setting failed: %v", err)
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+	}
+
+	return &v1.UpdateUserBaseSettingReply{
+		Code:    200,
+		Message: "更新成功",
+		Success: true,
+		Data:    "",
+	}, nil
+}

@@ -186,6 +186,25 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.role.v1.GetRolesReply'
+    /api/v1/user/base/setting:
+        post:
+            tags:
+                - User
+            description: 更新基础设置
+            operationId: User_UpdateUserBaseSetting
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.user.v1.UpdateUserBaseSettingRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.v1.UpdateUserBaseSettingReply'
     /api/v1/user/notification:
         post:
             tags:
@@ -651,6 +670,30 @@ components:
         api.user.v1.MpLoginRequest:
             type: object
             properties: {}
+        api.user.v1.UpdateUserBaseSettingReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: string
+        api.user.v1.UpdateUserBaseSettingRequest:
+            type: object
+            properties:
+                nickname:
+                    type: string
+                gender:
+                    type: integer
+                    format: enum
+                birthday:
+                    type: string
+                signature:
+                    type: string
         api.user.v1.WebCheckLoginReply:
             type: object
             properties:
