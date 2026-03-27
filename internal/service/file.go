@@ -29,3 +29,8 @@ func NewFileService(file *biz.FileUsecase, config *conf.Config, logger log.Logge
 func (s *FileService) DownloadFile(ctx context.Context, req *pb.DownloadFileRequest) (*pb.DownloadFileReply, error) {
 	return s.file.DownloadFile(ctx, req)
 }
+
+// UpdateAvatar 上传头像
+func (s *FileService) UploadAvatar(ctx context.Context, req *pb.UploadAvatarRequest) (*pb.UploadAvatarReply, error) {
+	return s.file.UploadAvatar(ctx, req)
+}

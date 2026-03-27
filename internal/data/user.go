@@ -89,7 +89,7 @@ func (u *userRepo) WebLogin(ctx context.Context, req *v1.WebLoginRequest) (*v1.W
 	loginErrorCount, err := u.GetLoginErrorCount(ctx, req.LoginType, req.LoginIdentity, clientIp)
 	if err != nil {
 		u.log.Error("get login error count failed: %v", err)
-		return nil, errors.BadRequest(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	if loginErrorCount >= invalidLoginCount {
@@ -184,7 +184,7 @@ func (u *userRepo) GetUserPasswordInfo(ctx context.Context, accountType AccountT
 		if err == gorm.ErrRecordNotFound {
 			return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "密码凭证不存在")
 		}
-		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 	return &v1.UserPasswordInfo{Slat: userPassword.Salt, Password: userPassword.Password}, nil
 }
@@ -199,7 +199,7 @@ func (u *userRepo) CheckUserPassword(ctx context.Context, accountType AccountTyp
 	pwd, err := password.New(req.Password, userPasswordInfo.Slat)
 	if err != nil {
 		u.log.Error("check password failed: %v", err)
-		return false, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+		return false, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	return pwd == userPasswordInfo.Password, nil
@@ -228,7 +228,7 @@ func (u *userRepo) GetWebLoginAccountInfo(ctx context.Context, accountType Accou
 		if err == gorm.ErrRecordNotFound {
 			return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "用户不存在")
 		}
-		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	return userInfo, nil
@@ -254,7 +254,7 @@ func (u *userRepo) WebLoginAccount(ctx context.Context, req *v1.WebLoginRequest,
 	userInfo, err := u.GetWebLoginAccountInfo(ctx, accountType, req)
 	if err != nil {
 		u.log.Error("get web login user info failed: %v", err)
-		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	jwtConfig := &jwt.Config{
@@ -267,7 +267,7 @@ func (u *userRepo) WebLoginAccount(ctx context.Context, req *v1.WebLoginRequest,
 	token, err := jwt.GenerateToken(jwtConfig, userInfo.Id, userInfo.Nickname)
 	if err != nil {
 		u.log.Error("generate jwt token failed: %v", err)
-		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	return &v1.WebLoginReply{
@@ -294,7 +294,7 @@ func (u *userRepo) GetUserByNickname(ctx context.Context, nickname string) (*v1.
 			return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "用户不存在")
 		}
 		u.log.Error("get user by nickname failed: %v", err)
-		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	return &v1.UserInfo{
@@ -325,7 +325,7 @@ func (u *userRepo) GetUserInfo(ctx context.Context, userId int64) (*v1.UserInfo,
 		if err == gorm.ErrRecordNotFound {
 			return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "用户不存在")
 		}
-		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	return &v1.UserInfo{
@@ -344,13 +344,13 @@ func (u *userRepo) GetWebLoginUserInfo(ctx context.Context, req *v1.GetWebLoginU
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
 		u.log.Error("get current user id failed: %v", err)
-		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	userInfo, err := u.GetUserInfo(ctx, userId)
 	if err != nil {
 		u.log.Error("get user info failed: %v", err)
-		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	return &v1.GetWebLoginUserInfoReply{

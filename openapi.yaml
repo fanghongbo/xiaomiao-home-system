@@ -223,6 +223,25 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.user.setting.v1.UpdateUserAdoptNotifyRecevieSettingReply'
+    /api/v1/user/avatar/upload:
+        post:
+            tags:
+                - File
+            description: 上传头像
+            operationId: File_UploadAvatar
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.file.v1.UploadAvatarRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.file.v1.UploadAvatarReply'
     /api/v1/user/base/setting:
         post:
             tags:
@@ -543,6 +562,36 @@ components:
                     type: string
                 fileSize:
                     type: string
+        api.file.v1.ImageInfo:
+            type: object
+            properties:
+                url:
+                    type: string
+        api.file.v1.UploadAvatarReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    $ref: '#/components/schemas/api.file.v1.ImageInfo'
+        api.file.v1.UploadAvatarRequest:
+            type: object
+            properties:
+                fileName:
+                    type: string
+                    description: 文件名，如 avatar.png
+                contentType:
+                    type: string
+                    description: 文件类型，如 image/png
+                content:
+                    type: string
+                    description: 文件二进制内容
+                    format: bytes
         api.role.v1.CreateRoleReply:
             type: object
             properties:

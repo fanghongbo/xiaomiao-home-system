@@ -33,7 +33,7 @@ func (u *userSettingRepo) UpdateUserBaseSetting(ctx context.Context, req *v1.Upd
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
 		u.log.Error("get current user id failed: %v", err)
-		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	userInfo := map[string]interface{}{
@@ -45,7 +45,7 @@ func (u *userSettingRepo) UpdateUserBaseSetting(ctx context.Context, req *v1.Upd
 
 	if err := u.data.db.Table("t_user").Where("id = ?", userId).Updates(userInfo).Error; err != nil {
 		u.log.Error("update user base setting failed: %v", err)
-		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	return &v1.UpdateUserBaseSettingReply{
@@ -77,7 +77,7 @@ func (u *userSettingRepo) UpdateUserPassword(ctx context.Context, req *v1.Update
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
 		u.log.Error("get current user id failed: %v", err)
-		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	if !u.CheckPassword(req.Password) {
@@ -87,13 +87,13 @@ func (u *userSettingRepo) UpdateUserPassword(ctx context.Context, req *v1.Update
 	salt, err := password.NewSalt(10)
 	if err != nil {
 		u.log.Error("generate salt failed: %v", err)
-		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	passwordHash, err := password.New(req.Password, salt)
 	if err != nil {
 		u.log.Error("generate password hash failed: %v", err)
-		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	if err := u.data.db.Table("t_user_password").Where("user_id = ?", userId).Updates(map[string]interface{}{
@@ -101,7 +101,7 @@ func (u *userSettingRepo) UpdateUserPassword(ctx context.Context, req *v1.Update
 		"salt":     salt,
 	}).Error; err != nil {
 		u.log.Error("update user password failed: %v", err)
-		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	return &v1.UpdateUserPasswordReply{
@@ -147,12 +147,12 @@ func (u *userSettingRepo) UpdateUserSystemNotifyRecevieSetting(ctx context.Conte
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
 		u.log.Error("get current user id failed: %v", err)
-		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	if err := u.upsertNotifySetting(userId, "system_notify_receive", req.Enable); err != nil {
 		u.log.Error("set receive user system notify failed: %v", err)
-		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	return &v1.UpdateUserSystemNotifyRecevieSettingReply{
@@ -168,12 +168,12 @@ func (u *userSettingRepo) UpdateUserInteractNotifyRecevieSetting(ctx context.Con
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
 		u.log.Error("get current user id failed: %v", err)
-		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	if err := u.upsertNotifySetting(userId, "interact_notify_receive", req.Enable); err != nil {
 		u.log.Error("set receive user interact notify failed: %v", err)
-		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	return &v1.UpdateUserInteractNotifyRecevieSettingReply{
@@ -189,12 +189,12 @@ func (u *userSettingRepo) UpdateUserAdoptNotifyRecevieSetting(ctx context.Contex
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
 		u.log.Error("get current user id failed: %v", err)
-		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	if err := u.upsertNotifySetting(userId, "adopt_notify_receive", req.Enable); err != nil {
 		u.log.Error("set receive user adopt notify failed: %v", err)
-		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	return &v1.UpdateUserAdoptNotifyRecevieSettingReply{
@@ -210,12 +210,12 @@ func (u *userSettingRepo) UpdateUserEmailNotifyRecevieSetting(ctx context.Contex
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
 		u.log.Error("get current user id failed: %v", err)
-		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	if err := u.upsertNotifySetting(userId, "email_notify_receive", req.Enable); err != nil {
 		u.log.Error("set receive user email notify failed: %v", err)
-		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	return &v1.UpdateUserEmailNotifyRecevieSettingReply{
@@ -231,7 +231,7 @@ func (u *userSettingRepo) GetUserNotifySetting(ctx context.Context, req *v1.GetU
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
 		u.log.Error("get current user id failed: %v", err)
-		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	var systemVal int32
@@ -240,7 +240,7 @@ func (u *userSettingRepo) GetUserNotifySetting(ctx context.Context, req *v1.GetU
 			systemVal = 1
 		} else {
 			u.log.Error("get user notify setting failed: %v", err)
-			return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+			return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 		}
 	}
 
@@ -250,7 +250,7 @@ func (u *userSettingRepo) GetUserNotifySetting(ctx context.Context, req *v1.GetU
 			interactVal = 1
 		} else {
 			u.log.Error("get user notify setting failed: %v", err)
-			return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+			return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 		}
 	}
 
@@ -260,7 +260,7 @@ func (u *userSettingRepo) GetUserNotifySetting(ctx context.Context, req *v1.GetU
 			adoptVal = 1
 		} else {
 			u.log.Error("get user notify setting failed: %v", err)
-			return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+			return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 		}
 	}
 
@@ -270,7 +270,7 @@ func (u *userSettingRepo) GetUserNotifySetting(ctx context.Context, req *v1.GetU
 			emailVal = 1
 		} else {
 			u.log.Error("get user notify setting failed: %v", err)
-			return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+			return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 		}
 	}
 

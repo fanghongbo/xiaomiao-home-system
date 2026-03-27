@@ -35,22 +35,22 @@ var (
 	_ = sort.Sort
 )
 
-// Validate checks the field values on UploadImageRequest with the rules
+// Validate checks the field values on UploadAvatarRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *UploadImageRequest) Validate() error {
+func (m *UploadAvatarRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on UploadImageRequest with the rules
+// ValidateAll checks the field values on UploadAvatarRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// UploadImageRequestMultiError, or nil if none found.
-func (m *UploadImageRequest) ValidateAll() error {
+// UploadAvatarRequestMultiError, or nil if none found.
+func (m *UploadAvatarRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *UploadImageRequest) validate(all bool) error {
+func (m *UploadAvatarRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -59,30 +59,24 @@ func (m *UploadImageRequest) validate(all bool) error {
 
 	// no validation rules for FileName
 
-	// no validation rules for FileSuffix
+	// no validation rules for ContentType
 
-	// no validation rules for FileType
-
-	// no validation rules for FilePath
-
-	// no validation rules for FileMd5
-
-	// no validation rules for FileSize
+	// no validation rules for Content
 
 	if len(errors) > 0 {
-		return UploadImageRequestMultiError(errors)
+		return UploadAvatarRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// UploadImageRequestMultiError is an error wrapping multiple validation errors
-// returned by UploadImageRequest.ValidateAll() if the designated constraints
-// aren't met.
-type UploadImageRequestMultiError []error
+// UploadAvatarRequestMultiError is an error wrapping multiple validation
+// errors returned by UploadAvatarRequest.ValidateAll() if the designated
+// constraints aren't met.
+type UploadAvatarRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m UploadImageRequestMultiError) Error() string {
+func (m UploadAvatarRequestMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -91,11 +85,11 @@ func (m UploadImageRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m UploadImageRequestMultiError) AllErrors() []error { return m }
+func (m UploadAvatarRequestMultiError) AllErrors() []error { return m }
 
-// UploadImageRequestValidationError is the validation error returned by
-// UploadImageRequest.Validate if the designated constraints aren't met.
-type UploadImageRequestValidationError struct {
+// UploadAvatarRequestValidationError is the validation error returned by
+// UploadAvatarRequest.Validate if the designated constraints aren't met.
+type UploadAvatarRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -103,24 +97,24 @@ type UploadImageRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e UploadImageRequestValidationError) Field() string { return e.field }
+func (e UploadAvatarRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e UploadImageRequestValidationError) Reason() string { return e.reason }
+func (e UploadAvatarRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e UploadImageRequestValidationError) Cause() error { return e.cause }
+func (e UploadAvatarRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e UploadImageRequestValidationError) Key() bool { return e.key }
+func (e UploadAvatarRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e UploadImageRequestValidationError) ErrorName() string {
-	return "UploadImageRequestValidationError"
+func (e UploadAvatarRequestValidationError) ErrorName() string {
+	return "UploadAvatarRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e UploadImageRequestValidationError) Error() string {
+func (e UploadAvatarRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -132,14 +126,14 @@ func (e UploadImageRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sUploadImageRequest.%s: %s%s",
+		"invalid %sUploadAvatarRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = UploadImageRequestValidationError{}
+var _ error = UploadAvatarRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -147,23 +141,24 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = UploadImageRequestValidationError{}
+} = UploadAvatarRequestValidationError{}
 
-// Validate checks the field values on Image with the rules defined in the
+// Validate checks the field values on ImageInfo with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
-func (m *Image) Validate() error {
+func (m *ImageInfo) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on Image with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in ImageMultiError, or nil if none found.
-func (m *Image) ValidateAll() error {
+// ValidateAll checks the field values on ImageInfo with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in ImageInfoMultiError, or nil
+// if none found.
+func (m *ImageInfo) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *Image) validate(all bool) error {
+func (m *ImageInfo) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -173,18 +168,18 @@ func (m *Image) validate(all bool) error {
 	// no validation rules for Url
 
 	if len(errors) > 0 {
-		return ImageMultiError(errors)
+		return ImageInfoMultiError(errors)
 	}
 
 	return nil
 }
 
-// ImageMultiError is an error wrapping multiple validation errors returned by
-// Image.ValidateAll() if the designated constraints aren't met.
-type ImageMultiError []error
+// ImageInfoMultiError is an error wrapping multiple validation errors returned
+// by ImageInfo.ValidateAll() if the designated constraints aren't met.
+type ImageInfoMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m ImageMultiError) Error() string {
+func (m ImageInfoMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -193,11 +188,11 @@ func (m ImageMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m ImageMultiError) AllErrors() []error { return m }
+func (m ImageInfoMultiError) AllErrors() []error { return m }
 
-// ImageValidationError is the validation error returned by Image.Validate if
-// the designated constraints aren't met.
-type ImageValidationError struct {
+// ImageInfoValidationError is the validation error returned by
+// ImageInfo.Validate if the designated constraints aren't met.
+type ImageInfoValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -205,22 +200,22 @@ type ImageValidationError struct {
 }
 
 // Field function returns field value.
-func (e ImageValidationError) Field() string { return e.field }
+func (e ImageInfoValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ImageValidationError) Reason() string { return e.reason }
+func (e ImageInfoValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ImageValidationError) Cause() error { return e.cause }
+func (e ImageInfoValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ImageValidationError) Key() bool { return e.key }
+func (e ImageInfoValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ImageValidationError) ErrorName() string { return "ImageValidationError" }
+func (e ImageInfoValidationError) ErrorName() string { return "ImageInfoValidationError" }
 
 // Error satisfies the builtin error interface
-func (e ImageValidationError) Error() string {
+func (e ImageInfoValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -232,14 +227,14 @@ func (e ImageValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sImage.%s: %s%s",
+		"invalid %sImageInfo.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ImageValidationError{}
+var _ error = ImageInfoValidationError{}
 
 var _ interface {
 	Field() string
@@ -247,24 +242,24 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ImageValidationError{}
+} = ImageInfoValidationError{}
 
-// Validate checks the field values on UploadImageReply with the rules defined
+// Validate checks the field values on UploadAvatarReply with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
-func (m *UploadImageReply) Validate() error {
+func (m *UploadAvatarReply) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on UploadImageReply with the rules
+// ValidateAll checks the field values on UploadAvatarReply with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// UploadImageReplyMultiError, or nil if none found.
-func (m *UploadImageReply) ValidateAll() error {
+// UploadAvatarReplyMultiError, or nil if none found.
+func (m *UploadAvatarReply) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *UploadImageReply) validate(all bool) error {
+func (m *UploadAvatarReply) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -281,7 +276,7 @@ func (m *UploadImageReply) validate(all bool) error {
 		switch v := interface{}(m.GetData()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, UploadImageReplyValidationError{
+				errors = append(errors, UploadAvatarReplyValidationError{
 					field:  "Data",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -289,7 +284,7 @@ func (m *UploadImageReply) validate(all bool) error {
 			}
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
-				errors = append(errors, UploadImageReplyValidationError{
+				errors = append(errors, UploadAvatarReplyValidationError{
 					field:  "Data",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -298,7 +293,7 @@ func (m *UploadImageReply) validate(all bool) error {
 		}
 	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return UploadImageReplyValidationError{
+			return UploadAvatarReplyValidationError{
 				field:  "Data",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -307,19 +302,19 @@ func (m *UploadImageReply) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return UploadImageReplyMultiError(errors)
+		return UploadAvatarReplyMultiError(errors)
 	}
 
 	return nil
 }
 
-// UploadImageReplyMultiError is an error wrapping multiple validation errors
-// returned by UploadImageReply.ValidateAll() if the designated constraints
+// UploadAvatarReplyMultiError is an error wrapping multiple validation errors
+// returned by UploadAvatarReply.ValidateAll() if the designated constraints
 // aren't met.
-type UploadImageReplyMultiError []error
+type UploadAvatarReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m UploadImageReplyMultiError) Error() string {
+func (m UploadAvatarReplyMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -328,11 +323,11 @@ func (m UploadImageReplyMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m UploadImageReplyMultiError) AllErrors() []error { return m }
+func (m UploadAvatarReplyMultiError) AllErrors() []error { return m }
 
-// UploadImageReplyValidationError is the validation error returned by
-// UploadImageReply.Validate if the designated constraints aren't met.
-type UploadImageReplyValidationError struct {
+// UploadAvatarReplyValidationError is the validation error returned by
+// UploadAvatarReply.Validate if the designated constraints aren't met.
+type UploadAvatarReplyValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -340,22 +335,24 @@ type UploadImageReplyValidationError struct {
 }
 
 // Field function returns field value.
-func (e UploadImageReplyValidationError) Field() string { return e.field }
+func (e UploadAvatarReplyValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e UploadImageReplyValidationError) Reason() string { return e.reason }
+func (e UploadAvatarReplyValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e UploadImageReplyValidationError) Cause() error { return e.cause }
+func (e UploadAvatarReplyValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e UploadImageReplyValidationError) Key() bool { return e.key }
+func (e UploadAvatarReplyValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e UploadImageReplyValidationError) ErrorName() string { return "UploadImageReplyValidationError" }
+func (e UploadAvatarReplyValidationError) ErrorName() string {
+	return "UploadAvatarReplyValidationError"
+}
 
 // Error satisfies the builtin error interface
-func (e UploadImageReplyValidationError) Error() string {
+func (e UploadAvatarReplyValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -367,14 +364,14 @@ func (e UploadImageReplyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sUploadImageReply.%s: %s%s",
+		"invalid %sUploadAvatarReply.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = UploadImageReplyValidationError{}
+var _ error = UploadAvatarReplyValidationError{}
 
 var _ interface {
 	Field() string
@@ -382,7 +379,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = UploadImageReplyValidationError{}
+} = UploadAvatarReplyValidationError{}
 
 // Validate checks the field values on FileInfo with the rules defined in the
 // proto definition for this message. If any rules are violated, the first

@@ -17,26 +17,34 @@ service File {
 			get: "/api/v1/file/download",
 		};
 	}
+
+	// 上传头像
+	rpc UploadAvatar (UploadAvatarRequest) returns (UploadAvatarReply) {
+		option (google.api.http) = {
+			post: "/api/v1/user/avatar/upload"
+			body: "*"
+		};
+	}
 }
 	
-message UploadImageRequest {
+message UploadAvatarRequest {
+	// 文件名，如 avatar.png
 	string fileName = 1;
-	string fileSuffix = 2;
-	string fileType = 3;
-	string filePath = 4;
-	string fileMd5 = 5;
-	int64 fileSize = 6;
+	// 文件类型，如 image/png
+	string contentType = 2;
+	// 文件二进制内容
+	bytes content = 3;
 }
 
-message Image {
+message ImageInfo {
 	string url = 1;
 }
 
-message UploadImageReply {
+message UploadAvatarReply {
 	int32 code = 1; 
 	string message = 2;
 	bool success = 3;
-	Image data = 4;
+	ImageInfo data = 4;
 }
 
 message FileInfo {
@@ -53,7 +61,7 @@ message DownloadFileRequest {
 	string file = 1 [(validate.rules).string = {min_len: 1}];
 }
 
-message  DownloadFileReply {
+message DownloadFileReply {
 	int32 code = 1; 
 	string message = 2;
 	bool success = 3;

@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"strings"
 	fileV1 "xiaomiao-home-system/api/file/v1"
 	roleV1 "xiaomiao-home-system/api/role/v1"
 	userNotificationV1 "xiaomiao-home-system/api/user/notification/v1"
@@ -68,11 +69,41 @@ func NewHTTPServer(c *conf.Server, config *conf.Jwt, user *service.UserService, 
 	}
 
 	srv := http.NewServer(opts...)
+	route := srv.Route("/")
+
+	// 自定义文件路由，避免 multipart 处理逻辑被代码生成覆盖
+	route.POST("/api/v1/user/avatar/upload", func(ctx http.Context) error {
+		var in fileV1.UploadAvatarRequest
+		if req, ok := http.RequestFromServerContext(ctx); ok && req != nil {
+			// multipart 由业务层自行解析，这里跳过默认 body bind（默认 codec 不支持 multipart）
+			if !strings.HasPrefix(strings.ToLower(req.Header.Get("Content-Type")), "multipart/form-data") {
+				if err := ctx.Bind(&in); err != nil {
+					return err
+				}
+			}
+		} else {
+			if err := ctx.Bind(&in); err != nil {
+				return err
+			}
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, fileV1.OperationFileUploadAvatar)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return file.UploadAvatar(ctx, req.(*fileV1.UploadAvatarRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*fileV1.UploadAvatarReply)
+		return ctx.Result(200, reply)
+	})
 
 	userV1.RegisterUserHTTPServer(srv, user)
 	roleV1.RegisterRoleHTTPServer(srv, role)
 	userNotificationV1.RegisterUserNotificationHTTPServer(srv, userNotification)
 	userSettingV1.RegisterUserSettingHTTPServer(srv, userSetting)
-	fileV1.RegisterFileHTTPServer(srv, file)
 	return srv
 }
