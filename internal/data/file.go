@@ -110,17 +110,16 @@ func (f *fileRepo) UploadAvatar(ctx context.Context, req *v1.UploadAvatarRequest
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_INVALID_REQUEST.String(), "头像文件不能超过 5MB")
 	}
 
-	avatarURL := strings.TrimRight(f.data.static.BaseUrl, "/") + "/" + strings.ReplaceAll(filepath.ToSlash(filepath.Join(relativeDir, finalName)), "\\", "/")
+	avatarPath := strings.ReplaceAll(filepath.ToSlash(filepath.Join(relativeDir, finalName)), "\\", "/")
 	if err := f.data.db.Model(&User{}).
 		Where("id = ?", userId).
 		Where("deleted_flag = ?", 0).
-		Update("avatar", avatarURL).Error; err != nil {
+		Update("avatar", avatarPath).Error; err != nil {
 		f.log.Errorf("update user avatar failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	// 返回给前端使用统一静态地址，不影响数据库中的真实存储地址
-	frontendAvatarURL := strings.TrimRight(f.data.static.BaseUrl, "/") + "/static/avatar/" + finalName
+	frontendAvatarURL := strings.TrimRight(f.data.static.BaseUrl, "/") + "/static/" + avatarPath
 
 	return &v1.UploadAvatarReply{
 		Code:    200,

@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v5.29.3
-// source: user/setting/v1/setting.proto
+// source: api/user/setting/v1/setting.proto
 
 package v1
 
@@ -56,11 +56,11 @@ func (x GenderType) String() string {
 }
 
 func (GenderType) Descriptor() protoreflect.EnumDescriptor {
-	return file_user_setting_v1_setting_proto_enumTypes[0].Descriptor()
+	return file_api_user_setting_v1_setting_proto_enumTypes[0].Descriptor()
 }
 
 func (GenderType) Type() protoreflect.EnumType {
-	return &file_user_setting_v1_setting_proto_enumTypes[0]
+	return &file_api_user_setting_v1_setting_proto_enumTypes[0]
 }
 
 func (x GenderType) Number() protoreflect.EnumNumber {
@@ -69,7 +69,7 @@ func (x GenderType) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use GenderType.Descriptor instead.
 func (GenderType) EnumDescriptor() ([]byte, []int) {
-	return file_user_setting_v1_setting_proto_rawDescGZIP(), []int{0}
+	return file_api_user_setting_v1_setting_proto_rawDescGZIP(), []int{0}
 }
 
 // 基础请求体
@@ -81,7 +81,7 @@ type BaseRequest struct {
 
 func (x *BaseRequest) Reset() {
 	*x = BaseRequest{}
-	mi := &file_user_setting_v1_setting_proto_msgTypes[0]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -93,7 +93,7 @@ func (x *BaseRequest) String() string {
 func (*BaseRequest) ProtoMessage() {}
 
 func (x *BaseRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_setting_v1_setting_proto_msgTypes[0]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -106,7 +106,7 @@ func (x *BaseRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BaseRequest.ProtoReflect.Descriptor instead.
 func (*BaseRequest) Descriptor() ([]byte, []int) {
-	return file_user_setting_v1_setting_proto_rawDescGZIP(), []int{0}
+	return file_api_user_setting_v1_setting_proto_rawDescGZIP(), []int{0}
 }
 
 // 基础响应体
@@ -118,7 +118,7 @@ type BaseResponse struct {
 
 func (x *BaseResponse) Reset() {
 	*x = BaseResponse{}
-	mi := &file_user_setting_v1_setting_proto_msgTypes[1]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -130,7 +130,7 @@ func (x *BaseResponse) String() string {
 func (*BaseResponse) ProtoMessage() {}
 
 func (x *BaseResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_user_setting_v1_setting_proto_msgTypes[1]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -143,7 +143,7 @@ func (x *BaseResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BaseResponse.ProtoReflect.Descriptor instead.
 func (*BaseResponse) Descriptor() ([]byte, []int) {
-	return file_user_setting_v1_setting_proto_rawDescGZIP(), []int{1}
+	return file_api_user_setting_v1_setting_proto_rawDescGZIP(), []int{1}
 }
 
 type UpdateUserBaseSettingRequest struct {
@@ -158,7 +158,7 @@ type UpdateUserBaseSettingRequest struct {
 
 func (x *UpdateUserBaseSettingRequest) Reset() {
 	*x = UpdateUserBaseSettingRequest{}
-	mi := &file_user_setting_v1_setting_proto_msgTypes[2]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -170,7 +170,7 @@ func (x *UpdateUserBaseSettingRequest) String() string {
 func (*UpdateUserBaseSettingRequest) ProtoMessage() {}
 
 func (x *UpdateUserBaseSettingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_setting_v1_setting_proto_msgTypes[2]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -183,7 +183,7 @@ func (x *UpdateUserBaseSettingRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateUserBaseSettingRequest.ProtoReflect.Descriptor instead.
 func (*UpdateUserBaseSettingRequest) Descriptor() ([]byte, []int) {
-	return file_user_setting_v1_setting_proto_rawDescGZIP(), []int{2}
+	return file_api_user_setting_v1_setting_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *UpdateUserBaseSettingRequest) GetNickname() string {
@@ -226,7 +226,7 @@ type UpdateUserBaseSettingReply struct {
 
 func (x *UpdateUserBaseSettingReply) Reset() {
 	*x = UpdateUserBaseSettingReply{}
-	mi := &file_user_setting_v1_setting_proto_msgTypes[3]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -238,7 +238,7 @@ func (x *UpdateUserBaseSettingReply) String() string {
 func (*UpdateUserBaseSettingReply) ProtoMessage() {}
 
 func (x *UpdateUserBaseSettingReply) ProtoReflect() protoreflect.Message {
-	mi := &file_user_setting_v1_setting_proto_msgTypes[3]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -251,7 +251,7 @@ func (x *UpdateUserBaseSettingReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateUserBaseSettingReply.ProtoReflect.Descriptor instead.
 func (*UpdateUserBaseSettingReply) Descriptor() ([]byte, []int) {
-	return file_user_setting_v1_setting_proto_rawDescGZIP(), []int{3}
+	return file_api_user_setting_v1_setting_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *UpdateUserBaseSettingReply) GetCode() int32 {
@@ -291,7 +291,7 @@ type UpdateUserPasswordRequest struct {
 
 func (x *UpdateUserPasswordRequest) Reset() {
 	*x = UpdateUserPasswordRequest{}
-	mi := &file_user_setting_v1_setting_proto_msgTypes[4]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -303,7 +303,7 @@ func (x *UpdateUserPasswordRequest) String() string {
 func (*UpdateUserPasswordRequest) ProtoMessage() {}
 
 func (x *UpdateUserPasswordRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_setting_v1_setting_proto_msgTypes[4]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -316,7 +316,7 @@ func (x *UpdateUserPasswordRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateUserPasswordRequest.ProtoReflect.Descriptor instead.
 func (*UpdateUserPasswordRequest) Descriptor() ([]byte, []int) {
-	return file_user_setting_v1_setting_proto_rawDescGZIP(), []int{4}
+	return file_api_user_setting_v1_setting_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *UpdateUserPasswordRequest) GetPassword() string {
@@ -338,7 +338,7 @@ type UpdateUserPasswordReply struct {
 
 func (x *UpdateUserPasswordReply) Reset() {
 	*x = UpdateUserPasswordReply{}
-	mi := &file_user_setting_v1_setting_proto_msgTypes[5]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -350,7 +350,7 @@ func (x *UpdateUserPasswordReply) String() string {
 func (*UpdateUserPasswordReply) ProtoMessage() {}
 
 func (x *UpdateUserPasswordReply) ProtoReflect() protoreflect.Message {
-	mi := &file_user_setting_v1_setting_proto_msgTypes[5]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -363,7 +363,7 @@ func (x *UpdateUserPasswordReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateUserPasswordReply.ProtoReflect.Descriptor instead.
 func (*UpdateUserPasswordReply) Descriptor() ([]byte, []int) {
-	return file_user_setting_v1_setting_proto_rawDescGZIP(), []int{5}
+	return file_api_user_setting_v1_setting_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *UpdateUserPasswordReply) GetCode() int32 {
@@ -403,7 +403,7 @@ type UpdateUserSystemNotifyRecevieSettingRequest struct {
 
 func (x *UpdateUserSystemNotifyRecevieSettingRequest) Reset() {
 	*x = UpdateUserSystemNotifyRecevieSettingRequest{}
-	mi := &file_user_setting_v1_setting_proto_msgTypes[6]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -415,7 +415,7 @@ func (x *UpdateUserSystemNotifyRecevieSettingRequest) String() string {
 func (*UpdateUserSystemNotifyRecevieSettingRequest) ProtoMessage() {}
 
 func (x *UpdateUserSystemNotifyRecevieSettingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_setting_v1_setting_proto_msgTypes[6]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -428,7 +428,7 @@ func (x *UpdateUserSystemNotifyRecevieSettingRequest) ProtoReflect() protoreflec
 
 // Deprecated: Use UpdateUserSystemNotifyRecevieSettingRequest.ProtoReflect.Descriptor instead.
 func (*UpdateUserSystemNotifyRecevieSettingRequest) Descriptor() ([]byte, []int) {
-	return file_user_setting_v1_setting_proto_rawDescGZIP(), []int{6}
+	return file_api_user_setting_v1_setting_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *UpdateUserSystemNotifyRecevieSettingRequest) GetEnable() int32 {
@@ -450,7 +450,7 @@ type UpdateUserSystemNotifyRecevieSettingReply struct {
 
 func (x *UpdateUserSystemNotifyRecevieSettingReply) Reset() {
 	*x = UpdateUserSystemNotifyRecevieSettingReply{}
-	mi := &file_user_setting_v1_setting_proto_msgTypes[7]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -462,7 +462,7 @@ func (x *UpdateUserSystemNotifyRecevieSettingReply) String() string {
 func (*UpdateUserSystemNotifyRecevieSettingReply) ProtoMessage() {}
 
 func (x *UpdateUserSystemNotifyRecevieSettingReply) ProtoReflect() protoreflect.Message {
-	mi := &file_user_setting_v1_setting_proto_msgTypes[7]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -475,7 +475,7 @@ func (x *UpdateUserSystemNotifyRecevieSettingReply) ProtoReflect() protoreflect.
 
 // Deprecated: Use UpdateUserSystemNotifyRecevieSettingReply.ProtoReflect.Descriptor instead.
 func (*UpdateUserSystemNotifyRecevieSettingReply) Descriptor() ([]byte, []int) {
-	return file_user_setting_v1_setting_proto_rawDescGZIP(), []int{7}
+	return file_api_user_setting_v1_setting_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *UpdateUserSystemNotifyRecevieSettingReply) GetCode() int32 {
@@ -515,7 +515,7 @@ type UpdateUserInteractNotifyRecevieSettingRequest struct {
 
 func (x *UpdateUserInteractNotifyRecevieSettingRequest) Reset() {
 	*x = UpdateUserInteractNotifyRecevieSettingRequest{}
-	mi := &file_user_setting_v1_setting_proto_msgTypes[8]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -527,7 +527,7 @@ func (x *UpdateUserInteractNotifyRecevieSettingRequest) String() string {
 func (*UpdateUserInteractNotifyRecevieSettingRequest) ProtoMessage() {}
 
 func (x *UpdateUserInteractNotifyRecevieSettingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_setting_v1_setting_proto_msgTypes[8]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -540,7 +540,7 @@ func (x *UpdateUserInteractNotifyRecevieSettingRequest) ProtoReflect() protorefl
 
 // Deprecated: Use UpdateUserInteractNotifyRecevieSettingRequest.ProtoReflect.Descriptor instead.
 func (*UpdateUserInteractNotifyRecevieSettingRequest) Descriptor() ([]byte, []int) {
-	return file_user_setting_v1_setting_proto_rawDescGZIP(), []int{8}
+	return file_api_user_setting_v1_setting_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *UpdateUserInteractNotifyRecevieSettingRequest) GetEnable() int32 {
@@ -562,7 +562,7 @@ type UpdateUserInteractNotifyRecevieSettingReply struct {
 
 func (x *UpdateUserInteractNotifyRecevieSettingReply) Reset() {
 	*x = UpdateUserInteractNotifyRecevieSettingReply{}
-	mi := &file_user_setting_v1_setting_proto_msgTypes[9]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -574,7 +574,7 @@ func (x *UpdateUserInteractNotifyRecevieSettingReply) String() string {
 func (*UpdateUserInteractNotifyRecevieSettingReply) ProtoMessage() {}
 
 func (x *UpdateUserInteractNotifyRecevieSettingReply) ProtoReflect() protoreflect.Message {
-	mi := &file_user_setting_v1_setting_proto_msgTypes[9]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -587,7 +587,7 @@ func (x *UpdateUserInteractNotifyRecevieSettingReply) ProtoReflect() protoreflec
 
 // Deprecated: Use UpdateUserInteractNotifyRecevieSettingReply.ProtoReflect.Descriptor instead.
 func (*UpdateUserInteractNotifyRecevieSettingReply) Descriptor() ([]byte, []int) {
-	return file_user_setting_v1_setting_proto_rawDescGZIP(), []int{9}
+	return file_api_user_setting_v1_setting_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *UpdateUserInteractNotifyRecevieSettingReply) GetCode() int32 {
@@ -627,7 +627,7 @@ type UpdateUserAdoptNotifyRecevieSettingRequest struct {
 
 func (x *UpdateUserAdoptNotifyRecevieSettingRequest) Reset() {
 	*x = UpdateUserAdoptNotifyRecevieSettingRequest{}
-	mi := &file_user_setting_v1_setting_proto_msgTypes[10]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -639,7 +639,7 @@ func (x *UpdateUserAdoptNotifyRecevieSettingRequest) String() string {
 func (*UpdateUserAdoptNotifyRecevieSettingRequest) ProtoMessage() {}
 
 func (x *UpdateUserAdoptNotifyRecevieSettingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_setting_v1_setting_proto_msgTypes[10]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -652,7 +652,7 @@ func (x *UpdateUserAdoptNotifyRecevieSettingRequest) ProtoReflect() protoreflect
 
 // Deprecated: Use UpdateUserAdoptNotifyRecevieSettingRequest.ProtoReflect.Descriptor instead.
 func (*UpdateUserAdoptNotifyRecevieSettingRequest) Descriptor() ([]byte, []int) {
-	return file_user_setting_v1_setting_proto_rawDescGZIP(), []int{10}
+	return file_api_user_setting_v1_setting_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *UpdateUserAdoptNotifyRecevieSettingRequest) GetEnable() int32 {
@@ -674,7 +674,7 @@ type UpdateUserAdoptNotifyRecevieSettingReply struct {
 
 func (x *UpdateUserAdoptNotifyRecevieSettingReply) Reset() {
 	*x = UpdateUserAdoptNotifyRecevieSettingReply{}
-	mi := &file_user_setting_v1_setting_proto_msgTypes[11]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -686,7 +686,7 @@ func (x *UpdateUserAdoptNotifyRecevieSettingReply) String() string {
 func (*UpdateUserAdoptNotifyRecevieSettingReply) ProtoMessage() {}
 
 func (x *UpdateUserAdoptNotifyRecevieSettingReply) ProtoReflect() protoreflect.Message {
-	mi := &file_user_setting_v1_setting_proto_msgTypes[11]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -699,7 +699,7 @@ func (x *UpdateUserAdoptNotifyRecevieSettingReply) ProtoReflect() protoreflect.M
 
 // Deprecated: Use UpdateUserAdoptNotifyRecevieSettingReply.ProtoReflect.Descriptor instead.
 func (*UpdateUserAdoptNotifyRecevieSettingReply) Descriptor() ([]byte, []int) {
-	return file_user_setting_v1_setting_proto_rawDescGZIP(), []int{11}
+	return file_api_user_setting_v1_setting_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *UpdateUserAdoptNotifyRecevieSettingReply) GetCode() int32 {
@@ -739,7 +739,7 @@ type UpdateUserEmailNotifyRecevieSettingRequest struct {
 
 func (x *UpdateUserEmailNotifyRecevieSettingRequest) Reset() {
 	*x = UpdateUserEmailNotifyRecevieSettingRequest{}
-	mi := &file_user_setting_v1_setting_proto_msgTypes[12]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -751,7 +751,7 @@ func (x *UpdateUserEmailNotifyRecevieSettingRequest) String() string {
 func (*UpdateUserEmailNotifyRecevieSettingRequest) ProtoMessage() {}
 
 func (x *UpdateUserEmailNotifyRecevieSettingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_setting_v1_setting_proto_msgTypes[12]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -764,7 +764,7 @@ func (x *UpdateUserEmailNotifyRecevieSettingRequest) ProtoReflect() protoreflect
 
 // Deprecated: Use UpdateUserEmailNotifyRecevieSettingRequest.ProtoReflect.Descriptor instead.
 func (*UpdateUserEmailNotifyRecevieSettingRequest) Descriptor() ([]byte, []int) {
-	return file_user_setting_v1_setting_proto_rawDescGZIP(), []int{12}
+	return file_api_user_setting_v1_setting_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *UpdateUserEmailNotifyRecevieSettingRequest) GetEnable() int32 {
@@ -786,7 +786,7 @@ type UpdateUserEmailNotifyRecevieSettingReply struct {
 
 func (x *UpdateUserEmailNotifyRecevieSettingReply) Reset() {
 	*x = UpdateUserEmailNotifyRecevieSettingReply{}
-	mi := &file_user_setting_v1_setting_proto_msgTypes[13]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -798,7 +798,7 @@ func (x *UpdateUserEmailNotifyRecevieSettingReply) String() string {
 func (*UpdateUserEmailNotifyRecevieSettingReply) ProtoMessage() {}
 
 func (x *UpdateUserEmailNotifyRecevieSettingReply) ProtoReflect() protoreflect.Message {
-	mi := &file_user_setting_v1_setting_proto_msgTypes[13]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -811,7 +811,7 @@ func (x *UpdateUserEmailNotifyRecevieSettingReply) ProtoReflect() protoreflect.M
 
 // Deprecated: Use UpdateUserEmailNotifyRecevieSettingReply.ProtoReflect.Descriptor instead.
 func (*UpdateUserEmailNotifyRecevieSettingReply) Descriptor() ([]byte, []int) {
-	return file_user_setting_v1_setting_proto_rawDescGZIP(), []int{13}
+	return file_api_user_setting_v1_setting_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *UpdateUserEmailNotifyRecevieSettingReply) GetCode() int32 {
@@ -850,7 +850,7 @@ type GetUserNotifySettingRequest struct {
 
 func (x *GetUserNotifySettingRequest) Reset() {
 	*x = GetUserNotifySettingRequest{}
-	mi := &file_user_setting_v1_setting_proto_msgTypes[14]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -862,7 +862,7 @@ func (x *GetUserNotifySettingRequest) String() string {
 func (*GetUserNotifySettingRequest) ProtoMessage() {}
 
 func (x *GetUserNotifySettingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_setting_v1_setting_proto_msgTypes[14]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -875,7 +875,7 @@ func (x *GetUserNotifySettingRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserNotifySettingRequest.ProtoReflect.Descriptor instead.
 func (*GetUserNotifySettingRequest) Descriptor() ([]byte, []int) {
-	return file_user_setting_v1_setting_proto_rawDescGZIP(), []int{14}
+	return file_api_user_setting_v1_setting_proto_rawDescGZIP(), []int{14}
 }
 
 type UserNotifySettingInfo struct {
@@ -890,7 +890,7 @@ type UserNotifySettingInfo struct {
 
 func (x *UserNotifySettingInfo) Reset() {
 	*x = UserNotifySettingInfo{}
-	mi := &file_user_setting_v1_setting_proto_msgTypes[15]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -902,7 +902,7 @@ func (x *UserNotifySettingInfo) String() string {
 func (*UserNotifySettingInfo) ProtoMessage() {}
 
 func (x *UserNotifySettingInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_user_setting_v1_setting_proto_msgTypes[15]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -915,7 +915,7 @@ func (x *UserNotifySettingInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserNotifySettingInfo.ProtoReflect.Descriptor instead.
 func (*UserNotifySettingInfo) Descriptor() ([]byte, []int) {
-	return file_user_setting_v1_setting_proto_rawDescGZIP(), []int{15}
+	return file_api_user_setting_v1_setting_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *UserNotifySettingInfo) GetSystem() int32 {
@@ -958,7 +958,7 @@ type GetUserNotifySettingReply struct {
 
 func (x *GetUserNotifySettingReply) Reset() {
 	*x = GetUserNotifySettingReply{}
-	mi := &file_user_setting_v1_setting_proto_msgTypes[16]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -970,7 +970,7 @@ func (x *GetUserNotifySettingReply) String() string {
 func (*GetUserNotifySettingReply) ProtoMessage() {}
 
 func (x *GetUserNotifySettingReply) ProtoReflect() protoreflect.Message {
-	mi := &file_user_setting_v1_setting_proto_msgTypes[16]
+	mi := &file_api_user_setting_v1_setting_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -983,7 +983,7 @@ func (x *GetUserNotifySettingReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserNotifySettingReply.ProtoReflect.Descriptor instead.
 func (*GetUserNotifySettingReply) Descriptor() ([]byte, []int) {
-	return file_user_setting_v1_setting_proto_rawDescGZIP(), []int{16}
+	return file_api_user_setting_v1_setting_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *GetUserNotifySettingReply) GetCode() int32 {
@@ -1014,11 +1014,11 @@ func (x *GetUserNotifySettingReply) GetData() *UserNotifySettingInfo {
 	return nil
 }
 
-var File_user_setting_v1_setting_proto protoreflect.FileDescriptor
+var File_api_user_setting_v1_setting_proto protoreflect.FileDescriptor
 
-const file_user_setting_v1_setting_proto_rawDesc = "" +
+const file_api_user_setting_v1_setting_proto_rawDesc = "" +
 	"\n" +
-	"\x1duser/setting/v1/setting.proto\x12\x13api.user.setting.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\"\r\n" +
+	"!api/user/setting/v1/setting.proto\x12\x13api.user.setting.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\"\r\n" +
 	"\vBaseRequest\"\x0e\n" +
 	"\fBaseResponse\"\xdf\x01\n" +
 	"\x1cUpdateUserBaseSettingRequest\x12%\n" +
@@ -1094,20 +1094,20 @@ const file_user_setting_v1_setting_proto_rawDesc = "" +
 	"\x13api.user.setting.v1B\x12UserSettingProtoV1P\x01Z+xiaomiao-home-system/api/user/setting/v1;v1b\x06proto3"
 
 var (
-	file_user_setting_v1_setting_proto_rawDescOnce sync.Once
-	file_user_setting_v1_setting_proto_rawDescData []byte
+	file_api_user_setting_v1_setting_proto_rawDescOnce sync.Once
+	file_api_user_setting_v1_setting_proto_rawDescData []byte
 )
 
-func file_user_setting_v1_setting_proto_rawDescGZIP() []byte {
-	file_user_setting_v1_setting_proto_rawDescOnce.Do(func() {
-		file_user_setting_v1_setting_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_user_setting_v1_setting_proto_rawDesc), len(file_user_setting_v1_setting_proto_rawDesc)))
+func file_api_user_setting_v1_setting_proto_rawDescGZIP() []byte {
+	file_api_user_setting_v1_setting_proto_rawDescOnce.Do(func() {
+		file_api_user_setting_v1_setting_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_api_user_setting_v1_setting_proto_rawDesc), len(file_api_user_setting_v1_setting_proto_rawDesc)))
 	})
-	return file_user_setting_v1_setting_proto_rawDescData
+	return file_api_user_setting_v1_setting_proto_rawDescData
 }
 
-var file_user_setting_v1_setting_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_user_setting_v1_setting_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
-var file_user_setting_v1_setting_proto_goTypes = []any{
+var file_api_user_setting_v1_setting_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_api_user_setting_v1_setting_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
+var file_api_user_setting_v1_setting_proto_goTypes = []any{
 	(GenderType)(0),                                       // 0: api.user.setting.v1.GenderType
 	(*BaseRequest)(nil),                                   // 1: api.user.setting.v1.BaseRequest
 	(*BaseResponse)(nil),                                  // 2: api.user.setting.v1.BaseResponse
@@ -1127,7 +1127,7 @@ var file_user_setting_v1_setting_proto_goTypes = []any{
 	(*UserNotifySettingInfo)(nil),                         // 16: api.user.setting.v1.UserNotifySettingInfo
 	(*GetUserNotifySettingReply)(nil),                     // 17: api.user.setting.v1.GetUserNotifySettingReply
 }
-var file_user_setting_v1_setting_proto_depIdxs = []int32{
+var file_api_user_setting_v1_setting_proto_depIdxs = []int32{
 	0,  // 0: api.user.setting.v1.UpdateUserBaseSettingRequest.gender:type_name -> api.user.setting.v1.GenderType
 	16, // 1: api.user.setting.v1.GetUserNotifySettingReply.data:type_name -> api.user.setting.v1.UserNotifySettingInfo
 	3,  // 2: api.user.setting.v1.UserSetting.UpdateUserBaseSetting:input_type -> api.user.setting.v1.UpdateUserBaseSettingRequest
@@ -1151,27 +1151,27 @@ var file_user_setting_v1_setting_proto_depIdxs = []int32{
 	0,  // [0:2] is the sub-list for field type_name
 }
 
-func init() { file_user_setting_v1_setting_proto_init() }
-func file_user_setting_v1_setting_proto_init() {
-	if File_user_setting_v1_setting_proto != nil {
+func init() { file_api_user_setting_v1_setting_proto_init() }
+func file_api_user_setting_v1_setting_proto_init() {
+	if File_api_user_setting_v1_setting_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_setting_v1_setting_proto_rawDesc), len(file_user_setting_v1_setting_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_user_setting_v1_setting_proto_rawDesc), len(file_api_user_setting_v1_setting_proto_rawDesc)),
 			NumEnums:      1,
 			NumMessages:   17,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_user_setting_v1_setting_proto_goTypes,
-		DependencyIndexes: file_user_setting_v1_setting_proto_depIdxs,
-		EnumInfos:         file_user_setting_v1_setting_proto_enumTypes,
-		MessageInfos:      file_user_setting_v1_setting_proto_msgTypes,
+		GoTypes:           file_api_user_setting_v1_setting_proto_goTypes,
+		DependencyIndexes: file_api_user_setting_v1_setting_proto_depIdxs,
+		EnumInfos:         file_api_user_setting_v1_setting_proto_enumTypes,
+		MessageInfos:      file_api_user_setting_v1_setting_proto_msgTypes,
 	}.Build()
-	File_user_setting_v1_setting_proto = out.File
-	file_user_setting_v1_setting_proto_goTypes = nil
-	file_user_setting_v1_setting_proto_depIdxs = nil
+	File_api_user_setting_v1_setting_proto = out.File
+	file_api_user_setting_v1_setting_proto_goTypes = nil
+	file_api_user_setting_v1_setting_proto_depIdxs = nil
 }

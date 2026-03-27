@@ -2,6 +2,9 @@ package server
 
 import (
 	"context"
+	stdhttp "net/http"
+	"os"
+	"path/filepath"
 	"strings"
 	fileV1 "xiaomiao-home-system/api/file/v1"
 	roleV1 "xiaomiao-home-system/api/role/v1"
@@ -14,6 +17,7 @@ import (
 	"xiaomiao-home-system/internal/service"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v2"
+	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/middleware/logging"
 	"github.com/go-kratos/kratos/v2/middleware/ratelimit"
 	"github.com/go-kratos/kratos/v2/middleware/selector"
@@ -40,7 +44,7 @@ func NewWhiteListMatcher() selector.MatchFunc {
 }
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Server, config *conf.Jwt, user *service.UserService, role *service.RoleService, userNotification *service.UserNotificationService, userSetting *service.UserSettingService, file *service.FileService, logger log.Logger) *http.Server {
+func NewHTTPServer(c *conf.Server, jwtConfig *conf.Jwt, staticConfig *conf.Static, user *service.UserService, role *service.RoleService, userNotification *service.UserNotificationService, userSetting *service.UserSettingService, file *service.FileService, logger log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
@@ -48,7 +52,7 @@ func NewHTTPServer(c *conf.Server, config *conf.Jwt, user *service.UserService, 
 			logging.Server(logger),
 			ratelimit.Server(),
 			selector.Server(
-				token.Server(config),
+				token.Server(jwtConfig),
 			).
 				Match(NewWhiteListMatcher()).
 				Build(),
@@ -70,6 +74,28 @@ func NewHTTPServer(c *conf.Server, config *conf.Jwt, user *service.UserService, 
 
 	srv := http.NewServer(opts...)
 	route := srv.Route("/")
+
+	route.GET("/static/{path:.*}", func(ctx http.Context) error {
+		req, ok := http.RequestFromServerContext(ctx)
+		if !ok || req == nil {
+			return errors.BadRequest("ERR_INVALID_REQUEST", "无效请求")
+		}
+		relPath := strings.TrimPrefix(req.URL.Path, "/static/")
+		relPath = strings.TrimSpace(relPath)
+		if relPath == "" || strings.Contains(relPath, "..") {
+			return errors.BadRequest("ERR_INVALID_REQUEST", "无效文件路径")
+		}
+		fullPath := filepath.Join(staticConfig.BaseDir, filepath.FromSlash(relPath))
+		if _, err := os.Stat(fullPath); err != nil {
+			if os.IsNotExist(err) {
+				return errors.NotFound("ERR_BAD_REQUEST", "文件不存在")
+			}
+			return errors.InternalServer("ERR_SYSTEM_EXCEPTION", "系统错误, 请稍后再试")
+		}
+		// 直接让 net/http 处理 Content-Type、Range 等
+		stdhttp.ServeFile(ctx.Response(), req, fullPath)
+		return nil
+	})
 
 	// 自定义文件路由，避免 multipart 处理逻辑被代码生成覆盖
 	route.POST("/api/v1/user/avatar/upload", func(ctx http.Context) error {
