@@ -25,6 +25,24 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.user.v1.AppLoginReply'
+    /api/v1/file/download:
+        get:
+            tags:
+                - File
+            description: 下载文件
+            operationId: File_DownloadFile
+            parameters:
+                - name: file
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.file.v1.DownloadFileReply'
     /api/v1/mp/auth/login:
         post:
             tags:
@@ -496,6 +514,35 @@ paths:
                                 $ref: '#/components/schemas/api.user.v1.GetWebLoginUserInfoReply'
 components:
     schemas:
+        api.file.v1.DownloadFileReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    $ref: '#/components/schemas/api.file.v1.FileInfo'
+        api.file.v1.FileInfo:
+            type: object
+            properties:
+                Id:
+                    type: string
+                fileName:
+                    type: string
+                fileSuffix:
+                    type: string
+                fileType:
+                    type: string
+                filePath:
+                    type: string
+                fileMd5:
+                    type: string
+                fileSize:
+                    type: string
         api.role.v1.CreateRoleReply:
             type: object
             properties:
@@ -1007,6 +1054,7 @@ components:
                 data:
                     type: string
 tags:
+    - name: File
     - name: Role
     - name: User
     - name: UserNotification

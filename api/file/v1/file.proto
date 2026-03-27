@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package api.file.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "xiaomiao-home-system/api/file/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.file.v1";
+option java_outer_classname = "FileProtoV1";
+
+service File {
+	// 下载文件
+	rpc DownloadFile (DownloadFileRequest) returns (DownloadFileReply) {
+		option (google.api.http) = {
+			get: "/api/v1/file/download",
+		};
+	}
+}
+	
+message UploadImageRequest {
+	string fileName = 1;
+	string fileSuffix = 2;
+	string fileType = 3;
+	string filePath = 4;
+	string fileMd5 = 5;
+	int64 fileSize = 6;
+}
+
+message Image {
+	string url = 1;
+}
+
+message UploadImageReply {
+	int32 code = 1; 
+	string message = 2;
+	bool success = 3;
+	Image data = 4;
+}
+
+message FileInfo {
+	string Id = 1;
+	string fileName = 2;
+	string fileSuffix = 3;
+	string fileType = 4;
+	string filePath = 5;
+	string fileMd5 = 6;
+	int64 fileSize = 7;
+}
+
+message DownloadFileRequest {
+	string file = 1 [(validate.rules).string = {min_len: 1}];
+}
+
+message  DownloadFileReply {
+	int32 code = 1; 
+	string message = 2;
+	bool success = 3;
+	FileInfo data = 4;
+}

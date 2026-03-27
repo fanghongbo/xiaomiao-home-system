@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	fileV1 "xiaomiao-home-system/api/file/v1"
 	roleV1 "xiaomiao-home-system/api/role/v1"
 	userNotificationV1 "xiaomiao-home-system/api/user/notification/v1"
 	userSettingV1 "xiaomiao-home-system/api/user/setting/v1"
@@ -38,7 +39,7 @@ func NewWhiteListMatcher() selector.MatchFunc {
 }
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Server, config *conf.Jwt, user *service.UserService, role *service.RoleService, userNotification *service.UserNotificationService, userSetting *service.UserSettingService, logger log.Logger) *http.Server {
+func NewHTTPServer(c *conf.Server, config *conf.Jwt, user *service.UserService, role *service.RoleService, userNotification *service.UserNotificationService, userSetting *service.UserSettingService, file *service.FileService, logger log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
@@ -72,5 +73,6 @@ func NewHTTPServer(c *conf.Server, config *conf.Jwt, user *service.UserService, 
 	roleV1.RegisterRoleHTTPServer(srv, role)
 	userNotificationV1.RegisterUserNotificationHTTPServer(srv, userNotification)
 	userSettingV1.RegisterUserSettingHTTPServer(srv, userSetting)
+	fileV1.RegisterFileHTTPServer(srv, file)
 	return srv
 }
