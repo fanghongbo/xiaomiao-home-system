@@ -329,6 +329,25 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.user.notification.v1.DeleteUserNotificationReply'
+    /api/v1/user/password:
+        post:
+            tags:
+                - User
+            description: 更新密码
+            operationId: User_UpdateUserPassword
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.user.v1.UpdateUserPasswordRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.v1.UpdateUserPasswordReply'
     /api/v1/web/auth/login:
         post:
             tags:
@@ -693,6 +712,23 @@ components:
                 birthday:
                     type: string
                 signature:
+                    type: string
+        api.user.v1.UpdateUserPasswordReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: string
+        api.user.v1.UpdateUserPasswordRequest:
+            type: object
+            properties:
+                password:
                     type: string
         api.user.v1.WebCheckLoginReply:
             type: object

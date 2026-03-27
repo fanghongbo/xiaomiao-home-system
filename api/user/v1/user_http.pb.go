@@ -23,6 +23,7 @@ const OperationUserAppLogin = "/api.user.v1.User/AppLogin"
 const OperationUserGetWebLoginUserInfo = "/api.user.v1.User/GetWebLoginUserInfo"
 const OperationUserMpLogin = "/api.user.v1.User/MpLogin"
 const OperationUserUpdateUserBaseSetting = "/api.user.v1.User/UpdateUserBaseSetting"
+const OperationUserUpdateUserPassword = "/api.user.v1.User/UpdateUserPassword"
 const OperationUserWebCheckLogin = "/api.user.v1.User/WebCheckLogin"
 const OperationUserWebLogin = "/api.user.v1.User/WebLogin"
 const OperationUserWebLogout = "/api.user.v1.User/WebLogout"
@@ -36,6 +37,8 @@ type UserHTTPServer interface {
 	MpLogin(context.Context, *MpLoginRequest) (*MpLoginReply, error)
 	// UpdateUserBaseSetting 更新基础设置
 	UpdateUserBaseSetting(context.Context, *UpdateUserBaseSettingRequest) (*UpdateUserBaseSettingReply, error)
+	// UpdateUserPassword 更新密码
+	UpdateUserPassword(context.Context, *UpdateUserPasswordRequest) (*UpdateUserPasswordReply, error)
 	// WebCheckLogin Web登陆检测
 	WebCheckLogin(context.Context, *WebCheckLoginRequest) (*WebCheckLoginReply, error)
 	// WebLogin Web登录接口
@@ -52,6 +55,7 @@ func RegisterUserHTTPServer(s *http.Server, srv UserHTTPServer) {
 	r.POST("/api/v1/mp/auth/login", _User_MpLogin0_HTTP_Handler(srv))
 	r.GET("/api/v1/web/user/info", _User_GetWebLoginUserInfo0_HTTP_Handler(srv))
 	r.POST("/api/v1/user/base/setting", _User_UpdateUserBaseSetting0_HTTP_Handler(srv))
+	r.POST("/api/v1/user/password", _User_UpdateUserPassword0_HTTP_Handler(srv))
 }
 
 func _User_WebLogin0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) error {
@@ -199,6 +203,28 @@ func _User_UpdateUserBaseSetting0_HTTP_Handler(srv UserHTTPServer) func(ctx http
 	}
 }
 
+func _User_UpdateUserPassword0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in UpdateUserPasswordRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationUserUpdateUserPassword)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.UpdateUserPassword(ctx, req.(*UpdateUserPasswordRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*UpdateUserPasswordReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type UserHTTPClient interface {
 	// AppLogin App登录
 	AppLogin(ctx context.Context, req *AppLoginRequest, opts ...http.CallOption) (rsp *AppLoginReply, err error)
@@ -208,6 +234,8 @@ type UserHTTPClient interface {
 	MpLogin(ctx context.Context, req *MpLoginRequest, opts ...http.CallOption) (rsp *MpLoginReply, err error)
 	// UpdateUserBaseSetting 更新基础设置
 	UpdateUserBaseSetting(ctx context.Context, req *UpdateUserBaseSettingRequest, opts ...http.CallOption) (rsp *UpdateUserBaseSettingReply, err error)
+	// UpdateUserPassword 更新密码
+	UpdateUserPassword(ctx context.Context, req *UpdateUserPasswordRequest, opts ...http.CallOption) (rsp *UpdateUserPasswordReply, err error)
 	// WebCheckLogin Web登陆检测
 	WebCheckLogin(ctx context.Context, req *WebCheckLoginRequest, opts ...http.CallOption) (rsp *WebCheckLoginReply, err error)
 	// WebLogin Web登录接口
@@ -271,6 +299,20 @@ func (c *UserHTTPClientImpl) UpdateUserBaseSetting(ctx context.Context, in *Upda
 	pattern := "/api/v1/user/base/setting"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationUserUpdateUserBaseSetting))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// UpdateUserPassword 更新密码
+func (c *UserHTTPClientImpl) UpdateUserPassword(ctx context.Context, in *UpdateUserPasswordRequest, opts ...http.CallOption) (*UpdateUserPasswordReply, error) {
+	var out UpdateUserPasswordReply
+	pattern := "/api/v1/user/password"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationUserUpdateUserPassword))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

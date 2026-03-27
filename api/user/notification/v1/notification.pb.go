@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v6.30.2
-// source: user/notification/v1/notification.proto
+// source: api/user/notification/v1/notification.proto
 
 package v1
 
@@ -32,7 +32,7 @@ type BaseRequest struct {
 
 func (x *BaseRequest) Reset() {
 	*x = BaseRequest{}
-	mi := &file_user_notification_v1_notification_proto_msgTypes[0]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -44,7 +44,7 @@ func (x *BaseRequest) String() string {
 func (*BaseRequest) ProtoMessage() {}
 
 func (x *BaseRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_notification_v1_notification_proto_msgTypes[0]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -57,7 +57,7 @@ func (x *BaseRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BaseRequest.ProtoReflect.Descriptor instead.
 func (*BaseRequest) Descriptor() ([]byte, []int) {
-	return file_user_notification_v1_notification_proto_rawDescGZIP(), []int{0}
+	return file_api_user_notification_v1_notification_proto_rawDescGZIP(), []int{0}
 }
 
 // 基础响应体
@@ -69,7 +69,7 @@ type BaseResponse struct {
 
 func (x *BaseResponse) Reset() {
 	*x = BaseResponse{}
-	mi := &file_user_notification_v1_notification_proto_msgTypes[1]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -81,7 +81,7 @@ func (x *BaseResponse) String() string {
 func (*BaseResponse) ProtoMessage() {}
 
 func (x *BaseResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_user_notification_v1_notification_proto_msgTypes[1]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -94,7 +94,7 @@ func (x *BaseResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BaseResponse.ProtoReflect.Descriptor instead.
 func (*BaseResponse) Descriptor() ([]byte, []int) {
-	return file_user_notification_v1_notification_proto_rawDescGZIP(), []int{1}
+	return file_api_user_notification_v1_notification_proto_rawDescGZIP(), []int{1}
 }
 
 type GetUserNotificationListRequest struct {
@@ -112,7 +112,7 @@ type GetUserNotificationListRequest struct {
 
 func (x *GetUserNotificationListRequest) Reset() {
 	*x = GetUserNotificationListRequest{}
-	mi := &file_user_notification_v1_notification_proto_msgTypes[2]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -124,7 +124,7 @@ func (x *GetUserNotificationListRequest) String() string {
 func (*GetUserNotificationListRequest) ProtoMessage() {}
 
 func (x *GetUserNotificationListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_notification_v1_notification_proto_msgTypes[2]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -137,7 +137,7 @@ func (x *GetUserNotificationListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserNotificationListRequest.ProtoReflect.Descriptor instead.
 func (*GetUserNotificationListRequest) Descriptor() ([]byte, []int) {
-	return file_user_notification_v1_notification_proto_rawDescGZIP(), []int{2}
+	return file_api_user_notification_v1_notification_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *GetUserNotificationListRequest) GetName() string {
@@ -204,7 +204,7 @@ type UserNotificationListItem struct {
 
 func (x *UserNotificationListItem) Reset() {
 	*x = UserNotificationListItem{}
-	mi := &file_user_notification_v1_notification_proto_msgTypes[3]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -216,7 +216,7 @@ func (x *UserNotificationListItem) String() string {
 func (*UserNotificationListItem) ProtoMessage() {}
 
 func (x *UserNotificationListItem) ProtoReflect() protoreflect.Message {
-	mi := &file_user_notification_v1_notification_proto_msgTypes[3]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -229,7 +229,7 @@ func (x *UserNotificationListItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserNotificationListItem.ProtoReflect.Descriptor instead.
 func (*UserNotificationListItem) Descriptor() ([]byte, []int) {
-	return file_user_notification_v1_notification_proto_rawDescGZIP(), []int{3}
+	return file_api_user_notification_v1_notification_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *UserNotificationListItem) GetId() int64 {
@@ -291,7 +291,7 @@ type UserNotificationList struct {
 
 func (x *UserNotificationList) Reset() {
 	*x = UserNotificationList{}
-	mi := &file_user_notification_v1_notification_proto_msgTypes[4]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -303,7 +303,7 @@ func (x *UserNotificationList) String() string {
 func (*UserNotificationList) ProtoMessage() {}
 
 func (x *UserNotificationList) ProtoReflect() protoreflect.Message {
-	mi := &file_user_notification_v1_notification_proto_msgTypes[4]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -316,7 +316,7 @@ func (x *UserNotificationList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserNotificationList.ProtoReflect.Descriptor instead.
 func (*UserNotificationList) Descriptor() ([]byte, []int) {
-	return file_user_notification_v1_notification_proto_rawDescGZIP(), []int{4}
+	return file_api_user_notification_v1_notification_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *UserNotificationList) GetItems() []*UserNotificationListItem {
@@ -345,7 +345,7 @@ type GetUserNotificationListReply struct {
 
 func (x *GetUserNotificationListReply) Reset() {
 	*x = GetUserNotificationListReply{}
-	mi := &file_user_notification_v1_notification_proto_msgTypes[5]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -357,7 +357,7 @@ func (x *GetUserNotificationListReply) String() string {
 func (*GetUserNotificationListReply) ProtoMessage() {}
 
 func (x *GetUserNotificationListReply) ProtoReflect() protoreflect.Message {
-	mi := &file_user_notification_v1_notification_proto_msgTypes[5]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -370,7 +370,7 @@ func (x *GetUserNotificationListReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserNotificationListReply.ProtoReflect.Descriptor instead.
 func (*GetUserNotificationListReply) Descriptor() ([]byte, []int) {
-	return file_user_notification_v1_notification_proto_rawDescGZIP(), []int{5}
+	return file_api_user_notification_v1_notification_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *GetUserNotificationListReply) GetCode() int32 {
@@ -410,7 +410,7 @@ type DeleteUserNotificationRequest struct {
 
 func (x *DeleteUserNotificationRequest) Reset() {
 	*x = DeleteUserNotificationRequest{}
-	mi := &file_user_notification_v1_notification_proto_msgTypes[6]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -422,7 +422,7 @@ func (x *DeleteUserNotificationRequest) String() string {
 func (*DeleteUserNotificationRequest) ProtoMessage() {}
 
 func (x *DeleteUserNotificationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_notification_v1_notification_proto_msgTypes[6]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -435,7 +435,7 @@ func (x *DeleteUserNotificationRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteUserNotificationRequest.ProtoReflect.Descriptor instead.
 func (*DeleteUserNotificationRequest) Descriptor() ([]byte, []int) {
-	return file_user_notification_v1_notification_proto_rawDescGZIP(), []int{6}
+	return file_api_user_notification_v1_notification_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *DeleteUserNotificationRequest) GetId() int64 {
@@ -457,7 +457,7 @@ type DeleteUserNotificationReply struct {
 
 func (x *DeleteUserNotificationReply) Reset() {
 	*x = DeleteUserNotificationReply{}
-	mi := &file_user_notification_v1_notification_proto_msgTypes[7]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -469,7 +469,7 @@ func (x *DeleteUserNotificationReply) String() string {
 func (*DeleteUserNotificationReply) ProtoMessage() {}
 
 func (x *DeleteUserNotificationReply) ProtoReflect() protoreflect.Message {
-	mi := &file_user_notification_v1_notification_proto_msgTypes[7]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -482,7 +482,7 @@ func (x *DeleteUserNotificationReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteUserNotificationReply.ProtoReflect.Descriptor instead.
 func (*DeleteUserNotificationReply) Descriptor() ([]byte, []int) {
-	return file_user_notification_v1_notification_proto_rawDescGZIP(), []int{7}
+	return file_api_user_notification_v1_notification_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *DeleteUserNotificationReply) GetCode() int32 {
@@ -523,7 +523,7 @@ type UpdateUserNotificationStatusRequest struct {
 
 func (x *UpdateUserNotificationStatusRequest) Reset() {
 	*x = UpdateUserNotificationStatusRequest{}
-	mi := &file_user_notification_v1_notification_proto_msgTypes[8]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -535,7 +535,7 @@ func (x *UpdateUserNotificationStatusRequest) String() string {
 func (*UpdateUserNotificationStatusRequest) ProtoMessage() {}
 
 func (x *UpdateUserNotificationStatusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_notification_v1_notification_proto_msgTypes[8]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -548,7 +548,7 @@ func (x *UpdateUserNotificationStatusRequest) ProtoReflect() protoreflect.Messag
 
 // Deprecated: Use UpdateUserNotificationStatusRequest.ProtoReflect.Descriptor instead.
 func (*UpdateUserNotificationStatusRequest) Descriptor() ([]byte, []int) {
-	return file_user_notification_v1_notification_proto_rawDescGZIP(), []int{8}
+	return file_api_user_notification_v1_notification_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *UpdateUserNotificationStatusRequest) GetId() int64 {
@@ -577,7 +577,7 @@ type UpdateUserNotificationStatusReply struct {
 
 func (x *UpdateUserNotificationStatusReply) Reset() {
 	*x = UpdateUserNotificationStatusReply{}
-	mi := &file_user_notification_v1_notification_proto_msgTypes[9]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -589,7 +589,7 @@ func (x *UpdateUserNotificationStatusReply) String() string {
 func (*UpdateUserNotificationStatusReply) ProtoMessage() {}
 
 func (x *UpdateUserNotificationStatusReply) ProtoReflect() protoreflect.Message {
-	mi := &file_user_notification_v1_notification_proto_msgTypes[9]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -602,7 +602,7 @@ func (x *UpdateUserNotificationStatusReply) ProtoReflect() protoreflect.Message 
 
 // Deprecated: Use UpdateUserNotificationStatusReply.ProtoReflect.Descriptor instead.
 func (*UpdateUserNotificationStatusReply) Descriptor() ([]byte, []int) {
-	return file_user_notification_v1_notification_proto_rawDescGZIP(), []int{9}
+	return file_api_user_notification_v1_notification_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *UpdateUserNotificationStatusReply) GetCode() int32 {
@@ -645,7 +645,7 @@ type CreateUserNotificationRequest struct {
 
 func (x *CreateUserNotificationRequest) Reset() {
 	*x = CreateUserNotificationRequest{}
-	mi := &file_user_notification_v1_notification_proto_msgTypes[10]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -657,7 +657,7 @@ func (x *CreateUserNotificationRequest) String() string {
 func (*CreateUserNotificationRequest) ProtoMessage() {}
 
 func (x *CreateUserNotificationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_notification_v1_notification_proto_msgTypes[10]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -670,7 +670,7 @@ func (x *CreateUserNotificationRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateUserNotificationRequest.ProtoReflect.Descriptor instead.
 func (*CreateUserNotificationRequest) Descriptor() ([]byte, []int) {
-	return file_user_notification_v1_notification_proto_rawDescGZIP(), []int{10}
+	return file_api_user_notification_v1_notification_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *CreateUserNotificationRequest) GetNotificationName() string {
@@ -711,7 +711,7 @@ type BatchUserNotificationsRequest struct {
 
 func (x *BatchUserNotificationsRequest) Reset() {
 	*x = BatchUserNotificationsRequest{}
-	mi := &file_user_notification_v1_notification_proto_msgTypes[11]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -723,7 +723,7 @@ func (x *BatchUserNotificationsRequest) String() string {
 func (*BatchUserNotificationsRequest) ProtoMessage() {}
 
 func (x *BatchUserNotificationsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_notification_v1_notification_proto_msgTypes[11]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -736,7 +736,7 @@ func (x *BatchUserNotificationsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BatchUserNotificationsRequest.ProtoReflect.Descriptor instead.
 func (*BatchUserNotificationsRequest) Descriptor() ([]byte, []int) {
-	return file_user_notification_v1_notification_proto_rawDescGZIP(), []int{11}
+	return file_api_user_notification_v1_notification_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *BatchUserNotificationsRequest) GetItems() []int64 {
@@ -765,7 +765,7 @@ type BatchUserNotificationsReply struct {
 
 func (x *BatchUserNotificationsReply) Reset() {
 	*x = BatchUserNotificationsReply{}
-	mi := &file_user_notification_v1_notification_proto_msgTypes[12]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -777,7 +777,7 @@ func (x *BatchUserNotificationsReply) String() string {
 func (*BatchUserNotificationsReply) ProtoMessage() {}
 
 func (x *BatchUserNotificationsReply) ProtoReflect() protoreflect.Message {
-	mi := &file_user_notification_v1_notification_proto_msgTypes[12]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -790,7 +790,7 @@ func (x *BatchUserNotificationsReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BatchUserNotificationsReply.ProtoReflect.Descriptor instead.
 func (*BatchUserNotificationsReply) Descriptor() ([]byte, []int) {
-	return file_user_notification_v1_notification_proto_rawDescGZIP(), []int{12}
+	return file_api_user_notification_v1_notification_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *BatchUserNotificationsReply) GetCode() int32 {
@@ -830,7 +830,7 @@ type UpdateUserAllNotificationStatusRequest struct {
 
 func (x *UpdateUserAllNotificationStatusRequest) Reset() {
 	*x = UpdateUserAllNotificationStatusRequest{}
-	mi := &file_user_notification_v1_notification_proto_msgTypes[13]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -842,7 +842,7 @@ func (x *UpdateUserAllNotificationStatusRequest) String() string {
 func (*UpdateUserAllNotificationStatusRequest) ProtoMessage() {}
 
 func (x *UpdateUserAllNotificationStatusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_notification_v1_notification_proto_msgTypes[13]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -855,7 +855,7 @@ func (x *UpdateUserAllNotificationStatusRequest) ProtoReflect() protoreflect.Mes
 
 // Deprecated: Use UpdateUserAllNotificationStatusRequest.ProtoReflect.Descriptor instead.
 func (*UpdateUserAllNotificationStatusRequest) Descriptor() ([]byte, []int) {
-	return file_user_notification_v1_notification_proto_rawDescGZIP(), []int{13}
+	return file_api_user_notification_v1_notification_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *UpdateUserAllNotificationStatusRequest) GetStatus() int32 {
@@ -877,7 +877,7 @@ type UpdateUserAllNotificationStatusReply struct {
 
 func (x *UpdateUserAllNotificationStatusReply) Reset() {
 	*x = UpdateUserAllNotificationStatusReply{}
-	mi := &file_user_notification_v1_notification_proto_msgTypes[14]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -889,7 +889,7 @@ func (x *UpdateUserAllNotificationStatusReply) String() string {
 func (*UpdateUserAllNotificationStatusReply) ProtoMessage() {}
 
 func (x *UpdateUserAllNotificationStatusReply) ProtoReflect() protoreflect.Message {
-	mi := &file_user_notification_v1_notification_proto_msgTypes[14]
+	mi := &file_api_user_notification_v1_notification_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -902,7 +902,7 @@ func (x *UpdateUserAllNotificationStatusReply) ProtoReflect() protoreflect.Messa
 
 // Deprecated: Use UpdateUserAllNotificationStatusReply.ProtoReflect.Descriptor instead.
 func (*UpdateUserAllNotificationStatusReply) Descriptor() ([]byte, []int) {
-	return file_user_notification_v1_notification_proto_rawDescGZIP(), []int{14}
+	return file_api_user_notification_v1_notification_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *UpdateUserAllNotificationStatusReply) GetCode() int32 {
@@ -933,11 +933,11 @@ func (x *UpdateUserAllNotificationStatusReply) GetData() string {
 	return ""
 }
 
-var File_user_notification_v1_notification_proto protoreflect.FileDescriptor
+var File_api_user_notification_v1_notification_proto protoreflect.FileDescriptor
 
-const file_user_notification_v1_notification_proto_rawDesc = "" +
+const file_api_user_notification_v1_notification_proto_rawDesc = "" +
 	"\n" +
-	"'user/notification/v1/notification.proto\x12\x18api.user.notification.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\"\r\n" +
+	"+api/user/notification/v1/notification.proto\x12\x18api.user.notification.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\"\r\n" +
 	"\vBaseRequest\"\x0e\n" +
 	"\fBaseResponse\"\xe3\x01\n" +
 	"\x1eGetUserNotificationListRequest\x12\x12\n" +
@@ -1011,19 +1011,19 @@ const file_user_notification_v1_notification_proto_rawDesc = "" +
 	"\x18api.user.notification.v1B\x17UserNotificationProtoV1P\x01Z0xiaomiao-home-system/api/user/notification/v1;v1b\x06proto3"
 
 var (
-	file_user_notification_v1_notification_proto_rawDescOnce sync.Once
-	file_user_notification_v1_notification_proto_rawDescData []byte
+	file_api_user_notification_v1_notification_proto_rawDescOnce sync.Once
+	file_api_user_notification_v1_notification_proto_rawDescData []byte
 )
 
-func file_user_notification_v1_notification_proto_rawDescGZIP() []byte {
-	file_user_notification_v1_notification_proto_rawDescOnce.Do(func() {
-		file_user_notification_v1_notification_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_user_notification_v1_notification_proto_rawDesc), len(file_user_notification_v1_notification_proto_rawDesc)))
+func file_api_user_notification_v1_notification_proto_rawDescGZIP() []byte {
+	file_api_user_notification_v1_notification_proto_rawDescOnce.Do(func() {
+		file_api_user_notification_v1_notification_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_api_user_notification_v1_notification_proto_rawDesc), len(file_api_user_notification_v1_notification_proto_rawDesc)))
 	})
-	return file_user_notification_v1_notification_proto_rawDescData
+	return file_api_user_notification_v1_notification_proto_rawDescData
 }
 
-var file_user_notification_v1_notification_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
-var file_user_notification_v1_notification_proto_goTypes = []any{
+var file_api_user_notification_v1_notification_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_api_user_notification_v1_notification_proto_goTypes = []any{
 	(*BaseRequest)(nil),                            // 0: api.user.notification.v1.BaseRequest
 	(*BaseResponse)(nil),                           // 1: api.user.notification.v1.BaseResponse
 	(*GetUserNotificationListRequest)(nil),         // 2: api.user.notification.v1.GetUserNotificationListRequest
@@ -1040,7 +1040,7 @@ var file_user_notification_v1_notification_proto_goTypes = []any{
 	(*UpdateUserAllNotificationStatusRequest)(nil), // 13: api.user.notification.v1.UpdateUserAllNotificationStatusRequest
 	(*UpdateUserAllNotificationStatusReply)(nil),   // 14: api.user.notification.v1.UpdateUserAllNotificationStatusReply
 }
-var file_user_notification_v1_notification_proto_depIdxs = []int32{
+var file_api_user_notification_v1_notification_proto_depIdxs = []int32{
 	3,  // 0: api.user.notification.v1.UserNotificationList.items:type_name -> api.user.notification.v1.UserNotificationListItem
 	4,  // 1: api.user.notification.v1.GetUserNotificationListReply.data:type_name -> api.user.notification.v1.UserNotificationList
 	2,  // 2: api.user.notification.v1.UserNotification.GetUserNotificationList:input_type -> api.user.notification.v1.GetUserNotificationListRequest
@@ -1060,26 +1060,26 @@ var file_user_notification_v1_notification_proto_depIdxs = []int32{
 	0,  // [0:2] is the sub-list for field type_name
 }
 
-func init() { file_user_notification_v1_notification_proto_init() }
-func file_user_notification_v1_notification_proto_init() {
-	if File_user_notification_v1_notification_proto != nil {
+func init() { file_api_user_notification_v1_notification_proto_init() }
+func file_api_user_notification_v1_notification_proto_init() {
+	if File_api_user_notification_v1_notification_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_notification_v1_notification_proto_rawDesc), len(file_user_notification_v1_notification_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_user_notification_v1_notification_proto_rawDesc), len(file_api_user_notification_v1_notification_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_user_notification_v1_notification_proto_goTypes,
-		DependencyIndexes: file_user_notification_v1_notification_proto_depIdxs,
-		MessageInfos:      file_user_notification_v1_notification_proto_msgTypes,
+		GoTypes:           file_api_user_notification_v1_notification_proto_goTypes,
+		DependencyIndexes: file_api_user_notification_v1_notification_proto_depIdxs,
+		MessageInfos:      file_api_user_notification_v1_notification_proto_msgTypes,
 	}.Build()
-	File_user_notification_v1_notification_proto = out.File
-	file_user_notification_v1_notification_proto_goTypes = nil
-	file_user_notification_v1_notification_proto_depIdxs = nil
+	File_api_user_notification_v1_notification_proto = out.File
+	file_api_user_notification_v1_notification_proto_goTypes = nil
+	file_api_user_notification_v1_notification_proto_depIdxs = nil
 }

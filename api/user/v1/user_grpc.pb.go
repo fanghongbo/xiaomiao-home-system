@@ -26,6 +26,7 @@ const (
 	User_MpLogin_FullMethodName               = "/api.user.v1.User/MpLogin"
 	User_GetWebLoginUserInfo_FullMethodName   = "/api.user.v1.User/GetWebLoginUserInfo"
 	User_UpdateUserBaseSetting_FullMethodName = "/api.user.v1.User/UpdateUserBaseSetting"
+	User_UpdateUserPassword_FullMethodName    = "/api.user.v1.User/UpdateUserPassword"
 )
 
 // UserClient is the client API for User service.
@@ -45,6 +46,8 @@ type UserClient interface {
 	GetWebLoginUserInfo(ctx context.Context, in *GetWebLoginUserInfoRequest, opts ...grpc.CallOption) (*GetWebLoginUserInfoReply, error)
 	// 更新基础设置
 	UpdateUserBaseSetting(ctx context.Context, in *UpdateUserBaseSettingRequest, opts ...grpc.CallOption) (*UpdateUserBaseSettingReply, error)
+	// 更新密码
+	UpdateUserPassword(ctx context.Context, in *UpdateUserPasswordRequest, opts ...grpc.CallOption) (*UpdateUserPasswordReply, error)
 }
 
 type userClient struct {
@@ -125,6 +128,16 @@ func (c *userClient) UpdateUserBaseSetting(ctx context.Context, in *UpdateUserBa
 	return out, nil
 }
 
+func (c *userClient) UpdateUserPassword(ctx context.Context, in *UpdateUserPasswordRequest, opts ...grpc.CallOption) (*UpdateUserPasswordReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateUserPasswordReply)
+	err := c.cc.Invoke(ctx, User_UpdateUserPassword_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServer is the server API for User service.
 // All implementations must embed UnimplementedUserServer
 // for forward compatibility.
@@ -142,6 +155,8 @@ type UserServer interface {
 	GetWebLoginUserInfo(context.Context, *GetWebLoginUserInfoRequest) (*GetWebLoginUserInfoReply, error)
 	// 更新基础设置
 	UpdateUserBaseSetting(context.Context, *UpdateUserBaseSettingRequest) (*UpdateUserBaseSettingReply, error)
+	// 更新密码
+	UpdateUserPassword(context.Context, *UpdateUserPasswordRequest) (*UpdateUserPasswordReply, error)
 	mustEmbedUnimplementedUserServer()
 }
 
@@ -172,6 +187,9 @@ func (UnimplementedUserServer) GetWebLoginUserInfo(context.Context, *GetWebLogin
 }
 func (UnimplementedUserServer) UpdateUserBaseSetting(context.Context, *UpdateUserBaseSettingRequest) (*UpdateUserBaseSettingReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method UpdateUserBaseSetting not implemented")
+}
+func (UnimplementedUserServer) UpdateUserPassword(context.Context, *UpdateUserPasswordRequest) (*UpdateUserPasswordReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateUserPassword not implemented")
 }
 func (UnimplementedUserServer) mustEmbedUnimplementedUserServer() {}
 func (UnimplementedUserServer) testEmbeddedByValue()              {}
@@ -320,6 +338,24 @@ func _User_UpdateUserBaseSetting_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _User_UpdateUserPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateUserPasswordRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).UpdateUserPassword(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: User_UpdateUserPassword_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).UpdateUserPassword(ctx, req.(*UpdateUserPasswordRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // User_ServiceDesc is the grpc.ServiceDesc for User service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -354,6 +390,10 @@ var User_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateUserBaseSetting",
 			Handler:    _User_UpdateUserBaseSetting_Handler,
+		},
+		{
+			MethodName: "UpdateUserPassword",
+			Handler:    _User_UpdateUserPassword_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

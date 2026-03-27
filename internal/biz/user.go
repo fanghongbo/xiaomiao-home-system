@@ -35,6 +35,8 @@ type UserRepo interface {
 	WebCheckLogin(context.Context, *v1.WebCheckLoginRequest) (*v1.WebCheckLoginReply, error)
 	// UpdateUserBaseSetting 更新用户基础设置
 	UpdateUserBaseSetting(context.Context, *v1.UpdateUserBaseSettingRequest) (*v1.UpdateUserBaseSettingReply, error)
+	// UpdateUserPassword 更新用户密码
+	UpdateUserPassword(context.Context, *v1.UpdateUserPasswordRequest) (*v1.UpdateUserPasswordReply, error)
 }
 
 // UserUsecase is a User usecase.
@@ -81,4 +83,9 @@ func (u *UserUsecase) WebCheckLogin(ctx context.Context, req *v1.WebCheckLoginRe
 // UpdateUserBaseSetting 更新用户基础设置
 func (u *UserUsecase) UpdateUserBaseSetting(ctx context.Context, req *v1.UpdateUserBaseSettingRequest) (*v1.UpdateUserBaseSettingReply, error) {
 	return u.repo.UpdateUserBaseSetting(ctx, req)
+}
+
+// UpdateUserPassword 更新用户密码
+func (u *UserUsecase) UpdateUserPassword(ctx context.Context, req *v1.UpdateUserPasswordRequest) (*v1.UpdateUserPasswordReply, error) {
+	return u.repo.UpdateUserPassword(ctx, req)
 }

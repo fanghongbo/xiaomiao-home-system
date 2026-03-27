@@ -3,6 +3,7 @@ package data
 import (
 	"context"
 	"fmt"
+	"regexp"
 	"time"
 	v1 "xiaomiao-home-system/api/user/v1"
 	"xiaomiao-home-system/third_party/jwt"
@@ -430,6 +431,62 @@ func (u *userRepo) UpdateUserBaseSetting(ctx context.Context, req *v1.UpdateUser
 	}
 
 	return &v1.UpdateUserBaseSettingReply{
+		Code:    200,
+		Message: "更新成功",
+		Success: true,
+		Data:    "",
+	}, nil
+}
+
+// CheckPassword 校验密码：必须包含 字母+数字+特殊符号，长度6-32
+func (u *userRepo) CheckPassword(password string) bool {
+	if len(password) < 6 || len(password) > 32 {
+		return false
+	}
+
+	// 包含字母
+	hasLetter := regexp.MustCompile(`[A-Za-z]`).MatchString(password)
+	// 包含数字
+	hasDigit := regexp.MustCompile(`[0-9]`).MatchString(password)
+	// 包含特殊符号
+	hasSpecial := regexp.MustCompile(`[^A-Za-z0-9]`).MatchString(password)
+
+	return hasLetter && hasDigit && hasSpecial
+}
+
+// UpdateUserPassword 更新用户密码
+func (u *userRepo) UpdateUserPassword(ctx context.Context, req *v1.UpdateUserPasswordRequest) (*v1.UpdateUserPasswordReply, error) {
+	userId, err := utils.GetCurrentUserId(ctx)
+	if err != nil {
+		u.log.Error("get current user id failed: %v", err)
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+	}
+
+	if !u.CheckPassword(req.Password) {
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "密码必须包含字母+数字+特殊符号，长度6-32")
+	}
+
+	salt, err := password.NewSalt(10)
+	if err != nil {
+		u.log.Error("generate salt failed: %v", err)
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+	}
+
+	passwordHash, err := password.New(req.Password, salt)
+	if err != nil {
+		u.log.Error("generate password hash failed: %v", err)
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+	}
+
+	if err := u.data.db.Table("t_user_password").Where("user_id = ?", userId).Updates(map[string]interface{}{
+		"password": passwordHash,
+		"salt":     salt,
+	}).Error; err != nil {
+		u.log.Error("update user password failed: %v", err)
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "系统错误, 请稍后再试")
+	}
+
+	return &v1.UpdateUserPasswordReply{
 		Code:    200,
 		Message: "更新成功",
 		Success: true,
