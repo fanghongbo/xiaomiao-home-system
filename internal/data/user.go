@@ -3,6 +3,7 @@ package data
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 	v1 "xiaomiao-home-system/api/user/v1"
 	"xiaomiao-home-system/third_party/jwt"
@@ -351,6 +352,10 @@ func (u *userRepo) GetWebLoginUserInfo(ctx context.Context, req *v1.GetWebLoginU
 	if err != nil {
 		u.log.Error("get user info failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	if userInfo.Avatar != "" {
+		userInfo.Avatar = strings.TrimRight(u.data.static.BaseUrl, "/") + "/static/" + userInfo.Avatar
 	}
 
 	return &v1.GetWebLoginUserInfoReply{
