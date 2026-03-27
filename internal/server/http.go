@@ -4,6 +4,7 @@ import (
 	"context"
 	stdhttp "net/http"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 	fileV1 "xiaomiao-home-system/api/file/v1"
@@ -80,12 +81,55 @@ func NewHTTPServer(c *conf.Server, jwtConfig *conf.Jwt, staticConfig *conf.Stati
 		if !ok || req == nil {
 			return errors.BadRequest("ERR_INVALID_REQUEST", "无效请求")
 		}
-		relPath := strings.TrimPrefix(req.URL.Path, "/static/")
-		relPath = strings.TrimSpace(relPath)
-		if relPath == "" || strings.Contains(relPath, "..") {
+
+		relPath := strings.TrimSpace(strings.TrimPrefix(req.URL.Path, "/static/"))
+		if relPath == "" {
 			return errors.BadRequest("ERR_INVALID_REQUEST", "无效文件路径")
 		}
-		fullPath := filepath.Join(staticConfig.BaseDir, filepath.FromSlash(relPath))
+
+		// 替换掉目录中的所有 ".." 字符后，再做规范化处理
+		relPath = strings.ReplaceAll(relPath, "..", "")
+		cleanRelPath := strings.TrimPrefix(path.Clean("/"+relPath), "/")
+		if cleanRelPath == "." || cleanRelPath == "" {
+			return errors.BadRequest("ERR_INVALID_REQUEST", "无效文件路径")
+		}
+
+		// 不允许请求隐藏文件/目录
+		for _, seg := range strings.Split(cleanRelPath, "/") {
+			if seg == "" {
+				continue
+			}
+			if strings.HasPrefix(seg, ".") {
+				return errors.BadRequest("ERR_INVALID_REQUEST", "无效文件路径")
+			}
+		}
+
+		baseDirAbs, err := filepath.Abs(staticConfig.BaseDir)
+		if err != nil {
+			return errors.InternalServer("ERR_SYSTEM_EXCEPTION", "系统错误, 请稍后再试")
+		}
+		fullPath := filepath.Join(baseDirAbs, filepath.FromSlash(cleanRelPath))
+		fullPathAbs, err := filepath.Abs(fullPath)
+		if err != nil {
+			return errors.InternalServer("ERR_SYSTEM_EXCEPTION", "系统错误, 请稍后再试")
+		}
+
+		// 最终路径前缀必须是 BaseDir
+		basePrefix := strings.TrimRight(baseDirAbs, string(os.PathSeparator)) + string(os.PathSeparator)
+		if fullPathAbs != baseDirAbs && !strings.HasPrefix(fullPathAbs, basePrefix) {
+			return errors.BadRequest("ERR_INVALID_REQUEST", "无效文件路径")
+		}
+
+		// 禁止路径上任意层级使用符号链接
+		hasSymlink, err := hasSymlinkInPath(baseDirAbs, fullPathAbs)
+		if err != nil {
+			return errors.InternalServer("ERR_SYSTEM_EXCEPTION", "系统错误, 请稍后再试")
+		}
+		if hasSymlink {
+			return errors.BadRequest("ERR_INVALID_REQUEST", "无效文件路径")
+		}
+
+		fullPath = fullPathAbs
 		if _, err := os.Stat(fullPath); err != nil {
 			if os.IsNotExist(err) {
 				return errors.NotFound("ERR_BAD_REQUEST", "文件不存在")
@@ -132,4 +176,34 @@ func NewHTTPServer(c *conf.Server, jwtConfig *conf.Jwt, staticConfig *conf.Stati
 	userNotificationV1.RegisterUserNotificationHTTPServer(srv, userNotification)
 	userSettingV1.RegisterUserSettingHTTPServer(srv, userSetting)
 	return srv
+}
+
+func hasSymlinkInPath(baseDirAbs string, fullPathAbs string) (bool, error) {
+	rel, err := filepath.Rel(baseDirAbs, fullPathAbs)
+	if err != nil {
+		return false, err
+	}
+	if rel == "." {
+		return false, nil
+	}
+
+	cur := baseDirAbs
+	for _, seg := range strings.Split(rel, string(os.PathSeparator)) {
+		if seg == "" || seg == "." {
+			continue
+		}
+		cur = filepath.Join(cur, seg)
+		info, err := os.Lstat(cur)
+		if err != nil {
+			// 由后续 os.Stat 统一处理不存在等情况
+			if os.IsNotExist(err) {
+				return false, nil
+			}
+			return false, err
+		}
+		if info.Mode()&os.ModeSymlink != 0 {
+			return true, nil
+		}
+	}
+	return false, nil
 }
