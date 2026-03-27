@@ -40,8 +40,11 @@ func wireApp(confServer *conf.Server, confData *conf.Data, config *conf.Config, 
 	userNotificationRepo := data.NewUserNotificationRepo(dataData, logger)
 	userNotificationUsecase := biz.NewUserNotificationUsecase(userNotificationRepo, logger)
 	userNotificationService := service.NewUserNotificationService(userNotificationUsecase, config, logger)
-	grpcServer := server.NewGRPCServer(confServer, userService, roleService, userNotificationService, logger)
-	httpServer := server.NewHTTPServer(confServer, jwt, userService, roleService, userNotificationService, logger)
+	userSettingRepo := data.NewUserSettingRepo(dataData, logger)
+	userSettingUsecase := biz.NewUserSettingUsecase(userSettingRepo, logger)
+	userSettingService := service.NewUserSettingService(userSettingUsecase, config, logger)
+	grpcServer := server.NewGRPCServer(confServer, userService, roleService, userNotificationService, userSettingService, logger)
+	httpServer := server.NewHTTPServer(confServer, jwt, userService, roleService, userNotificationService, userSettingService, logger)
 	app := newApp(logger, taskManager, grpcServer, httpServer, registry)
 	return app, func() {
 		cleanup()

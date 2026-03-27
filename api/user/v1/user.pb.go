@@ -79,55 +79,6 @@ func (LoginType) EnumDescriptor() ([]byte, []int) {
 	return file_api_user_v1_user_proto_rawDescGZIP(), []int{0}
 }
 
-type GenderType int32
-
-const (
-	GenderType_GENDER_SECRET GenderType = 0 // 保密
-	GenderType_GENDER_MALE   GenderType = 1 // 男
-	GenderType_GENDER_FEMALE GenderType = 2 // 女
-)
-
-// Enum value maps for GenderType.
-var (
-	GenderType_name = map[int32]string{
-		0: "GENDER_SECRET",
-		1: "GENDER_MALE",
-		2: "GENDER_FEMALE",
-	}
-	GenderType_value = map[string]int32{
-		"GENDER_SECRET": 0,
-		"GENDER_MALE":   1,
-		"GENDER_FEMALE": 2,
-	}
-)
-
-func (x GenderType) Enum() *GenderType {
-	p := new(GenderType)
-	*p = x
-	return p
-}
-
-func (x GenderType) String() string {
-	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
-}
-
-func (GenderType) Descriptor() protoreflect.EnumDescriptor {
-	return file_api_user_v1_user_proto_enumTypes[1].Descriptor()
-}
-
-func (GenderType) Type() protoreflect.EnumType {
-	return &file_api_user_v1_user_proto_enumTypes[1]
-}
-
-func (x GenderType) Number() protoreflect.EnumNumber {
-	return protoreflect.EnumNumber(x)
-}
-
-// Deprecated: Use GenderType.Descriptor instead.
-func (GenderType) EnumDescriptor() ([]byte, []int) {
-	return file_api_user_v1_user_proto_rawDescGZIP(), []int{1}
-}
-
 // 基础请求体
 type BaseRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1160,254 +1111,6 @@ func (x *WebCheckLoginReply) GetData() string {
 	return ""
 }
 
-type UpdateUserBaseSettingRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Nickname      string                 `protobuf:"bytes,1,opt,name=nickname,proto3" json:"nickname,omitempty"`
-	Gender        GenderType             `protobuf:"varint,2,opt,name=gender,proto3,enum=api.user.v1.GenderType" json:"gender,omitempty"`
-	Birthday      string                 `protobuf:"bytes,3,opt,name=birthday,proto3" json:"birthday,omitempty"`
-	Signature     string                 `protobuf:"bytes,4,opt,name=signature,proto3" json:"signature,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *UpdateUserBaseSettingRequest) Reset() {
-	*x = UpdateUserBaseSettingRequest{}
-	mi := &file_api_user_v1_user_proto_msgTypes[19]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *UpdateUserBaseSettingRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*UpdateUserBaseSettingRequest) ProtoMessage() {}
-
-func (x *UpdateUserBaseSettingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_user_v1_user_proto_msgTypes[19]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use UpdateUserBaseSettingRequest.ProtoReflect.Descriptor instead.
-func (*UpdateUserBaseSettingRequest) Descriptor() ([]byte, []int) {
-	return file_api_user_v1_user_proto_rawDescGZIP(), []int{19}
-}
-
-func (x *UpdateUserBaseSettingRequest) GetNickname() string {
-	if x != nil {
-		return x.Nickname
-	}
-	return ""
-}
-
-func (x *UpdateUserBaseSettingRequest) GetGender() GenderType {
-	if x != nil {
-		return x.Gender
-	}
-	return GenderType_GENDER_SECRET
-}
-
-func (x *UpdateUserBaseSettingRequest) GetBirthday() string {
-	if x != nil {
-		return x.Birthday
-	}
-	return ""
-}
-
-func (x *UpdateUserBaseSettingRequest) GetSignature() string {
-	if x != nil {
-		return x.Signature
-	}
-	return ""
-}
-
-type UpdateUserBaseSettingReply struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Code          int32                  `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
-	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
-	Success       bool                   `protobuf:"varint,3,opt,name=success,proto3" json:"success,omitempty"`
-	Data          string                 `protobuf:"bytes,4,opt,name=data,proto3" json:"data,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *UpdateUserBaseSettingReply) Reset() {
-	*x = UpdateUserBaseSettingReply{}
-	mi := &file_api_user_v1_user_proto_msgTypes[20]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *UpdateUserBaseSettingReply) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*UpdateUserBaseSettingReply) ProtoMessage() {}
-
-func (x *UpdateUserBaseSettingReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_user_v1_user_proto_msgTypes[20]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use UpdateUserBaseSettingReply.ProtoReflect.Descriptor instead.
-func (*UpdateUserBaseSettingReply) Descriptor() ([]byte, []int) {
-	return file_api_user_v1_user_proto_rawDescGZIP(), []int{20}
-}
-
-func (x *UpdateUserBaseSettingReply) GetCode() int32 {
-	if x != nil {
-		return x.Code
-	}
-	return 0
-}
-
-func (x *UpdateUserBaseSettingReply) GetMessage() string {
-	if x != nil {
-		return x.Message
-	}
-	return ""
-}
-
-func (x *UpdateUserBaseSettingReply) GetSuccess() bool {
-	if x != nil {
-		return x.Success
-	}
-	return false
-}
-
-func (x *UpdateUserBaseSettingReply) GetData() string {
-	if x != nil {
-		return x.Data
-	}
-	return ""
-}
-
-type UpdateUserPasswordRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Password      string                 `protobuf:"bytes,1,opt,name=password,proto3" json:"password,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *UpdateUserPasswordRequest) Reset() {
-	*x = UpdateUserPasswordRequest{}
-	mi := &file_api_user_v1_user_proto_msgTypes[21]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *UpdateUserPasswordRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*UpdateUserPasswordRequest) ProtoMessage() {}
-
-func (x *UpdateUserPasswordRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_user_v1_user_proto_msgTypes[21]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use UpdateUserPasswordRequest.ProtoReflect.Descriptor instead.
-func (*UpdateUserPasswordRequest) Descriptor() ([]byte, []int) {
-	return file_api_user_v1_user_proto_rawDescGZIP(), []int{21}
-}
-
-func (x *UpdateUserPasswordRequest) GetPassword() string {
-	if x != nil {
-		return x.Password
-	}
-	return ""
-}
-
-type UpdateUserPasswordReply struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Code          int32                  `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
-	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
-	Success       bool                   `protobuf:"varint,3,opt,name=success,proto3" json:"success,omitempty"`
-	Data          string                 `protobuf:"bytes,4,opt,name=data,proto3" json:"data,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *UpdateUserPasswordReply) Reset() {
-	*x = UpdateUserPasswordReply{}
-	mi := &file_api_user_v1_user_proto_msgTypes[22]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *UpdateUserPasswordReply) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*UpdateUserPasswordReply) ProtoMessage() {}
-
-func (x *UpdateUserPasswordReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_user_v1_user_proto_msgTypes[22]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use UpdateUserPasswordReply.ProtoReflect.Descriptor instead.
-func (*UpdateUserPasswordReply) Descriptor() ([]byte, []int) {
-	return file_api_user_v1_user_proto_rawDescGZIP(), []int{22}
-}
-
-func (x *UpdateUserPasswordReply) GetCode() int32 {
-	if x != nil {
-		return x.Code
-	}
-	return 0
-}
-
-func (x *UpdateUserPasswordReply) GetMessage() string {
-	if x != nil {
-		return x.Message
-	}
-	return ""
-}
-
-func (x *UpdateUserPasswordReply) GetSuccess() bool {
-	if x != nil {
-		return x.Success
-	}
-	return false
-}
-
-func (x *UpdateUserPasswordReply) GetData() string {
-	if x != nil {
-		return x.Data
-	}
-	return ""
-}
-
 var File_api_user_v1_user_proto protoreflect.FileDescriptor
 
 const file_api_user_v1_user_proto_rawDesc = "" +
@@ -1476,44 +1179,20 @@ const file_api_user_v1_user_proto_rawDesc = "" +
 	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12\x18\n" +
 	"\asuccess\x18\x03 \x01(\bR\asuccess\x12\x12\n" +
-	"\x04data\x18\x04 \x01(\tR\x04data\"\xd7\x01\n" +
-	"\x1cUpdateUserBaseSettingRequest\x12%\n" +
-	"\bnickname\x18\x01 \x01(\tB\t\xfaB\x06r\x04\x10\x01\x18\x14R\bnickname\x12/\n" +
-	"\x06gender\x18\x02 \x01(\x0e2\x17.api.user.v1.GenderTypeR\x06gender\x126\n" +
-	"\bbirthday\x18\x03 \x01(\tB\x1a\xfaB\x17r\x152\x13^\\d{4}-\\d{2}-\\d{2}$R\bbirthday\x12'\n" +
-	"\tsignature\x18\x04 \x01(\tB\t\xfaB\x06r\x04\x10\x00\x18dR\tsignature\"x\n" +
-	"\x1aUpdateUserBaseSettingReply\x12\x12\n" +
-	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
-	"\amessage\x18\x02 \x01(\tR\amessage\x12\x18\n" +
-	"\asuccess\x18\x03 \x01(\bR\asuccess\x12\x12\n" +
-	"\x04data\x18\x04 \x01(\tR\x04data\"\xb2\x02\n" +
-	"\x19UpdateUserPasswordRequest\x12\x94\x02\n" +
-	"\bpassword\x18\x01 \x01(\tB\xf7\x01\xfaB\xf3\x01r\xf0\x01 \x06( 2\xe9\x01^.*[A-Za-z]+.*[0-9]+.*[^A-Za-z0-9]+.*$|^.*[0-9]+.*[A-Za-z]+.*[^A-Za-z0-9]+.*$|^.*[A-Za-z]+.*[^A-Za-z0-9]+.*[0-9]+.*$|^.*[0-9]+.*[^A-Za-z0-9]+.*[A-Za-z]+.*$|^.*[^A-Za-z0-9]+.*[A-Za-z]+.*[0-9]+.*$|^.*[^A-Za-z0-9]+.*[0-9]+.*[A-Za-z]+.*$R\bpassword\"u\n" +
-	"\x17UpdateUserPasswordReply\x12\x12\n" +
-	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
-	"\amessage\x18\x02 \x01(\tR\amessage\x12\x18\n" +
-	"\asuccess\x18\x03 \x01(\bR\asuccess\x12\x12\n" +
 	"\x04data\x18\x04 \x01(\tR\x04data*}\n" +
 	"\tLoginType\x12\x1a\n" +
 	"\x16LOGIN_TYPE_UNSPECIFIED\x10\x00\x12\x16\n" +
 	"\x12LOGIN_TYPE_ACCOUNT\x10\x01\x12\x12\n" +
 	"\x0eLOGIN_TYPE_SMS\x10\x02\x12\x15\n" +
 	"\x11LOGIN_TYPE_WECHAT\x10\x03\x12\x11\n" +
-	"\rLOGIN_TYPE_QQ\x10\x04*C\n" +
-	"\n" +
-	"GenderType\x12\x11\n" +
-	"\rGENDER_SECRET\x10\x00\x12\x0f\n" +
-	"\vGENDER_MALE\x10\x01\x12\x11\n" +
-	"\rGENDER_FEMALE\x10\x022\xbf\a\n" +
+	"\rLOGIN_TYPE_QQ\x10\x042\xa4\x05\n" +
 	"\x04User\x12g\n" +
 	"\bWebLogin\x12\x1c.api.user.v1.WebLoginRequest\x1a\x1a.api.user.v1.WebLoginReply\"!\x82\xd3\xe4\x93\x02\x1b:\x01*\"\x16/api/v1/web/auth/login\x12t\n" +
 	"\rWebCheckLogin\x12!.api.user.v1.WebCheckLoginRequest\x1a\x1f.api.user.v1.WebCheckLoginReply\"\x1f\x82\xd3\xe4\x93\x02\x19\x12\x17/api/v1/web/check/login\x12h\n" +
 	"\tWebLogout\x12\x1d.api.user.v1.WebLogoutRequest\x1a\x1b.api.user.v1.WebLogoutReply\"\x1f\x82\xd3\xe4\x93\x02\x19\x12\x17/api/v1/web/auth/logout\x12g\n" +
 	"\bAppLogin\x12\x1c.api.user.v1.AppLoginRequest\x1a\x1a.api.user.v1.AppLoginReply\"!\x82\xd3\xe4\x93\x02\x1b:\x01*\"\x16/api/v1/app/auth/login\x12c\n" +
 	"\aMpLogin\x12\x1b.api.user.v1.MpLoginRequest\x1a\x19.api.user.v1.MpLoginReply\" \x82\xd3\xe4\x93\x02\x1a:\x01*\"\x15/api/v1/mp/auth/login\x12\x84\x01\n" +
-	"\x13GetWebLoginUserInfo\x12'.api.user.v1.GetWebLoginUserInfoRequest\x1a%.api.user.v1.GetWebLoginUserInfoReply\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/api/v1/web/user/info\x12\x91\x01\n" +
-	"\x15UpdateUserBaseSetting\x12).api.user.v1.UpdateUserBaseSettingRequest\x1a'.api.user.v1.UpdateUserBaseSettingReply\"$\x82\xd3\xe4\x93\x02\x1e:\x01*\"\x19/api/v1/user/base/setting\x12\x84\x01\n" +
-	"\x12UpdateUserPassword\x12&.api.user.v1.UpdateUserPasswordRequest\x1a$.api.user.v1.UpdateUserPasswordReply\" \x82\xd3\xe4\x93\x02\x1a:\x01*\"\x15/api/v1/user/passwordBA\n" +
+	"\x13GetWebLoginUserInfo\x12'.api.user.v1.GetWebLoginUserInfoRequest\x1a%.api.user.v1.GetWebLoginUserInfoReply\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/api/v1/web/user/infoBA\n" +
 	"\vapi.user.v1B\vUserProtoV1P\x01Z#xiaomiao-home-system/api/user/v1;v1b\x06proto3"
 
 var (
@@ -1528,61 +1207,51 @@ func file_api_user_v1_user_proto_rawDescGZIP() []byte {
 	return file_api_user_v1_user_proto_rawDescData
 }
 
-var file_api_user_v1_user_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_api_user_v1_user_proto_msgTypes = make([]protoimpl.MessageInfo, 23)
+var file_api_user_v1_user_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_api_user_v1_user_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
 var file_api_user_v1_user_proto_goTypes = []any{
-	(LoginType)(0),                       // 0: api.user.v1.LoginType
-	(GenderType)(0),                      // 1: api.user.v1.GenderType
-	(*BaseRequest)(nil),                  // 2: api.user.v1.BaseRequest
-	(*BaseResponse)(nil),                 // 3: api.user.v1.BaseResponse
-	(*WebLoginRequest)(nil),              // 4: api.user.v1.WebLoginRequest
-	(*WebLoginInfo)(nil),                 // 5: api.user.v1.WebLoginInfo
-	(*WebLoginReply)(nil),                // 6: api.user.v1.WebLoginReply
-	(*RoleItem)(nil),                     // 7: api.user.v1.RoleItem
-	(*UserInfo)(nil),                     // 8: api.user.v1.UserInfo
-	(*UserPasswordInfo)(nil),             // 9: api.user.v1.UserPasswordInfo
-	(*AppLoginRequest)(nil),              // 10: api.user.v1.AppLoginRequest
-	(*AppLoginReply)(nil),                // 11: api.user.v1.AppLoginReply
-	(*MpLoginRequest)(nil),               // 12: api.user.v1.MpLoginRequest
-	(*MpLoginReply)(nil),                 // 13: api.user.v1.MpLoginReply
-	(*GetWebLoginUserInfoRequest)(nil),   // 14: api.user.v1.GetWebLoginUserInfoRequest
-	(*WebLoginUserInfo)(nil),             // 15: api.user.v1.WebLoginUserInfo
-	(*GetWebLoginUserInfoReply)(nil),     // 16: api.user.v1.GetWebLoginUserInfoReply
-	(*WebLogoutRequest)(nil),             // 17: api.user.v1.WebLogoutRequest
-	(*WebLogoutReply)(nil),               // 18: api.user.v1.WebLogoutReply
-	(*WebCheckLoginRequest)(nil),         // 19: api.user.v1.WebCheckLoginRequest
-	(*WebCheckLoginReply)(nil),           // 20: api.user.v1.WebCheckLoginReply
-	(*UpdateUserBaseSettingRequest)(nil), // 21: api.user.v1.UpdateUserBaseSettingRequest
-	(*UpdateUserBaseSettingReply)(nil),   // 22: api.user.v1.UpdateUserBaseSettingReply
-	(*UpdateUserPasswordRequest)(nil),    // 23: api.user.v1.UpdateUserPasswordRequest
-	(*UpdateUserPasswordReply)(nil),      // 24: api.user.v1.UpdateUserPasswordReply
+	(LoginType)(0),                     // 0: api.user.v1.LoginType
+	(*BaseRequest)(nil),                // 1: api.user.v1.BaseRequest
+	(*BaseResponse)(nil),               // 2: api.user.v1.BaseResponse
+	(*WebLoginRequest)(nil),            // 3: api.user.v1.WebLoginRequest
+	(*WebLoginInfo)(nil),               // 4: api.user.v1.WebLoginInfo
+	(*WebLoginReply)(nil),              // 5: api.user.v1.WebLoginReply
+	(*RoleItem)(nil),                   // 6: api.user.v1.RoleItem
+	(*UserInfo)(nil),                   // 7: api.user.v1.UserInfo
+	(*UserPasswordInfo)(nil),           // 8: api.user.v1.UserPasswordInfo
+	(*AppLoginRequest)(nil),            // 9: api.user.v1.AppLoginRequest
+	(*AppLoginReply)(nil),              // 10: api.user.v1.AppLoginReply
+	(*MpLoginRequest)(nil),             // 11: api.user.v1.MpLoginRequest
+	(*MpLoginReply)(nil),               // 12: api.user.v1.MpLoginReply
+	(*GetWebLoginUserInfoRequest)(nil), // 13: api.user.v1.GetWebLoginUserInfoRequest
+	(*WebLoginUserInfo)(nil),           // 14: api.user.v1.WebLoginUserInfo
+	(*GetWebLoginUserInfoReply)(nil),   // 15: api.user.v1.GetWebLoginUserInfoReply
+	(*WebLogoutRequest)(nil),           // 16: api.user.v1.WebLogoutRequest
+	(*WebLogoutReply)(nil),             // 17: api.user.v1.WebLogoutReply
+	(*WebCheckLoginRequest)(nil),       // 18: api.user.v1.WebCheckLoginRequest
+	(*WebCheckLoginReply)(nil),         // 19: api.user.v1.WebCheckLoginReply
 }
 var file_api_user_v1_user_proto_depIdxs = []int32{
 	0,  // 0: api.user.v1.WebLoginRequest.login_type:type_name -> api.user.v1.LoginType
-	5,  // 1: api.user.v1.WebLoginReply.data:type_name -> api.user.v1.WebLoginInfo
-	15, // 2: api.user.v1.GetWebLoginUserInfoReply.data:type_name -> api.user.v1.WebLoginUserInfo
-	1,  // 3: api.user.v1.UpdateUserBaseSettingRequest.gender:type_name -> api.user.v1.GenderType
-	4,  // 4: api.user.v1.User.WebLogin:input_type -> api.user.v1.WebLoginRequest
-	19, // 5: api.user.v1.User.WebCheckLogin:input_type -> api.user.v1.WebCheckLoginRequest
-	17, // 6: api.user.v1.User.WebLogout:input_type -> api.user.v1.WebLogoutRequest
-	10, // 7: api.user.v1.User.AppLogin:input_type -> api.user.v1.AppLoginRequest
-	12, // 8: api.user.v1.User.MpLogin:input_type -> api.user.v1.MpLoginRequest
-	14, // 9: api.user.v1.User.GetWebLoginUserInfo:input_type -> api.user.v1.GetWebLoginUserInfoRequest
-	21, // 10: api.user.v1.User.UpdateUserBaseSetting:input_type -> api.user.v1.UpdateUserBaseSettingRequest
-	23, // 11: api.user.v1.User.UpdateUserPassword:input_type -> api.user.v1.UpdateUserPasswordRequest
-	6,  // 12: api.user.v1.User.WebLogin:output_type -> api.user.v1.WebLoginReply
-	20, // 13: api.user.v1.User.WebCheckLogin:output_type -> api.user.v1.WebCheckLoginReply
-	18, // 14: api.user.v1.User.WebLogout:output_type -> api.user.v1.WebLogoutReply
-	11, // 15: api.user.v1.User.AppLogin:output_type -> api.user.v1.AppLoginReply
-	13, // 16: api.user.v1.User.MpLogin:output_type -> api.user.v1.MpLoginReply
-	16, // 17: api.user.v1.User.GetWebLoginUserInfo:output_type -> api.user.v1.GetWebLoginUserInfoReply
-	22, // 18: api.user.v1.User.UpdateUserBaseSetting:output_type -> api.user.v1.UpdateUserBaseSettingReply
-	24, // 19: api.user.v1.User.UpdateUserPassword:output_type -> api.user.v1.UpdateUserPasswordReply
-	12, // [12:20] is the sub-list for method output_type
-	4,  // [4:12] is the sub-list for method input_type
-	4,  // [4:4] is the sub-list for extension type_name
-	4,  // [4:4] is the sub-list for extension extendee
-	0,  // [0:4] is the sub-list for field type_name
+	4,  // 1: api.user.v1.WebLoginReply.data:type_name -> api.user.v1.WebLoginInfo
+	14, // 2: api.user.v1.GetWebLoginUserInfoReply.data:type_name -> api.user.v1.WebLoginUserInfo
+	3,  // 3: api.user.v1.User.WebLogin:input_type -> api.user.v1.WebLoginRequest
+	18, // 4: api.user.v1.User.WebCheckLogin:input_type -> api.user.v1.WebCheckLoginRequest
+	16, // 5: api.user.v1.User.WebLogout:input_type -> api.user.v1.WebLogoutRequest
+	9,  // 6: api.user.v1.User.AppLogin:input_type -> api.user.v1.AppLoginRequest
+	11, // 7: api.user.v1.User.MpLogin:input_type -> api.user.v1.MpLoginRequest
+	13, // 8: api.user.v1.User.GetWebLoginUserInfo:input_type -> api.user.v1.GetWebLoginUserInfoRequest
+	5,  // 9: api.user.v1.User.WebLogin:output_type -> api.user.v1.WebLoginReply
+	19, // 10: api.user.v1.User.WebCheckLogin:output_type -> api.user.v1.WebCheckLoginReply
+	17, // 11: api.user.v1.User.WebLogout:output_type -> api.user.v1.WebLogoutReply
+	10, // 12: api.user.v1.User.AppLogin:output_type -> api.user.v1.AppLoginReply
+	12, // 13: api.user.v1.User.MpLogin:output_type -> api.user.v1.MpLoginReply
+	15, // 14: api.user.v1.User.GetWebLoginUserInfo:output_type -> api.user.v1.GetWebLoginUserInfoReply
+	9,  // [9:15] is the sub-list for method output_type
+	3,  // [3:9] is the sub-list for method input_type
+	3,  // [3:3] is the sub-list for extension type_name
+	3,  // [3:3] is the sub-list for extension extendee
+	0,  // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_api_user_v1_user_proto_init() }
@@ -1595,8 +1264,8 @@ func file_api_user_v1_user_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_user_v1_user_proto_rawDesc), len(file_api_user_v1_user_proto_rawDesc)),
-			NumEnums:      2,
-			NumMessages:   23,
+			NumEnums:      1,
+			NumMessages:   19,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

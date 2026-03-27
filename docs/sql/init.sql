@@ -18,7 +18,7 @@ CREATE TABLE
     created_time datetime    NOT NULL         DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     updated_time datetime    NOT NULL         DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     deleted_time datetime                     DEFAULT  '1970-01-01 08:00:00' COMMENT '删除时间',
-    UNIQUE KEY uk_nickname (nickname, deleted_flag, deleted_time) USING BTREE
+    KEY idx_nickname (nickname) USING BTREE
 ) ENGINE = innodb
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci

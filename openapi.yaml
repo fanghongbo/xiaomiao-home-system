@@ -186,17 +186,17 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.role.v1.GetRolesReply'
-    /api/v1/user/base/setting:
+    /api/v1/user/adopt/notify/setting:
         post:
             tags:
-                - User
-            description: 更新基础设置
-            operationId: User_UpdateUserBaseSetting
+                - UserSetting
+            description: UpdateUserAdoptNotifyRecevieSetting 更新用户领养通知
+            operationId: UserSetting_UpdateUserAdoptNotifyRecevieSetting
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.user.v1.UpdateUserBaseSettingRequest'
+                            $ref: '#/components/schemas/api.user.setting.v1.UpdateUserAdoptNotifyRecevieSettingRequest'
                 required: true
             responses:
                 "200":
@@ -204,7 +204,64 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.user.v1.UpdateUserBaseSettingReply'
+                                $ref: '#/components/schemas/api.user.setting.v1.UpdateUserAdoptNotifyRecevieSettingReply'
+    /api/v1/user/base/setting:
+        post:
+            tags:
+                - UserSetting
+            description: 更新基础更新
+            operationId: UserSetting_UpdateUserBaseSetting
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.user.setting.v1.UpdateUserBaseSettingRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.setting.v1.UpdateUserBaseSettingReply'
+    /api/v1/user/email/notify/setting:
+        post:
+            tags:
+                - UserSetting
+            description: UpdateUserEmailNotifyRecevieSetting 更新用户邮件通知
+            operationId: UserSetting_UpdateUserEmailNotifyRecevieSetting
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.user.setting.v1.UpdateUserEmailNotifyRecevieSettingRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.setting.v1.UpdateUserEmailNotifyRecevieSettingReply'
+    /api/v1/user/interact/notify/setting:
+        post:
+            tags:
+                - UserSetting
+            description: UpdateUserInteractNotifyRecevieSetting 更新用户互动通知
+            operationId: UserSetting_UpdateUserInteractNotifyRecevieSetting
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.user.setting.v1.UpdateUserInteractNotifyRecevieSettingRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.setting.v1.UpdateUserInteractNotifyRecevieSettingReply'
     /api/v1/user/notification:
         post:
             tags:
@@ -329,17 +386,30 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.user.notification.v1.DeleteUserNotificationReply'
+    /api/v1/user/notify/setting:
+        get:
+            tags:
+                - UserSetting
+            description: GetUserNotifySetting 获取用通知设置
+            operationId: UserSetting_GetUserNotifySetting
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.setting.v1.GetUserNotifySettingReply'
     /api/v1/user/password:
         post:
             tags:
-                - User
+                - UserSetting
             description: 更新密码
-            operationId: User_UpdateUserPassword
+            operationId: UserSetting_UpdateUserPassword
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.user.v1.UpdateUserPasswordRequest'
+                            $ref: '#/components/schemas/api.user.setting.v1.UpdateUserPasswordRequest'
                 required: true
             responses:
                 "200":
@@ -347,7 +417,26 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.user.v1.UpdateUserPasswordReply'
+                                $ref: '#/components/schemas/api.user.setting.v1.UpdateUserPasswordReply'
+    /api/v1/user/system/notify/setting:
+        post:
+            tags:
+                - UserSetting
+            description: UpdateUserSystemNotifyRecevieSetting 更新用户系统通知
+            operationId: UserSetting_UpdateUserSystemNotifyRecevieSetting
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.user.setting.v1.UpdateUserSystemNotifyRecevieSettingRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.setting.v1.UpdateUserSystemNotifyRecevieSettingReply'
     /api/v1/web/auth/login:
         post:
             tags:
@@ -665,6 +754,146 @@ components:
                     type: string
                 updatedTime:
                     type: string
+        api.user.setting.v1.GetUserNotifySettingReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    $ref: '#/components/schemas/api.user.setting.v1.UserNotifySettingInfo'
+        api.user.setting.v1.UpdateUserAdoptNotifyRecevieSettingReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: string
+        api.user.setting.v1.UpdateUserAdoptNotifyRecevieSettingRequest:
+            type: object
+            properties:
+                enable:
+                    type: integer
+                    format: int32
+        api.user.setting.v1.UpdateUserBaseSettingReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: string
+        api.user.setting.v1.UpdateUserBaseSettingRequest:
+            type: object
+            properties:
+                nickname:
+                    type: string
+                gender:
+                    type: integer
+                    format: enum
+                birthday:
+                    type: string
+                signature:
+                    type: string
+        api.user.setting.v1.UpdateUserEmailNotifyRecevieSettingReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: string
+        api.user.setting.v1.UpdateUserEmailNotifyRecevieSettingRequest:
+            type: object
+            properties:
+                enable:
+                    type: integer
+                    format: int32
+        api.user.setting.v1.UpdateUserInteractNotifyRecevieSettingReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: string
+        api.user.setting.v1.UpdateUserInteractNotifyRecevieSettingRequest:
+            type: object
+            properties:
+                enable:
+                    type: integer
+                    format: int32
+        api.user.setting.v1.UpdateUserPasswordReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: string
+        api.user.setting.v1.UpdateUserPasswordRequest:
+            type: object
+            properties:
+                password:
+                    type: string
+        api.user.setting.v1.UpdateUserSystemNotifyRecevieSettingReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: string
+        api.user.setting.v1.UpdateUserSystemNotifyRecevieSettingRequest:
+            type: object
+            properties:
+                enable:
+                    type: integer
+                    format: int32
+        api.user.setting.v1.UserNotifySettingInfo:
+            type: object
+            properties:
+                system:
+                    type: integer
+                    format: int32
+                interact:
+                    type: integer
+                    format: int32
+                adopt:
+                    type: integer
+                    format: int32
+                email:
+                    type: integer
+                    format: int32
         api.user.v1.AppLoginReply:
             type: object
             properties: {}
@@ -689,47 +918,6 @@ components:
         api.user.v1.MpLoginRequest:
             type: object
             properties: {}
-        api.user.v1.UpdateUserBaseSettingReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                success:
-                    type: boolean
-                data:
-                    type: string
-        api.user.v1.UpdateUserBaseSettingRequest:
-            type: object
-            properties:
-                nickname:
-                    type: string
-                gender:
-                    type: integer
-                    format: enum
-                birthday:
-                    type: string
-                signature:
-                    type: string
-        api.user.v1.UpdateUserPasswordReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                success:
-                    type: boolean
-                data:
-                    type: string
-        api.user.v1.UpdateUserPasswordRequest:
-            type: object
-            properties:
-                password:
-                    type: string
         api.user.v1.WebCheckLoginReply:
             type: object
             properties:
@@ -822,3 +1010,4 @@ tags:
     - name: Role
     - name: User
     - name: UserNotification
+    - name: UserSetting

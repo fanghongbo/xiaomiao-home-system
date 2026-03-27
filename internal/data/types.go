@@ -134,3 +134,19 @@ type UserInfo struct {
 	Id       int64  `gorm:"column:id"`
 	Nickname string `gorm:"column:nickname"`
 }
+
+type UserSetting struct {
+	Id          int64     `gorm:"column:id"`
+	UserId      int64     `gorm:"column:user_id"`
+	Name        string    `gorm:"column:name"`
+	Value       string    `gorm:"column:value"`
+	Remark      string    `gorm:"column:remark"`
+	CreatedTime time.Time `gorm:"column:created_time"`
+	UpdatedTime time.Time `gorm:"column:updated_time"`
+	DeletedFlag int       `gorm:"column:deleted_flag"`
+	DeletedTime time.Time `gorm:"column:deleted_time"`
+}
+
+func (u UserSetting) TableName() string {
+	return "t_user_setting"
+}

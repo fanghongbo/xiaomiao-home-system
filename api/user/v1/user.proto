@@ -54,22 +54,6 @@ service User {
 			get: "/api/v1/web/user/info"
 		};
 	}
-
-	// 更新基础设置
-	rpc UpdateUserBaseSetting (UpdateUserBaseSettingRequest) returns (UpdateUserBaseSettingReply) {
-		option (google.api.http) = {
-			post: "/api/v1/user/base/setting",
-			body: "*"
-		};
-	}
-
-	// 更新密码
-	rpc UpdateUserPassword (UpdateUserPasswordRequest) returns (UpdateUserPasswordReply) {
-		option (google.api.http) = {
-			post: "/api/v1/user/password",
-			body: "*"
-		};
-	}
 }
 
 // 基础请求体
@@ -181,45 +165,6 @@ message WebLogoutReply {
 message WebCheckLoginRequest {}
 
 message WebCheckLoginReply {
-	int32 code = 1;
-	string message = 2;
-	bool success = 3;
-	string data = 4;
-}
-
-enum GenderType {
-  GENDER_SECRET = 0;      // 保密
-  GENDER_MALE = 1;        // 男
-  GENDER_FEMALE = 2;      // 女  
-}
-
-message UpdateUserBaseSettingRequest {
-	string nickname = 1 [(validate.rules).string = {min_len: 1, max_len: 20}];;
-	GenderType gender = 2;
-	string birthday = 3 [(validate.rules).string = { pattern: "^\\d{4}-\\d{2}-\\d{2}$" }];
-	string signature = 4 [(validate.rules).string = {min_len: 0, max_len: 100}];
-}
-
-message UpdateUserBaseSettingReply {
-	int32 code = 1;
-	string message = 2;
-	bool success = 3;
-	string data = 4;
-}
-
-message UpdateUserPasswordRequest {
-	string password = 1  [
-    (validate.rules).string = {
-      min_bytes: 6,    // 最小6位
-      max_bytes: 32,   // 最大32位
-      
-      // PGV 标准正则：不使用(?=)，兼容所有版本
-      pattern: "^.*[A-Za-z]+.*[0-9]+.*[^A-Za-z0-9]+.*$|^.*[0-9]+.*[A-Za-z]+.*[^A-Za-z0-9]+.*$|^.*[A-Za-z]+.*[^A-Za-z0-9]+.*[0-9]+.*$|^.*[0-9]+.*[^A-Za-z0-9]+.*[A-Za-z]+.*$|^.*[^A-Za-z0-9]+.*[A-Za-z]+.*[0-9]+.*$|^.*[^A-Za-z0-9]+.*[0-9]+.*[A-Za-z]+.*$"
-    }
-  ];
-}
-
-message UpdateUserPasswordReply {
 	int32 code = 1;
 	string message = 2;
 	bool success = 3;
