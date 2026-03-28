@@ -68,7 +68,8 @@ func (f *fileRepo) UploadAvatar(ctx context.Context, req *v1.UploadAvatarRequest
 	if err != nil {
 		return nil, errors.Unauthorized(v1.ErrorReason_ERR_INVALID_SESSION.String(), "登录失效, 请重新登录")
 	}
-	if err := f.checkAvatarUploadCountLimit(ctx, userId); err != nil {
+
+	if err := f.CheckAvatarUploadCountLimit(ctx, userId); err != nil {
 		return nil, err
 	}
 
@@ -131,7 +132,7 @@ func (f *fileRepo) UploadAvatar(ctx context.Context, req *v1.UploadAvatarRequest
 	}, nil
 }
 
-func (f *fileRepo) checkAvatarUploadCountLimit(ctx context.Context, userId int64) error {
+func (f *fileRepo) CheckAvatarUploadCountLimit(ctx context.Context, userId int64) error {
 	uploadCountKey := fmt.Sprintf("user:avatar:upload:count:%d", userId)
 	uploadCount, err := f.data.rdb.Incr(ctx, uploadCountKey).Result()
 	if err != nil {
