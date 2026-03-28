@@ -20,11 +20,14 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 const OperationFileDownloadFile = "/api.file.v1.File/DownloadFile"
+const OperationFileGetStaticFile = "/api.file.v1.File/GetStaticFile"
 const OperationFileUploadAvatar = "/api.file.v1.File/UploadAvatar"
 
 type FileHTTPServer interface {
 	// DownloadFile 下载文件
 	DownloadFile(context.Context, *DownloadFileRequest) (*DownloadFileReply, error)
+	// GetStaticFile GetStaticFile
+	GetStaticFile(context.Context, *StaticFileRequest) (*StaticFileReply, error)
 	// UploadAvatar 上传头像
 	UploadAvatar(context.Context, *UploadAvatarRequest) (*UploadAvatarReply, error)
 }
@@ -33,6 +36,7 @@ func RegisterFileHTTPServer(s *http.Server, srv FileHTTPServer) {
 	r := s.Route("/")
 	r.GET("/api/v1/file/download", _File_DownloadFile0_HTTP_Handler(srv))
 	r.POST("/api/v1/user/avatar/upload", _File_UploadAvatar0_HTTP_Handler(srv))
+	r.GET("/static/{filename}", _File_GetStaticFile0_HTTP_Handler(srv))
 }
 
 func _File_DownloadFile0_HTTP_Handler(srv FileHTTPServer) func(ctx http.Context) error {
@@ -76,9 +80,33 @@ func _File_UploadAvatar0_HTTP_Handler(srv FileHTTPServer) func(ctx http.Context)
 	}
 }
 
+func _File_GetStaticFile0_HTTP_Handler(srv FileHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in StaticFileRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationFileGetStaticFile)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetStaticFile(ctx, req.(*StaticFileRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*StaticFileReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type FileHTTPClient interface {
 	// DownloadFile 下载文件
 	DownloadFile(ctx context.Context, req *DownloadFileRequest, opts ...http.CallOption) (rsp *DownloadFileReply, err error)
+	// GetStaticFile GetStaticFile
+	GetStaticFile(ctx context.Context, req *StaticFileRequest, opts ...http.CallOption) (rsp *StaticFileReply, err error)
 	// UploadAvatar 上传头像
 	UploadAvatar(ctx context.Context, req *UploadAvatarRequest, opts ...http.CallOption) (rsp *UploadAvatarReply, err error)
 }
@@ -97,6 +125,20 @@ func (c *FileHTTPClientImpl) DownloadFile(ctx context.Context, in *DownloadFileR
 	pattern := "/api/v1/file/download"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationFileDownloadFile))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// GetStaticFile GetStaticFile
+func (c *FileHTTPClientImpl) GetStaticFile(ctx context.Context, in *StaticFileRequest, opts ...http.CallOption) (*StaticFileReply, error) {
+	var out StaticFileReply
+	pattern := "/static/{filename}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationFileGetStaticFile))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

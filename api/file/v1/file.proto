@@ -25,6 +25,13 @@ service File {
 			body: "*"
 		};
 	}
+
+	// GetStaticFile
+	rpc GetStaticFile (StaticFileRequest) returns (StaticFileReply) {
+		option (google.api.http) = {
+			get: "/static/{filename}",
+		};
+	}
 }
 	
 message UploadAvatarRequest {
@@ -66,4 +73,12 @@ message DownloadFileReply {
 	string message = 2;
 	bool success = 3;
 	FileInfo data = 4;
+}
+
+message StaticFileRequest {
+	string filename = 1;
+}
+
+message StaticFileReply {
+	bytes data = 1;
 }

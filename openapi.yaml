@@ -531,6 +531,25 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.user.v1.GetWebLoginUserInfoReply'
+    /static/{filename}:
+        get:
+            tags:
+                - File
+            description: GetStaticFile
+            operationId: File_GetStaticFile
+            parameters:
+                - name: filename
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.file.v1.StaticFileReply'
 components:
     schemas:
         api.file.v1.DownloadFileReply:
@@ -567,6 +586,12 @@ components:
             properties:
                 url:
                     type: string
+        api.file.v1.StaticFileReply:
+            type: object
+            properties:
+                data:
+                    type: string
+                    format: bytes
         api.file.v1.UploadAvatarReply:
             type: object
             properties:

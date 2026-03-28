@@ -19,8 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	File_DownloadFile_FullMethodName = "/api.file.v1.File/DownloadFile"
-	File_UploadAvatar_FullMethodName = "/api.file.v1.File/UploadAvatar"
+	File_DownloadFile_FullMethodName  = "/api.file.v1.File/DownloadFile"
+	File_UploadAvatar_FullMethodName  = "/api.file.v1.File/UploadAvatar"
+	File_GetStaticFile_FullMethodName = "/api.file.v1.File/GetStaticFile"
 )
 
 // FileClient is the client API for File service.
@@ -31,6 +32,8 @@ type FileClient interface {
 	DownloadFile(ctx context.Context, in *DownloadFileRequest, opts ...grpc.CallOption) (*DownloadFileReply, error)
 	// 上传头像
 	UploadAvatar(ctx context.Context, in *UploadAvatarRequest, opts ...grpc.CallOption) (*UploadAvatarReply, error)
+	// GetStaticFile
+	GetStaticFile(ctx context.Context, in *StaticFileRequest, opts ...grpc.CallOption) (*StaticFileReply, error)
 }
 
 type fileClient struct {
@@ -61,6 +64,16 @@ func (c *fileClient) UploadAvatar(ctx context.Context, in *UploadAvatarRequest, 
 	return out, nil
 }
 
+func (c *fileClient) GetStaticFile(ctx context.Context, in *StaticFileRequest, opts ...grpc.CallOption) (*StaticFileReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(StaticFileReply)
+	err := c.cc.Invoke(ctx, File_GetStaticFile_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FileServer is the server API for File service.
 // All implementations must embed UnimplementedFileServer
 // for forward compatibility.
@@ -69,6 +82,8 @@ type FileServer interface {
 	DownloadFile(context.Context, *DownloadFileRequest) (*DownloadFileReply, error)
 	// 上传头像
 	UploadAvatar(context.Context, *UploadAvatarRequest) (*UploadAvatarReply, error)
+	// GetStaticFile
+	GetStaticFile(context.Context, *StaticFileRequest) (*StaticFileReply, error)
 	mustEmbedUnimplementedFileServer()
 }
 
@@ -84,6 +99,9 @@ func (UnimplementedFileServer) DownloadFile(context.Context, *DownloadFileReques
 }
 func (UnimplementedFileServer) UploadAvatar(context.Context, *UploadAvatarRequest) (*UploadAvatarReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method UploadAvatar not implemented")
+}
+func (UnimplementedFileServer) GetStaticFile(context.Context, *StaticFileRequest) (*StaticFileReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetStaticFile not implemented")
 }
 func (UnimplementedFileServer) mustEmbedUnimplementedFileServer() {}
 func (UnimplementedFileServer) testEmbeddedByValue()              {}
@@ -142,6 +160,24 @@ func _File_UploadAvatar_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _File_GetStaticFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StaticFileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FileServer).GetStaticFile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: File_GetStaticFile_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FileServer).GetStaticFile(ctx, req.(*StaticFileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // File_ServiceDesc is the grpc.ServiceDesc for File service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -156,6 +192,10 @@ var File_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UploadAvatar",
 			Handler:    _File_UploadAvatar_Handler,
+		},
+		{
+			MethodName: "GetStaticFile",
+			Handler:    _File_GetStaticFile_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

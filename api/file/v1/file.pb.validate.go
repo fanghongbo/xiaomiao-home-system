@@ -743,3 +743,209 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DownloadFileReplyValidationError{}
+
+// Validate checks the field values on StaticFileRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *StaticFileRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on StaticFileRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// StaticFileRequestMultiError, or nil if none found.
+func (m *StaticFileRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *StaticFileRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Filename
+
+	if len(errors) > 0 {
+		return StaticFileRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// StaticFileRequestMultiError is an error wrapping multiple validation errors
+// returned by StaticFileRequest.ValidateAll() if the designated constraints
+// aren't met.
+type StaticFileRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StaticFileRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StaticFileRequestMultiError) AllErrors() []error { return m }
+
+// StaticFileRequestValidationError is the validation error returned by
+// StaticFileRequest.Validate if the designated constraints aren't met.
+type StaticFileRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StaticFileRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StaticFileRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StaticFileRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StaticFileRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StaticFileRequestValidationError) ErrorName() string {
+	return "StaticFileRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e StaticFileRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStaticFileRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StaticFileRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StaticFileRequestValidationError{}
+
+// Validate checks the field values on StaticFileReply with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *StaticFileReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on StaticFileReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// StaticFileReplyMultiError, or nil if none found.
+func (m *StaticFileReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *StaticFileReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Data
+
+	if len(errors) > 0 {
+		return StaticFileReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// StaticFileReplyMultiError is an error wrapping multiple validation errors
+// returned by StaticFileReply.ValidateAll() if the designated constraints
+// aren't met.
+type StaticFileReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StaticFileReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StaticFileReplyMultiError) AllErrors() []error { return m }
+
+// StaticFileReplyValidationError is the validation error returned by
+// StaticFileReply.Validate if the designated constraints aren't met.
+type StaticFileReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StaticFileReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StaticFileReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StaticFileReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StaticFileReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StaticFileReplyValidationError) ErrorName() string { return "StaticFileReplyValidationError" }
+
+// Error satisfies the builtin error interface
+func (e StaticFileReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStaticFileReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StaticFileReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StaticFileReplyValidationError{}

@@ -45,7 +45,7 @@ func wireApp(confServer *conf.Server, confData *conf.Data, config *conf.Config, 
 	userSettingService := service.NewUserSettingService(userSettingUsecase, config, logger)
 	fileRepo := data.NewFileRepo(dataData, logger)
 	fileUsecase := biz.NewFileUsecase(fileRepo, logger)
-	fileService := service.NewFileService(fileUsecase, config, logger)
+	fileService := service.NewFileService(fileUsecase, config, static, logger)
 	grpcServer := server.NewGRPCServer(confServer, userService, roleService, userNotificationService, userSettingService, fileService, logger)
 	httpServer := server.NewHTTPServer(confServer, jwt, static, userService, roleService, userNotificationService, userSettingService, fileService, logger)
 	app := newApp(logger, taskManager, grpcServer, httpServer, registry)
