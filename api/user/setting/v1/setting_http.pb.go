@@ -8,6 +8,7 @@ package v1
 
 import (
 	context "context"
+
 	http "github.com/go-kratos/kratos/v2/transport/http"
 	binding "github.com/go-kratos/kratos/v2/transport/http/binding"
 )
@@ -20,38 +21,38 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 const OperationUserSettingGetUserNotifySetting = "/api.user.setting.v1.UserSetting/GetUserNotifySetting"
-const OperationUserSettingUpdateUserAdoptNotifyRecevieSetting = "/api.user.setting.v1.UserSetting/UpdateUserAdoptNotifyRecevieSetting"
+const OperationUserSettingUpdateUserAdoptNotifySetting = "/api.user.setting.v1.UserSetting/UpdateUserAdoptNotifySetting"
 const OperationUserSettingUpdateUserBaseSetting = "/api.user.setting.v1.UserSetting/UpdateUserBaseSetting"
-const OperationUserSettingUpdateUserEmailNotifyRecevieSetting = "/api.user.setting.v1.UserSetting/UpdateUserEmailNotifyRecevieSetting"
-const OperationUserSettingUpdateUserInteractNotifyRecevieSetting = "/api.user.setting.v1.UserSetting/UpdateUserInteractNotifyRecevieSetting"
+const OperationUserSettingUpdateUserEmailNotifySetting = "/api.user.setting.v1.UserSetting/UpdateUserEmailNotifySetting"
+const OperationUserSettingUpdateUserInteractNotifySetting = "/api.user.setting.v1.UserSetting/UpdateUserInteractNotifySetting"
 const OperationUserSettingUpdateUserPassword = "/api.user.setting.v1.UserSetting/UpdateUserPassword"
-const OperationUserSettingUpdateUserSystemNotifyRecevieSetting = "/api.user.setting.v1.UserSetting/UpdateUserSystemNotifyRecevieSetting"
+const OperationUserSettingUpdateUserSystemNotifySetting = "/api.user.setting.v1.UserSetting/UpdateUserSystemNotifySetting"
 
 type UserSettingHTTPServer interface {
 	// GetUserNotifySetting GetUserNotifySetting 获取用通知设置
 	GetUserNotifySetting(context.Context, *GetUserNotifySettingRequest) (*GetUserNotifySettingReply, error)
-	// UpdateUserAdoptNotifyRecevieSetting UpdateUserAdoptNotifyRecevieSetting 更新用户领养通知
-	UpdateUserAdoptNotifyRecevieSetting(context.Context, *UpdateUserAdoptNotifyRecevieSettingRequest) (*UpdateUserAdoptNotifyRecevieSettingReply, error)
+	// UpdateUserAdoptNotifySetting UpdateUserAdoptNotifySetting 更新用户领养通知
+	UpdateUserAdoptNotifySetting(context.Context, *UpdateUserAdoptNotifySettingRequest) (*UpdateUserAdoptNotifySettingReply, error)
 	// UpdateUserBaseSetting 更新基础更新
 	UpdateUserBaseSetting(context.Context, *UpdateUserBaseSettingRequest) (*UpdateUserBaseSettingReply, error)
-	// UpdateUserEmailNotifyRecevieSetting UpdateUserEmailNotifyRecevieSetting 更新用户邮件通知
-	UpdateUserEmailNotifyRecevieSetting(context.Context, *UpdateUserEmailNotifyRecevieSettingRequest) (*UpdateUserEmailNotifyRecevieSettingReply, error)
-	// UpdateUserInteractNotifyRecevieSetting UpdateUserInteractNotifyRecevieSetting 更新用户互动通知
-	UpdateUserInteractNotifyRecevieSetting(context.Context, *UpdateUserInteractNotifyRecevieSettingRequest) (*UpdateUserInteractNotifyRecevieSettingReply, error)
+	// UpdateUserEmailNotifySetting UpdateUserEmailNotifySetting 更新用户邮件通知
+	UpdateUserEmailNotifySetting(context.Context, *UpdateUserEmailNotifySettingRequest) (*UpdateUserEmailNotifySettingReply, error)
+	// UpdateUserInteractNotifySetting UpdateUserInteractNotifySetting 更新用户互动通知
+	UpdateUserInteractNotifySetting(context.Context, *UpdateUserInteractNotifySettingRequest) (*UpdateUserInteractNotifySettingReply, error)
 	// UpdateUserPassword 更新密码
 	UpdateUserPassword(context.Context, *UpdateUserPasswordRequest) (*UpdateUserPasswordReply, error)
-	// UpdateUserSystemNotifyRecevieSetting UpdateUserSystemNotifyRecevieSetting 更新用户系统通知
-	UpdateUserSystemNotifyRecevieSetting(context.Context, *UpdateUserSystemNotifyRecevieSettingRequest) (*UpdateUserSystemNotifyRecevieSettingReply, error)
+	// UpdateUserSystemNotifySetting UpdateUserSystemNotifySetting 更新用户系统通知
+	UpdateUserSystemNotifySetting(context.Context, *UpdateUserSystemNotifySettingRequest) (*UpdateUserSystemNotifySettingReply, error)
 }
 
 func RegisterUserSettingHTTPServer(s *http.Server, srv UserSettingHTTPServer) {
 	r := s.Route("/")
 	r.POST("/api/v1/user/base/setting", _UserSetting_UpdateUserBaseSetting0_HTTP_Handler(srv))
 	r.POST("/api/v1/user/password", _UserSetting_UpdateUserPassword0_HTTP_Handler(srv))
-	r.POST("/api/v1/user/system/notify/setting", _UserSetting_UpdateUserSystemNotifyRecevieSetting0_HTTP_Handler(srv))
-	r.POST("/api/v1/user/interact/notify/setting", _UserSetting_UpdateUserInteractNotifyRecevieSetting0_HTTP_Handler(srv))
-	r.POST("/api/v1/user/adopt/notify/setting", _UserSetting_UpdateUserAdoptNotifyRecevieSetting0_HTTP_Handler(srv))
-	r.POST("/api/v1/user/email/notify/setting", _UserSetting_UpdateUserEmailNotifyRecevieSetting0_HTTP_Handler(srv))
+	r.POST("/api/v1/user/system/notify/setting", _UserSetting_UpdateUserSystemNotifySetting0_HTTP_Handler(srv))
+	r.POST("/api/v1/user/interact/notify/setting", _UserSetting_UpdateUserInteractNotifySetting0_HTTP_Handler(srv))
+	r.POST("/api/v1/user/adopt/notify/setting", _UserSetting_UpdateUserAdoptNotifySetting0_HTTP_Handler(srv))
+	r.POST("/api/v1/user/email/notify/setting", _UserSetting_UpdateUserEmailNotifySetting0_HTTP_Handler(srv))
 	r.GET("/api/v1/user/notify/setting", _UserSetting_GetUserNotifySetting0_HTTP_Handler(srv))
 }
 
@@ -99,90 +100,90 @@ func _UserSetting_UpdateUserPassword0_HTTP_Handler(srv UserSettingHTTPServer) fu
 	}
 }
 
-func _UserSetting_UpdateUserSystemNotifyRecevieSetting0_HTTP_Handler(srv UserSettingHTTPServer) func(ctx http.Context) error {
+func _UserSetting_UpdateUserSystemNotifySetting0_HTTP_Handler(srv UserSettingHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in UpdateUserSystemNotifyRecevieSettingRequest
+		var in UpdateUserSystemNotifySettingRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationUserSettingUpdateUserSystemNotifyRecevieSetting)
+		http.SetOperation(ctx, OperationUserSettingUpdateUserSystemNotifySetting)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.UpdateUserSystemNotifyRecevieSetting(ctx, req.(*UpdateUserSystemNotifyRecevieSettingRequest))
+			return srv.UpdateUserSystemNotifySetting(ctx, req.(*UpdateUserSystemNotifySettingRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*UpdateUserSystemNotifyRecevieSettingReply)
+		reply := out.(*UpdateUserSystemNotifySettingReply)
 		return ctx.Result(200, reply)
 	}
 }
 
-func _UserSetting_UpdateUserInteractNotifyRecevieSetting0_HTTP_Handler(srv UserSettingHTTPServer) func(ctx http.Context) error {
+func _UserSetting_UpdateUserInteractNotifySetting0_HTTP_Handler(srv UserSettingHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in UpdateUserInteractNotifyRecevieSettingRequest
+		var in UpdateUserInteractNotifySettingRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationUserSettingUpdateUserInteractNotifyRecevieSetting)
+		http.SetOperation(ctx, OperationUserSettingUpdateUserInteractNotifySetting)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.UpdateUserInteractNotifyRecevieSetting(ctx, req.(*UpdateUserInteractNotifyRecevieSettingRequest))
+			return srv.UpdateUserInteractNotifySetting(ctx, req.(*UpdateUserInteractNotifySettingRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*UpdateUserInteractNotifyRecevieSettingReply)
+		reply := out.(*UpdateUserInteractNotifySettingReply)
 		return ctx.Result(200, reply)
 	}
 }
 
-func _UserSetting_UpdateUserAdoptNotifyRecevieSetting0_HTTP_Handler(srv UserSettingHTTPServer) func(ctx http.Context) error {
+func _UserSetting_UpdateUserAdoptNotifySetting0_HTTP_Handler(srv UserSettingHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in UpdateUserAdoptNotifyRecevieSettingRequest
+		var in UpdateUserAdoptNotifySettingRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationUserSettingUpdateUserAdoptNotifyRecevieSetting)
+		http.SetOperation(ctx, OperationUserSettingUpdateUserAdoptNotifySetting)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.UpdateUserAdoptNotifyRecevieSetting(ctx, req.(*UpdateUserAdoptNotifyRecevieSettingRequest))
+			return srv.UpdateUserAdoptNotifySetting(ctx, req.(*UpdateUserAdoptNotifySettingRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*UpdateUserAdoptNotifyRecevieSettingReply)
+		reply := out.(*UpdateUserAdoptNotifySettingReply)
 		return ctx.Result(200, reply)
 	}
 }
 
-func _UserSetting_UpdateUserEmailNotifyRecevieSetting0_HTTP_Handler(srv UserSettingHTTPServer) func(ctx http.Context) error {
+func _UserSetting_UpdateUserEmailNotifySetting0_HTTP_Handler(srv UserSettingHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in UpdateUserEmailNotifyRecevieSettingRequest
+		var in UpdateUserEmailNotifySettingRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationUserSettingUpdateUserEmailNotifyRecevieSetting)
+		http.SetOperation(ctx, OperationUserSettingUpdateUserEmailNotifySetting)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.UpdateUserEmailNotifyRecevieSetting(ctx, req.(*UpdateUserEmailNotifyRecevieSettingRequest))
+			return srv.UpdateUserEmailNotifySetting(ctx, req.(*UpdateUserEmailNotifySettingRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*UpdateUserEmailNotifyRecevieSettingReply)
+		reply := out.(*UpdateUserEmailNotifySettingReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -209,18 +210,18 @@ func _UserSetting_GetUserNotifySetting0_HTTP_Handler(srv UserSettingHTTPServer) 
 type UserSettingHTTPClient interface {
 	// GetUserNotifySetting GetUserNotifySetting 获取用通知设置
 	GetUserNotifySetting(ctx context.Context, req *GetUserNotifySettingRequest, opts ...http.CallOption) (rsp *GetUserNotifySettingReply, err error)
-	// UpdateUserAdoptNotifyRecevieSetting UpdateUserAdoptNotifyRecevieSetting 更新用户领养通知
-	UpdateUserAdoptNotifyRecevieSetting(ctx context.Context, req *UpdateUserAdoptNotifyRecevieSettingRequest, opts ...http.CallOption) (rsp *UpdateUserAdoptNotifyRecevieSettingReply, err error)
+	// UpdateUserAdoptNotifySetting UpdateUserAdoptNotifySetting 更新用户领养通知
+	UpdateUserAdoptNotifySetting(ctx context.Context, req *UpdateUserAdoptNotifySettingRequest, opts ...http.CallOption) (rsp *UpdateUserAdoptNotifySettingReply, err error)
 	// UpdateUserBaseSetting 更新基础更新
 	UpdateUserBaseSetting(ctx context.Context, req *UpdateUserBaseSettingRequest, opts ...http.CallOption) (rsp *UpdateUserBaseSettingReply, err error)
-	// UpdateUserEmailNotifyRecevieSetting UpdateUserEmailNotifyRecevieSetting 更新用户邮件通知
-	UpdateUserEmailNotifyRecevieSetting(ctx context.Context, req *UpdateUserEmailNotifyRecevieSettingRequest, opts ...http.CallOption) (rsp *UpdateUserEmailNotifyRecevieSettingReply, err error)
-	// UpdateUserInteractNotifyRecevieSetting UpdateUserInteractNotifyRecevieSetting 更新用户互动通知
-	UpdateUserInteractNotifyRecevieSetting(ctx context.Context, req *UpdateUserInteractNotifyRecevieSettingRequest, opts ...http.CallOption) (rsp *UpdateUserInteractNotifyRecevieSettingReply, err error)
+	// UpdateUserEmailNotifySetting UpdateUserEmailNotifySetting 更新用户邮件通知
+	UpdateUserEmailNotifySetting(ctx context.Context, req *UpdateUserEmailNotifySettingRequest, opts ...http.CallOption) (rsp *UpdateUserEmailNotifySettingReply, err error)
+	// UpdateUserInteractNotifySetting UpdateUserInteractNotifySetting 更新用户互动通知
+	UpdateUserInteractNotifySetting(ctx context.Context, req *UpdateUserInteractNotifySettingRequest, opts ...http.CallOption) (rsp *UpdateUserInteractNotifySettingReply, err error)
 	// UpdateUserPassword 更新密码
 	UpdateUserPassword(ctx context.Context, req *UpdateUserPasswordRequest, opts ...http.CallOption) (rsp *UpdateUserPasswordReply, err error)
-	// UpdateUserSystemNotifyRecevieSetting UpdateUserSystemNotifyRecevieSetting 更新用户系统通知
-	UpdateUserSystemNotifyRecevieSetting(ctx context.Context, req *UpdateUserSystemNotifyRecevieSettingRequest, opts ...http.CallOption) (rsp *UpdateUserSystemNotifyRecevieSettingReply, err error)
+	// UpdateUserSystemNotifySetting UpdateUserSystemNotifySetting 更新用户系统通知
+	UpdateUserSystemNotifySetting(ctx context.Context, req *UpdateUserSystemNotifySettingRequest, opts ...http.CallOption) (rsp *UpdateUserSystemNotifySettingReply, err error)
 }
 
 type UserSettingHTTPClientImpl struct {
@@ -245,12 +246,12 @@ func (c *UserSettingHTTPClientImpl) GetUserNotifySetting(ctx context.Context, in
 	return &out, nil
 }
 
-// UpdateUserAdoptNotifyRecevieSetting UpdateUserAdoptNotifyRecevieSetting 更新用户领养通知
-func (c *UserSettingHTTPClientImpl) UpdateUserAdoptNotifyRecevieSetting(ctx context.Context, in *UpdateUserAdoptNotifyRecevieSettingRequest, opts ...http.CallOption) (*UpdateUserAdoptNotifyRecevieSettingReply, error) {
-	var out UpdateUserAdoptNotifyRecevieSettingReply
+// UpdateUserAdoptNotifySetting UpdateUserAdoptNotifySetting 更新用户领养通知
+func (c *UserSettingHTTPClientImpl) UpdateUserAdoptNotifySetting(ctx context.Context, in *UpdateUserAdoptNotifySettingRequest, opts ...http.CallOption) (*UpdateUserAdoptNotifySettingReply, error) {
+	var out UpdateUserAdoptNotifySettingReply
 	pattern := "/api/v1/user/adopt/notify/setting"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationUserSettingUpdateUserAdoptNotifyRecevieSetting))
+	opts = append(opts, http.Operation(OperationUserSettingUpdateUserAdoptNotifySetting))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -273,12 +274,12 @@ func (c *UserSettingHTTPClientImpl) UpdateUserBaseSetting(ctx context.Context, i
 	return &out, nil
 }
 
-// UpdateUserEmailNotifyRecevieSetting UpdateUserEmailNotifyRecevieSetting 更新用户邮件通知
-func (c *UserSettingHTTPClientImpl) UpdateUserEmailNotifyRecevieSetting(ctx context.Context, in *UpdateUserEmailNotifyRecevieSettingRequest, opts ...http.CallOption) (*UpdateUserEmailNotifyRecevieSettingReply, error) {
-	var out UpdateUserEmailNotifyRecevieSettingReply
+// UpdateUserEmailNotifySetting UpdateUserEmailNotifySetting 更新用户邮件通知
+func (c *UserSettingHTTPClientImpl) UpdateUserEmailNotifySetting(ctx context.Context, in *UpdateUserEmailNotifySettingRequest, opts ...http.CallOption) (*UpdateUserEmailNotifySettingReply, error) {
+	var out UpdateUserEmailNotifySettingReply
 	pattern := "/api/v1/user/email/notify/setting"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationUserSettingUpdateUserEmailNotifyRecevieSetting))
+	opts = append(opts, http.Operation(OperationUserSettingUpdateUserEmailNotifySetting))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -287,12 +288,12 @@ func (c *UserSettingHTTPClientImpl) UpdateUserEmailNotifyRecevieSetting(ctx cont
 	return &out, nil
 }
 
-// UpdateUserInteractNotifyRecevieSetting UpdateUserInteractNotifyRecevieSetting 更新用户互动通知
-func (c *UserSettingHTTPClientImpl) UpdateUserInteractNotifyRecevieSetting(ctx context.Context, in *UpdateUserInteractNotifyRecevieSettingRequest, opts ...http.CallOption) (*UpdateUserInteractNotifyRecevieSettingReply, error) {
-	var out UpdateUserInteractNotifyRecevieSettingReply
+// UpdateUserInteractNotifySetting UpdateUserInteractNotifySetting 更新用户互动通知
+func (c *UserSettingHTTPClientImpl) UpdateUserInteractNotifySetting(ctx context.Context, in *UpdateUserInteractNotifySettingRequest, opts ...http.CallOption) (*UpdateUserInteractNotifySettingReply, error) {
+	var out UpdateUserInteractNotifySettingReply
 	pattern := "/api/v1/user/interact/notify/setting"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationUserSettingUpdateUserInteractNotifyRecevieSetting))
+	opts = append(opts, http.Operation(OperationUserSettingUpdateUserInteractNotifySetting))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -315,12 +316,12 @@ func (c *UserSettingHTTPClientImpl) UpdateUserPassword(ctx context.Context, in *
 	return &out, nil
 }
 
-// UpdateUserSystemNotifyRecevieSetting UpdateUserSystemNotifyRecevieSetting 更新用户系统通知
-func (c *UserSettingHTTPClientImpl) UpdateUserSystemNotifyRecevieSetting(ctx context.Context, in *UpdateUserSystemNotifyRecevieSettingRequest, opts ...http.CallOption) (*UpdateUserSystemNotifyRecevieSettingReply, error) {
-	var out UpdateUserSystemNotifyRecevieSettingReply
+// UpdateUserSystemNotifySetting UpdateUserSystemNotifySetting 更新用户系统通知
+func (c *UserSettingHTTPClientImpl) UpdateUserSystemNotifySetting(ctx context.Context, in *UpdateUserSystemNotifySettingRequest, opts ...http.CallOption) (*UpdateUserSystemNotifySettingReply, error) {
+	var out UpdateUserSystemNotifySettingReply
 	pattern := "/api/v1/user/system/notify/setting"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationUserSettingUpdateUserSystemNotifyRecevieSetting))
+	opts = append(opts, http.Operation(OperationUserSettingUpdateUserSystemNotifySetting))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

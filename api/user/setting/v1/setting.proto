@@ -28,32 +28,32 @@ service UserSetting {
 	}
 
 	
-	// UpdateUserSystemNotifyRecevieSetting 更新用户系统通知
-	rpc UpdateUserSystemNotifyRecevieSetting (UpdateUserSystemNotifyRecevieSettingRequest) returns (UpdateUserSystemNotifyRecevieSettingReply) {
+	// UpdateUserSystemNotifySetting 更新用户系统通知
+	rpc UpdateUserSystemNotifySetting (UpdateUserSystemNotifySettingRequest) returns (UpdateUserSystemNotifySettingReply) {
 		option (google.api.http) = {
 			post: "/api/v1/user/system/notify/setting",
 			body: "*"
 		};
 	}
 
-	// UpdateUserInteractNotifyRecevieSetting 更新用户互动通知
-	rpc UpdateUserInteractNotifyRecevieSetting (UpdateUserInteractNotifyRecevieSettingRequest) returns (UpdateUserInteractNotifyRecevieSettingReply) {
+	// UpdateUserInteractNotifySetting 更新用户互动通知
+	rpc UpdateUserInteractNotifySetting (UpdateUserInteractNotifySettingRequest) returns (UpdateUserInteractNotifySettingReply) {
 		option (google.api.http) = {
 			post: "/api/v1/user/interact/notify/setting",
 			body: "*"
 		};
 	}
 
-	// UpdateUserAdoptNotifyRecevieSetting 更新用户领养通知
-	rpc UpdateUserAdoptNotifyRecevieSetting (UpdateUserAdoptNotifyRecevieSettingRequest) returns (UpdateUserAdoptNotifyRecevieSettingReply) {
+	// UpdateUserAdoptNotifySetting 更新用户领养通知
+	rpc UpdateUserAdoptNotifySetting (UpdateUserAdoptNotifySettingRequest) returns (UpdateUserAdoptNotifySettingReply) {
 		option (google.api.http) = {
 			post: "/api/v1/user/adopt/notify/setting",
 			body: "*"
 		};
 	}
 
-	// UpdateUserEmailNotifyRecevieSetting 更新用户邮件通知
-	rpc UpdateUserEmailNotifyRecevieSetting (UpdateUserEmailNotifyRecevieSettingRequest) returns (UpdateUserEmailNotifyRecevieSettingReply) {
+	// UpdateUserEmailNotifySetting 更新用户邮件通知
+	rpc UpdateUserEmailNotifySetting (UpdateUserEmailNotifySettingRequest) returns (UpdateUserEmailNotifySettingReply) {
 		option (google.api.http) = {
 			post: "/api/v1/user/email/notify/setting",
 			body: "*"
@@ -113,44 +113,44 @@ message UpdateUserPasswordReply {
 	string data = 4;
 }
 
-message UpdateUserSystemNotifyRecevieSettingRequest {
+message UpdateUserSystemNotifySettingRequest {
 	int32 enable = 1;
 }
 
-message UpdateUserSystemNotifyRecevieSettingReply {
+message UpdateUserSystemNotifySettingReply {
 	int32 code = 1;
 	string message = 2;
 	bool success = 3;
 	string data = 4;
 }
 
-message UpdateUserInteractNotifyRecevieSettingRequest {
+message UpdateUserInteractNotifySettingRequest {
 	int32 enable = 1;
 }
 
-message UpdateUserInteractNotifyRecevieSettingReply {
+message UpdateUserInteractNotifySettingReply {
 	int32 code = 1;
 	string message = 2;
 	bool success = 3;
 	string data = 4;
 }
 
-message UpdateUserAdoptNotifyRecevieSettingRequest {
+message UpdateUserAdoptNotifySettingRequest {
 	int32 enable = 1;
 }
 
-message UpdateUserAdoptNotifyRecevieSettingReply {
+message UpdateUserAdoptNotifySettingReply {
 	int32 code = 1;
 	string message = 2;
 	bool success = 3;
 	string data = 4;
 }
 
-message UpdateUserEmailNotifyRecevieSettingRequest {
+message UpdateUserEmailNotifySettingRequest {
 	int32 enable = 1;
 }
 
-message UpdateUserEmailNotifyRecevieSettingReply {
+message UpdateUserEmailNotifySettingReply {
 	int32 code = 1;
 	string message = 2;
 	bool success = 3;

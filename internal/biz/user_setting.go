@@ -14,14 +14,14 @@ type UserSettingRepo interface {
 	UpdateUserBaseSetting(context.Context, *v1.UpdateUserBaseSettingRequest) (*v1.UpdateUserBaseSettingReply, error)
 	// UpdateUserPassword 更新用户密码
 	UpdateUserPassword(context.Context, *v1.UpdateUserPasswordRequest) (*v1.UpdateUserPasswordReply, error)
-	// UpdateUserSystemNotifyRecevieSetting 更新用户系统通知
-	UpdateUserSystemNotifyRecevieSetting(context.Context, *v1.UpdateUserSystemNotifyRecevieSettingRequest) (*v1.UpdateUserSystemNotifyRecevieSettingReply, error)
-	// UpdateUserInteractNotifyRecevieSetting 更新用户互动通知
-	UpdateUserInteractNotifyRecevieSetting(context.Context, *v1.UpdateUserInteractNotifyRecevieSettingRequest) (*v1.UpdateUserInteractNotifyRecevieSettingReply, error)
-	// UpdateUserAdoptNotifyRecevieSetting 更新用户领养通知
-	UpdateUserAdoptNotifyRecevieSetting(context.Context, *v1.UpdateUserAdoptNotifyRecevieSettingRequest) (*v1.UpdateUserAdoptNotifyRecevieSettingReply, error)
-	// UpdateUserEmailNotifyRecevieSetting 更新用户邮件通知
-	UpdateUserEmailNotifyRecevieSetting(context.Context, *v1.UpdateUserEmailNotifyRecevieSettingRequest) (*v1.UpdateUserEmailNotifyRecevieSettingReply, error)
+	// UpdateUserSystemNotifySetting 更新用户系统通知
+	UpdateUserSystemNotifySetting(context.Context, *v1.UpdateUserSystemNotifySettingRequest) (*v1.UpdateUserSystemNotifySettingReply, error)
+	// UpdateUserInteractNotifySetting 更新用户互动通知
+	UpdateUserInteractNotifySetting(context.Context, *v1.UpdateUserInteractNotifySettingRequest) (*v1.UpdateUserInteractNotifySettingReply, error)
+	// UpdateUserAdoptNotifySetting 更新用户领养通知
+	UpdateUserAdoptNotifySetting(context.Context, *v1.UpdateUserAdoptNotifySettingRequest) (*v1.UpdateUserAdoptNotifySettingReply, error)
+	// UpdateUserEmailNotifySetting 更新用户邮件通知
+	UpdateUserEmailNotifySetting(context.Context, *v1.UpdateUserEmailNotifySettingRequest) (*v1.UpdateUserEmailNotifySettingReply, error)
 	// GetUserNotifySetting 获取用户通知设置
 	GetUserNotifySetting(context.Context, *v1.GetUserNotifySettingRequest) (*v1.GetUserNotifySettingReply, error)
 }
@@ -47,24 +47,24 @@ func (u *UserSettingUsecase) UpdateUserPassword(ctx context.Context, req *v1.Upd
 	return u.repo.UpdateUserPassword(ctx, req)
 }
 
-// UpdateUserSystemNotifyRecevieSetting 更新用户系统通知
-func (u *UserSettingUsecase) UpdateUserSystemNotifyRecevieSetting(ctx context.Context, req *v1.UpdateUserSystemNotifyRecevieSettingRequest) (*v1.UpdateUserSystemNotifyRecevieSettingReply, error) {
-	return u.repo.UpdateUserSystemNotifyRecevieSetting(ctx, req)
+// UpdateUserSystemNotifySetting 更新用户系统通知
+func (u *UserSettingUsecase) UpdateUserSystemNotifySetting(ctx context.Context, req *v1.UpdateUserSystemNotifySettingRequest) (*v1.UpdateUserSystemNotifySettingReply, error) {
+	return u.repo.UpdateUserSystemNotifySetting(ctx, req)
 }
 
-// UpdateUserInteractNotifyRecevieSetting 更新用户互动通知
-func (u *UserSettingUsecase) UpdateUserInteractNotifyRecevieSetting(ctx context.Context, req *v1.UpdateUserInteractNotifyRecevieSettingRequest) (*v1.UpdateUserInteractNotifyRecevieSettingReply, error) {
-	return u.repo.UpdateUserInteractNotifyRecevieSetting(ctx, req)
+// UpdateUserInteractNotifySetting 更新用户互动通知
+func (u *UserSettingUsecase) UpdateUserInteractNotifySetting(ctx context.Context, req *v1.UpdateUserInteractNotifySettingRequest) (*v1.UpdateUserInteractNotifySettingReply, error) {
+	return u.repo.UpdateUserInteractNotifySetting(ctx, req)
 }
 
-// UpdateUserAdoptNotifyRecevieSetting 更新用户领养通知
-func (u *UserSettingUsecase) UpdateUserAdoptNotifyRecevieSetting(ctx context.Context, req *v1.UpdateUserAdoptNotifyRecevieSettingRequest) (*v1.UpdateUserAdoptNotifyRecevieSettingReply, error) {
-	return u.repo.UpdateUserAdoptNotifyRecevieSetting(ctx, req)
+// UpdateUserAdoptNotifySetting 更新用户领养通知
+func (u *UserSettingUsecase) UpdateUserAdoptNotifySetting(ctx context.Context, req *v1.UpdateUserAdoptNotifySettingRequest) (*v1.UpdateUserAdoptNotifySettingReply, error) {
+	return u.repo.UpdateUserAdoptNotifySetting(ctx, req)
 }
 
-// UpdateUserEmailNotifyRecevieSetting 更新用户邮件通知
-func (u *UserSettingUsecase) UpdateUserEmailNotifyRecevieSetting(ctx context.Context, req *v1.UpdateUserEmailNotifyRecevieSettingRequest) (*v1.UpdateUserEmailNotifyRecevieSettingReply, error) {
-	return u.repo.UpdateUserEmailNotifyRecevieSetting(ctx, req)
+// UpdateUserEmailNotifySetting 更新用户邮件通知
+func (u *UserSettingUsecase) UpdateUserEmailNotifySetting(ctx context.Context, req *v1.UpdateUserEmailNotifySettingRequest) (*v1.UpdateUserEmailNotifySettingReply, error) {
+	return u.repo.UpdateUserEmailNotifySetting(ctx, req)
 }
 
 // GetUserNotifySetting 获取用户通知设置

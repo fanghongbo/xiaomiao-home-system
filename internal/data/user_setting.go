@@ -2,7 +2,9 @@ package data
 
 import (
 	"context"
+	"fmt"
 	"regexp"
+	"time"
 	v1 "xiaomiao-home-system/api/user/setting/v1"
 	"xiaomiao-home-system/third_party/password"
 	"xiaomiao-home-system/utils"
@@ -14,6 +16,16 @@ import (
 
 	"github.com/go-kratos/kratos/v2/log"
 )
+
+const userMaxSettingUpdateCount = 10
+const userSettingUpdateCountTTL = 8 * time.Hour
+
+const redisKeyUserBaseSettingUpdateCount = "user:base:setting:update:count"
+const redisKeyPasswordUpdateCount = "user:password:update:count"
+const redisKeySystemNotifySettingUpdateCount = "user:system:notify:setting:update:count"
+const redisKeyInteractNotifySettingUpdateCount = "user:interact:notify:setting:update:count"
+const redisKeyAdoptNotifySettingUpdateCount = "user:adopt:notify:setting:update:count"
+const redisKeyEmailNotifySettingUpdateCount = "user:email:notify:setting:update:count"
 
 type userSettingRepo struct {
 	data *Data
@@ -28,12 +40,36 @@ func NewUserSettingRepo(data *Data, logger log.Logger) biz.UserSettingRepo {
 	}
 }
 
+// CheckUserSettingUpdateCountLimit 检查用户设置更新次数限制
+func (u *userSettingRepo) CheckUserSettingUpdateCountLimit(ctx context.Context, userId int64, countKeyPrefix string) error {
+	key := fmt.Sprintf("%s:%d", countKeyPrefix, userId)
+	n, err := u.data.rdb.Incr(ctx, key).Result()
+	if err != nil {
+		u.log.Errorf("increase notify setting update count failed, key=%s: %v", countKeyPrefix, err)
+		return errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+	if n == 1 {
+		if err := u.data.rdb.Expire(ctx, key, userSettingUpdateCountTTL).Err(); err != nil {
+			u.log.Errorf("set notify setting update count ttl failed, key=%s: %v", countKeyPrefix, err)
+			return errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+		}
+	}
+	if n > userMaxSettingUpdateCount {
+		return errors.InternalServer(v1.ErrorReason_ERR_TOO_MANY_REQUEST.String(), "今日修改次数过多")
+	}
+	return nil
+}
+
 // UpdateUserBaseSetting 更新用户基础更新
 func (u *userSettingRepo) UpdateUserBaseSetting(ctx context.Context, req *v1.UpdateUserBaseSettingRequest) (*v1.UpdateUserBaseSettingReply, error) {
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
 		u.log.Error("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	if err := u.CheckUserSettingUpdateCountLimit(ctx, userId, redisKeyUserBaseSettingUpdateCount); err != nil {
+		return nil, err
 	}
 
 	userInfo := map[string]interface{}{
@@ -78,6 +114,10 @@ func (u *userSettingRepo) UpdateUserPassword(ctx context.Context, req *v1.Update
 	if err != nil {
 		u.log.Error("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	if err := u.CheckUserSettingUpdateCountLimit(ctx, userId, redisKeyPasswordUpdateCount); err != nil {
+		return nil, err
 	}
 
 	if !u.CheckPassword(req.Password) {
@@ -142,12 +182,16 @@ func (u *userSettingRepo) upsertNotifySetting(userId int64, settingName string, 
 		Updates(map[string]interface{}{"value": enable}).Error
 }
 
-// UpdateUserSystemNotifyRecevieSetting 更新用户系统通知
-func (u *userSettingRepo) UpdateUserSystemNotifyRecevieSetting(ctx context.Context, req *v1.UpdateUserSystemNotifyRecevieSettingRequest) (*v1.UpdateUserSystemNotifyRecevieSettingReply, error) {
+// UpdateUserSystemNotifySetting 更新用户系统通知
+func (u *userSettingRepo) UpdateUserSystemNotifySetting(ctx context.Context, req *v1.UpdateUserSystemNotifySettingRequest) (*v1.UpdateUserSystemNotifySettingReply, error) {
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
 		u.log.Error("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	if err := u.CheckUserSettingUpdateCountLimit(ctx, userId, redisKeySystemNotifySettingUpdateCount); err != nil {
+		return nil, err
 	}
 
 	if err := u.upsertNotifySetting(userId, "system_notify_receive", req.Enable); err != nil {
@@ -155,7 +199,7 @@ func (u *userSettingRepo) UpdateUserSystemNotifyRecevieSetting(ctx context.Conte
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	return &v1.UpdateUserSystemNotifyRecevieSettingReply{
+	return &v1.UpdateUserSystemNotifySettingReply{
 		Code:    200,
 		Message: "更新成功",
 		Success: true,
@@ -163,12 +207,16 @@ func (u *userSettingRepo) UpdateUserSystemNotifyRecevieSetting(ctx context.Conte
 	}, nil
 }
 
-// UpdateUserInteractNotifyRecevieSetting 更新用户互动通知
-func (u *userSettingRepo) UpdateUserInteractNotifyRecevieSetting(ctx context.Context, req *v1.UpdateUserInteractNotifyRecevieSettingRequest) (*v1.UpdateUserInteractNotifyRecevieSettingReply, error) {
+// UpdateUserInteractNotifySetting 更新用户互动通知
+func (u *userSettingRepo) UpdateUserInteractNotifySetting(ctx context.Context, req *v1.UpdateUserInteractNotifySettingRequest) (*v1.UpdateUserInteractNotifySettingReply, error) {
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
 		u.log.Error("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	if err := u.CheckUserSettingUpdateCountLimit(ctx, userId, redisKeyInteractNotifySettingUpdateCount); err != nil {
+		return nil, err
 	}
 
 	if err := u.upsertNotifySetting(userId, "interact_notify_receive", req.Enable); err != nil {
@@ -176,7 +224,7 @@ func (u *userSettingRepo) UpdateUserInteractNotifyRecevieSetting(ctx context.Con
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	return &v1.UpdateUserInteractNotifyRecevieSettingReply{
+	return &v1.UpdateUserInteractNotifySettingReply{
 		Code:    200,
 		Message: "更新成功",
 		Success: true,
@@ -184,12 +232,16 @@ func (u *userSettingRepo) UpdateUserInteractNotifyRecevieSetting(ctx context.Con
 	}, nil
 }
 
-// UpdateUserAdoptNotifyRecevieSetting 更新用户领养通知
-func (u *userSettingRepo) UpdateUserAdoptNotifyRecevieSetting(ctx context.Context, req *v1.UpdateUserAdoptNotifyRecevieSettingRequest) (*v1.UpdateUserAdoptNotifyRecevieSettingReply, error) {
+// UpdateUserAdoptNotifySetting 更新用户领养通知
+func (u *userSettingRepo) UpdateUserAdoptNotifySetting(ctx context.Context, req *v1.UpdateUserAdoptNotifySettingRequest) (*v1.UpdateUserAdoptNotifySettingReply, error) {
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
 		u.log.Error("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	if err := u.CheckUserSettingUpdateCountLimit(ctx, userId, redisKeyAdoptNotifySettingUpdateCount); err != nil {
+		return nil, err
 	}
 
 	if err := u.upsertNotifySetting(userId, "adopt_notify_receive", req.Enable); err != nil {
@@ -197,7 +249,7 @@ func (u *userSettingRepo) UpdateUserAdoptNotifyRecevieSetting(ctx context.Contex
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	return &v1.UpdateUserAdoptNotifyRecevieSettingReply{
+	return &v1.UpdateUserAdoptNotifySettingReply{
 		Code:    200,
 		Message: "更新成功",
 		Success: true,
@@ -205,12 +257,16 @@ func (u *userSettingRepo) UpdateUserAdoptNotifyRecevieSetting(ctx context.Contex
 	}, nil
 }
 
-// UpdateUserEmailNotifyRecevieSetting 更新用户邮件通知
-func (u *userSettingRepo) UpdateUserEmailNotifyRecevieSetting(ctx context.Context, req *v1.UpdateUserEmailNotifyRecevieSettingRequest) (*v1.UpdateUserEmailNotifyRecevieSettingReply, error) {
+// UpdateUserEmailNotifySetting 更新用户邮件通知
+func (u *userSettingRepo) UpdateUserEmailNotifySetting(ctx context.Context, req *v1.UpdateUserEmailNotifySettingRequest) (*v1.UpdateUserEmailNotifySettingReply, error) {
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
 		u.log.Error("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	if err := u.CheckUserSettingUpdateCountLimit(ctx, userId, redisKeyEmailNotifySettingUpdateCount); err != nil {
+		return nil, err
 	}
 
 	if err := u.upsertNotifySetting(userId, "email_notify_receive", req.Enable); err != nil {
@@ -218,7 +274,7 @@ func (u *userSettingRepo) UpdateUserEmailNotifyRecevieSetting(ctx context.Contex
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	return &v1.UpdateUserEmailNotifyRecevieSettingReply{
+	return &v1.UpdateUserEmailNotifySettingReply{
 		Code:    200,
 		Message: "更新成功",
 		Success: true,

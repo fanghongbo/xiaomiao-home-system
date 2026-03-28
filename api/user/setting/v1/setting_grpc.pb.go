@@ -8,6 +8,7 @@ package v1
 
 import (
 	context "context"
+
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -19,13 +20,13 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	UserSetting_UpdateUserBaseSetting_FullMethodName                  = "/api.user.setting.v1.UserSetting/UpdateUserBaseSetting"
-	UserSetting_UpdateUserPassword_FullMethodName                     = "/api.user.setting.v1.UserSetting/UpdateUserPassword"
-	UserSetting_UpdateUserSystemNotifyRecevieSetting_FullMethodName   = "/api.user.setting.v1.UserSetting/UpdateUserSystemNotifyRecevieSetting"
-	UserSetting_UpdateUserInteractNotifyRecevieSetting_FullMethodName = "/api.user.setting.v1.UserSetting/UpdateUserInteractNotifyRecevieSetting"
-	UserSetting_UpdateUserAdoptNotifyRecevieSetting_FullMethodName    = "/api.user.setting.v1.UserSetting/UpdateUserAdoptNotifyRecevieSetting"
-	UserSetting_UpdateUserEmailNotifyRecevieSetting_FullMethodName    = "/api.user.setting.v1.UserSetting/UpdateUserEmailNotifyRecevieSetting"
-	UserSetting_GetUserNotifySetting_FullMethodName                   = "/api.user.setting.v1.UserSetting/GetUserNotifySetting"
+	UserSetting_UpdateUserBaseSetting_FullMethodName           = "/api.user.setting.v1.UserSetting/UpdateUserBaseSetting"
+	UserSetting_UpdateUserPassword_FullMethodName              = "/api.user.setting.v1.UserSetting/UpdateUserPassword"
+	UserSetting_UpdateUserSystemNotifySetting_FullMethodName   = "/api.user.setting.v1.UserSetting/UpdateUserSystemNotifySetting"
+	UserSetting_UpdateUserInteractNotifySetting_FullMethodName = "/api.user.setting.v1.UserSetting/UpdateUserInteractNotifySetting"
+	UserSetting_UpdateUserAdoptNotifySetting_FullMethodName    = "/api.user.setting.v1.UserSetting/UpdateUserAdoptNotifySetting"
+	UserSetting_UpdateUserEmailNotifySetting_FullMethodName    = "/api.user.setting.v1.UserSetting/UpdateUserEmailNotifySetting"
+	UserSetting_GetUserNotifySetting_FullMethodName            = "/api.user.setting.v1.UserSetting/GetUserNotifySetting"
 )
 
 // UserSettingClient is the client API for UserSetting service.
@@ -36,14 +37,14 @@ type UserSettingClient interface {
 	UpdateUserBaseSetting(ctx context.Context, in *UpdateUserBaseSettingRequest, opts ...grpc.CallOption) (*UpdateUserBaseSettingReply, error)
 	// 更新密码
 	UpdateUserPassword(ctx context.Context, in *UpdateUserPasswordRequest, opts ...grpc.CallOption) (*UpdateUserPasswordReply, error)
-	// UpdateUserSystemNotifyRecevieSetting 更新用户系统通知
-	UpdateUserSystemNotifyRecevieSetting(ctx context.Context, in *UpdateUserSystemNotifyRecevieSettingRequest, opts ...grpc.CallOption) (*UpdateUserSystemNotifyRecevieSettingReply, error)
-	// UpdateUserInteractNotifyRecevieSetting 更新用户互动通知
-	UpdateUserInteractNotifyRecevieSetting(ctx context.Context, in *UpdateUserInteractNotifyRecevieSettingRequest, opts ...grpc.CallOption) (*UpdateUserInteractNotifyRecevieSettingReply, error)
-	// UpdateUserAdoptNotifyRecevieSetting 更新用户领养通知
-	UpdateUserAdoptNotifyRecevieSetting(ctx context.Context, in *UpdateUserAdoptNotifyRecevieSettingRequest, opts ...grpc.CallOption) (*UpdateUserAdoptNotifyRecevieSettingReply, error)
-	// UpdateUserEmailNotifyRecevieSetting 更新用户邮件通知
-	UpdateUserEmailNotifyRecevieSetting(ctx context.Context, in *UpdateUserEmailNotifyRecevieSettingRequest, opts ...grpc.CallOption) (*UpdateUserEmailNotifyRecevieSettingReply, error)
+	// UpdateUserSystemNotifySetting 更新用户系统通知
+	UpdateUserSystemNotifySetting(ctx context.Context, in *UpdateUserSystemNotifySettingRequest, opts ...grpc.CallOption) (*UpdateUserSystemNotifySettingReply, error)
+	// UpdateUserInteractNotifySetting 更新用户互动通知
+	UpdateUserInteractNotifySetting(ctx context.Context, in *UpdateUserInteractNotifySettingRequest, opts ...grpc.CallOption) (*UpdateUserInteractNotifySettingReply, error)
+	// UpdateUserAdoptNotifySetting 更新用户领养通知
+	UpdateUserAdoptNotifySetting(ctx context.Context, in *UpdateUserAdoptNotifySettingRequest, opts ...grpc.CallOption) (*UpdateUserAdoptNotifySettingReply, error)
+	// UpdateUserEmailNotifySetting 更新用户邮件通知
+	UpdateUserEmailNotifySetting(ctx context.Context, in *UpdateUserEmailNotifySettingRequest, opts ...grpc.CallOption) (*UpdateUserEmailNotifySettingReply, error)
 	// GetUserNotifySetting 获取用通知设置
 	GetUserNotifySetting(ctx context.Context, in *GetUserNotifySettingRequest, opts ...grpc.CallOption) (*GetUserNotifySettingReply, error)
 }
@@ -76,40 +77,40 @@ func (c *userSettingClient) UpdateUserPassword(ctx context.Context, in *UpdateUs
 	return out, nil
 }
 
-func (c *userSettingClient) UpdateUserSystemNotifyRecevieSetting(ctx context.Context, in *UpdateUserSystemNotifyRecevieSettingRequest, opts ...grpc.CallOption) (*UpdateUserSystemNotifyRecevieSettingReply, error) {
+func (c *userSettingClient) UpdateUserSystemNotifySetting(ctx context.Context, in *UpdateUserSystemNotifySettingRequest, opts ...grpc.CallOption) (*UpdateUserSystemNotifySettingReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UpdateUserSystemNotifyRecevieSettingReply)
-	err := c.cc.Invoke(ctx, UserSetting_UpdateUserSystemNotifyRecevieSetting_FullMethodName, in, out, cOpts...)
+	out := new(UpdateUserSystemNotifySettingReply)
+	err := c.cc.Invoke(ctx, UserSetting_UpdateUserSystemNotifySetting_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *userSettingClient) UpdateUserInteractNotifyRecevieSetting(ctx context.Context, in *UpdateUserInteractNotifyRecevieSettingRequest, opts ...grpc.CallOption) (*UpdateUserInteractNotifyRecevieSettingReply, error) {
+func (c *userSettingClient) UpdateUserInteractNotifySetting(ctx context.Context, in *UpdateUserInteractNotifySettingRequest, opts ...grpc.CallOption) (*UpdateUserInteractNotifySettingReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UpdateUserInteractNotifyRecevieSettingReply)
-	err := c.cc.Invoke(ctx, UserSetting_UpdateUserInteractNotifyRecevieSetting_FullMethodName, in, out, cOpts...)
+	out := new(UpdateUserInteractNotifySettingReply)
+	err := c.cc.Invoke(ctx, UserSetting_UpdateUserInteractNotifySetting_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *userSettingClient) UpdateUserAdoptNotifyRecevieSetting(ctx context.Context, in *UpdateUserAdoptNotifyRecevieSettingRequest, opts ...grpc.CallOption) (*UpdateUserAdoptNotifyRecevieSettingReply, error) {
+func (c *userSettingClient) UpdateUserAdoptNotifySetting(ctx context.Context, in *UpdateUserAdoptNotifySettingRequest, opts ...grpc.CallOption) (*UpdateUserAdoptNotifySettingReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UpdateUserAdoptNotifyRecevieSettingReply)
-	err := c.cc.Invoke(ctx, UserSetting_UpdateUserAdoptNotifyRecevieSetting_FullMethodName, in, out, cOpts...)
+	out := new(UpdateUserAdoptNotifySettingReply)
+	err := c.cc.Invoke(ctx, UserSetting_UpdateUserAdoptNotifySetting_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *userSettingClient) UpdateUserEmailNotifyRecevieSetting(ctx context.Context, in *UpdateUserEmailNotifyRecevieSettingRequest, opts ...grpc.CallOption) (*UpdateUserEmailNotifyRecevieSettingReply, error) {
+func (c *userSettingClient) UpdateUserEmailNotifySetting(ctx context.Context, in *UpdateUserEmailNotifySettingRequest, opts ...grpc.CallOption) (*UpdateUserEmailNotifySettingReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UpdateUserEmailNotifyRecevieSettingReply)
-	err := c.cc.Invoke(ctx, UserSetting_UpdateUserEmailNotifyRecevieSetting_FullMethodName, in, out, cOpts...)
+	out := new(UpdateUserEmailNotifySettingReply)
+	err := c.cc.Invoke(ctx, UserSetting_UpdateUserEmailNotifySetting_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -134,14 +135,14 @@ type UserSettingServer interface {
 	UpdateUserBaseSetting(context.Context, *UpdateUserBaseSettingRequest) (*UpdateUserBaseSettingReply, error)
 	// 更新密码
 	UpdateUserPassword(context.Context, *UpdateUserPasswordRequest) (*UpdateUserPasswordReply, error)
-	// UpdateUserSystemNotifyRecevieSetting 更新用户系统通知
-	UpdateUserSystemNotifyRecevieSetting(context.Context, *UpdateUserSystemNotifyRecevieSettingRequest) (*UpdateUserSystemNotifyRecevieSettingReply, error)
-	// UpdateUserInteractNotifyRecevieSetting 更新用户互动通知
-	UpdateUserInteractNotifyRecevieSetting(context.Context, *UpdateUserInteractNotifyRecevieSettingRequest) (*UpdateUserInteractNotifyRecevieSettingReply, error)
-	// UpdateUserAdoptNotifyRecevieSetting 更新用户领养通知
-	UpdateUserAdoptNotifyRecevieSetting(context.Context, *UpdateUserAdoptNotifyRecevieSettingRequest) (*UpdateUserAdoptNotifyRecevieSettingReply, error)
-	// UpdateUserEmailNotifyRecevieSetting 更新用户邮件通知
-	UpdateUserEmailNotifyRecevieSetting(context.Context, *UpdateUserEmailNotifyRecevieSettingRequest) (*UpdateUserEmailNotifyRecevieSettingReply, error)
+	// UpdateUserSystemNotifySetting 更新用户系统通知
+	UpdateUserSystemNotifySetting(context.Context, *UpdateUserSystemNotifySettingRequest) (*UpdateUserSystemNotifySettingReply, error)
+	// UpdateUserInteractNotifySetting 更新用户互动通知
+	UpdateUserInteractNotifySetting(context.Context, *UpdateUserInteractNotifySettingRequest) (*UpdateUserInteractNotifySettingReply, error)
+	// UpdateUserAdoptNotifySetting 更新用户领养通知
+	UpdateUserAdoptNotifySetting(context.Context, *UpdateUserAdoptNotifySettingRequest) (*UpdateUserAdoptNotifySettingReply, error)
+	// UpdateUserEmailNotifySetting 更新用户邮件通知
+	UpdateUserEmailNotifySetting(context.Context, *UpdateUserEmailNotifySettingRequest) (*UpdateUserEmailNotifySettingReply, error)
 	// GetUserNotifySetting 获取用通知设置
 	GetUserNotifySetting(context.Context, *GetUserNotifySettingRequest) (*GetUserNotifySettingReply, error)
 	mustEmbedUnimplementedUserSettingServer()
@@ -160,17 +161,17 @@ func (UnimplementedUserSettingServer) UpdateUserBaseSetting(context.Context, *Up
 func (UnimplementedUserSettingServer) UpdateUserPassword(context.Context, *UpdateUserPasswordRequest) (*UpdateUserPasswordReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method UpdateUserPassword not implemented")
 }
-func (UnimplementedUserSettingServer) UpdateUserSystemNotifyRecevieSetting(context.Context, *UpdateUserSystemNotifyRecevieSettingRequest) (*UpdateUserSystemNotifyRecevieSettingReply, error) {
-	return nil, status.Error(codes.Unimplemented, "method UpdateUserSystemNotifyRecevieSetting not implemented")
+func (UnimplementedUserSettingServer) UpdateUserSystemNotifySetting(context.Context, *UpdateUserSystemNotifySettingRequest) (*UpdateUserSystemNotifySettingReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateUserSystemNotifySetting not implemented")
 }
-func (UnimplementedUserSettingServer) UpdateUserInteractNotifyRecevieSetting(context.Context, *UpdateUserInteractNotifyRecevieSettingRequest) (*UpdateUserInteractNotifyRecevieSettingReply, error) {
-	return nil, status.Error(codes.Unimplemented, "method UpdateUserInteractNotifyRecevieSetting not implemented")
+func (UnimplementedUserSettingServer) UpdateUserInteractNotifySetting(context.Context, *UpdateUserInteractNotifySettingRequest) (*UpdateUserInteractNotifySettingReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateUserInteractNotifySetting not implemented")
 }
-func (UnimplementedUserSettingServer) UpdateUserAdoptNotifyRecevieSetting(context.Context, *UpdateUserAdoptNotifyRecevieSettingRequest) (*UpdateUserAdoptNotifyRecevieSettingReply, error) {
-	return nil, status.Error(codes.Unimplemented, "method UpdateUserAdoptNotifyRecevieSetting not implemented")
+func (UnimplementedUserSettingServer) UpdateUserAdoptNotifySetting(context.Context, *UpdateUserAdoptNotifySettingRequest) (*UpdateUserAdoptNotifySettingReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateUserAdoptNotifySetting not implemented")
 }
-func (UnimplementedUserSettingServer) UpdateUserEmailNotifyRecevieSetting(context.Context, *UpdateUserEmailNotifyRecevieSettingRequest) (*UpdateUserEmailNotifyRecevieSettingReply, error) {
-	return nil, status.Error(codes.Unimplemented, "method UpdateUserEmailNotifyRecevieSetting not implemented")
+func (UnimplementedUserSettingServer) UpdateUserEmailNotifySetting(context.Context, *UpdateUserEmailNotifySettingRequest) (*UpdateUserEmailNotifySettingReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateUserEmailNotifySetting not implemented")
 }
 func (UnimplementedUserSettingServer) GetUserNotifySetting(context.Context, *GetUserNotifySettingRequest) (*GetUserNotifySettingReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetUserNotifySetting not implemented")
@@ -232,74 +233,74 @@ func _UserSetting_UpdateUserPassword_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserSetting_UpdateUserSystemNotifyRecevieSetting_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateUserSystemNotifyRecevieSettingRequest)
+func _UserSetting_UpdateUserSystemNotifySetting_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateUserSystemNotifySettingRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserSettingServer).UpdateUserSystemNotifyRecevieSetting(ctx, in)
+		return srv.(UserSettingServer).UpdateUserSystemNotifySetting(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: UserSetting_UpdateUserSystemNotifyRecevieSetting_FullMethodName,
+		FullMethod: UserSetting_UpdateUserSystemNotifySetting_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserSettingServer).UpdateUserSystemNotifyRecevieSetting(ctx, req.(*UpdateUserSystemNotifyRecevieSettingRequest))
+		return srv.(UserSettingServer).UpdateUserSystemNotifySetting(ctx, req.(*UpdateUserSystemNotifySettingRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserSetting_UpdateUserInteractNotifyRecevieSetting_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateUserInteractNotifyRecevieSettingRequest)
+func _UserSetting_UpdateUserInteractNotifySetting_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateUserInteractNotifySettingRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserSettingServer).UpdateUserInteractNotifyRecevieSetting(ctx, in)
+		return srv.(UserSettingServer).UpdateUserInteractNotifySetting(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: UserSetting_UpdateUserInteractNotifyRecevieSetting_FullMethodName,
+		FullMethod: UserSetting_UpdateUserInteractNotifySetting_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserSettingServer).UpdateUserInteractNotifyRecevieSetting(ctx, req.(*UpdateUserInteractNotifyRecevieSettingRequest))
+		return srv.(UserSettingServer).UpdateUserInteractNotifySetting(ctx, req.(*UpdateUserInteractNotifySettingRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserSetting_UpdateUserAdoptNotifyRecevieSetting_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateUserAdoptNotifyRecevieSettingRequest)
+func _UserSetting_UpdateUserAdoptNotifySetting_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateUserAdoptNotifySettingRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserSettingServer).UpdateUserAdoptNotifyRecevieSetting(ctx, in)
+		return srv.(UserSettingServer).UpdateUserAdoptNotifySetting(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: UserSetting_UpdateUserAdoptNotifyRecevieSetting_FullMethodName,
+		FullMethod: UserSetting_UpdateUserAdoptNotifySetting_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserSettingServer).UpdateUserAdoptNotifyRecevieSetting(ctx, req.(*UpdateUserAdoptNotifyRecevieSettingRequest))
+		return srv.(UserSettingServer).UpdateUserAdoptNotifySetting(ctx, req.(*UpdateUserAdoptNotifySettingRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserSetting_UpdateUserEmailNotifyRecevieSetting_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateUserEmailNotifyRecevieSettingRequest)
+func _UserSetting_UpdateUserEmailNotifySetting_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateUserEmailNotifySettingRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserSettingServer).UpdateUserEmailNotifyRecevieSetting(ctx, in)
+		return srv.(UserSettingServer).UpdateUserEmailNotifySetting(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: UserSetting_UpdateUserEmailNotifyRecevieSetting_FullMethodName,
+		FullMethod: UserSetting_UpdateUserEmailNotifySetting_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserSettingServer).UpdateUserEmailNotifyRecevieSetting(ctx, req.(*UpdateUserEmailNotifyRecevieSettingRequest))
+		return srv.(UserSettingServer).UpdateUserEmailNotifySetting(ctx, req.(*UpdateUserEmailNotifySettingRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -338,20 +339,20 @@ var UserSetting_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _UserSetting_UpdateUserPassword_Handler,
 		},
 		{
-			MethodName: "UpdateUserSystemNotifyRecevieSetting",
-			Handler:    _UserSetting_UpdateUserSystemNotifyRecevieSetting_Handler,
+			MethodName: "UpdateUserSystemNotifySetting",
+			Handler:    _UserSetting_UpdateUserSystemNotifySetting_Handler,
 		},
 		{
-			MethodName: "UpdateUserInteractNotifyRecevieSetting",
-			Handler:    _UserSetting_UpdateUserInteractNotifyRecevieSetting_Handler,
+			MethodName: "UpdateUserInteractNotifySetting",
+			Handler:    _UserSetting_UpdateUserInteractNotifySetting_Handler,
 		},
 		{
-			MethodName: "UpdateUserAdoptNotifyRecevieSetting",
-			Handler:    _UserSetting_UpdateUserAdoptNotifyRecevieSetting_Handler,
+			MethodName: "UpdateUserAdoptNotifySetting",
+			Handler:    _UserSetting_UpdateUserAdoptNotifySetting_Handler,
 		},
 		{
-			MethodName: "UpdateUserEmailNotifyRecevieSetting",
-			Handler:    _UserSetting_UpdateUserEmailNotifyRecevieSetting_Handler,
+			MethodName: "UpdateUserEmailNotifySetting",
+			Handler:    _UserSetting_UpdateUserEmailNotifySetting_Handler,
 		},
 		{
 			MethodName: "GetUserNotifySetting",

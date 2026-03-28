@@ -208,13 +208,13 @@ paths:
         post:
             tags:
                 - UserSetting
-            description: UpdateUserAdoptNotifyRecevieSetting 更新用户领养通知
-            operationId: UserSetting_UpdateUserAdoptNotifyRecevieSetting
+            description: UpdateUserAdoptNotifySetting 更新用户领养通知
+            operationId: UserSetting_UpdateUserAdoptNotifySetting
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.user.setting.v1.UpdateUserAdoptNotifyRecevieSettingRequest'
+                            $ref: '#/components/schemas/api.user.setting.v1.UpdateUserAdoptNotifySettingRequest'
                 required: true
             responses:
                 "200":
@@ -222,7 +222,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.user.setting.v1.UpdateUserAdoptNotifyRecevieSettingReply'
+                                $ref: '#/components/schemas/api.user.setting.v1.UpdateUserAdoptNotifySettingReply'
     /api/v1/user/avatar/upload:
         post:
             tags:
@@ -265,13 +265,13 @@ paths:
         post:
             tags:
                 - UserSetting
-            description: UpdateUserEmailNotifyRecevieSetting 更新用户邮件通知
-            operationId: UserSetting_UpdateUserEmailNotifyRecevieSetting
+            description: UpdateUserEmailNotifySetting 更新用户邮件通知
+            operationId: UserSetting_UpdateUserEmailNotifySetting
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.user.setting.v1.UpdateUserEmailNotifyRecevieSettingRequest'
+                            $ref: '#/components/schemas/api.user.setting.v1.UpdateUserEmailNotifySettingRequest'
                 required: true
             responses:
                 "200":
@@ -279,18 +279,18 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.user.setting.v1.UpdateUserEmailNotifyRecevieSettingReply'
+                                $ref: '#/components/schemas/api.user.setting.v1.UpdateUserEmailNotifySettingReply'
     /api/v1/user/interact/notify/setting:
         post:
             tags:
                 - UserSetting
-            description: UpdateUserInteractNotifyRecevieSetting 更新用户互动通知
-            operationId: UserSetting_UpdateUserInteractNotifyRecevieSetting
+            description: UpdateUserInteractNotifySetting 更新用户互动通知
+            operationId: UserSetting_UpdateUserInteractNotifySetting
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.user.setting.v1.UpdateUserInteractNotifyRecevieSettingRequest'
+                            $ref: '#/components/schemas/api.user.setting.v1.UpdateUserInteractNotifySettingRequest'
                 required: true
             responses:
                 "200":
@@ -298,7 +298,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.user.setting.v1.UpdateUserInteractNotifyRecevieSettingReply'
+                                $ref: '#/components/schemas/api.user.setting.v1.UpdateUserInteractNotifySettingReply'
     /api/v1/user/notification:
         post:
             tags:
@@ -459,13 +459,13 @@ paths:
         post:
             tags:
                 - UserSetting
-            description: UpdateUserSystemNotifyRecevieSetting 更新用户系统通知
-            operationId: UserSetting_UpdateUserSystemNotifyRecevieSetting
+            description: UpdateUserSystemNotifySetting 更新用户系统通知
+            operationId: UserSetting_UpdateUserSystemNotifySetting
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.user.setting.v1.UpdateUserSystemNotifyRecevieSettingRequest'
+                            $ref: '#/components/schemas/api.user.setting.v1.UpdateUserSystemNotifySettingRequest'
                 required: true
             responses:
                 "200":
@@ -473,7 +473,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.user.setting.v1.UpdateUserSystemNotifyRecevieSettingReply'
+                                $ref: '#/components/schemas/api.user.setting.v1.UpdateUserSystemNotifySettingReply'
     /api/v1/web/auth/login:
         post:
             tags:
@@ -862,7 +862,7 @@ components:
                     type: boolean
                 data:
                     $ref: '#/components/schemas/api.user.setting.v1.UserNotifySettingInfo'
-        api.user.setting.v1.UpdateUserAdoptNotifyRecevieSettingReply:
+        api.user.setting.v1.UpdateUserAdoptNotifySettingReply:
             type: object
             properties:
                 code:
@@ -874,7 +874,7 @@ components:
                     type: boolean
                 data:
                     type: string
-        api.user.setting.v1.UpdateUserAdoptNotifyRecevieSettingRequest:
+        api.user.setting.v1.UpdateUserAdoptNotifySettingRequest:
             type: object
             properties:
                 enable:
@@ -904,7 +904,7 @@ components:
                     type: string
                 signature:
                     type: string
-        api.user.setting.v1.UpdateUserEmailNotifyRecevieSettingReply:
+        api.user.setting.v1.UpdateUserEmailNotifySettingReply:
             type: object
             properties:
                 code:
@@ -916,13 +916,13 @@ components:
                     type: boolean
                 data:
                     type: string
-        api.user.setting.v1.UpdateUserEmailNotifyRecevieSettingRequest:
+        api.user.setting.v1.UpdateUserEmailNotifySettingRequest:
             type: object
             properties:
                 enable:
                     type: integer
                     format: int32
-        api.user.setting.v1.UpdateUserInteractNotifyRecevieSettingReply:
+        api.user.setting.v1.UpdateUserInteractNotifySettingReply:
             type: object
             properties:
                 code:
@@ -934,7 +934,7 @@ components:
                     type: boolean
                 data:
                     type: string
-        api.user.setting.v1.UpdateUserInteractNotifyRecevieSettingRequest:
+        api.user.setting.v1.UpdateUserInteractNotifySettingRequest:
             type: object
             properties:
                 enable:
@@ -957,7 +957,7 @@ components:
             properties:
                 password:
                     type: string
-        api.user.setting.v1.UpdateUserSystemNotifyRecevieSettingReply:
+        api.user.setting.v1.UpdateUserSystemNotifySettingReply:
             type: object
             properties:
                 code:
@@ -969,7 +969,7 @@ components:
                     type: boolean
                 data:
                     type: string
-        api.user.setting.v1.UpdateUserSystemNotifyRecevieSettingRequest:
+        api.user.setting.v1.UpdateUserSystemNotifySettingRequest:
             type: object
             properties:
                 enable:
