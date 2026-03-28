@@ -929,6 +929,14 @@ components:
                     type: string
                 signature:
                     type: string
+                provinceId:
+                    type: integer
+                    format: int32
+                cityId:
+                    type: integer
+                    format: int32
+                address:
+                    type: string
         api.user.setting.v1.UpdateUserEmailNotifySettingReply:
             type: object
             properties:
@@ -1110,6 +1118,14 @@ components:
                 birthday:
                     type: string
                 signature:
+                    type: string
+                provinceId:
+                    type: integer
+                    format: int32
+                cityId:
+                    type: integer
+                    format: int32
+                address:
                     type: string
                 accessCodes:
                     type: array

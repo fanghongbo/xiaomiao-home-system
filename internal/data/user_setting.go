@@ -75,10 +75,13 @@ func (u *userSettingRepo) UpdateUserBaseSetting(ctx context.Context, req *v1.Upd
 	}
 
 	userInfo := map[string]interface{}{
-		"nickname":  req.Nickname,
-		"gender":    req.Gender,
-		"birthday":  req.Birthday,
-		"signature": req.Signature,
+		"nickname":    req.Nickname,
+		"gender":      req.Gender,
+		"birthday":    req.Birthday,
+		"province_id": req.ProvinceId,
+		"city_id":     req.CityId,
+		"address":     req.Address,
+		"signature":   req.Signature,
 	}
 
 	if err := u.data.db.Table("t_user").Where("id = ?", userId).Updates(userInfo).Error; err != nil {

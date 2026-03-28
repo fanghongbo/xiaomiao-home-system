@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v5.29.3
-// source: api/system/setting/v1/setting.proto
+// source: system/setting/v1/setting.proto
 
 package v1
 
@@ -32,7 +32,7 @@ type BaseRequest struct {
 
 func (x *BaseRequest) Reset() {
 	*x = BaseRequest{}
-	mi := &file_api_system_setting_v1_setting_proto_msgTypes[0]
+	mi := &file_system_setting_v1_setting_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -44,7 +44,7 @@ func (x *BaseRequest) String() string {
 func (*BaseRequest) ProtoMessage() {}
 
 func (x *BaseRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_system_setting_v1_setting_proto_msgTypes[0]
+	mi := &file_system_setting_v1_setting_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -57,7 +57,7 @@ func (x *BaseRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BaseRequest.ProtoReflect.Descriptor instead.
 func (*BaseRequest) Descriptor() ([]byte, []int) {
-	return file_api_system_setting_v1_setting_proto_rawDescGZIP(), []int{0}
+	return file_system_setting_v1_setting_proto_rawDescGZIP(), []int{0}
 }
 
 // 基础响应体
@@ -69,7 +69,7 @@ type BaseResponse struct {
 
 func (x *BaseResponse) Reset() {
 	*x = BaseResponse{}
-	mi := &file_api_system_setting_v1_setting_proto_msgTypes[1]
+	mi := &file_system_setting_v1_setting_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -81,7 +81,7 @@ func (x *BaseResponse) String() string {
 func (*BaseResponse) ProtoMessage() {}
 
 func (x *BaseResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_system_setting_v1_setting_proto_msgTypes[1]
+	mi := &file_system_setting_v1_setting_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -94,7 +94,7 @@ func (x *BaseResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BaseResponse.ProtoReflect.Descriptor instead.
 func (*BaseResponse) Descriptor() ([]byte, []int) {
-	return file_api_system_setting_v1_setting_proto_rawDescGZIP(), []int{1}
+	return file_system_setting_v1_setting_proto_rawDescGZIP(), []int{1}
 }
 
 type SystemSettingItem struct {
@@ -107,7 +107,7 @@ type SystemSettingItem struct {
 
 func (x *SystemSettingItem) Reset() {
 	*x = SystemSettingItem{}
-	mi := &file_api_system_setting_v1_setting_proto_msgTypes[2]
+	mi := &file_system_setting_v1_setting_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -119,7 +119,7 @@ func (x *SystemSettingItem) String() string {
 func (*SystemSettingItem) ProtoMessage() {}
 
 func (x *SystemSettingItem) ProtoReflect() protoreflect.Message {
-	mi := &file_api_system_setting_v1_setting_proto_msgTypes[2]
+	mi := &file_system_setting_v1_setting_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -132,7 +132,7 @@ func (x *SystemSettingItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SystemSettingItem.ProtoReflect.Descriptor instead.
 func (*SystemSettingItem) Descriptor() ([]byte, []int) {
-	return file_api_system_setting_v1_setting_proto_rawDescGZIP(), []int{2}
+	return file_system_setting_v1_setting_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *SystemSettingItem) GetName() string {
@@ -160,7 +160,7 @@ type SystemSettingInfo struct {
 
 func (x *SystemSettingInfo) Reset() {
 	*x = SystemSettingInfo{}
-	mi := &file_api_system_setting_v1_setting_proto_msgTypes[3]
+	mi := &file_system_setting_v1_setting_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -172,7 +172,7 @@ func (x *SystemSettingInfo) String() string {
 func (*SystemSettingInfo) ProtoMessage() {}
 
 func (x *SystemSettingInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_api_system_setting_v1_setting_proto_msgTypes[3]
+	mi := &file_system_setting_v1_setting_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -185,7 +185,7 @@ func (x *SystemSettingInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SystemSettingInfo.ProtoReflect.Descriptor instead.
 func (*SystemSettingInfo) Descriptor() ([]byte, []int) {
-	return file_api_system_setting_v1_setting_proto_rawDescGZIP(), []int{3}
+	return file_system_setting_v1_setting_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *SystemSettingInfo) GetId() int64 {
@@ -219,7 +219,7 @@ type BaseSettingInfo struct {
 
 func (x *BaseSettingInfo) Reset() {
 	*x = BaseSettingInfo{}
-	mi := &file_api_system_setting_v1_setting_proto_msgTypes[4]
+	mi := &file_system_setting_v1_setting_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -231,7 +231,7 @@ func (x *BaseSettingInfo) String() string {
 func (*BaseSettingInfo) ProtoMessage() {}
 
 func (x *BaseSettingInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_api_system_setting_v1_setting_proto_msgTypes[4]
+	mi := &file_system_setting_v1_setting_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -244,7 +244,7 @@ func (x *BaseSettingInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BaseSettingInfo.ProtoReflect.Descriptor instead.
 func (*BaseSettingInfo) Descriptor() ([]byte, []int) {
-	return file_api_system_setting_v1_setting_proto_rawDescGZIP(), []int{4}
+	return file_system_setting_v1_setting_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *BaseSettingInfo) GetSiteName() string {
@@ -273,7 +273,7 @@ type LoginSettingInfo struct {
 
 func (x *LoginSettingInfo) Reset() {
 	*x = LoginSettingInfo{}
-	mi := &file_api_system_setting_v1_setting_proto_msgTypes[5]
+	mi := &file_system_setting_v1_setting_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -285,7 +285,7 @@ func (x *LoginSettingInfo) String() string {
 func (*LoginSettingInfo) ProtoMessage() {}
 
 func (x *LoginSettingInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_api_system_setting_v1_setting_proto_msgTypes[5]
+	mi := &file_system_setting_v1_setting_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -298,7 +298,7 @@ func (x *LoginSettingInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoginSettingInfo.ProtoReflect.Descriptor instead.
 func (*LoginSettingInfo) Descriptor() ([]byte, []int) {
-	return file_api_system_setting_v1_setting_proto_rawDescGZIP(), []int{5}
+	return file_system_setting_v1_setting_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *LoginSettingInfo) GetLoginValidPeriod() int64 {
@@ -340,7 +340,7 @@ type SecuritySettingInfo struct {
 
 func (x *SecuritySettingInfo) Reset() {
 	*x = SecuritySettingInfo{}
-	mi := &file_api_system_setting_v1_setting_proto_msgTypes[6]
+	mi := &file_system_setting_v1_setting_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -352,7 +352,7 @@ func (x *SecuritySettingInfo) String() string {
 func (*SecuritySettingInfo) ProtoMessage() {}
 
 func (x *SecuritySettingInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_api_system_setting_v1_setting_proto_msgTypes[6]
+	mi := &file_system_setting_v1_setting_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -365,7 +365,7 @@ func (x *SecuritySettingInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SecuritySettingInfo.ProtoReflect.Descriptor instead.
 func (*SecuritySettingInfo) Descriptor() ([]byte, []int) {
-	return file_api_system_setting_v1_setting_proto_rawDescGZIP(), []int{6}
+	return file_system_setting_v1_setting_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *SecuritySettingInfo) GetMfaAuth() bool {
@@ -389,11 +389,11 @@ func (x *SecuritySettingInfo) GetCasValidPeriod() int64 {
 	return 0
 }
 
-var File_api_system_setting_v1_setting_proto protoreflect.FileDescriptor
+var File_system_setting_v1_setting_proto protoreflect.FileDescriptor
 
-const file_api_system_setting_v1_setting_proto_rawDesc = "" +
+const file_system_setting_v1_setting_proto_rawDesc = "" +
 	"\n" +
-	"#api/system/setting/v1/setting.proto\x12\x15api.system.setting.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\"\r\n" +
+	"\x1fsystem/setting/v1/setting.proto\x12\x15api.system.setting.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\"\r\n" +
 	"\vBaseRequest\"\x0e\n" +
 	"\fBaseResponse\"=\n" +
 	"\x11SystemSettingItem\x12\x12\n" +
@@ -419,19 +419,19 @@ const file_api_system_setting_v1_setting_proto_rawDesc = "" +
 	"\x15api.system.setting.v1B\x14SystemSettingProtoV1P\x01Z-xiaomiao-home-system/api/system/setting/v1;v1b\x06proto3"
 
 var (
-	file_api_system_setting_v1_setting_proto_rawDescOnce sync.Once
-	file_api_system_setting_v1_setting_proto_rawDescData []byte
+	file_system_setting_v1_setting_proto_rawDescOnce sync.Once
+	file_system_setting_v1_setting_proto_rawDescData []byte
 )
 
-func file_api_system_setting_v1_setting_proto_rawDescGZIP() []byte {
-	file_api_system_setting_v1_setting_proto_rawDescOnce.Do(func() {
-		file_api_system_setting_v1_setting_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_api_system_setting_v1_setting_proto_rawDesc), len(file_api_system_setting_v1_setting_proto_rawDesc)))
+func file_system_setting_v1_setting_proto_rawDescGZIP() []byte {
+	file_system_setting_v1_setting_proto_rawDescOnce.Do(func() {
+		file_system_setting_v1_setting_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_system_setting_v1_setting_proto_rawDesc), len(file_system_setting_v1_setting_proto_rawDesc)))
 	})
-	return file_api_system_setting_v1_setting_proto_rawDescData
+	return file_system_setting_v1_setting_proto_rawDescData
 }
 
-var file_api_system_setting_v1_setting_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
-var file_api_system_setting_v1_setting_proto_goTypes = []any{
+var file_system_setting_v1_setting_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_system_setting_v1_setting_proto_goTypes = []any{
 	(*BaseRequest)(nil),         // 0: api.system.setting.v1.BaseRequest
 	(*BaseResponse)(nil),        // 1: api.system.setting.v1.BaseResponse
 	(*SystemSettingItem)(nil),   // 2: api.system.setting.v1.SystemSettingItem
@@ -440,7 +440,7 @@ var file_api_system_setting_v1_setting_proto_goTypes = []any{
 	(*LoginSettingInfo)(nil),    // 5: api.system.setting.v1.LoginSettingInfo
 	(*SecuritySettingInfo)(nil), // 6: api.system.setting.v1.SecuritySettingInfo
 }
-var file_api_system_setting_v1_setting_proto_depIdxs = []int32{
+var file_system_setting_v1_setting_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
 	0, // [0:0] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -448,26 +448,26 @@ var file_api_system_setting_v1_setting_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_api_system_setting_v1_setting_proto_init() }
-func file_api_system_setting_v1_setting_proto_init() {
-	if File_api_system_setting_v1_setting_proto != nil {
+func init() { file_system_setting_v1_setting_proto_init() }
+func file_system_setting_v1_setting_proto_init() {
+	if File_system_setting_v1_setting_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_system_setting_v1_setting_proto_rawDesc), len(file_api_system_setting_v1_setting_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_system_setting_v1_setting_proto_rawDesc), len(file_system_setting_v1_setting_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_api_system_setting_v1_setting_proto_goTypes,
-		DependencyIndexes: file_api_system_setting_v1_setting_proto_depIdxs,
-		MessageInfos:      file_api_system_setting_v1_setting_proto_msgTypes,
+		GoTypes:           file_system_setting_v1_setting_proto_goTypes,
+		DependencyIndexes: file_system_setting_v1_setting_proto_depIdxs,
+		MessageInfos:      file_system_setting_v1_setting_proto_msgTypes,
 	}.Build()
-	File_api_system_setting_v1_setting_proto = out.File
-	file_api_system_setting_v1_setting_proto_goTypes = nil
-	file_api_system_setting_v1_setting_proto_depIdxs = nil
+	File_system_setting_v1_setting_proto = out.File
+	file_system_setting_v1_setting_proto_goTypes = nil
+	file_system_setting_v1_setting_proto_depIdxs = nil
 }

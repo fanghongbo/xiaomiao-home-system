@@ -9,6 +9,9 @@ type User struct {
 	Birthday    time.Time `gorm:"column:birthday"`
 	Avatar      string    `gorm:"column:avatar"`
 	Signature   string    `gorm:"column:signature"`
+	ProvinceId  int32     `gorm:"column:province_id"`
+	CityId      int32     `gorm:"column:city_id"`
+	Address     string    `gorm:"column:address"`
 	Remark      string    `gorm:"column:remark"`
 	Status      int       `gorm:"column:status"` // 0: 正常 1: 禁用
 	CreatedTime time.Time `gorm:"column:created_time"`

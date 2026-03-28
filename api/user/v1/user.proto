@@ -117,8 +117,11 @@ message UserInfo  {
 	int32 gender = 4;
 	string birthday = 5;
 	string signature = 6;
-	int32 status = 7;
-	repeated string access_codes = 8;
+	int32 province_id = 7;
+	int32 city_id = 8;
+	string address = 9;
+	int32 status = 10;
+	repeated string access_codes = 11;
 }
 
 message UserPasswordInfo {
@@ -143,7 +146,10 @@ message WebLoginUserInfo {
 	int32 gender = 4;
 	string birthday = 5;
 	string signature = 6;
-	repeated string access_codes = 7;
+	int32 province_id = 7;
+	int32 city_id = 8;
+	string address = 9;
+	repeated string access_codes = 10;
 }
 
 message GetWebLoginUserInfoReply {

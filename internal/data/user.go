@@ -322,7 +322,7 @@ func (u *userRepo) MpLogin(ctx context.Context, req *v1.MpLoginRequest) (*v1.MpL
 // 查询用户信息
 func (u *userRepo) GetUserInfo(ctx context.Context, userId int64) (*v1.UserInfo, error) {
 	var user User
-	if err := u.data.db.Table("t_user").Select("id, nickname, avatar, gender, birthday, signature, status").Where("id = ?", userId).Where("deleted_flag = ?", 0).First(&user).Error; err != nil {
+	if err := u.data.db.Table("t_user").Select("id, nickname, avatar, gender, birthday, signature, province_id, city_id, address, status").Where("id = ?", userId).Where("deleted_flag = ?", 0).First(&user).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "用户不存在")
 		}
@@ -330,13 +330,16 @@ func (u *userRepo) GetUserInfo(ctx context.Context, userId int64) (*v1.UserInfo,
 	}
 
 	return &v1.UserInfo{
-		Id:        user.Id,
-		Nickname:  user.Nickname,
-		Avatar:    user.Avatar,
-		Gender:    int32(user.Gender),
-		Birthday:  user.Birthday.Format("2006-01-02"),
-		Signature: user.Signature,
-		Status:    int32(user.Status),
+		Id:         user.Id,
+		Nickname:   user.Nickname,
+		Avatar:     user.Avatar,
+		Gender:     int32(user.Gender),
+		Birthday:   user.Birthday.Format("2006-01-02"),
+		Signature:  user.Signature,
+		ProvinceId: int32(user.ProvinceId),
+		CityId:     int32(user.CityId),
+		Address:    user.Address,
+		Status:     int32(user.Status),
 	}, nil
 }
 
@@ -369,6 +372,9 @@ func (u *userRepo) GetWebLoginUserInfo(ctx context.Context, req *v1.GetWebLoginU
 			Gender:      int32(userInfo.Gender),
 			Birthday:    userInfo.Birthday,
 			Signature:   userInfo.Signature,
+			ProvinceId:  userInfo.ProvinceId,
+			CityId:      userInfo.CityId,
+			Address:     userInfo.Address,
 			AccessCodes: []string{},
 		},
 	}, nil
