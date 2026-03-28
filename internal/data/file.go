@@ -146,7 +146,7 @@ func (f *fileRepo) CheckAvatarUploadCountLimit(ctx context.Context, userId int64
 		}
 	}
 	if uploadCount > maxAvatarUploadCount {
-		return errors.InternalServer(v1.ErrorReason_ERR_TOO_MANY_REQUEST.String(), "今日修改头像次数已达上限")
+		return errors.BadRequest(v1.ErrorReason_ERR_TOO_MANY_REQUEST.String(), "今日修改头像次数已达上限")
 	}
 	return nil
 }

@@ -54,9 +54,11 @@ func (u *userSettingRepo) CheckUserSettingUpdateCountLimit(ctx context.Context, 
 			return errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 		}
 	}
+
 	if n > userMaxSettingUpdateCount {
-		return errors.InternalServer(v1.ErrorReason_ERR_TOO_MANY_REQUEST.String(), "今日修改次数过多")
+		return errors.BadRequest(v1.ErrorReason_ERR_TOO_MANY_REQUEST.String(), "今日修改次数过多")
 	}
+
 	return nil
 }
 

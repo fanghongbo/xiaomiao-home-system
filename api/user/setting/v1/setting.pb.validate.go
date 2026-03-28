@@ -719,18 +719,17 @@ var _ interface {
 	ErrorName() string
 } = UpdateUserPasswordReplyValidationError{}
 
-// Validate checks the field values on
-// UpdateUserSystemNotifySettingRequest with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
+// Validate checks the field values on UpdateUserSystemNotifySettingRequest
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the first error encountered is returned, or nil if
+// there are no violations.
 func (m *UpdateUserSystemNotifySettingRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on
-// UpdateUserSystemNotifySettingRequest with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in
+// ValidateAll checks the field values on UpdateUserSystemNotifySettingRequest
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the result is a list of violation errors wrapped in
 // UpdateUserSystemNotifySettingRequestMultiError, or nil if none found.
 func (m *UpdateUserSystemNotifySettingRequest) ValidateAll() error {
 	return m.validate(true)
@@ -752,8 +751,8 @@ func (m *UpdateUserSystemNotifySettingRequest) validate(all bool) error {
 	return nil
 }
 
-// UpdateUserSystemNotifySettingRequestMultiError is an error wrapping
-// multiple validation errors returned by
+// UpdateUserSystemNotifySettingRequestMultiError is an error wrapping multiple
+// validation errors returned by
 // UpdateUserSystemNotifySettingRequest.ValidateAll() if the designated
 // constraints aren't met.
 type UpdateUserSystemNotifySettingRequestMultiError []error
@@ -770,9 +769,9 @@ func (m UpdateUserSystemNotifySettingRequestMultiError) Error() string {
 // AllErrors returns a list of validation violation errors.
 func (m UpdateUserSystemNotifySettingRequestMultiError) AllErrors() []error { return m }
 
-// UpdateUserSystemNotifySettingRequestValidationError is the validation
-// error returned by UpdateUserSystemNotifySettingRequest.Validate if
-// the designated constraints aren't met.
+// UpdateUserSystemNotifySettingRequestValidationError is the validation error
+// returned by UpdateUserSystemNotifySettingRequest.Validate if the designated
+// constraints aren't met.
 type UpdateUserSystemNotifySettingRequestValidationError struct {
 	field  string
 	reason string
@@ -827,18 +826,17 @@ var _ interface {
 	ErrorName() string
 } = UpdateUserSystemNotifySettingRequestValidationError{}
 
-// Validate checks the field values on
-// UpdateUserSystemNotifySettingReply with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
+// Validate checks the field values on UpdateUserSystemNotifySettingReply with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the first error encountered is returned, or nil if there are
+// no violations.
 func (m *UpdateUserSystemNotifySettingReply) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on
-// UpdateUserSystemNotifySettingReply with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in
+// ValidateAll checks the field values on UpdateUserSystemNotifySettingReply
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the result is a list of violation errors wrapped in
 // UpdateUserSystemNotifySettingReplyMultiError, or nil if none found.
 func (m *UpdateUserSystemNotifySettingReply) ValidateAll() error {
 	return m.validate(true)
@@ -866,8 +864,8 @@ func (m *UpdateUserSystemNotifySettingReply) validate(all bool) error {
 	return nil
 }
 
-// UpdateUserSystemNotifySettingReplyMultiError is an error wrapping
-// multiple validation errors returned by
+// UpdateUserSystemNotifySettingReplyMultiError is an error wrapping multiple
+// validation errors returned by
 // UpdateUserSystemNotifySettingReply.ValidateAll() if the designated
 // constraints aren't met.
 type UpdateUserSystemNotifySettingReplyMultiError []error
@@ -884,9 +882,9 @@ func (m UpdateUserSystemNotifySettingReplyMultiError) Error() string {
 // AllErrors returns a list of validation violation errors.
 func (m UpdateUserSystemNotifySettingReplyMultiError) AllErrors() []error { return m }
 
-// UpdateUserSystemNotifySettingReplyValidationError is the validation
-// error returned by UpdateUserSystemNotifySettingReply.Validate if the
-// designated constraints aren't met.
+// UpdateUserSystemNotifySettingReplyValidationError is the validation error
+// returned by UpdateUserSystemNotifySettingReply.Validate if the designated
+// constraints aren't met.
 type UpdateUserSystemNotifySettingReplyValidationError struct {
 	field  string
 	reason string
@@ -941,18 +939,18 @@ var _ interface {
 	ErrorName() string
 } = UpdateUserSystemNotifySettingReplyValidationError{}
 
-// Validate checks the field values on
-// UpdateUserInteractNotifySettingRequest with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
+// Validate checks the field values on UpdateUserInteractNotifySettingRequest
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the first error encountered is returned, or nil if
+// there are no violations.
 func (m *UpdateUserInteractNotifySettingRequest) Validate() error {
 	return m.validate(false)
 }
 
 // ValidateAll checks the field values on
-// UpdateUserInteractNotifySettingRequest with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in
+// UpdateUserInteractNotifySettingRequest with the rules defined in the proto
+// definition for this message. If any rules are violated, the result is a
+// list of violation errors wrapped in
 // UpdateUserInteractNotifySettingRequestMultiError, or nil if none found.
 func (m *UpdateUserInteractNotifySettingRequest) ValidateAll() error {
 	return m.validate(true)
@@ -976,8 +974,8 @@ func (m *UpdateUserInteractNotifySettingRequest) validate(all bool) error {
 
 // UpdateUserInteractNotifySettingRequestMultiError is an error wrapping
 // multiple validation errors returned by
-// UpdateUserInteractNotifySettingRequest.ValidateAll() if the
-// designated constraints aren't met.
+// UpdateUserInteractNotifySettingRequest.ValidateAll() if the designated
+// constraints aren't met.
 type UpdateUserInteractNotifySettingRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
@@ -992,10 +990,9 @@ func (m UpdateUserInteractNotifySettingRequestMultiError) Error() string {
 // AllErrors returns a list of validation violation errors.
 func (m UpdateUserInteractNotifySettingRequestMultiError) AllErrors() []error { return m }
 
-// UpdateUserInteractNotifySettingRequestValidationError is the
-// validation error returned by
-// UpdateUserInteractNotifySettingRequest.Validate if the designated
-// constraints aren't met.
+// UpdateUserInteractNotifySettingRequestValidationError is the validation
+// error returned by UpdateUserInteractNotifySettingRequest.Validate if the
+// designated constraints aren't met.
 type UpdateUserInteractNotifySettingRequestValidationError struct {
 	field  string
 	reason string
@@ -1007,9 +1004,7 @@ type UpdateUserInteractNotifySettingRequestValidationError struct {
 func (e UpdateUserInteractNotifySettingRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e UpdateUserInteractNotifySettingRequestValidationError) Reason() string {
-	return e.reason
-}
+func (e UpdateUserInteractNotifySettingRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
 func (e UpdateUserInteractNotifySettingRequestValidationError) Cause() error { return e.cause }
@@ -1052,18 +1047,17 @@ var _ interface {
 	ErrorName() string
 } = UpdateUserInteractNotifySettingRequestValidationError{}
 
-// Validate checks the field values on
-// UpdateUserInteractNotifySettingReply with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
+// Validate checks the field values on UpdateUserInteractNotifySettingReply
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the first error encountered is returned, or nil if
+// there are no violations.
 func (m *UpdateUserInteractNotifySettingReply) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on
-// UpdateUserInteractNotifySettingReply with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in
+// ValidateAll checks the field values on UpdateUserInteractNotifySettingReply
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the result is a list of violation errors wrapped in
 // UpdateUserInteractNotifySettingReplyMultiError, or nil if none found.
 func (m *UpdateUserInteractNotifySettingReply) ValidateAll() error {
 	return m.validate(true)
@@ -1091,8 +1085,8 @@ func (m *UpdateUserInteractNotifySettingReply) validate(all bool) error {
 	return nil
 }
 
-// UpdateUserInteractNotifySettingReplyMultiError is an error wrapping
-// multiple validation errors returned by
+// UpdateUserInteractNotifySettingReplyMultiError is an error wrapping multiple
+// validation errors returned by
 // UpdateUserInteractNotifySettingReply.ValidateAll() if the designated
 // constraints aren't met.
 type UpdateUserInteractNotifySettingReplyMultiError []error
@@ -1109,9 +1103,9 @@ func (m UpdateUserInteractNotifySettingReplyMultiError) Error() string {
 // AllErrors returns a list of validation violation errors.
 func (m UpdateUserInteractNotifySettingReplyMultiError) AllErrors() []error { return m }
 
-// UpdateUserInteractNotifySettingReplyValidationError is the validation
-// error returned by UpdateUserInteractNotifySettingReply.Validate if
-// the designated constraints aren't met.
+// UpdateUserInteractNotifySettingReplyValidationError is the validation error
+// returned by UpdateUserInteractNotifySettingReply.Validate if the designated
+// constraints aren't met.
 type UpdateUserInteractNotifySettingReplyValidationError struct {
 	field  string
 	reason string
@@ -1166,18 +1160,17 @@ var _ interface {
 	ErrorName() string
 } = UpdateUserInteractNotifySettingReplyValidationError{}
 
-// Validate checks the field values on
-// UpdateUserAdoptNotifySettingRequest with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
+// Validate checks the field values on UpdateUserAdoptNotifySettingRequest with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the first error encountered is returned, or nil if there are
+// no violations.
 func (m *UpdateUserAdoptNotifySettingRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on
-// UpdateUserAdoptNotifySettingRequest with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in
+// ValidateAll checks the field values on UpdateUserAdoptNotifySettingRequest
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the result is a list of violation errors wrapped in
 // UpdateUserAdoptNotifySettingRequestMultiError, or nil if none found.
 func (m *UpdateUserAdoptNotifySettingRequest) ValidateAll() error {
 	return m.validate(true)
@@ -1199,8 +1192,8 @@ func (m *UpdateUserAdoptNotifySettingRequest) validate(all bool) error {
 	return nil
 }
 
-// UpdateUserAdoptNotifySettingRequestMultiError is an error wrapping
-// multiple validation errors returned by
+// UpdateUserAdoptNotifySettingRequestMultiError is an error wrapping multiple
+// validation errors returned by
 // UpdateUserAdoptNotifySettingRequest.ValidateAll() if the designated
 // constraints aren't met.
 type UpdateUserAdoptNotifySettingRequestMultiError []error
@@ -1217,9 +1210,9 @@ func (m UpdateUserAdoptNotifySettingRequestMultiError) Error() string {
 // AllErrors returns a list of validation violation errors.
 func (m UpdateUserAdoptNotifySettingRequestMultiError) AllErrors() []error { return m }
 
-// UpdateUserAdoptNotifySettingRequestValidationError is the validation
-// error returned by UpdateUserAdoptNotifySettingRequest.Validate if
-// the designated constraints aren't met.
+// UpdateUserAdoptNotifySettingRequestValidationError is the validation error
+// returned by UpdateUserAdoptNotifySettingRequest.Validate if the designated
+// constraints aren't met.
 type UpdateUserAdoptNotifySettingRequestValidationError struct {
 	field  string
 	reason string
@@ -1274,18 +1267,17 @@ var _ interface {
 	ErrorName() string
 } = UpdateUserAdoptNotifySettingRequestValidationError{}
 
-// Validate checks the field values on UpdateUserAdoptNotifySettingReply
-// with the rules defined in the proto definition for this message. If any
-// rules are violated, the first error encountered is returned, or nil if
-// there are no violations.
+// Validate checks the field values on UpdateUserAdoptNotifySettingReply with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the first error encountered is returned, or nil if there are
+// no violations.
 func (m *UpdateUserAdoptNotifySettingReply) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on
-// UpdateUserAdoptNotifySettingReply with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in
+// ValidateAll checks the field values on UpdateUserAdoptNotifySettingReply
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the result is a list of violation errors wrapped in
 // UpdateUserAdoptNotifySettingReplyMultiError, or nil if none found.
 func (m *UpdateUserAdoptNotifySettingReply) ValidateAll() error {
 	return m.validate(true)
@@ -1313,8 +1305,8 @@ func (m *UpdateUserAdoptNotifySettingReply) validate(all bool) error {
 	return nil
 }
 
-// UpdateUserAdoptNotifySettingReplyMultiError is an error wrapping
-// multiple validation errors returned by
+// UpdateUserAdoptNotifySettingReplyMultiError is an error wrapping multiple
+// validation errors returned by
 // UpdateUserAdoptNotifySettingReply.ValidateAll() if the designated
 // constraints aren't met.
 type UpdateUserAdoptNotifySettingReplyMultiError []error
@@ -1331,9 +1323,9 @@ func (m UpdateUserAdoptNotifySettingReplyMultiError) Error() string {
 // AllErrors returns a list of validation violation errors.
 func (m UpdateUserAdoptNotifySettingReplyMultiError) AllErrors() []error { return m }
 
-// UpdateUserAdoptNotifySettingReplyValidationError is the validation
-// error returned by UpdateUserAdoptNotifySettingReply.Validate if the
-// designated constraints aren't met.
+// UpdateUserAdoptNotifySettingReplyValidationError is the validation error
+// returned by UpdateUserAdoptNotifySettingReply.Validate if the designated
+// constraints aren't met.
 type UpdateUserAdoptNotifySettingReplyValidationError struct {
 	field  string
 	reason string
@@ -1388,18 +1380,17 @@ var _ interface {
 	ErrorName() string
 } = UpdateUserAdoptNotifySettingReplyValidationError{}
 
-// Validate checks the field values on
-// UpdateUserEmailNotifySettingRequest with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
+// Validate checks the field values on UpdateUserEmailNotifySettingRequest with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the first error encountered is returned, or nil if there are
+// no violations.
 func (m *UpdateUserEmailNotifySettingRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on
-// UpdateUserEmailNotifySettingRequest with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in
+// ValidateAll checks the field values on UpdateUserEmailNotifySettingRequest
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the result is a list of violation errors wrapped in
 // UpdateUserEmailNotifySettingRequestMultiError, or nil if none found.
 func (m *UpdateUserEmailNotifySettingRequest) ValidateAll() error {
 	return m.validate(true)
@@ -1421,8 +1412,8 @@ func (m *UpdateUserEmailNotifySettingRequest) validate(all bool) error {
 	return nil
 }
 
-// UpdateUserEmailNotifySettingRequestMultiError is an error wrapping
-// multiple validation errors returned by
+// UpdateUserEmailNotifySettingRequestMultiError is an error wrapping multiple
+// validation errors returned by
 // UpdateUserEmailNotifySettingRequest.ValidateAll() if the designated
 // constraints aren't met.
 type UpdateUserEmailNotifySettingRequestMultiError []error
@@ -1439,9 +1430,9 @@ func (m UpdateUserEmailNotifySettingRequestMultiError) Error() string {
 // AllErrors returns a list of validation violation errors.
 func (m UpdateUserEmailNotifySettingRequestMultiError) AllErrors() []error { return m }
 
-// UpdateUserEmailNotifySettingRequestValidationError is the validation
-// error returned by UpdateUserEmailNotifySettingRequest.Validate if
-// the designated constraints aren't met.
+// UpdateUserEmailNotifySettingRequestValidationError is the validation error
+// returned by UpdateUserEmailNotifySettingRequest.Validate if the designated
+// constraints aren't met.
 type UpdateUserEmailNotifySettingRequestValidationError struct {
 	field  string
 	reason string
@@ -1496,18 +1487,17 @@ var _ interface {
 	ErrorName() string
 } = UpdateUserEmailNotifySettingRequestValidationError{}
 
-// Validate checks the field values on UpdateUserEmailNotifySettingReply
-// with the rules defined in the proto definition for this message. If any
-// rules are violated, the first error encountered is returned, or nil if
-// there are no violations.
+// Validate checks the field values on UpdateUserEmailNotifySettingReply with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the first error encountered is returned, or nil if there are
+// no violations.
 func (m *UpdateUserEmailNotifySettingReply) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on
-// UpdateUserEmailNotifySettingReply with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in
+// ValidateAll checks the field values on UpdateUserEmailNotifySettingReply
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the result is a list of violation errors wrapped in
 // UpdateUserEmailNotifySettingReplyMultiError, or nil if none found.
 func (m *UpdateUserEmailNotifySettingReply) ValidateAll() error {
 	return m.validate(true)
@@ -1535,8 +1525,8 @@ func (m *UpdateUserEmailNotifySettingReply) validate(all bool) error {
 	return nil
 }
 
-// UpdateUserEmailNotifySettingReplyMultiError is an error wrapping
-// multiple validation errors returned by
+// UpdateUserEmailNotifySettingReplyMultiError is an error wrapping multiple
+// validation errors returned by
 // UpdateUserEmailNotifySettingReply.ValidateAll() if the designated
 // constraints aren't met.
 type UpdateUserEmailNotifySettingReplyMultiError []error
@@ -1553,9 +1543,9 @@ func (m UpdateUserEmailNotifySettingReplyMultiError) Error() string {
 // AllErrors returns a list of validation violation errors.
 func (m UpdateUserEmailNotifySettingReplyMultiError) AllErrors() []error { return m }
 
-// UpdateUserEmailNotifySettingReplyValidationError is the validation
-// error returned by UpdateUserEmailNotifySettingReply.Validate if the
-// designated constraints aren't met.
+// UpdateUserEmailNotifySettingReplyValidationError is the validation error
+// returned by UpdateUserEmailNotifySettingReply.Validate if the designated
+// constraints aren't met.
 type UpdateUserEmailNotifySettingReplyValidationError struct {
 	field  string
 	reason string
