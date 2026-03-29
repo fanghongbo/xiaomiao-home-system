@@ -62,6 +62,127 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.user.v1.MpLoginReply'
+    /api/v1/publish:
+        post:
+            tags:
+                - Publish
+            description: CreatePublish 创建发布内容
+            operationId: Publish_CreatePublish
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.publish.v1.CreatePublishRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.publish.v1.CreatePublishReply'
+    /api/v1/publish/list:
+        get:
+            tags:
+                - Publish
+            description: GetPublishList 查询发布内容列表
+            operationId: Publish_GetPublishList
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: string
+                - name: size
+                  in: query
+                  schema:
+                    type: string
+                - name: status
+                  in: query
+                  schema:
+                    type: string
+                - name: startTime
+                  in: query
+                  schema:
+                    type: string
+                - name: endTime
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.publish.v1.GetPublishListReply'
+    /api/v1/publish/status/{id}:
+        put:
+            tags:
+                - Publish
+            description: UpdatePublishStatus 更新发布内容状态
+            operationId: Publish_UpdatePublishStatus
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.publish.v1.UpdatePublishStatusRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.publish.v1.UpdatePublishStatusReply'
+    /api/v1/publish/{id}:
+        put:
+            tags:
+                - Publish
+            description: UpdateUser 更新发布内容
+            operationId: Publish_UpdatePublish
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.publish.v1.UpdatePublishRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.publish.v1.UpdatePublishReply'
+        delete:
+            tags:
+                - Publish
+            description: DeletePublish 删除发布内容
+            operationId: Publish_DeletePublish
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.publish.v1.DeletePublishReply'
     /api/v1/role:
         post:
             tags:
@@ -617,6 +738,145 @@ components:
                     type: string
                     description: 文件二进制内容
                     format: bytes
+        api.publish.v1.CreatePublishReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: string
+        api.publish.v1.CreatePublishRequest:
+            type: object
+            properties:
+                title:
+                    type: string
+                publishType:
+                    type: integer
+                    format: int32
+                provinceId:
+                    type: integer
+                    format: int32
+                cityId:
+                    type: integer
+                    format: int32
+                address:
+                    type: string
+                remark:
+                    type: string
+                catType:
+                    type: integer
+                    format: int32
+                catBreed:
+                    type: integer
+                    format: int32
+                catGender:
+                    type: integer
+                    format: int32
+        api.publish.v1.DeletePublishReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: string
+        api.publish.v1.GetPublishListReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    $ref: '#/components/schemas/api.publish.v1.PublishList'
+        api.publish.v1.PublishList:
+            type: object
+            properties:
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.publish.v1.PublishListItem'
+                total:
+                    type: string
+        api.publish.v1.PublishListItem:
+            type: object
+            properties:
+                id:
+                    type: string
+                title:
+                    type: string
+                publishStatus:
+                    type: integer
+                    format: int32
+                auditStatus:
+                    type: integer
+                    format: int32
+                remark:
+                    type: string
+                createdTime:
+                    type: string
+                updatedTime:
+                    type: string
+        api.publish.v1.UpdatePublishReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: string
+        api.publish.v1.UpdatePublishRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                publishName:
+                    type: string
+                status:
+                    type: integer
+                    format: int32
+                remark:
+                    type: string
+                permissions:
+                    type: array
+                    items:
+                        type: string
+        api.publish.v1.UpdatePublishStatusReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: string
+        api.publish.v1.UpdatePublishStatusRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                status:
+                    type: integer
+                    format: int32
         api.role.v1.CreateRoleReply:
             type: object
             properties:
@@ -1145,6 +1405,7 @@ components:
                     type: string
 tags:
     - name: File
+    - name: Publish
     - name: Role
     - name: User
     - name: UserNotification

@@ -1,0 +1,144 @@
+syntax = "proto3";
+
+package api.publish.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "xiaomiao-home-system/api/publish/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.publish.v1";
+option java_outer_classname = "PublishProtoV1";
+
+service Publish {
+	// GetPublishList 查询发布内容列表
+	rpc GetPublishList (GetPublishListRequest) returns (GetPublishListReply) {
+		option (google.api.http) = {
+			get: "/api/v1/publish/list",
+		};
+	}
+
+	// CreatePublish 创建发布内容
+	rpc CreatePublish (CreatePublishRequest) returns (CreatePublishReply) {
+		option (google.api.http) = {
+			post: "/api/v1/publish",
+			body: "*"
+		};	
+	}
+
+	// UpdateUser 更新发布内容
+	rpc UpdatePublish (UpdatePublishRequest) returns (UpdatePublishReply) {
+		option (google.api.http) = {
+			put: "/api/v1/publish/{id}",
+			body: "*"
+		};	
+	}
+
+	// DeletePublish 删除发布内容
+	rpc DeletePublish (DeletePublishRequest) returns (DeletePublishReply) {
+		option (google.api.http) = {
+			delete: "/api/v1/publish/{id}"
+		};	
+	}
+
+	// UpdatePublishStatus 更新发布内容状态
+	rpc UpdatePublishStatus (UpdatePublishStatusRequest) returns (UpdatePublishStatusReply) {
+		option (google.api.http) = {
+			put: "/api/v1/publish/status/{id}",
+			body: "*"
+		};	
+	}
+}
+
+// 基础请求体
+message BaseRequest {}
+
+// 基础响应体
+message BaseResponse {}
+
+message GetPublishListRequest {
+	int64 page = 1 [(validate.rules).int64 = {gte: 1}];
+	int64 size = 2 [(validate.rules).int64 = {gte: 10, lte: 200}];
+	string status = 3;
+	int64 startTime = 4;
+	int64 endTime = 5;
+}
+
+message PublishListItem {
+	int64 id = 1;
+	string title = 2;
+	int32 publish_status = 3;
+	int32 audit_status = 4;
+	string remark = 5;
+	string createdTime = 6;
+	string updatedTime = 7;
+}
+
+message PublishList {
+	repeated PublishListItem items = 1;
+	int64 total = 2;
+}
+
+message GetPublishListReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	PublishList data = 4;
+}
+
+message CreatePublishRequest {
+	string title = 1 [(validate.rules).string = {min_len: 1}];
+	int32 publishType = 2 [(validate.rules).int32 = { gte: 0, lte: 4 }];
+	int32 provinceId = 3 [(validate.rules).int32 = { gte: 0 }];
+	int32 cityId = 4 [(validate.rules).int32 = { gte: 0  }];
+	string address = 5 [(validate.rules).string = {min_len: 1}];
+	string remark = 6 [(validate.rules).string = {min_len: 1}];
+	int32 catType = 7 [(validate.rules).int32 = { gte: 1, lte: 2 }];
+	int32 catBreed = 8 [(validate.rules).int32 = { gte: 0, lte: 20 }];
+	int32 catGender = 9 [(validate.rules).int32 = { gte: 0, lte: 2 }];
+}
+
+message CreatePublishReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	string data = 4;
+}
+
+message UpdatePublishRequest {
+	int64 id = 1 [(validate.rules).int64 = {gt: 0}];
+	string publishName = 2 [(validate.rules).string = {min_len: 1}];
+	int32 status = 3;
+	string remark = 4;
+	repeated string permissions = 5;
+}
+
+message UpdatePublishReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	string data = 4;
+}
+
+message DeletePublishRequest {
+	int64 id = 1 [(validate.rules).int64 = {gt: 0}];
+}
+
+message DeletePublishReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	string data = 4;
+}
+
+message UpdatePublishStatusRequest {
+	int64 id = 1 [(validate.rules).int64 = {gt: 0}];
+	int32 status = 2;
+}
+
+message UpdatePublishStatusReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	string data = 4;
+}

@@ -290,6 +290,12 @@ func (m *UpdateUserBaseSettingRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	// no validation rules for ProvinceId
+
+	// no validation rules for CityId
+
+	// no validation rules for Address
+
 	if len(errors) > 0 {
 		return UpdateUserBaseSettingRequestMultiError(errors)
 	}

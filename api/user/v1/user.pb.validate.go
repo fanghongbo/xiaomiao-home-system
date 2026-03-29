@@ -727,6 +727,12 @@ func (m *UserInfo) validate(all bool) error {
 
 	// no validation rules for Signature
 
+	// no validation rules for ProvinceId
+
+	// no validation rules for CityId
+
+	// no validation rules for Address
+
 	// no validation rules for Status
 
 	if len(errors) > 0 {
@@ -1444,6 +1450,12 @@ func (m *WebLoginUserInfo) validate(all bool) error {
 	// no validation rules for Birthday
 
 	// no validation rules for Signature
+
+	// no validation rules for ProvinceId
+
+	// no validation rules for CityId
+
+	// no validation rules for Address
 
 	if len(errors) > 0 {
 		return WebLoginUserInfoMultiError(errors)
