@@ -42,7 +42,7 @@ paths:
                   schema:
                     type: integer
                     format: int32
-                - name: c_type
+                - name: cType
                   in: query
                   schema:
                     type: integer
@@ -142,7 +142,6 @@ paths:
                     format: int32
                 - name: pType
                   in: query
-                  description: 使用 snake_case 字段名，确保 HTTP BindQuery 可用 p_type 绑定
                   schema:
                     type: integer
                     format: int32

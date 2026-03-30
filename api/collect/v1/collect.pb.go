@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v6.30.2
-// source: api/collect/v1/collect.proto
+// source: collect/v1/collect.proto
 
 package v1
 
@@ -32,7 +32,7 @@ type BaseRequest struct {
 
 func (x *BaseRequest) Reset() {
 	*x = BaseRequest{}
-	mi := &file_api_collect_v1_collect_proto_msgTypes[0]
+	mi := &file_collect_v1_collect_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -44,7 +44,7 @@ func (x *BaseRequest) String() string {
 func (*BaseRequest) ProtoMessage() {}
 
 func (x *BaseRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_collect_v1_collect_proto_msgTypes[0]
+	mi := &file_collect_v1_collect_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -57,7 +57,7 @@ func (x *BaseRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BaseRequest.ProtoReflect.Descriptor instead.
 func (*BaseRequest) Descriptor() ([]byte, []int) {
-	return file_api_collect_v1_collect_proto_rawDescGZIP(), []int{0}
+	return file_collect_v1_collect_proto_rawDescGZIP(), []int{0}
 }
 
 // 基础响应体
@@ -69,7 +69,7 @@ type BaseResponse struct {
 
 func (x *BaseResponse) Reset() {
 	*x = BaseResponse{}
-	mi := &file_api_collect_v1_collect_proto_msgTypes[1]
+	mi := &file_collect_v1_collect_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -81,7 +81,7 @@ func (x *BaseResponse) String() string {
 func (*BaseResponse) ProtoMessage() {}
 
 func (x *BaseResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_collect_v1_collect_proto_msgTypes[1]
+	mi := &file_collect_v1_collect_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -94,21 +94,21 @@ func (x *BaseResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BaseResponse.ProtoReflect.Descriptor instead.
 func (*BaseResponse) Descriptor() ([]byte, []int) {
-	return file_api_collect_v1_collect_proto_rawDescGZIP(), []int{1}
+	return file_collect_v1_collect_proto_rawDescGZIP(), []int{1}
 }
 
 type GetCollectListRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Page          int32                  `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`
 	Size          int32                  `protobuf:"varint,2,opt,name=size,proto3" json:"size,omitempty"`
-	CType         int32                  `protobuf:"varint,3,opt,name=c_type,proto3" json:"c_type,omitempty"`
+	CType         int32                  `protobuf:"varint,3,opt,name=c_type,json=cType,proto3" json:"c_type,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GetCollectListRequest) Reset() {
 	*x = GetCollectListRequest{}
-	mi := &file_api_collect_v1_collect_proto_msgTypes[2]
+	mi := &file_collect_v1_collect_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -120,7 +120,7 @@ func (x *GetCollectListRequest) String() string {
 func (*GetCollectListRequest) ProtoMessage() {}
 
 func (x *GetCollectListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_collect_v1_collect_proto_msgTypes[2]
+	mi := &file_collect_v1_collect_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -133,7 +133,7 @@ func (x *GetCollectListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCollectListRequest.ProtoReflect.Descriptor instead.
 func (*GetCollectListRequest) Descriptor() ([]byte, []int) {
-	return file_api_collect_v1_collect_proto_rawDescGZIP(), []int{2}
+	return file_collect_v1_collect_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *GetCollectListRequest) GetPage() int32 {
@@ -173,7 +173,7 @@ type CollectListItem struct {
 
 func (x *CollectListItem) Reset() {
 	*x = CollectListItem{}
-	mi := &file_api_collect_v1_collect_proto_msgTypes[3]
+	mi := &file_collect_v1_collect_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -185,7 +185,7 @@ func (x *CollectListItem) String() string {
 func (*CollectListItem) ProtoMessage() {}
 
 func (x *CollectListItem) ProtoReflect() protoreflect.Message {
-	mi := &file_api_collect_v1_collect_proto_msgTypes[3]
+	mi := &file_collect_v1_collect_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -198,7 +198,7 @@ func (x *CollectListItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CollectListItem.ProtoReflect.Descriptor instead.
 func (*CollectListItem) Descriptor() ([]byte, []int) {
-	return file_api_collect_v1_collect_proto_rawDescGZIP(), []int{3}
+	return file_collect_v1_collect_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *CollectListItem) GetId() int64 {
@@ -267,7 +267,7 @@ type CollectList struct {
 
 func (x *CollectList) Reset() {
 	*x = CollectList{}
-	mi := &file_api_collect_v1_collect_proto_msgTypes[4]
+	mi := &file_collect_v1_collect_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -279,7 +279,7 @@ func (x *CollectList) String() string {
 func (*CollectList) ProtoMessage() {}
 
 func (x *CollectList) ProtoReflect() protoreflect.Message {
-	mi := &file_api_collect_v1_collect_proto_msgTypes[4]
+	mi := &file_collect_v1_collect_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -292,7 +292,7 @@ func (x *CollectList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CollectList.ProtoReflect.Descriptor instead.
 func (*CollectList) Descriptor() ([]byte, []int) {
-	return file_api_collect_v1_collect_proto_rawDescGZIP(), []int{4}
+	return file_collect_v1_collect_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *CollectList) GetItems() []*CollectListItem {
@@ -321,7 +321,7 @@ type GetCollectListReply struct {
 
 func (x *GetCollectListReply) Reset() {
 	*x = GetCollectListReply{}
-	mi := &file_api_collect_v1_collect_proto_msgTypes[5]
+	mi := &file_collect_v1_collect_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -333,7 +333,7 @@ func (x *GetCollectListReply) String() string {
 func (*GetCollectListReply) ProtoMessage() {}
 
 func (x *GetCollectListReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_collect_v1_collect_proto_msgTypes[5]
+	mi := &file_collect_v1_collect_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -346,7 +346,7 @@ func (x *GetCollectListReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCollectListReply.ProtoReflect.Descriptor instead.
 func (*GetCollectListReply) Descriptor() ([]byte, []int) {
-	return file_api_collect_v1_collect_proto_rawDescGZIP(), []int{5}
+	return file_collect_v1_collect_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *GetCollectListReply) GetCode() int32 {
@@ -385,7 +385,7 @@ type GetCollectTypesRequest struct {
 
 func (x *GetCollectTypesRequest) Reset() {
 	*x = GetCollectTypesRequest{}
-	mi := &file_api_collect_v1_collect_proto_msgTypes[6]
+	mi := &file_collect_v1_collect_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -397,7 +397,7 @@ func (x *GetCollectTypesRequest) String() string {
 func (*GetCollectTypesRequest) ProtoMessage() {}
 
 func (x *GetCollectTypesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_collect_v1_collect_proto_msgTypes[6]
+	mi := &file_collect_v1_collect_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -410,7 +410,7 @@ func (x *GetCollectTypesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCollectTypesRequest.ProtoReflect.Descriptor instead.
 func (*GetCollectTypesRequest) Descriptor() ([]byte, []int) {
-	return file_api_collect_v1_collect_proto_rawDescGZIP(), []int{6}
+	return file_collect_v1_collect_proto_rawDescGZIP(), []int{6}
 }
 
 type GetCollectTypesReply struct {
@@ -425,7 +425,7 @@ type GetCollectTypesReply struct {
 
 func (x *GetCollectTypesReply) Reset() {
 	*x = GetCollectTypesReply{}
-	mi := &file_api_collect_v1_collect_proto_msgTypes[7]
+	mi := &file_collect_v1_collect_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -437,7 +437,7 @@ func (x *GetCollectTypesReply) String() string {
 func (*GetCollectTypesReply) ProtoMessage() {}
 
 func (x *GetCollectTypesReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_collect_v1_collect_proto_msgTypes[7]
+	mi := &file_collect_v1_collect_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -450,7 +450,7 @@ func (x *GetCollectTypesReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCollectTypesReply.ProtoReflect.Descriptor instead.
 func (*GetCollectTypesReply) Descriptor() ([]byte, []int) {
-	return file_api_collect_v1_collect_proto_rawDescGZIP(), []int{7}
+	return file_collect_v1_collect_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *GetCollectTypesReply) GetCode() int32 {
@@ -481,19 +481,19 @@ func (x *GetCollectTypesReply) GetData() []int64 {
 	return nil
 }
 
-var File_api_collect_v1_collect_proto protoreflect.FileDescriptor
+var File_collect_v1_collect_proto protoreflect.FileDescriptor
 
-const file_api_collect_v1_collect_proto_rawDesc = "" +
+const file_collect_v1_collect_proto_rawDesc = "" +
 	"\n" +
-	"\x1capi/collect/v1/collect.proto\x12\x0eapi.collect.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\"\r\n" +
+	"\x18collect/v1/collect.proto\x12\x0eapi.collect.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\"\r\n" +
 	"\vBaseRequest\"\x0e\n" +
-	"\fBaseResponse\"w\n" +
+	"\fBaseResponse\"v\n" +
 	"\x15GetCollectListRequest\x12\x1b\n" +
 	"\x04page\x18\x01 \x01(\x05B\a\xfaB\x04\x1a\x02(\x01R\x04page\x12\x1e\n" +
 	"\x04size\x18\x02 \x01(\x05B\n" +
 	"\xfaB\a\x1a\x05\x18\xc8\x01(\n" +
-	"R\x04size\x12!\n" +
-	"\x06c_type\x18\x03 \x01(\x05B\t\xfaB\x06\x1a\x04\x18\x14(\x00R\x06c_type\"\xfb\x01\n" +
+	"R\x04size\x12 \n" +
+	"\x06c_type\x18\x03 \x01(\x05B\t\xfaB\x06\x1a\x04\x18\x14(\x00R\x05cType\"\xfb\x01\n" +
 	"\x0fCollectListItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x14\n" +
 	"\x05title\x18\x02 \x01(\tR\x05title\x12$\n" +
@@ -525,19 +525,19 @@ const file_api_collect_v1_collect_proto_rawDesc = "" +
 	"\x0eapi.collect.v1B\x0eCollectProtoV1P\x01Z&xiaomiao-home-system/api/collect/v1;v1b\x06proto3"
 
 var (
-	file_api_collect_v1_collect_proto_rawDescOnce sync.Once
-	file_api_collect_v1_collect_proto_rawDescData []byte
+	file_collect_v1_collect_proto_rawDescOnce sync.Once
+	file_collect_v1_collect_proto_rawDescData []byte
 )
 
-func file_api_collect_v1_collect_proto_rawDescGZIP() []byte {
-	file_api_collect_v1_collect_proto_rawDescOnce.Do(func() {
-		file_api_collect_v1_collect_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_api_collect_v1_collect_proto_rawDesc), len(file_api_collect_v1_collect_proto_rawDesc)))
+func file_collect_v1_collect_proto_rawDescGZIP() []byte {
+	file_collect_v1_collect_proto_rawDescOnce.Do(func() {
+		file_collect_v1_collect_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_collect_v1_collect_proto_rawDesc), len(file_collect_v1_collect_proto_rawDesc)))
 	})
-	return file_api_collect_v1_collect_proto_rawDescData
+	return file_collect_v1_collect_proto_rawDescData
 }
 
-var file_api_collect_v1_collect_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
-var file_api_collect_v1_collect_proto_goTypes = []any{
+var file_collect_v1_collect_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_collect_v1_collect_proto_goTypes = []any{
 	(*BaseRequest)(nil),            // 0: api.collect.v1.BaseRequest
 	(*BaseResponse)(nil),           // 1: api.collect.v1.BaseResponse
 	(*GetCollectListRequest)(nil),  // 2: api.collect.v1.GetCollectListRequest
@@ -547,7 +547,7 @@ var file_api_collect_v1_collect_proto_goTypes = []any{
 	(*GetCollectTypesRequest)(nil), // 6: api.collect.v1.GetCollectTypesRequest
 	(*GetCollectTypesReply)(nil),   // 7: api.collect.v1.GetCollectTypesReply
 }
-var file_api_collect_v1_collect_proto_depIdxs = []int32{
+var file_collect_v1_collect_proto_depIdxs = []int32{
 	3, // 0: api.collect.v1.CollectList.items:type_name -> api.collect.v1.CollectListItem
 	4, // 1: api.collect.v1.GetCollectListReply.data:type_name -> api.collect.v1.CollectList
 	2, // 2: api.collect.v1.Collect.GetCollectList:input_type -> api.collect.v1.GetCollectListRequest
@@ -561,26 +561,26 @@ var file_api_collect_v1_collect_proto_depIdxs = []int32{
 	0, // [0:2] is the sub-list for field type_name
 }
 
-func init() { file_api_collect_v1_collect_proto_init() }
-func file_api_collect_v1_collect_proto_init() {
-	if File_api_collect_v1_collect_proto != nil {
+func init() { file_collect_v1_collect_proto_init() }
+func file_collect_v1_collect_proto_init() {
+	if File_collect_v1_collect_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_collect_v1_collect_proto_rawDesc), len(file_api_collect_v1_collect_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_collect_v1_collect_proto_rawDesc), len(file_collect_v1_collect_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_api_collect_v1_collect_proto_goTypes,
-		DependencyIndexes: file_api_collect_v1_collect_proto_depIdxs,
-		MessageInfos:      file_api_collect_v1_collect_proto_msgTypes,
+		GoTypes:           file_collect_v1_collect_proto_goTypes,
+		DependencyIndexes: file_collect_v1_collect_proto_depIdxs,
+		MessageInfos:      file_collect_v1_collect_proto_msgTypes,
 	}.Build()
-	File_api_collect_v1_collect_proto = out.File
-	file_api_collect_v1_collect_proto_goTypes = nil
-	file_api_collect_v1_collect_proto_depIdxs = nil
+	File_collect_v1_collect_proto = out.File
+	file_collect_v1_collect_proto_goTypes = nil
+	file_collect_v1_collect_proto_depIdxs = nil
 }
