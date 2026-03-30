@@ -91,23 +91,18 @@ paths:
                 - name: page
                   in: query
                   schema:
-                    type: string
+                    type: integer
+                    format: int32
                 - name: size
                   in: query
                   schema:
-                    type: string
-                - name: status
+                    type: integer
+                    format: int32
+                - name: pType
                   in: query
                   schema:
-                    type: string
-                - name: startTime
-                  in: query
-                  schema:
-                    type: string
-                - name: endTime
-                  in: query
-                  schema:
-                    type: string
+                    type: integer
+                    format: int32
             responses:
                 "200":
                     description: OK
@@ -823,6 +818,8 @@ components:
                 auditStatus:
                     type: integer
                     format: int32
+                coverImage:
+                    type: string
                 remark:
                     type: string
                 createdTime:

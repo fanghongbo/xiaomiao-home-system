@@ -216,8 +216,12 @@ CREATE TABLE
     created_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     updated_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     deleted_time datetime                     DEFAULT  '1970-01-01 08:00:00' COMMENT '删除时间',
-    KEY idx_setting_name (name) USING BTREE,
-    KEY idx_setting_user (user_id) USING BTREE,
+    KEY idx_user_id (user_id) USING BTREE,
+    KEY idx_publish_type (publish_type) USING BTREE,
+    KEY idx_audit_status (audit_status) USING BTREE,
+    KEY idx_publish_status (publish_status) USING BTREE,
+    KEY idx_province_id (province_id) USING BTREE,
+    KEY idx_city_id (city_id) USING BTREE
 ) ENGINE = innodb
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci

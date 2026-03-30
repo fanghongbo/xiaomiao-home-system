@@ -27,36 +27,20 @@ func NewPublishRepo(data *Data, logger log.Logger) biz.PublishRepo {
 
 // GetPublishList 查询发布内容列表
 func (u *publishRepo) GetPublishList(ctx context.Context, req *v1.GetPublishListRequest) (*v1.GetPublishListReply, error) {
-	var Publishs []*v1.PublishListItem
+	var items []*v1.PublishListItem
 	var total int64
 
 	baseQuery := u.data.db.Model(&Publish{}).Where("deleted_flag = ?", 0)
 
-	if req.Status != "" {
-		if req.Status == "active" {
-			baseQuery = baseQuery.Where("status = ?", 1)
-		} else {
-			baseQuery = baseQuery.Where("status = ?", 0)
-		}
-	}
-
-	if req.StartTime > 0 {
-		startTimeObj := time.UnixMilli(req.StartTime)
-		startTime := time.Date(startTimeObj.Year(), startTimeObj.Month(), startTimeObj.Day(), 0, 0, 0, 0, startTimeObj.Location()).Format("2006-01-02 15:04:05")
-		baseQuery = baseQuery.Where("created_time >= ?", startTime)
-	}
-
-	if req.EndTime > 0 {
-		endTimeObj := time.UnixMilli(req.EndTime)
-		endTime := time.Date(endTimeObj.Year(), endTimeObj.Month(), endTimeObj.Day(), 23, 59, 59, 0, endTimeObj.Location()).Format("2006-01-02 15:04:05")
-		baseQuery = baseQuery.Where("created_time <= ?", endTime)
+	if req.PType > 0 {
+		baseQuery = baseQuery.Where("publish_type = ?", req.PType)
 	}
 
 	if err := baseQuery.Count(&total).Error; err != nil {
 		return nil, err
 	}
 
-	result := baseQuery.Select("id", "publish_name", "status", "remark", "created_time", "updated_time").
+	result := baseQuery.Select("id", "title", "publish_status", "audit_status", "remark", "created_time", "updated_time").
 		Offset(int((req.Page - 1) * req.Size)).
 		Limit(int(req.Size))
 
@@ -68,24 +52,27 @@ func (u *publishRepo) GetPublishList(ctx context.Context, req *v1.GetPublishList
 
 	for rows.Next() {
 		var (
-			id          int64
-			publishName string
-			status      int
-			remark      string
-			createdTime time.Time
-			updatedTime time.Time
+			id            int64
+			title         string
+			publishStatus int
+			auditStatus   int
+			remark        string
+			createdTime   time.Time
+			updatedTime   time.Time
 		)
 
-		if err := rows.Scan(&id, &publishName, &status, &remark, &createdTime, &updatedTime); err != nil {
+		if err := rows.Scan(&id, &title, &publishStatus, &auditStatus, &remark, &createdTime, &updatedTime); err != nil {
 			return nil, err
 		}
 
-		Publishs = append(Publishs, &v1.PublishListItem{
-			Id: id,
-
-			Remark:      remark,
-			CreatedTime: createdTime.Format("2006-01-02 15:04:05"),
-			UpdatedTime: updatedTime.Format("2006-01-02 15:04:05"),
+		items = append(items, &v1.PublishListItem{
+			Id:            id,
+			Title:         title,
+			PublishStatus: int32(publishStatus),
+			AuditStatus:   int32(auditStatus),
+			Remark:        remark,
+			CreatedTime:   createdTime.Format("2006-01-02 15:04:05"),
+			UpdatedTime:   updatedTime.Format("2006-01-02 15:04:05"),
 		})
 	}
 
@@ -96,7 +83,7 @@ func (u *publishRepo) GetPublishList(ctx context.Context, req *v1.GetPublishList
 	return &v1.GetPublishListReply{
 		Code: 200, Success: true,
 		Data: &v1.PublishList{
-			Items: Publishs,
+			Items: items,
 			Total: total,
 		},
 	}, nil
