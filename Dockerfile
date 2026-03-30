@@ -15,8 +15,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY --from=builder /src/bin /app
 
-ADD ./configs/config.yaml /configs/
-
 WORKDIR /app
 
 EXPOSE 8000
