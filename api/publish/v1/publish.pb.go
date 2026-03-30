@@ -357,12 +357,16 @@ type PublishInfo struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
-	PublishStatus int32                  `protobuf:"varint,3,opt,name=publishStatus,proto3" json:"publishStatus,omitempty"`
-	AuditStatus   int32                  `protobuf:"varint,4,opt,name=auditStatus,proto3" json:"auditStatus,omitempty"`
-	CoverImage    string                 `protobuf:"bytes,5,opt,name=coverImage,proto3" json:"coverImage,omitempty"`
-	Remark        string                 `protobuf:"bytes,6,opt,name=remark,proto3" json:"remark,omitempty"`
-	CreatedTime   string                 `protobuf:"bytes,7,opt,name=createdTime,proto3" json:"createdTime,omitempty"`
-	UpdatedTime   string                 `protobuf:"bytes,8,opt,name=updatedTime,proto3" json:"updatedTime,omitempty"`
+	PublishType   int32                  `protobuf:"varint,3,opt,name=publishType,proto3" json:"publishType,omitempty"`
+	ProvinceId    int32                  `protobuf:"varint,4,opt,name=provinceId,proto3" json:"provinceId,omitempty"`
+	CityId        int32                  `protobuf:"varint,5,opt,name=cityId,proto3" json:"cityId,omitempty"`
+	Address       string                 `protobuf:"bytes,6,opt,name=address,proto3" json:"address,omitempty"`
+	Remark        string                 `protobuf:"bytes,7,opt,name=remark,proto3" json:"remark,omitempty"`
+	CatType       int32                  `protobuf:"varint,8,opt,name=catType,proto3" json:"catType,omitempty"`
+	CatBreed      int32                  `protobuf:"varint,9,opt,name=catBreed,proto3" json:"catBreed,omitempty"`
+	CatGender     int32                  `protobuf:"varint,10,opt,name=catGender,proto3" json:"catGender,omitempty"`
+	CreatedTime   string                 `protobuf:"bytes,11,opt,name=createdTime,proto3" json:"createdTime,omitempty"`
+	UpdatedTime   string                 `protobuf:"bytes,12,opt,name=updatedTime,proto3" json:"updatedTime,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -411,23 +415,30 @@ func (x *PublishInfo) GetTitle() string {
 	return ""
 }
 
-func (x *PublishInfo) GetPublishStatus() int32 {
+func (x *PublishInfo) GetPublishType() int32 {
 	if x != nil {
-		return x.PublishStatus
+		return x.PublishType
 	}
 	return 0
 }
 
-func (x *PublishInfo) GetAuditStatus() int32 {
+func (x *PublishInfo) GetProvinceId() int32 {
 	if x != nil {
-		return x.AuditStatus
+		return x.ProvinceId
 	}
 	return 0
 }
 
-func (x *PublishInfo) GetCoverImage() string {
+func (x *PublishInfo) GetCityId() int32 {
 	if x != nil {
-		return x.CoverImage
+		return x.CityId
+	}
+	return 0
+}
+
+func (x *PublishInfo) GetAddress() string {
+	if x != nil {
+		return x.Address
 	}
 	return ""
 }
@@ -437,6 +448,27 @@ func (x *PublishInfo) GetRemark() string {
 		return x.Remark
 	}
 	return ""
+}
+
+func (x *PublishInfo) GetCatType() int32 {
+	if x != nil {
+		return x.CatType
+	}
+	return 0
+}
+
+func (x *PublishInfo) GetCatBreed() int32 {
+	if x != nil {
+		return x.CatBreed
+	}
+	return 0
+}
+
+func (x *PublishInfo) GetCatGender() int32 {
+	if x != nil {
+		return x.CatGender
+	}
+	return 0
 }
 
 func (x *PublishInfo) GetCreatedTime() string {
@@ -1209,18 +1241,23 @@ const file_publish_v1_publish_proto_rawDesc = "" +
 	"\x05items\x18\x01 \x03(\v2\x1f.api.publish.v1.PublishListItemR\x05items\x12\x14\n" +
 	"\x05total\x18\x02 \x01(\x03R\x05total\",\n" +
 	"\x11GetPublishRequest\x12\x17\n" +
-	"\x02id\x18\x01 \x01(\x03B\a\xfaB\x04\"\x02 \x00R\x02id\"\xf7\x01\n" +
+	"\x02id\x18\x01 \x01(\x03B\a\xfaB\x04\"\x02 \x00R\x02id\"\xd7\x02\n" +
 	"\vPublishInfo\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x14\n" +
-	"\x05title\x18\x02 \x01(\tR\x05title\x12$\n" +
-	"\rpublishStatus\x18\x03 \x01(\x05R\rpublishStatus\x12 \n" +
-	"\vauditStatus\x18\x04 \x01(\x05R\vauditStatus\x12\x1e\n" +
+	"\x05title\x18\x02 \x01(\tR\x05title\x12 \n" +
+	"\vpublishType\x18\x03 \x01(\x05R\vpublishType\x12\x1e\n" +
 	"\n" +
-	"coverImage\x18\x05 \x01(\tR\n" +
-	"coverImage\x12\x16\n" +
-	"\x06remark\x18\x06 \x01(\tR\x06remark\x12 \n" +
-	"\vcreatedTime\x18\a \x01(\tR\vcreatedTime\x12 \n" +
-	"\vupdatedTime\x18\b \x01(\tR\vupdatedTime\"\x8a\x01\n" +
+	"provinceId\x18\x04 \x01(\x05R\n" +
+	"provinceId\x12\x16\n" +
+	"\x06cityId\x18\x05 \x01(\x05R\x06cityId\x12\x18\n" +
+	"\aaddress\x18\x06 \x01(\tR\aaddress\x12\x16\n" +
+	"\x06remark\x18\a \x01(\tR\x06remark\x12\x18\n" +
+	"\acatType\x18\b \x01(\x05R\acatType\x12\x1a\n" +
+	"\bcatBreed\x18\t \x01(\x05R\bcatBreed\x12\x1c\n" +
+	"\tcatGender\x18\n" +
+	" \x01(\x05R\tcatGender\x12 \n" +
+	"\vcreatedTime\x18\v \x01(\tR\vcreatedTime\x12 \n" +
+	"\vupdatedTime\x18\f \x01(\tR\vupdatedTime\"\x8a\x01\n" +
 	"\x0fGetPublishReply\x12\x12\n" +
 	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12\x18\n" +

@@ -833,16 +833,28 @@ components:
                     type: string
                 title:
                     type: string
-                publishStatus:
+                publishType:
                     type: integer
                     format: int32
-                auditStatus:
+                provinceId:
                     type: integer
                     format: int32
-                coverImage:
+                cityId:
+                    type: integer
+                    format: int32
+                address:
                     type: string
                 remark:
                     type: string
+                catType:
+                    type: integer
+                    format: int32
+                catBreed:
+                    type: integer
+                    format: int32
+                catGender:
+                    type: integer
+                    format: int32
                 createdTime:
                     type: string
                 updatedTime:

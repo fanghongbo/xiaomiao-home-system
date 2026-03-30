@@ -246,13 +246,18 @@ func (u *publishRepo) GetPublish(ctx context.Context, req *v1.GetPublishRequest)
 	return &v1.GetPublishReply{
 		Code: 200, Success: true, Message: "查询成功",
 		Data: &v1.PublishInfo{
-			Id:            publish.Id,
-			Title:         publish.Title,
-			PublishStatus: int32(publish.PublishStatus),
-			AuditStatus:   int32(publish.AuditStatus),
-			Remark:        publish.Remark,
-			CreatedTime:   publish.CreatedTime.Format("2006-01-02 15:04:05"),
-			UpdatedTime:   publish.UpdatedTime.Format("2006-01-02 15:04:05"),
+			Id:          publish.Id,
+			Title:       publish.Title,
+			PublishType: int32(publish.PublishType),
+			ProvinceId:  int32(publish.ProvinceId),
+			CityId:      int32(publish.CityId),
+			Address:     publish.Address,
+			CatType:     1,
+			CatBreed:    1,
+			CatGender:   1,
+			Remark:      publish.Remark,
+			CreatedTime: publish.CreatedTime.Format("2006-01-02 15:04:05"),
+			UpdatedTime: publish.UpdatedTime.Format("2006-01-02 15:04:05"),
 		},
 	}, nil
 }

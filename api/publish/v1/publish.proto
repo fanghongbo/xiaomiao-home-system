@@ -90,14 +90,18 @@ message GetPublishRequest {
 }
 
 message PublishInfo {
-	int64 id = 1;
+    int64 id = 1;
 	string title = 2;
-	int32 publishStatus = 3;
-	int32 auditStatus = 4;
-	string coverImage = 5;
-	string remark = 6;
-	string createdTime = 7;
-	string updatedTime = 8;
+	int32 publishType = 3;
+	int32 provinceId = 4;
+	int32 cityId = 5;
+	string address = 6;
+	string remark = 7;
+	int32 catType = 8;
+	int32 catBreed = 9;
+	int32 catGender = 10;
+	string createdTime = 11;
+	string updatedTime = 12;
 }
 
 message GetPublishReply {
