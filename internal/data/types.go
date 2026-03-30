@@ -154,25 +154,25 @@ func (u UserSetting) TableName() string {
 	return "t_user_setting"
 }
 
-type Publish struct {
-	Id            int64     `gorm:"column:id"`
-	UserId        string    `gorm:"column:user_id"`
-	Title         string    `gorm:"column:title"`
-	PublishType   int       `gorm:"column:publish_type"`
-	ProvinceId    int64     `gorm:"column:province_id"`
-	CityId        int64     `gorm:"column:city_id"`
-	Address       string    `gorm:"column:address"`
-	AuditStatus   int       `gorm:"column:audit_status"`
-	AuditRemark   string    `gorm:"column:audit_remark"`
-	AuditTime     time.Time `gorm:"column:audit_time"`
-	PublishStatus int       `gorm:"column:publish_status"`
-	Remark        string    `gorm:"column:remark"`
-	DeletedFlag   int       `gorm:"column:deleted_flag"`
-	CreatedTime   time.Time `gorm:"column:created_time"`
-	UpdatedTime   time.Time `gorm:"column:updated_time"`
-	DeletedTime   time.Time `gorm:"column:deleted_time"`
+type Post struct {
+	Id          int64     `gorm:"column:id"`
+	UserId      string    `gorm:"column:user_id"`
+	Title       string    `gorm:"column:title"`
+	PostType    int       `gorm:"column:post_type"`
+	ProvinceId  int64     `gorm:"column:province_id"`
+	CityId      int64     `gorm:"column:city_id"`
+	Address     string    `gorm:"column:address"`
+	AuditStatus int       `gorm:"column:audit_status"`
+	AuditRemark string    `gorm:"column:audit_remark"`
+	AuditTime   time.Time `gorm:"column:audit_time"`
+	PostStatus  int       `gorm:"column:post_status"`
+	Remark      string    `gorm:"column:remark"`
+	DeletedFlag int       `gorm:"column:deleted_flag"`
+	CreatedTime time.Time `gorm:"column:created_time"`
+	UpdatedTime time.Time `gorm:"column:updated_time"`
+	DeletedTime time.Time `gorm:"column:deleted_time"`
 }
 
-func (u Publish) TableName() string {
-	return "t_publish"
+func (u Post) TableName() string {
+	return "t_post"
 }

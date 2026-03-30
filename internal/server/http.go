@@ -3,7 +3,7 @@ package server
 import (
 	"context"
 	collectV1 "xiaomiao-home-system/api/collect/v1"
-	publishV1 "xiaomiao-home-system/api/publish/v1"
+	postV1 "xiaomiao-home-system/api/post/v1"
 	roleV1 "xiaomiao-home-system/api/role/v1"
 	userNotificationV1 "xiaomiao-home-system/api/user/notification/v1"
 	userSettingV1 "xiaomiao-home-system/api/user/setting/v1"
@@ -41,7 +41,7 @@ func NewWhiteListMatcher() selector.MatchFunc {
 }
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Server, jwtConfig *conf.Jwt, staticConfig *conf.Static, user *service.UserService, role *service.RoleService, userNotification *service.UserNotificationService, userSetting *service.UserSettingService, file *service.FileService, publish *service.PublishService, collect *service.CollectService, logger log.Logger) *http.Server {
+func NewHTTPServer(c *conf.Server, jwtConfig *conf.Jwt, staticConfig *conf.Static, user *service.UserService, role *service.RoleService, userNotification *service.UserNotificationService, userSetting *service.UserSettingService, file *service.FileService, post *service.PostService, collect *service.CollectService, logger log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
@@ -79,7 +79,7 @@ func NewHTTPServer(c *conf.Server, jwtConfig *conf.Jwt, staticConfig *conf.Stati
 	roleV1.RegisterRoleHTTPServer(srv, role)
 	userNotificationV1.RegisterUserNotificationHTTPServer(srv, userNotification)
 	userSettingV1.RegisterUserSettingHTTPServer(srv, userSetting)
-	publishV1.RegisterPublishHTTPServer(srv, publish)
+	postV1.RegisterPostHTTPServer(srv, post)
 	collectV1.RegisterCollectHTTPServer(srv, collect)
 	return srv
 }

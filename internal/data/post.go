@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"time"
-	v1 "xiaomiao-home-system/api/publish/v1"
+	v1 "xiaomiao-home-system/api/post/v1"
 	"xiaomiao-home-system/internal/biz"
 	"xiaomiao-home-system/utils"
 
@@ -13,22 +13,22 @@ import (
 	"gorm.io/gorm"
 )
 
-type publishRepo struct {
+type postRepo struct {
 	data *Data
 	log  *log.Helper
 }
 
-// NewPublishRepo .
-func NewPublishRepo(data *Data, logger log.Logger) biz.PublishRepo {
-	return &publishRepo{
+// NewPostRepo .
+func NewPostRepo(data *Data, logger log.Logger) biz.PostRepo {
+	return &postRepo{
 		data: data,
-		log:  log.NewHelper(log.With(logger, "data", "PublishRepo")),
+		log:  log.NewHelper(log.With(logger, "data", "PostRepo")),
 	}
 }
 
-// GetPublishList 查询发布内容列表
-func (u *publishRepo) GetPublishList(ctx context.Context, req *v1.GetPublishListRequest) (*v1.GetPublishListReply, error) {
-	var items []*v1.PublishListItem
+// GetPostList 查询发布内容列表
+func (u *postRepo) GetPostList(ctx context.Context, req *v1.GetPostListRequest) (*v1.GetPostListReply, error) {
+	var items []*v1.PostListItem
 	var total int64
 
 	userId, err := utils.GetCurrentUserId(ctx)
@@ -37,24 +37,24 @@ func (u *publishRepo) GetPublishList(ctx context.Context, req *v1.GetPublishList
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	baseQuery := u.data.db.Model(&Publish{}).Where("deleted_flag = ?", 0).Where("user_id = ?", userId)
+	baseQuery := u.data.db.Model(&Post{}).Where("deleted_flag = ?", 0).Where("user_id = ?", userId)
 
 	if req.PType > 0 {
-		baseQuery = baseQuery.Where("publish_type = ?", req.PType)
+		baseQuery = baseQuery.Where("post_type = ?", req.PType)
 	}
 
 	if err := baseQuery.Count(&total).Error; err != nil {
-		u.log.Error("get publish list failed: %v", err)
+		u.log.Error("get post list failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	result := baseQuery.Select("id", "title", "publish_status", "audit_status", "remark", "created_time", "updated_time").Order("created_time DESC").
+	result := baseQuery.Select("id", "title", "post_status", "audit_status", "remark", "created_time", "updated_time").Order("created_time DESC").
 		Limit(int(req.Size)).
 		Offset(int((req.Page - 1) * req.Size))
 
 	rows, err := result.Rows()
 	if err != nil {
-		u.log.Error("get publish list failed: %v", err)
+		u.log.Error("get post list failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -64,22 +64,22 @@ func (u *publishRepo) GetPublishList(ctx context.Context, req *v1.GetPublishList
 		var (
 			id            int64
 			title         string
-			publishStatus int
+			postStatus int
 			auditStatus   int
 			remark        string
 			createdTime   time.Time
 			updatedTime   time.Time
 		)
 
-		if err := rows.Scan(&id, &title, &publishStatus, &auditStatus, &remark, &createdTime, &updatedTime); err != nil {
-			u.log.Error("get publish list failed: %v", err)
+		if err := rows.Scan(&id, &title, &postStatus, &auditStatus, &remark, &createdTime, &updatedTime); err != nil {
+			u.log.Error("get post list failed: %v", err)
 			return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 		}
 
-		items = append(items, &v1.PublishListItem{
+		items = append(items, &v1.PostListItem{
 			Id:            id,
 			Title:         title,
-			PublishStatus: int32(publishStatus),
+			PostStatus: int32(postStatus),
 			AuditStatus:   int32(auditStatus),
 			Remark:        remark,
 			CreatedTime:   createdTime.Format("2006-01-02 15:04:05"),
@@ -88,21 +88,21 @@ func (u *publishRepo) GetPublishList(ctx context.Context, req *v1.GetPublishList
 	}
 
 	if err := rows.Err(); err != nil {
-		u.log.Error("get publish list failed: %v", err)
+		u.log.Error("get post list failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	return &v1.GetPublishListReply{
+	return &v1.GetPostListReply{
 		Code: 200, Success: true,
-		Data: &v1.PublishList{
+		Data: &v1.PostList{
 			Items: items,
 			Total: total,
 		},
 	}, nil
 }
 
-// CreatePublish 创建发布内容
-func (u *publishRepo) CreatePublish(ctx context.Context, req *v1.CreatePublishRequest) (*v1.CreatePublishReply, error) {
+// CreatePost 创建发布内容
+func (u *postRepo) CreatePost(ctx context.Context, req *v1.CreatePostRequest) (*v1.CreatePostReply, error) {
 	id, err := u.data.gid.NextID()
 	if err != nil {
 		u.log.Error("generate id failed: %v", err)
@@ -115,16 +115,16 @@ func (u *publishRepo) CreatePublish(ctx context.Context, req *v1.CreatePublishRe
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	publish := map[string]interface{}{
+	post := map[string]interface{}{
 		"id":             id,
 		"user_id":        userId,
 		"title":          req.Title,
-		"publish_type":   req.PublishType,
+		"post_type":   req.PostType,
 		"province_id":    req.ProvinceId,
 		"city_id":        req.CityId,
 		"address":        req.Address,
 		"audit_status":   0,
-		"publish_status": 0,
+		"post_status": 0,
 		"remark":         req.Remark,
 		"created_time":   time.Now(),
 		"updated_time":   time.Now(),
@@ -133,40 +133,40 @@ func (u *publishRepo) CreatePublish(ctx context.Context, req *v1.CreatePublishRe
 	// 启动MySQL事务
 	tx := u.data.db.Begin()
 
-	if err := tx.Model(&Publish{}).Create(publish).Error; err != nil {
+	if err := tx.Model(&Post{}).Create(post).Error; err != nil {
 		tx.Rollback()
-		u.log.Error("create publish failed: %v", err)
+		u.log.Error("create post failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	if err := tx.Commit().Error; err != nil {
 		tx.Rollback()
-		u.log.Error("create publish failed: %v", err)
+		u.log.Error("create post failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	return &v1.CreatePublishReply{
+	return &v1.CreatePostReply{
 		Code: 200, Success: true, Message: "创建成功",
 	}, nil
 }
 
-// UpdatePublish 更新发布内容
-func (u *publishRepo) UpdatePublish(ctx context.Context, req *v1.UpdatePublishRequest) (*v1.UpdatePublishReply, error) {
+// UpdatePost 更新发布内容
+func (u *postRepo) UpdatePost(ctx context.Context, req *v1.UpdatePostRequest) (*v1.UpdatePostReply, error) {
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
 		u.log.Error("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	publish := map[string]interface{}{
+	post := map[string]interface{}{
 		"id":             req.Id,
 		"title":          req.Title,
-		"publish_type":   req.PublishType,
+		"post_type":   req.PostType,
 		"province_id":    req.ProvinceId,
 		"city_id":        req.CityId,
 		"address":        req.Address,
 		"audit_status":   0,
-		"publish_status": 0,
+		"post_status": 0,
 		"remark":         req.Remark,
 		"updated_time":   time.Now(),
 	}
@@ -174,14 +174,14 @@ func (u *publishRepo) UpdatePublish(ctx context.Context, req *v1.UpdatePublishRe
 	// 启动MySQL事务
 	tx := u.data.db.Begin()
 
-	result := tx.Model(&Publish{}).
+	result := tx.Model(&Post{}).
 		Where("id = ?", req.Id).
 		Where("user_id = ?", userId).
 		Where("deleted_flag = ?", 0).
-		Updates(publish)
+		Updates(post)
 	if result.Error != nil {
 		tx.Rollback()
-		u.log.Error("update publish failed: %v", result.Error)
+		u.log.Error("update post failed: %v", result.Error)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 	if result.RowsAffected == 0 {
@@ -191,35 +191,35 @@ func (u *publishRepo) UpdatePublish(ctx context.Context, req *v1.UpdatePublishRe
 
 	if err := tx.Commit().Error; err != nil {
 		tx.Rollback()
-		u.log.Error("update publish failed: %v", err)
+		u.log.Error("update post failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	return &v1.UpdatePublishReply{
+	return &v1.UpdatePostReply{
 		Code: 200, Success: true, Message: "修改成功",
 	}, nil
 }
 
-// DeletePublish 删除发布内容
-func (u *publishRepo) DeletePublish(ctx context.Context, req *v1.DeletePublishRequest) (*v1.DeletePublishReply, error) {
+// DeletePost 删除发布内容
+func (u *postRepo) DeletePost(ctx context.Context, req *v1.DeletePostRequest) (*v1.DeletePostReply, error) {
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
 		u.log.Error("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	publish := map[string]interface{}{
+	post := map[string]interface{}{
 		"deleted_flag": 1,
 		"deleted_time": time.Now(),
 	}
 
 	tx := u.data.db.Begin()
 
-	result := tx.Model(&Publish{}).Where("id = ?", req.Id).Where("user_id = ?", userId).Where("deleted_flag = ?", 0).Updates(publish)
+	result := tx.Model(&Post{}).Where("id = ?", req.Id).Where("user_id = ?", userId).Where("deleted_flag = ?", 0).Updates(post)
 
 	if result.Error != nil {
 		tx.Rollback()
-		u.log.Error("delete publish failed: %v", result.Error)
+		u.log.Error("delete post failed: %v", result.Error)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 	if result.RowsAffected == 0 {
@@ -229,39 +229,39 @@ func (u *publishRepo) DeletePublish(ctx context.Context, req *v1.DeletePublishRe
 
 	if err := tx.Commit().Error; err != nil {
 		tx.Rollback()
-		u.log.Error("delete publish failed: %v", err)
+		u.log.Error("delete post failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	return &v1.DeletePublishReply{
+	return &v1.DeletePostReply{
 		Code: 200, Success: true, Message: "删除成功",
 	}, nil
 }
 
-// UpdatePublishStatus 更新发布内容状态
-func (u *publishRepo) UpdatePublishStatus(ctx context.Context, req *v1.UpdatePublishStatusRequest) (*v1.UpdatePublishStatusReply, error) {
+// UpdatePostStatus 更新发布内容状态
+func (u *postRepo) UpdatePostStatus(ctx context.Context, req *v1.UpdatePostStatusRequest) (*v1.UpdatePostStatusReply, error) {
 	if req.Id == 0 {
 		return nil, fmt.Errorf("id is required")
 	}
 
-	publish := map[string]interface{}{
+	post := map[string]interface{}{
 		"status": int(req.Status),
 	}
 
-	result := u.data.db.Model(&Publish{}).Where("id = ?", req.Id).Where("deleted_flag = ?", 0).Updates(publish)
+	result := u.data.db.Model(&Post{}).Where("id = ?", req.Id).Where("deleted_flag = ?", 0).Updates(post)
 
 	if result.Error != nil {
 		return nil, result.Error
 	}
 
-	return &v1.UpdatePublishStatusReply{
+	return &v1.UpdatePostStatusReply{
 		Code: 200, Success: true, Message: "更新成功",
 	}, nil
 }
 
-// GetPublish 查询发布内容
-func (u *publishRepo) GetPublish(ctx context.Context, req *v1.GetPublishRequest) (*v1.GetPublishReply, error) {
-	publish := &Publish{}
+// GetPost 查询发布内容
+func (u *postRepo) GetPost(ctx context.Context, req *v1.GetPostRequest) (*v1.GetPostReply, error) {
+	post := &Post{}
 
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
@@ -269,28 +269,28 @@ func (u *publishRepo) GetPublish(ctx context.Context, req *v1.GetPublishRequest)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	if err := u.data.db.Model(&Publish{}).Where("id = ?", req.Id).Where("user_id = ?", userId).Where("deleted_flag = ?", 0).First(publish).Error; err != nil {
+	if err := u.data.db.Model(&Post{}).Where("id = ?", req.Id).Where("user_id = ?", userId).Where("deleted_flag = ?", 0).First(post).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "发布内容不存在")
 		}
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	return &v1.GetPublishReply{
+	return &v1.GetPostReply{
 		Code: 200, Success: true, Message: "查询成功",
-		Data: &v1.PublishInfo{
-			Id:          publish.Id,
-			Title:       publish.Title,
-			PublishType: int32(publish.PublishType),
-			ProvinceId:  int32(publish.ProvinceId),
-			CityId:      int32(publish.CityId),
-			Address:     publish.Address,
+		Data: &v1.PostInfo{
+			Id:          post.Id,
+			Title:       post.Title,
+			PostType: int32(post.PostType),
+			ProvinceId:  int32(post.ProvinceId),
+			CityId:      int32(post.CityId),
+			Address:     post.Address,
 			CatType:     1,
 			CatBreed:    1,
 			CatGender:   1,
-			Remark:      publish.Remark,
-			CreatedTime: publish.CreatedTime.Format("2006-01-02 15:04:05"),
-			UpdatedTime: publish.UpdatedTime.Format("2006-01-02 15:04:05"),
+			Remark:      post.Remark,
+			CreatedTime: post.CreatedTime.Format("2006-01-02 15:04:05"),
+			UpdatedTime: post.UpdatedTime.Format("2006-01-02 15:04:05"),
 		},
 	}, nil
 }

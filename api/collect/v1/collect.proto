@@ -41,7 +41,7 @@ message GetCollectListRequest {
 message CollectListItem {
 	int64 id = 1;
 	string title = 2;
-	int32 publishStatus = 3;
+	int32 postStatus = 3;
 	int32 auditStatus = 4;
 	string coverImage = 5;
 	string remark = 6;

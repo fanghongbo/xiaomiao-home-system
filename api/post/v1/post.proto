@@ -1,57 +1,57 @@
 syntax = "proto3";
 
-package api.publish.v1;
+package api.post.v1;
 
 import "google/api/annotations.proto";
 import "validate/validate.proto";
 
-option go_package = "xiaomiao-home-system/api/publish/v1;v1";
+option go_package = "xiaomiao-home-system/api/post/v1;v1";
 option java_multiple_files = true;
-option java_package = "api.publish.v1";
-option java_outer_classname = "PublishProtoV1";
+option java_package = "api.post.v1";
+option java_outer_classname = "PostProtoV1";
 
-service Publish {
-	// GetPublishList 查询发布内容列表
-	rpc GetPublishList (GetPublishListRequest) returns (GetPublishListReply) {
+service Post {
+	// GetPostList 查询发布内容列表
+	rpc GetPostList (GetPostListRequest) returns (GetPostListReply) {
 		option (google.api.http) = {
-			get: "/api/v1/publish/list",
+			get: "/api/v1/post/list",
 		};
 	}
 
-	// CreatePublish 创建发布内容
-	rpc CreatePublish (CreatePublishRequest) returns (CreatePublishReply) {
+	// CreatePost 创建发布内容
+	rpc CreatePost (CreatePostRequest) returns (CreatePostReply) {
 		option (google.api.http) = {
-			post: "/api/v1/publish",
+			post: "/api/v1/post",
 			body: "*"
 		};	
 	}
 
-	// GetPublish 查询发布内容
-	rpc GetPublish (GetPublishRequest) returns (GetPublishReply) {
+	// GetPost 查询发布内容
+	rpc GetPost (GetPostRequest) returns (GetPostReply) {
 		option (google.api.http) = {
-			get: "/api/v1/publish/{id}"
+			get: "/api/v1/post/{id}"
 		};	
 	}
 
-	// UpdatePublish 更新发布内容
-	rpc UpdatePublish (UpdatePublishRequest) returns (UpdatePublishReply) {
+	// UpdatePost 更新发布内容
+	rpc UpdatePost (UpdatePostRequest) returns (UpdatePostReply) {
 		option (google.api.http) = {
-			put: "/api/v1/publish/{id}",
+			put: "/api/v1/post/{id}",
 			body: "*"
 		};	
 	}
 
-	// DeletePublish 删除发布内容
-	rpc DeletePublish (DeletePublishRequest) returns (DeletePublishReply) {
+	// DeletePost 删除发布内容
+	rpc DeletePost (DeletePostRequest) returns (DeletePostReply) {
 		option (google.api.http) = {
-			delete: "/api/v1/publish/{id}"
+			delete: "/api/v1/post/{id}"
 		};	
 	}
 
-	// UpdatePublishStatus 更新发布内容状态
-	rpc UpdatePublishStatus (UpdatePublishStatusRequest) returns (UpdatePublishStatusReply) {
+	// UpdatePostStatus 更新发布内容状态
+	rpc UpdatePostStatus (UpdatePostStatusRequest) returns (UpdatePostStatusReply) {
 		option (google.api.http) = {
-			put: "/api/v1/publish/status/{id}",
+			put: "/api/v1/post/status/{id}",
 			body: "*"
 		};	
 	}
@@ -63,16 +63,16 @@ message BaseRequest {}
 // 基础响应体
 message BaseResponse {}
 
-message GetPublishListRequest {
+message GetPostListRequest {
 	int32 page = 1 [(validate.rules).int32 = {gte: 1}];
 	int32 size = 2 [(validate.rules).int32 = {gte: 10, lte: 200}];
 	int32 p_type = 3 [(validate.rules).int32 = {gte: 0, lte: 4}];
 }
 
-message PublishListItem {
+message PostListItem {
 	int64 id = 1;
 	string title = 2;
-	int32 publishStatus = 3;
+	int32 postStatus = 3;
 	int32 auditStatus = 4;
 	string coverImage = 5;
 	string remark = 6;
@@ -80,26 +80,26 @@ message PublishListItem {
 	string updatedTime = 8;
 }
 
-message PublishList {
-	repeated PublishListItem items = 1;
+message PostList {
+	repeated PostListItem items = 1;
 	int64 total = 2;
 }
 
-message GetPublishListReply {
+message GetPostListReply {
 	int32 code = 1;
 	string message = 2;
 	bool success = 3;
-	PublishList data = 4;
+	PostList data = 4;
 }
 
-message GetPublishRequest {
+message GetPostRequest {
 	int64 id = 1 [(validate.rules).int64 = {gt: 0}];
 }
 
-message PublishInfo {
+message PostInfo {
     int64 id = 1;
 	string title = 2;
-	int32 publishType = 3;
+	int32 postType = 3;
 	int32 provinceId = 4;
 	int32 cityId = 5;
 	string address = 6;
@@ -111,16 +111,16 @@ message PublishInfo {
 	string updatedTime = 12;
 }
 
-message GetPublishReply {
+message GetPostReply {
 	int32 code = 1;
 	string message = 2;
 	bool success = 3;
-	PublishInfo data = 4;
+	PostInfo data = 4;
 }
 
-message CreatePublishRequest {
+message CreatePostRequest {
 	string title = 1 [(validate.rules).string = {min_len: 1}];
-	int32 publishType = 2 [(validate.rules).int32 = { gte: 0, lte: 4 }];
+	int32 postType = 2 [(validate.rules).int32 = { gte: 0, lte: 4 }];
 	int32 provinceId = 3 [(validate.rules).int32 = { gte: 0 }];
 	int32 cityId = 4 [(validate.rules).int32 = { gte: 0  }];
 	string address = 5 [(validate.rules).string = {min_len: 1}];
@@ -130,17 +130,17 @@ message CreatePublishRequest {
 	int32 catGender = 9 [(validate.rules).int32 = { gte: 0, lte: 2 }];
 }
 
-message CreatePublishReply {
+message CreatePostReply {
 	int32 code = 1;
 	string message = 2;
 	bool success = 3;
 	string data = 4;
 }
 
-message UpdatePublishRequest {
+message UpdatePostRequest {
 	int64 id = 1 [(validate.rules).int64 = {gt: 0}];
 	string title = 2 [(validate.rules).string = {min_len: 1}];
-	int32 publishType = 3 [(validate.rules).int32 = { gte: 0, lte: 4 }];
+	int32 postType = 3 [(validate.rules).int32 = { gte: 0, lte: 4 }];
 	int32 provinceId = 4 [(validate.rules).int32 = { gte: 0 }];
 	int32 cityId = 5 [(validate.rules).int32 = { gte: 0  }];
 	string address = 6 [(validate.rules).string = {min_len: 1}];
@@ -150,30 +150,30 @@ message UpdatePublishRequest {
 	int32 catGender = 10 [(validate.rules).int32 = { gte: 0, lte: 2 }];
 }
 
-message UpdatePublishReply {
+message UpdatePostReply {
 	int32 code = 1;
 	string message = 2;
 	bool success = 3;
 	string data = 4;
 }
 
-message DeletePublishRequest {
+message DeletePostRequest {
 	int64 id = 1 [(validate.rules).int64 = {gt: 0}];
 }
 
-message DeletePublishReply {
+message DeletePostReply {
 	int32 code = 1;
 	string message = 2;
 	bool success = 3;
 	string data = 4;
 }
 
-message UpdatePublishStatusRequest {
+message UpdatePostStatusRequest {
 	int64 id = 1 [(validate.rules).int64 = {gt: 0}];
 	int32 status = 2;
 }
 
-message UpdatePublishStatusReply {
+message UpdatePostStatusReply {
 	int32 code = 1;
 	string message = 2;
 	bool success = 3;

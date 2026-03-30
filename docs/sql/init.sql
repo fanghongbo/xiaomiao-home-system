@@ -219,28 +219,28 @@ CREATE TABLE
 
 -- 发布内容表
 CREATE TABLE
-    IF NOT EXISTS t_publish
+    IF NOT EXISTS t_post
 (
     id           bigint PRIMARY KEY COMMENT '发布信息id',
     user_id      varchar(50) NOT NULL COMMENT '用户id',
     title         varchar(64) NOT NULL COMMENT '标题',
-    publish_type  tinyint(1) NOT NULL COMMENT '发布类型, 1: 领养, 2: 寻猫, 3: 日常, 4: 求助',
+    post_type  tinyint(1) NOT NULL COMMENT '发布类型, 1: 领养, 2: 寻猫, 3: 日常, 4: 求助',
     province_id  bigint DEFAULT NULL COMMENT '省份id',
     city_id      bigint DEFAULT NULL COMMENT '城市id',
     address      varchar(255) DEFAULT NULL COMMENT '详细地址',
     audit_status tinyint(1) NOT NULL COMMENT '审核状态, 0: 待审核, 1: 审核通过, 2: 审核不通过',
     audit_remark longtext DEFAULT NULL COMMENT '审核备注',
     audit_time datetime DEFAULT NULL COMMENT '审核时间',
-    publish_status tinyint(1) NOT NULL COMMENT '发布状态, 0: 待发布, 1: 已发布, 2: 已下架',
+    post_status tinyint(1) NOT NULL COMMENT '发布状态, 0: 待发布, 1: 已发布, 2: 已下架',
     remark  longtext COMMENT '描述',
     deleted_flag tinyint(1)           DEFAULT 0 COMMENT '删除标记, 0: 未删除,  1: 已删除',
     created_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     updated_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     deleted_time datetime                     DEFAULT  '1970-01-01 08:00:00' COMMENT '删除时间',
     KEY idx_user_id (user_id) USING BTREE,
-    KEY idx_publish_type (publish_type) USING BTREE,
+    KEY idx_post_type (post_type) USING BTREE,
     KEY idx_audit_status (audit_status) USING BTREE,
-    KEY idx_publish_status (publish_status) USING BTREE,
+    KEY idx_post_status (post_status) USING BTREE,
     KEY idx_province_id (province_id) USING BTREE,
     KEY idx_city_id (city_id) USING BTREE
 ) ENGINE = innodb
@@ -254,14 +254,14 @@ CREATE TABLE
 (
     id           bigint PRIMARY KEY COMMENT '收藏id',
     user_id      bigint NOT NULL COMMENT '用户id',
-    publish_id   bigint NOT NULL COMMENT '发布id',
+    post_id   bigint NOT NULL COMMENT '发布id',
     deleted_flag tinyint(1)           DEFAULT 0 COMMENT '删除标记, 0: 未删除,  1: 已删除',
     created_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     updated_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     deleted_time datetime                     DEFAULT  '1970-01-01 08:00:00' COMMENT '删除时间',
     KEY idx_user_id (user_id) USING BTREE,
-    KEY idx_publish_id (publish_id) USING BTREE,
-    UNIQUE KEY uk_user_id_publish_id (user_id, publish_id, deleted_flag, deleted_time) USING BTREE
+    KEY idx_post_id (post_id) USING BTREE,
+    UNIQUE KEY uk_user_id_post_id (user_id, post_id, deleted_flag, deleted_time) USING BTREE
 ) ENGINE = innodb
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci
@@ -269,18 +269,18 @@ CREATE TABLE
 
 -- 发布小猫关联表
 CREATE TABLE
-    IF NOT EXISTS t_publish_cat
+    IF NOT EXISTS t_post_cat
 (
     id           bigint PRIMARY KEY COMMENT '关联id',
-    publish_id   bigint NOT NULL COMMENT '发布id',
+    post_id   bigint NOT NULL COMMENT '发布id',
     cat_id       bigint NOT NULL COMMENT '小猫id',
     deleted_flag tinyint(1)           DEFAULT 0 COMMENT '删除标记, 0: 未删除,  1: 已删除',
     created_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     updated_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     deleted_time datetime                     DEFAULT  '1970-01-01 08:00:00' COMMENT '删除时间',
-    KEY idx_publish_id (publish_id) USING BTREE,
+    KEY idx_post_id (post_id) USING BTREE,
     KEY idx_cat_id (cat_id) USING BTREE,
-    UNIQUE KEY uk_publish_id_cat_id (publish_id, cat_id, deleted_flag, deleted_time) USING BTREE
+    UNIQUE KEY uk_post_id_cat_id (post_id, cat_id, deleted_flag, deleted_time) USING BTREE
 ) ENGINE = innodb
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci
@@ -288,18 +288,18 @@ CREATE TABLE
 
 -- 发布图片关联表
 CREATE TABLE
-    IF NOT EXISTS t_publish_image
+    IF NOT EXISTS t_post_image
 (
     id           bigint PRIMARY KEY COMMENT '关联id',
-    publish_id   bigint NOT NULL COMMENT '发布id',
+    post_id   bigint NOT NULL COMMENT '发布id',
     image_url    varchar(255) NOT NULL COMMENT '图片url',
     deleted_flag tinyint(1)           DEFAULT 0 COMMENT '删除标记, 0: 未删除,  1: 已删除',
     created_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     updated_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     deleted_time datetime                     DEFAULT  '1970-01-01 08:00:00' COMMENT '删除时间',
-    KEY idx_publish_id (publish_id) USING BTREE,
+    KEY idx_post_id (post_id) USING BTREE,
     KEY idx_image_url (image_url) USING BTREE,
-    UNIQUE KEY uk_publish_id_image_url (publish_id, image_url, deleted_flag, deleted_time) USING BTREE
+    UNIQUE KEY uk_post_id_image_url (post_id, image_url, deleted_flag, deleted_time) USING BTREE
 ) ENGINE = innodb
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci

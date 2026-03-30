@@ -394,7 +394,7 @@ func (m *CollectListItem) validate(all bool) error {
 
 	// no validation rules for Title
 
-	// no validation rules for PublishStatus
+	// no validation rules for PostStatus
 
 	// no validation rules for AuditStatus
 

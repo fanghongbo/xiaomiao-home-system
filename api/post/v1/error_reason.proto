@@ -1,12 +1,12 @@
 syntax = "proto3";
 
-package publish.v1;
+package post.v1;
 import "errors/errors.proto";
 
-option go_package = "xiaomiao-home-system/api/publish/v1;v1";
+option go_package = "xiaomiao-home-system/api/post/v1;v1";
 option java_multiple_files = true;
-option java_package = "publish.v1";
-option objc_class_prefix = "APIPUBLISHV1";
+option java_package = "post.v1";
+option objc_class_prefix = "APIPOSTV1";
 
 enum ErrorReason {
   option (errors.default_code) = 500;
