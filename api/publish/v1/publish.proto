@@ -66,6 +66,7 @@ message BaseResponse {}
 message GetPublishListRequest {
 	int32 page = 1 [(validate.rules).int32 = {gte: 1}];
 	int32 size = 2 [(validate.rules).int32 = {gte: 10, lte: 200}];
+	// 使用 snake_case 字段名，确保 HTTP BindQuery 可用 p_type 绑定
 	int32 p_type = 3 [(validate.rules).int32 = {gte: 0, lte: 4}];
 }
 
@@ -83,6 +84,13 @@ message PublishListItem {
 message PublishList {
 	repeated PublishListItem items = 1;
 	int64 total = 2;
+}
+
+message GetPublishListReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	PublishList data = 4;
 }
 
 message GetPublishRequest {
@@ -109,13 +117,6 @@ message GetPublishReply {
 	string message = 2;
 	bool success = 3;
 	PublishInfo data = 4;
-}
-
-message GetPublishListReply {
-	int32 code = 1;
-	string message = 2;
-	bool success = 3;
-	PublishList data = 4;
 }
 
 message CreatePublishRequest {

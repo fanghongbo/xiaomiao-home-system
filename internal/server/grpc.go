@@ -1,6 +1,7 @@
 package server
 
 import (
+	collectV1 "xiaomiao-home-system/api/collect/v1"
 	fileV1 "xiaomiao-home-system/api/file/v1"
 	publishV1 "xiaomiao-home-system/api/publish/v1"
 	roleV1 "xiaomiao-home-system/api/role/v1"
@@ -20,7 +21,7 @@ import (
 )
 
 // NewGRPCServer new a gRPC server.
-func NewGRPCServer(c *conf.Server, user *service.UserService, role *service.RoleService, userNotification *service.UserNotificationService, userSetting *service.UserSettingService, file *service.FileService, publish *service.PublishService, logger log.Logger) *grpc.Server {
+func NewGRPCServer(c *conf.Server, user *service.UserService, role *service.RoleService, userNotification *service.UserNotificationService, userSetting *service.UserSettingService, file *service.FileService, publish *service.PublishService, collect *service.CollectService, logger log.Logger) *grpc.Server {
 	var opts = []grpc.ServerOption{
 		grpc.Middleware(
 			recovery.Recovery(),
@@ -50,5 +51,6 @@ func NewGRPCServer(c *conf.Server, user *service.UserService, role *service.Role
 	userSettingV1.RegisterUserSettingServer(srv, userSetting)
 	fileV1.RegisterFileServer(srv, file)
 	publishV1.RegisterPublishServer(srv, publish)
+	collectV1.RegisterCollectServer(srv, collect)
 	return srv
 }

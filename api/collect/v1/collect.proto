@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package api.collect.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "xiaomiao-home-system/api/collect/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.collect.v1";
+option java_outer_classname = "CollectProtoV1";
+
+service Collect {
+	// GetCollectList 查询收藏列表
+	rpc GetCollectList (GetCollectListRequest) returns (GetCollectListReply) {
+		option (google.api.http) = {
+			get: "/api/v1/collect/list",
+		};
+	}
+
+	// GetCollectTypes 查询收藏分类
+	rpc GetCollectTypes (GetCollectTypesRequest) returns (GetCollectTypesReply) {
+		option (google.api.http) = {
+			get: "/api/v1/collect/types",
+		};
+	}
+}
+
+// 基础请求体
+message BaseRequest {}
+
+// 基础响应体
+message BaseResponse {}
+
+message GetCollectListRequest {
+	int32 page = 1 [(validate.rules).int32 = {gte: 1}];
+	int32 size = 2 [(validate.rules).int32 = {gte: 10, lte: 200}];
+	int32 c_type = 3 [
+		json_name = "c_type",
+		(validate.rules).int32 = {gte: 0, lte: 20}
+	];
+}
+
+message CollectListItem {
+	int64 id = 1;
+	string title = 2;
+	int32 publishStatus = 3;
+	int32 auditStatus = 4;
+	string coverImage = 5;
+	string remark = 6;
+	string createdTime = 7;
+	string updatedTime = 8;
+}
+
+message CollectList {
+	repeated CollectListItem items = 1;
+	int64 total = 2;
+}
+
+message GetCollectListReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	CollectList data = 4;
+}
+
+message GetCollectTypesRequest {}
+
+message GetCollectTypesReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	repeated int64 data = 4;
+}

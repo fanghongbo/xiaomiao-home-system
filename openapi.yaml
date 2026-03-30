@@ -25,6 +25,48 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.user.v1.AppLoginReply'
+    /api/v1/collect/list:
+        get:
+            tags:
+                - Collect
+            description: GetCollectList 查询收藏列表
+            operationId: Collect_GetCollectList
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: size
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: c_type
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.collect.v1.GetCollectListReply'
+    /api/v1/collect/types:
+        get:
+            tags:
+                - Collect
+            description: GetCollectTypes 查询收藏分类
+            operationId: Collect_GetCollectTypes
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.collect.v1.GetCollectTypesReply'
     /api/v1/file/download:
         get:
             tags:
@@ -100,6 +142,7 @@ paths:
                     format: int32
                 - name: pType
                   in: query
+                  description: 使用 snake_case 字段名，确保 HTTP BindQuery 可用 p_type 绑定
                   schema:
                     type: integer
                     format: int32
@@ -686,6 +729,62 @@ paths:
                                 $ref: '#/components/schemas/api.file.v1.StaticFileReply'
 components:
     schemas:
+        api.collect.v1.CollectList:
+            type: object
+            properties:
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.collect.v1.CollectListItem'
+                total:
+                    type: string
+        api.collect.v1.CollectListItem:
+            type: object
+            properties:
+                id:
+                    type: string
+                title:
+                    type: string
+                publishStatus:
+                    type: integer
+                    format: int32
+                auditStatus:
+                    type: integer
+                    format: int32
+                coverImage:
+                    type: string
+                remark:
+                    type: string
+                createdTime:
+                    type: string
+                updatedTime:
+                    type: string
+        api.collect.v1.GetCollectListReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    $ref: '#/components/schemas/api.collect.v1.CollectList'
+        api.collect.v1.GetCollectTypesReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: array
+                    items:
+                        type: string
         api.file.v1.DownloadFileReply:
             type: object
             properties:
@@ -1477,6 +1576,7 @@ components:
                 data:
                     type: string
 tags:
+    - name: Collect
     - name: File
     - name: Publish
     - name: Role

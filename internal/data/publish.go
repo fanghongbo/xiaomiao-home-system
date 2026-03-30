@@ -44,7 +44,8 @@ func (u *publishRepo) GetPublishList(ctx context.Context, req *v1.GetPublishList
 	}
 
 	if err := baseQuery.Count(&total).Error; err != nil {
-		return nil, err
+		u.log.Error("get publish list failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	result := baseQuery.Select("id", "title", "publish_status", "audit_status", "remark", "created_time", "updated_time").Order("created_time DESC").
@@ -53,8 +54,10 @@ func (u *publishRepo) GetPublishList(ctx context.Context, req *v1.GetPublishList
 
 	rows, err := result.Rows()
 	if err != nil {
-		return nil, err
+		u.log.Error("get publish list failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
+
 	defer rows.Close()
 
 	for rows.Next() {
@@ -69,7 +72,8 @@ func (u *publishRepo) GetPublishList(ctx context.Context, req *v1.GetPublishList
 		)
 
 		if err := rows.Scan(&id, &title, &publishStatus, &auditStatus, &remark, &createdTime, &updatedTime); err != nil {
-			return nil, err
+			u.log.Error("get publish list failed: %v", err)
+			return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 		}
 
 		items = append(items, &v1.PublishListItem{
@@ -84,7 +88,8 @@ func (u *publishRepo) GetPublishList(ctx context.Context, req *v1.GetPublishList
 	}
 
 	if err := rows.Err(); err != nil {
-		return nil, err
+		u.log.Error("get publish list failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	return &v1.GetPublishListReply{
