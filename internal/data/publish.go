@@ -147,6 +147,12 @@ func (u *publishRepo) CreatePublish(ctx context.Context, req *v1.CreatePublishRe
 
 // UpdatePublish 更新发布内容
 func (u *publishRepo) UpdatePublish(ctx context.Context, req *v1.UpdatePublishRequest) (*v1.UpdatePublishReply, error) {
+	userId, err := utils.GetCurrentUserId(ctx)
+	if err != nil {
+		u.log.Error("get current user id failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
 	publish := map[string]interface{}{
 		"id":             req.Id,
 		"title":          req.Title,
@@ -163,13 +169,19 @@ func (u *publishRepo) UpdatePublish(ctx context.Context, req *v1.UpdatePublishRe
 	// 启动MySQL事务
 	tx := u.data.db.Begin()
 
-	if err := tx.Model(&Publish{}).
+	result := tx.Model(&Publish{}).
 		Where("id = ?", req.Id).
+		Where("user_id = ?", userId).
 		Where("deleted_flag = ?", 0).
-		Updates(publish).Error; err != nil {
+		Updates(publish)
+	if result.Error != nil {
 		tx.Rollback()
-		u.log.Error("update publish failed: %v", err)
+		u.log.Error("update publish failed: %v", result.Error)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+	if result.RowsAffected == 0 {
+		tx.Rollback()
+		return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "发布内容不存在或无权限")
 	}
 
 	if err := tx.Commit().Error; err != nil {
@@ -185,6 +197,12 @@ func (u *publishRepo) UpdatePublish(ctx context.Context, req *v1.UpdatePublishRe
 
 // DeletePublish 删除发布内容
 func (u *publishRepo) DeletePublish(ctx context.Context, req *v1.DeletePublishRequest) (*v1.DeletePublishReply, error) {
+	userId, err := utils.GetCurrentUserId(ctx)
+	if err != nil {
+		u.log.Error("get current user id failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
 	publish := map[string]interface{}{
 		"deleted_flag": 1,
 		"deleted_time": time.Now(),
@@ -192,12 +210,16 @@ func (u *publishRepo) DeletePublish(ctx context.Context, req *v1.DeletePublishRe
 
 	tx := u.data.db.Begin()
 
-	result := tx.Model(&Publish{}).Where("id = ?", req.Id).Where("deleted_flag = ?", 0).Updates(publish)
+	result := tx.Model(&Publish{}).Where("id = ?", req.Id).Where("user_id = ?", userId).Where("deleted_flag = ?", 0).Updates(publish)
 
 	if result.Error != nil {
 		tx.Rollback()
 		u.log.Error("delete publish failed: %v", result.Error)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+	if result.RowsAffected == 0 {
+		tx.Rollback()
+		return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "发布内容不存在或无权限")
 	}
 
 	if err := tx.Commit().Error; err != nil {
@@ -236,7 +258,13 @@ func (u *publishRepo) UpdatePublishStatus(ctx context.Context, req *v1.UpdatePub
 func (u *publishRepo) GetPublish(ctx context.Context, req *v1.GetPublishRequest) (*v1.GetPublishReply, error) {
 	publish := &Publish{}
 
-	if err := u.data.db.Model(&Publish{}).Where("id = ?", req.Id).Where("deleted_flag = ?", 0).First(publish).Error; err != nil {
+	userId, err := utils.GetCurrentUserId(ctx)
+	if err != nil {
+		u.log.Error("get current user id failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	if err := u.data.db.Model(&Publish{}).Where("id = ?", req.Id).Where("user_id = ?", userId).Where("deleted_flag = ?", 0).First(publish).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "发布内容不存在")
 		}
