@@ -277,11 +277,16 @@ func (m *GetPublishListRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	// no validation rules for Status
-
-	// no validation rules for StartTime
-
-	// no validation rules for EndTime
+	if val := m.GetPType(); val < 0 || val > 4 {
+		err := GetPublishListRequestValidationError{
+			field:  "PType",
+			reason: "value must be inside range [0, 4]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if len(errors) > 0 {
 		return GetPublishListRequestMultiError(errors)
@@ -392,6 +397,8 @@ func (m *PublishListItem) validate(all bool) error {
 	// no validation rules for PublishStatus
 
 	// no validation rules for AuditStatus
+
+	// no validation rules for CoverImage
 
 	// no validation rules for Remark
 

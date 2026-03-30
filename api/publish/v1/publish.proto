@@ -57,9 +57,9 @@ message BaseRequest {}
 message BaseResponse {}
 
 message GetPublishListRequest {
-	int32 page = 1 [(validate.rules).int64 = {gte: 1}];
-	int32 size = 2 [(validate.rules).int64 = {gte: 10, lte: 200}];
-	int32 pType = 3 [(validate.rules).int64 = {gte: 0, lte: 4}];
+	int32 page = 1 [(validate.rules).int32 = {gte: 1}];
+	int32 size = 2 [(validate.rules).int32 = {gte: 10, lte: 200}];
+	int32 p_type = 3 [(validate.rules).int32 = {gte: 0, lte: 4}];
 }
 
 message PublishListItem {
