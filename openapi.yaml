@@ -67,6 +67,40 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.collect.v1.GetCollectTypesReply'
+    /api/v1/discover/list:
+        get:
+            tags:
+                - Discover
+            description: GetDiscoverList 查询发现列表
+            operationId: Discover_GetDiscoverList
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: size
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: pType
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: cType
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.discover.v1.GetDiscoverListReply'
     /api/v1/file/download:
         get:
             tags:
@@ -784,6 +818,48 @@ components:
                     type: array
                     items:
                         type: string
+        api.discover.v1.DiscoverList:
+            type: object
+            properties:
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.discover.v1.DiscoverListItem'
+                total:
+                    type: string
+        api.discover.v1.DiscoverListItem:
+            type: object
+            properties:
+                id:
+                    type: string
+                title:
+                    type: string
+                postStatus:
+                    type: integer
+                    format: int32
+                auditStatus:
+                    type: integer
+                    format: int32
+                coverImage:
+                    type: string
+                remark:
+                    type: string
+                createdTime:
+                    type: string
+                updatedTime:
+                    type: string
+        api.discover.v1.GetDiscoverListReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    $ref: '#/components/schemas/api.discover.v1.DiscoverList'
         api.file.v1.DownloadFileReply:
             type: object
             properties:
@@ -1576,6 +1652,7 @@ components:
                     type: string
 tags:
     - name: Collect
+    - name: Discover
     - name: File
     - name: Post
     - name: Role
