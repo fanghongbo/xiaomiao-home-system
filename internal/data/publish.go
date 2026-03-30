@@ -30,7 +30,13 @@ func (u *publishRepo) GetPublishList(ctx context.Context, req *v1.GetPublishList
 	var items []*v1.PublishListItem
 	var total int64
 
-	baseQuery := u.data.db.Model(&Publish{}).Where("deleted_flag = ?", 0)
+	userId, err := utils.GetCurrentUserId(ctx)
+	if err != nil {
+		u.log.Error("get current user id failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	baseQuery := u.data.db.Model(&Publish{}).Where("deleted_flag = ?", 0).Where("user_id = ?", userId)
 
 	if req.PType > 0 {
 		baseQuery = baseQuery.Where("publish_type = ?", req.PType)
@@ -40,9 +46,9 @@ func (u *publishRepo) GetPublishList(ctx context.Context, req *v1.GetPublishList
 		return nil, err
 	}
 
-	result := baseQuery.Select("id", "title", "publish_status", "audit_status", "remark", "created_time", "updated_time").
-		Offset(int((req.Page - 1) * req.Size)).
-		Limit(int(req.Size))
+	result := baseQuery.Select("id", "title", "publish_status", "audit_status", "remark", "created_time", "updated_time").Order("created_time DESC").
+		Limit(int(req.Size)).
+		Offset(int((req.Page - 1) * req.Size))
 
 	rows, err := result.Rows()
 	if err != nil {
