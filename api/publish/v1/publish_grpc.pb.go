@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	Publish_GetPublishList_FullMethodName      = "/api.publish.v1.Publish/GetPublishList"
 	Publish_CreatePublish_FullMethodName       = "/api.publish.v1.Publish/CreatePublish"
+	Publish_GetPublish_FullMethodName          = "/api.publish.v1.Publish/GetPublish"
 	Publish_UpdatePublish_FullMethodName       = "/api.publish.v1.Publish/UpdatePublish"
 	Publish_DeletePublish_FullMethodName       = "/api.publish.v1.Publish/DeletePublish"
 	Publish_UpdatePublishStatus_FullMethodName = "/api.publish.v1.Publish/UpdatePublishStatus"
@@ -34,7 +35,9 @@ type PublishClient interface {
 	GetPublishList(ctx context.Context, in *GetPublishListRequest, opts ...grpc.CallOption) (*GetPublishListReply, error)
 	// CreatePublish 创建发布内容
 	CreatePublish(ctx context.Context, in *CreatePublishRequest, opts ...grpc.CallOption) (*CreatePublishReply, error)
-	// UpdateUser 更新发布内容
+	// GetPublish 查询发布内容
+	GetPublish(ctx context.Context, in *GetPublishRequest, opts ...grpc.CallOption) (*GetPublishReply, error)
+	// UpdatePublish 更新发布内容
 	UpdatePublish(ctx context.Context, in *UpdatePublishRequest, opts ...grpc.CallOption) (*UpdatePublishReply, error)
 	// DeletePublish 删除发布内容
 	DeletePublish(ctx context.Context, in *DeletePublishRequest, opts ...grpc.CallOption) (*DeletePublishReply, error)
@@ -64,6 +67,16 @@ func (c *publishClient) CreatePublish(ctx context.Context, in *CreatePublishRequ
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CreatePublishReply)
 	err := c.cc.Invoke(ctx, Publish_CreatePublish_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *publishClient) GetPublish(ctx context.Context, in *GetPublishRequest, opts ...grpc.CallOption) (*GetPublishReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetPublishReply)
+	err := c.cc.Invoke(ctx, Publish_GetPublish_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +121,9 @@ type PublishServer interface {
 	GetPublishList(context.Context, *GetPublishListRequest) (*GetPublishListReply, error)
 	// CreatePublish 创建发布内容
 	CreatePublish(context.Context, *CreatePublishRequest) (*CreatePublishReply, error)
-	// UpdateUser 更新发布内容
+	// GetPublish 查询发布内容
+	GetPublish(context.Context, *GetPublishRequest) (*GetPublishReply, error)
+	// UpdatePublish 更新发布内容
 	UpdatePublish(context.Context, *UpdatePublishRequest) (*UpdatePublishReply, error)
 	// DeletePublish 删除发布内容
 	DeletePublish(context.Context, *DeletePublishRequest) (*DeletePublishReply, error)
@@ -129,6 +144,9 @@ func (UnimplementedPublishServer) GetPublishList(context.Context, *GetPublishLis
 }
 func (UnimplementedPublishServer) CreatePublish(context.Context, *CreatePublishRequest) (*CreatePublishReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method CreatePublish not implemented")
+}
+func (UnimplementedPublishServer) GetPublish(context.Context, *GetPublishRequest) (*GetPublishReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetPublish not implemented")
 }
 func (UnimplementedPublishServer) UpdatePublish(context.Context, *UpdatePublishRequest) (*UpdatePublishReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method UpdatePublish not implemented")
@@ -192,6 +210,24 @@ func _Publish_CreatePublish_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(PublishServer).CreatePublish(ctx, req.(*CreatePublishRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Publish_GetPublish_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPublishRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PublishServer).GetPublish(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Publish_GetPublish_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PublishServer).GetPublish(ctx, req.(*GetPublishRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -264,6 +300,10 @@ var Publish_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreatePublish",
 			Handler:    _Publish_CreatePublish_Handler,
+		},
+		{
+			MethodName: "GetPublish",
+			Handler:    _Publish_GetPublish_Handler,
 		},
 		{
 			MethodName: "UpdatePublish",

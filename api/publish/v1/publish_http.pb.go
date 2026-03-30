@@ -21,6 +21,7 @@ const _ = http.SupportPackageIsVersion1
 
 const OperationPublishCreatePublish = "/api.publish.v1.Publish/CreatePublish"
 const OperationPublishDeletePublish = "/api.publish.v1.Publish/DeletePublish"
+const OperationPublishGetPublish = "/api.publish.v1.Publish/GetPublish"
 const OperationPublishGetPublishList = "/api.publish.v1.Publish/GetPublishList"
 const OperationPublishUpdatePublish = "/api.publish.v1.Publish/UpdatePublish"
 const OperationPublishUpdatePublishStatus = "/api.publish.v1.Publish/UpdatePublishStatus"
@@ -30,9 +31,11 @@ type PublishHTTPServer interface {
 	CreatePublish(context.Context, *CreatePublishRequest) (*CreatePublishReply, error)
 	// DeletePublish DeletePublish 删除发布内容
 	DeletePublish(context.Context, *DeletePublishRequest) (*DeletePublishReply, error)
+	// GetPublish GetPublish 查询发布内容
+	GetPublish(context.Context, *GetPublishRequest) (*GetPublishReply, error)
 	// GetPublishList GetPublishList 查询发布内容列表
 	GetPublishList(context.Context, *GetPublishListRequest) (*GetPublishListReply, error)
-	// UpdatePublish UpdateUser 更新发布内容
+	// UpdatePublish UpdatePublish 更新发布内容
 	UpdatePublish(context.Context, *UpdatePublishRequest) (*UpdatePublishReply, error)
 	// UpdatePublishStatus UpdatePublishStatus 更新发布内容状态
 	UpdatePublishStatus(context.Context, *UpdatePublishStatusRequest) (*UpdatePublishStatusReply, error)
@@ -42,6 +45,7 @@ func RegisterPublishHTTPServer(s *http.Server, srv PublishHTTPServer) {
 	r := s.Route("/")
 	r.GET("/api/v1/publish/list", _Publish_GetPublishList0_HTTP_Handler(srv))
 	r.POST("/api/v1/publish", _Publish_CreatePublish0_HTTP_Handler(srv))
+	r.GET("/api/v1/publish/{id}", _Publish_GetPublish0_HTTP_Handler(srv))
 	r.PUT("/api/v1/publish/{id}", _Publish_UpdatePublish0_HTTP_Handler(srv))
 	r.DELETE("/api/v1/publish/{id}", _Publish_DeletePublish0_HTTP_Handler(srv))
 	r.PUT("/api/v1/publish/status/{id}", _Publish_UpdatePublishStatus0_HTTP_Handler(srv))
@@ -84,6 +88,28 @@ func _Publish_CreatePublish0_HTTP_Handler(srv PublishHTTPServer) func(ctx http.C
 			return err
 		}
 		reply := out.(*CreatePublishReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Publish_GetPublish0_HTTP_Handler(srv PublishHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetPublishRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationPublishGetPublish)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetPublish(ctx, req.(*GetPublishRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetPublishReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -165,9 +191,11 @@ type PublishHTTPClient interface {
 	CreatePublish(ctx context.Context, req *CreatePublishRequest, opts ...http.CallOption) (rsp *CreatePublishReply, err error)
 	// DeletePublish DeletePublish 删除发布内容
 	DeletePublish(ctx context.Context, req *DeletePublishRequest, opts ...http.CallOption) (rsp *DeletePublishReply, err error)
+	// GetPublish GetPublish 查询发布内容
+	GetPublish(ctx context.Context, req *GetPublishRequest, opts ...http.CallOption) (rsp *GetPublishReply, err error)
 	// GetPublishList GetPublishList 查询发布内容列表
 	GetPublishList(ctx context.Context, req *GetPublishListRequest, opts ...http.CallOption) (rsp *GetPublishListReply, err error)
-	// UpdatePublish UpdateUser 更新发布内容
+	// UpdatePublish UpdatePublish 更新发布内容
 	UpdatePublish(ctx context.Context, req *UpdatePublishRequest, opts ...http.CallOption) (rsp *UpdatePublishReply, err error)
 	// UpdatePublishStatus UpdatePublishStatus 更新发布内容状态
 	UpdatePublishStatus(ctx context.Context, req *UpdatePublishStatusRequest, opts ...http.CallOption) (rsp *UpdatePublishStatusReply, err error)
@@ -209,6 +237,20 @@ func (c *PublishHTTPClientImpl) DeletePublish(ctx context.Context, in *DeletePub
 	return &out, nil
 }
 
+// GetPublish GetPublish 查询发布内容
+func (c *PublishHTTPClientImpl) GetPublish(ctx context.Context, in *GetPublishRequest, opts ...http.CallOption) (*GetPublishReply, error) {
+	var out GetPublishReply
+	pattern := "/api/v1/publish/{id}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationPublishGetPublish))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
 // GetPublishList GetPublishList 查询发布内容列表
 func (c *PublishHTTPClientImpl) GetPublishList(ctx context.Context, in *GetPublishListRequest, opts ...http.CallOption) (*GetPublishListReply, error) {
 	var out GetPublishListReply
@@ -223,7 +265,7 @@ func (c *PublishHTTPClientImpl) GetPublishList(ctx context.Context, in *GetPubli
 	return &out, nil
 }
 
-// UpdatePublish UpdateUser 更新发布内容
+// UpdatePublish UpdatePublish 更新发布内容
 func (c *PublishHTTPClientImpl) UpdatePublish(ctx context.Context, in *UpdatePublishRequest, opts ...http.CallOption) (*UpdatePublishReply, error) {
 	var out UpdatePublishReply
 	pattern := "/api/v1/publish/{id}"

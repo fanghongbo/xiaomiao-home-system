@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v6.30.2
-// source: api/publish/v1/publish.proto
+// source: publish/v1/publish.proto
 
 package v1
 
@@ -32,7 +32,7 @@ type BaseRequest struct {
 
 func (x *BaseRequest) Reset() {
 	*x = BaseRequest{}
-	mi := &file_api_publish_v1_publish_proto_msgTypes[0]
+	mi := &file_publish_v1_publish_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -44,7 +44,7 @@ func (x *BaseRequest) String() string {
 func (*BaseRequest) ProtoMessage() {}
 
 func (x *BaseRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_publish_v1_publish_proto_msgTypes[0]
+	mi := &file_publish_v1_publish_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -57,7 +57,7 @@ func (x *BaseRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BaseRequest.ProtoReflect.Descriptor instead.
 func (*BaseRequest) Descriptor() ([]byte, []int) {
-	return file_api_publish_v1_publish_proto_rawDescGZIP(), []int{0}
+	return file_publish_v1_publish_proto_rawDescGZIP(), []int{0}
 }
 
 // 基础响应体
@@ -69,7 +69,7 @@ type BaseResponse struct {
 
 func (x *BaseResponse) Reset() {
 	*x = BaseResponse{}
-	mi := &file_api_publish_v1_publish_proto_msgTypes[1]
+	mi := &file_publish_v1_publish_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -81,7 +81,7 @@ func (x *BaseResponse) String() string {
 func (*BaseResponse) ProtoMessage() {}
 
 func (x *BaseResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_publish_v1_publish_proto_msgTypes[1]
+	mi := &file_publish_v1_publish_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -94,7 +94,7 @@ func (x *BaseResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BaseResponse.ProtoReflect.Descriptor instead.
 func (*BaseResponse) Descriptor() ([]byte, []int) {
-	return file_api_publish_v1_publish_proto_rawDescGZIP(), []int{1}
+	return file_publish_v1_publish_proto_rawDescGZIP(), []int{1}
 }
 
 type GetPublishListRequest struct {
@@ -108,7 +108,7 @@ type GetPublishListRequest struct {
 
 func (x *GetPublishListRequest) Reset() {
 	*x = GetPublishListRequest{}
-	mi := &file_api_publish_v1_publish_proto_msgTypes[2]
+	mi := &file_publish_v1_publish_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -120,7 +120,7 @@ func (x *GetPublishListRequest) String() string {
 func (*GetPublishListRequest) ProtoMessage() {}
 
 func (x *GetPublishListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_publish_v1_publish_proto_msgTypes[2]
+	mi := &file_publish_v1_publish_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -133,7 +133,7 @@ func (x *GetPublishListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetPublishListRequest.ProtoReflect.Descriptor instead.
 func (*GetPublishListRequest) Descriptor() ([]byte, []int) {
-	return file_api_publish_v1_publish_proto_rawDescGZIP(), []int{2}
+	return file_publish_v1_publish_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *GetPublishListRequest) GetPage() int32 {
@@ -173,7 +173,7 @@ type PublishListItem struct {
 
 func (x *PublishListItem) Reset() {
 	*x = PublishListItem{}
-	mi := &file_api_publish_v1_publish_proto_msgTypes[3]
+	mi := &file_publish_v1_publish_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -185,7 +185,7 @@ func (x *PublishListItem) String() string {
 func (*PublishListItem) ProtoMessage() {}
 
 func (x *PublishListItem) ProtoReflect() protoreflect.Message {
-	mi := &file_api_publish_v1_publish_proto_msgTypes[3]
+	mi := &file_publish_v1_publish_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -198,7 +198,7 @@ func (x *PublishListItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PublishListItem.ProtoReflect.Descriptor instead.
 func (*PublishListItem) Descriptor() ([]byte, []int) {
-	return file_api_publish_v1_publish_proto_rawDescGZIP(), []int{3}
+	return file_publish_v1_publish_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *PublishListItem) GetId() int64 {
@@ -267,7 +267,7 @@ type PublishList struct {
 
 func (x *PublishList) Reset() {
 	*x = PublishList{}
-	mi := &file_api_publish_v1_publish_proto_msgTypes[4]
+	mi := &file_publish_v1_publish_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -279,7 +279,7 @@ func (x *PublishList) String() string {
 func (*PublishList) ProtoMessage() {}
 
 func (x *PublishList) ProtoReflect() protoreflect.Message {
-	mi := &file_api_publish_v1_publish_proto_msgTypes[4]
+	mi := &file_publish_v1_publish_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -292,7 +292,7 @@ func (x *PublishList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PublishList.ProtoReflect.Descriptor instead.
 func (*PublishList) Descriptor() ([]byte, []int) {
-	return file_api_publish_v1_publish_proto_rawDescGZIP(), []int{4}
+	return file_publish_v1_publish_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *PublishList) GetItems() []*PublishListItem {
@@ -309,6 +309,218 @@ func (x *PublishList) GetTotal() int64 {
 	return 0
 }
 
+type GetPublishRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetPublishRequest) Reset() {
+	*x = GetPublishRequest{}
+	mi := &file_publish_v1_publish_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetPublishRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetPublishRequest) ProtoMessage() {}
+
+func (x *GetPublishRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_publish_v1_publish_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetPublishRequest.ProtoReflect.Descriptor instead.
+func (*GetPublishRequest) Descriptor() ([]byte, []int) {
+	return file_publish_v1_publish_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *GetPublishRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type PublishInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+	PublishStatus int32                  `protobuf:"varint,3,opt,name=publishStatus,proto3" json:"publishStatus,omitempty"`
+	AuditStatus   int32                  `protobuf:"varint,4,opt,name=auditStatus,proto3" json:"auditStatus,omitempty"`
+	CoverImage    string                 `protobuf:"bytes,5,opt,name=coverImage,proto3" json:"coverImage,omitempty"`
+	Remark        string                 `protobuf:"bytes,6,opt,name=remark,proto3" json:"remark,omitempty"`
+	CreatedTime   string                 `protobuf:"bytes,7,opt,name=createdTime,proto3" json:"createdTime,omitempty"`
+	UpdatedTime   string                 `protobuf:"bytes,8,opt,name=updatedTime,proto3" json:"updatedTime,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PublishInfo) Reset() {
+	*x = PublishInfo{}
+	mi := &file_publish_v1_publish_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PublishInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PublishInfo) ProtoMessage() {}
+
+func (x *PublishInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_publish_v1_publish_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PublishInfo.ProtoReflect.Descriptor instead.
+func (*PublishInfo) Descriptor() ([]byte, []int) {
+	return file_publish_v1_publish_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *PublishInfo) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *PublishInfo) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+func (x *PublishInfo) GetPublishStatus() int32 {
+	if x != nil {
+		return x.PublishStatus
+	}
+	return 0
+}
+
+func (x *PublishInfo) GetAuditStatus() int32 {
+	if x != nil {
+		return x.AuditStatus
+	}
+	return 0
+}
+
+func (x *PublishInfo) GetCoverImage() string {
+	if x != nil {
+		return x.CoverImage
+	}
+	return ""
+}
+
+func (x *PublishInfo) GetRemark() string {
+	if x != nil {
+		return x.Remark
+	}
+	return ""
+}
+
+func (x *PublishInfo) GetCreatedTime() string {
+	if x != nil {
+		return x.CreatedTime
+	}
+	return ""
+}
+
+func (x *PublishInfo) GetUpdatedTime() string {
+	if x != nil {
+		return x.UpdatedTime
+	}
+	return ""
+}
+
+type GetPublishReply struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Code          int32                  `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Success       bool                   `protobuf:"varint,3,opt,name=success,proto3" json:"success,omitempty"`
+	Data          *PublishInfo           `protobuf:"bytes,4,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetPublishReply) Reset() {
+	*x = GetPublishReply{}
+	mi := &file_publish_v1_publish_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetPublishReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetPublishReply) ProtoMessage() {}
+
+func (x *GetPublishReply) ProtoReflect() protoreflect.Message {
+	mi := &file_publish_v1_publish_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetPublishReply.ProtoReflect.Descriptor instead.
+func (*GetPublishReply) Descriptor() ([]byte, []int) {
+	return file_publish_v1_publish_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *GetPublishReply) GetCode() int32 {
+	if x != nil {
+		return x.Code
+	}
+	return 0
+}
+
+func (x *GetPublishReply) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *GetPublishReply) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetPublishReply) GetData() *PublishInfo {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
 type GetPublishListReply struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Code          int32                  `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
@@ -321,7 +533,7 @@ type GetPublishListReply struct {
 
 func (x *GetPublishListReply) Reset() {
 	*x = GetPublishListReply{}
-	mi := &file_api_publish_v1_publish_proto_msgTypes[5]
+	mi := &file_publish_v1_publish_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -333,7 +545,7 @@ func (x *GetPublishListReply) String() string {
 func (*GetPublishListReply) ProtoMessage() {}
 
 func (x *GetPublishListReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_publish_v1_publish_proto_msgTypes[5]
+	mi := &file_publish_v1_publish_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -346,7 +558,7 @@ func (x *GetPublishListReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetPublishListReply.ProtoReflect.Descriptor instead.
 func (*GetPublishListReply) Descriptor() ([]byte, []int) {
-	return file_api_publish_v1_publish_proto_rawDescGZIP(), []int{5}
+	return file_publish_v1_publish_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *GetPublishListReply) GetCode() int32 {
@@ -394,7 +606,7 @@ type CreatePublishRequest struct {
 
 func (x *CreatePublishRequest) Reset() {
 	*x = CreatePublishRequest{}
-	mi := &file_api_publish_v1_publish_proto_msgTypes[6]
+	mi := &file_publish_v1_publish_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -406,7 +618,7 @@ func (x *CreatePublishRequest) String() string {
 func (*CreatePublishRequest) ProtoMessage() {}
 
 func (x *CreatePublishRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_publish_v1_publish_proto_msgTypes[6]
+	mi := &file_publish_v1_publish_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -419,7 +631,7 @@ func (x *CreatePublishRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreatePublishRequest.ProtoReflect.Descriptor instead.
 func (*CreatePublishRequest) Descriptor() ([]byte, []int) {
-	return file_api_publish_v1_publish_proto_rawDescGZIP(), []int{6}
+	return file_publish_v1_publish_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *CreatePublishRequest) GetTitle() string {
@@ -497,7 +709,7 @@ type CreatePublishReply struct {
 
 func (x *CreatePublishReply) Reset() {
 	*x = CreatePublishReply{}
-	mi := &file_api_publish_v1_publish_proto_msgTypes[7]
+	mi := &file_publish_v1_publish_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -509,7 +721,7 @@ func (x *CreatePublishReply) String() string {
 func (*CreatePublishReply) ProtoMessage() {}
 
 func (x *CreatePublishReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_publish_v1_publish_proto_msgTypes[7]
+	mi := &file_publish_v1_publish_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -522,7 +734,7 @@ func (x *CreatePublishReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreatePublishReply.ProtoReflect.Descriptor instead.
 func (*CreatePublishReply) Descriptor() ([]byte, []int) {
-	return file_api_publish_v1_publish_proto_rawDescGZIP(), []int{7}
+	return file_publish_v1_publish_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *CreatePublishReply) GetCode() int32 {
@@ -556,17 +768,22 @@ func (x *CreatePublishReply) GetData() string {
 type UpdatePublishRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	PublishName   string                 `protobuf:"bytes,2,opt,name=publishName,proto3" json:"publishName,omitempty"`
-	Status        int32                  `protobuf:"varint,3,opt,name=status,proto3" json:"status,omitempty"`
-	Remark        string                 `protobuf:"bytes,4,opt,name=remark,proto3" json:"remark,omitempty"`
-	Permissions   []string               `protobuf:"bytes,5,rep,name=permissions,proto3" json:"permissions,omitempty"`
+	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+	PublishType   int32                  `protobuf:"varint,3,opt,name=publishType,proto3" json:"publishType,omitempty"`
+	ProvinceId    int32                  `protobuf:"varint,4,opt,name=provinceId,proto3" json:"provinceId,omitempty"`
+	CityId        int32                  `protobuf:"varint,5,opt,name=cityId,proto3" json:"cityId,omitempty"`
+	Address       string                 `protobuf:"bytes,6,opt,name=address,proto3" json:"address,omitempty"`
+	Remark        string                 `protobuf:"bytes,7,opt,name=remark,proto3" json:"remark,omitempty"`
+	CatType       int32                  `protobuf:"varint,8,opt,name=catType,proto3" json:"catType,omitempty"`
+	CatBreed      int32                  `protobuf:"varint,9,opt,name=catBreed,proto3" json:"catBreed,omitempty"`
+	CatGender     int32                  `protobuf:"varint,10,opt,name=catGender,proto3" json:"catGender,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *UpdatePublishRequest) Reset() {
 	*x = UpdatePublishRequest{}
-	mi := &file_api_publish_v1_publish_proto_msgTypes[8]
+	mi := &file_publish_v1_publish_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -578,7 +795,7 @@ func (x *UpdatePublishRequest) String() string {
 func (*UpdatePublishRequest) ProtoMessage() {}
 
 func (x *UpdatePublishRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_publish_v1_publish_proto_msgTypes[8]
+	mi := &file_publish_v1_publish_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -591,7 +808,7 @@ func (x *UpdatePublishRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdatePublishRequest.ProtoReflect.Descriptor instead.
 func (*UpdatePublishRequest) Descriptor() ([]byte, []int) {
-	return file_api_publish_v1_publish_proto_rawDescGZIP(), []int{8}
+	return file_publish_v1_publish_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *UpdatePublishRequest) GetId() int64 {
@@ -601,18 +818,39 @@ func (x *UpdatePublishRequest) GetId() int64 {
 	return 0
 }
 
-func (x *UpdatePublishRequest) GetPublishName() string {
+func (x *UpdatePublishRequest) GetTitle() string {
 	if x != nil {
-		return x.PublishName
+		return x.Title
 	}
 	return ""
 }
 
-func (x *UpdatePublishRequest) GetStatus() int32 {
+func (x *UpdatePublishRequest) GetPublishType() int32 {
 	if x != nil {
-		return x.Status
+		return x.PublishType
 	}
 	return 0
+}
+
+func (x *UpdatePublishRequest) GetProvinceId() int32 {
+	if x != nil {
+		return x.ProvinceId
+	}
+	return 0
+}
+
+func (x *UpdatePublishRequest) GetCityId() int32 {
+	if x != nil {
+		return x.CityId
+	}
+	return 0
+}
+
+func (x *UpdatePublishRequest) GetAddress() string {
+	if x != nil {
+		return x.Address
+	}
+	return ""
 }
 
 func (x *UpdatePublishRequest) GetRemark() string {
@@ -622,11 +860,25 @@ func (x *UpdatePublishRequest) GetRemark() string {
 	return ""
 }
 
-func (x *UpdatePublishRequest) GetPermissions() []string {
+func (x *UpdatePublishRequest) GetCatType() int32 {
 	if x != nil {
-		return x.Permissions
+		return x.CatType
 	}
-	return nil
+	return 0
+}
+
+func (x *UpdatePublishRequest) GetCatBreed() int32 {
+	if x != nil {
+		return x.CatBreed
+	}
+	return 0
+}
+
+func (x *UpdatePublishRequest) GetCatGender() int32 {
+	if x != nil {
+		return x.CatGender
+	}
+	return 0
 }
 
 type UpdatePublishReply struct {
@@ -641,7 +893,7 @@ type UpdatePublishReply struct {
 
 func (x *UpdatePublishReply) Reset() {
 	*x = UpdatePublishReply{}
-	mi := &file_api_publish_v1_publish_proto_msgTypes[9]
+	mi := &file_publish_v1_publish_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -653,7 +905,7 @@ func (x *UpdatePublishReply) String() string {
 func (*UpdatePublishReply) ProtoMessage() {}
 
 func (x *UpdatePublishReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_publish_v1_publish_proto_msgTypes[9]
+	mi := &file_publish_v1_publish_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -666,7 +918,7 @@ func (x *UpdatePublishReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdatePublishReply.ProtoReflect.Descriptor instead.
 func (*UpdatePublishReply) Descriptor() ([]byte, []int) {
-	return file_api_publish_v1_publish_proto_rawDescGZIP(), []int{9}
+	return file_publish_v1_publish_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *UpdatePublishReply) GetCode() int32 {
@@ -706,7 +958,7 @@ type DeletePublishRequest struct {
 
 func (x *DeletePublishRequest) Reset() {
 	*x = DeletePublishRequest{}
-	mi := &file_api_publish_v1_publish_proto_msgTypes[10]
+	mi := &file_publish_v1_publish_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -718,7 +970,7 @@ func (x *DeletePublishRequest) String() string {
 func (*DeletePublishRequest) ProtoMessage() {}
 
 func (x *DeletePublishRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_publish_v1_publish_proto_msgTypes[10]
+	mi := &file_publish_v1_publish_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -731,7 +983,7 @@ func (x *DeletePublishRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeletePublishRequest.ProtoReflect.Descriptor instead.
 func (*DeletePublishRequest) Descriptor() ([]byte, []int) {
-	return file_api_publish_v1_publish_proto_rawDescGZIP(), []int{10}
+	return file_publish_v1_publish_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *DeletePublishRequest) GetId() int64 {
@@ -753,7 +1005,7 @@ type DeletePublishReply struct {
 
 func (x *DeletePublishReply) Reset() {
 	*x = DeletePublishReply{}
-	mi := &file_api_publish_v1_publish_proto_msgTypes[11]
+	mi := &file_publish_v1_publish_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -765,7 +1017,7 @@ func (x *DeletePublishReply) String() string {
 func (*DeletePublishReply) ProtoMessage() {}
 
 func (x *DeletePublishReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_publish_v1_publish_proto_msgTypes[11]
+	mi := &file_publish_v1_publish_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -778,7 +1030,7 @@ func (x *DeletePublishReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeletePublishReply.ProtoReflect.Descriptor instead.
 func (*DeletePublishReply) Descriptor() ([]byte, []int) {
-	return file_api_publish_v1_publish_proto_rawDescGZIP(), []int{11}
+	return file_publish_v1_publish_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *DeletePublishReply) GetCode() int32 {
@@ -819,7 +1071,7 @@ type UpdatePublishStatusRequest struct {
 
 func (x *UpdatePublishStatusRequest) Reset() {
 	*x = UpdatePublishStatusRequest{}
-	mi := &file_api_publish_v1_publish_proto_msgTypes[12]
+	mi := &file_publish_v1_publish_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -831,7 +1083,7 @@ func (x *UpdatePublishStatusRequest) String() string {
 func (*UpdatePublishStatusRequest) ProtoMessage() {}
 
 func (x *UpdatePublishStatusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_publish_v1_publish_proto_msgTypes[12]
+	mi := &file_publish_v1_publish_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -844,7 +1096,7 @@ func (x *UpdatePublishStatusRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdatePublishStatusRequest.ProtoReflect.Descriptor instead.
 func (*UpdatePublishStatusRequest) Descriptor() ([]byte, []int) {
-	return file_api_publish_v1_publish_proto_rawDescGZIP(), []int{12}
+	return file_publish_v1_publish_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *UpdatePublishStatusRequest) GetId() int64 {
@@ -873,7 +1125,7 @@ type UpdatePublishStatusReply struct {
 
 func (x *UpdatePublishStatusReply) Reset() {
 	*x = UpdatePublishStatusReply{}
-	mi := &file_api_publish_v1_publish_proto_msgTypes[13]
+	mi := &file_publish_v1_publish_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -885,7 +1137,7 @@ func (x *UpdatePublishStatusReply) String() string {
 func (*UpdatePublishStatusReply) ProtoMessage() {}
 
 func (x *UpdatePublishStatusReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_publish_v1_publish_proto_msgTypes[13]
+	mi := &file_publish_v1_publish_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -898,7 +1150,7 @@ func (x *UpdatePublishStatusReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdatePublishStatusReply.ProtoReflect.Descriptor instead.
 func (*UpdatePublishStatusReply) Descriptor() ([]byte, []int) {
-	return file_api_publish_v1_publish_proto_rawDescGZIP(), []int{13}
+	return file_publish_v1_publish_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *UpdatePublishStatusReply) GetCode() int32 {
@@ -929,11 +1181,11 @@ func (x *UpdatePublishStatusReply) GetData() string {
 	return ""
 }
 
-var File_api_publish_v1_publish_proto protoreflect.FileDescriptor
+var File_publish_v1_publish_proto protoreflect.FileDescriptor
 
-const file_api_publish_v1_publish_proto_rawDesc = "" +
+const file_publish_v1_publish_proto_rawDesc = "" +
 	"\n" +
-	"\x1capi/publish/v1/publish.proto\x12\x0eapi.publish.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\"\r\n" +
+	"\x18publish/v1/publish.proto\x12\x0eapi.publish.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\"\r\n" +
 	"\vBaseRequest\"\x0e\n" +
 	"\fBaseResponse\"v\n" +
 	"\x15GetPublishListRequest\x12\x1b\n" +
@@ -955,7 +1207,25 @@ const file_api_publish_v1_publish_proto_rawDesc = "" +
 	"\vupdatedTime\x18\b \x01(\tR\vupdatedTime\"Z\n" +
 	"\vPublishList\x125\n" +
 	"\x05items\x18\x01 \x03(\v2\x1f.api.publish.v1.PublishListItemR\x05items\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x03R\x05total\"\x8e\x01\n" +
+	"\x05total\x18\x02 \x01(\x03R\x05total\",\n" +
+	"\x11GetPublishRequest\x12\x17\n" +
+	"\x02id\x18\x01 \x01(\x03B\a\xfaB\x04\"\x02 \x00R\x02id\"\xf7\x01\n" +
+	"\vPublishInfo\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x14\n" +
+	"\x05title\x18\x02 \x01(\tR\x05title\x12$\n" +
+	"\rpublishStatus\x18\x03 \x01(\x05R\rpublishStatus\x12 \n" +
+	"\vauditStatus\x18\x04 \x01(\x05R\vauditStatus\x12\x1e\n" +
+	"\n" +
+	"coverImage\x18\x05 \x01(\tR\n" +
+	"coverImage\x12\x16\n" +
+	"\x06remark\x18\x06 \x01(\tR\x06remark\x12 \n" +
+	"\vcreatedTime\x18\a \x01(\tR\vcreatedTime\x12 \n" +
+	"\vupdatedTime\x18\b \x01(\tR\vupdatedTime\"\x8a\x01\n" +
+	"\x0fGetPublishReply\x12\x12\n" +
+	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12\x18\n" +
+	"\asuccess\x18\x03 \x01(\bR\asuccess\x12/\n" +
+	"\x04data\x18\x04 \x01(\v2\x1b.api.publish.v1.PublishInfoR\x04data\"\x8e\x01\n" +
 	"\x13GetPublishListReply\x12\x12\n" +
 	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12\x18\n" +
@@ -977,13 +1247,21 @@ const file_api_publish_v1_publish_proto_rawDesc = "" +
 	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12\x18\n" +
 	"\asuccess\x18\x03 \x01(\bR\asuccess\x12\x12\n" +
-	"\x04data\x18\x04 \x01(\tR\x04data\"\xac\x01\n" +
+	"\x04data\x18\x04 \x01(\tR\x04data\"\xfe\x02\n" +
 	"\x14UpdatePublishRequest\x12\x17\n" +
-	"\x02id\x18\x01 \x01(\x03B\a\xfaB\x04\"\x02 \x00R\x02id\x12)\n" +
-	"\vpublishName\x18\x02 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\vpublishName\x12\x16\n" +
-	"\x06status\x18\x03 \x01(\x05R\x06status\x12\x16\n" +
-	"\x06remark\x18\x04 \x01(\tR\x06remark\x12 \n" +
-	"\vpermissions\x18\x05 \x03(\tR\vpermissions\"p\n" +
+	"\x02id\x18\x01 \x01(\x03B\a\xfaB\x04\"\x02 \x00R\x02id\x12\x1d\n" +
+	"\x05title\x18\x02 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\x05title\x12+\n" +
+	"\vpublishType\x18\x03 \x01(\x05B\t\xfaB\x06\x1a\x04\x18\x04(\x00R\vpublishType\x12'\n" +
+	"\n" +
+	"provinceId\x18\x04 \x01(\x05B\a\xfaB\x04\x1a\x02(\x00R\n" +
+	"provinceId\x12\x1f\n" +
+	"\x06cityId\x18\x05 \x01(\x05B\a\xfaB\x04\x1a\x02(\x00R\x06cityId\x12!\n" +
+	"\aaddress\x18\x06 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\aaddress\x12\x1f\n" +
+	"\x06remark\x18\a \x01(\tB\a\xfaB\x04r\x02\x10\x01R\x06remark\x12#\n" +
+	"\acatType\x18\b \x01(\x05B\t\xfaB\x06\x1a\x04\x18\x02(\x01R\acatType\x12%\n" +
+	"\bcatBreed\x18\t \x01(\x05B\t\xfaB\x06\x1a\x04\x18\x14(\x00R\bcatBreed\x12'\n" +
+	"\tcatGender\x18\n" +
+	" \x01(\x05B\t\xfaB\x06\x1a\x04\x18\x02(\x00R\tcatGender\"p\n" +
 	"\x12UpdatePublishReply\x12\x12\n" +
 	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12\x18\n" +
@@ -1003,84 +1281,92 @@ const file_api_publish_v1_publish_proto_rawDesc = "" +
 	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12\x18\n" +
 	"\asuccess\x18\x03 \x01(\bR\asuccess\x12\x12\n" +
-	"\x04data\x18\x04 \x01(\tR\x04data2\x87\x05\n" +
+	"\x04data\x18\x04 \x01(\tR\x04data2\xf7\x05\n" +
 	"\aPublish\x12z\n" +
 	"\x0eGetPublishList\x12%.api.publish.v1.GetPublishListRequest\x1a#.api.publish.v1.GetPublishListReply\"\x1c\x82\xd3\xe4\x93\x02\x16\x12\x14/api/v1/publish/list\x12u\n" +
-	"\rCreatePublish\x12$.api.publish.v1.CreatePublishRequest\x1a\".api.publish.v1.CreatePublishReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/api/v1/publish\x12z\n" +
+	"\rCreatePublish\x12$.api.publish.v1.CreatePublishRequest\x1a\".api.publish.v1.CreatePublishReply\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/api/v1/publish\x12n\n" +
+	"\n" +
+	"GetPublish\x12!.api.publish.v1.GetPublishRequest\x1a\x1f.api.publish.v1.GetPublishReply\"\x1c\x82\xd3\xe4\x93\x02\x16\x12\x14/api/v1/publish/{id}\x12z\n" +
 	"\rUpdatePublish\x12$.api.publish.v1.UpdatePublishRequest\x1a\".api.publish.v1.UpdatePublishReply\"\x1f\x82\xd3\xe4\x93\x02\x19:\x01*\x1a\x14/api/v1/publish/{id}\x12w\n" +
 	"\rDeletePublish\x12$.api.publish.v1.DeletePublishRequest\x1a\".api.publish.v1.DeletePublishReply\"\x1c\x82\xd3\xe4\x93\x02\x16*\x14/api/v1/publish/{id}\x12\x93\x01\n" +
 	"\x13UpdatePublishStatus\x12*.api.publish.v1.UpdatePublishStatusRequest\x1a(.api.publish.v1.UpdatePublishStatusReply\"&\x82\xd3\xe4\x93\x02 :\x01*\x1a\x1b/api/v1/publish/status/{id}BJ\n" +
 	"\x0eapi.publish.v1B\x0ePublishProtoV1P\x01Z&xiaomiao-home-system/api/publish/v1;v1b\x06proto3"
 
 var (
-	file_api_publish_v1_publish_proto_rawDescOnce sync.Once
-	file_api_publish_v1_publish_proto_rawDescData []byte
+	file_publish_v1_publish_proto_rawDescOnce sync.Once
+	file_publish_v1_publish_proto_rawDescData []byte
 )
 
-func file_api_publish_v1_publish_proto_rawDescGZIP() []byte {
-	file_api_publish_v1_publish_proto_rawDescOnce.Do(func() {
-		file_api_publish_v1_publish_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_api_publish_v1_publish_proto_rawDesc), len(file_api_publish_v1_publish_proto_rawDesc)))
+func file_publish_v1_publish_proto_rawDescGZIP() []byte {
+	file_publish_v1_publish_proto_rawDescOnce.Do(func() {
+		file_publish_v1_publish_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_publish_v1_publish_proto_rawDesc), len(file_publish_v1_publish_proto_rawDesc)))
 	})
-	return file_api_publish_v1_publish_proto_rawDescData
+	return file_publish_v1_publish_proto_rawDescData
 }
 
-var file_api_publish_v1_publish_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
-var file_api_publish_v1_publish_proto_goTypes = []any{
+var file_publish_v1_publish_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
+var file_publish_v1_publish_proto_goTypes = []any{
 	(*BaseRequest)(nil),                // 0: api.publish.v1.BaseRequest
 	(*BaseResponse)(nil),               // 1: api.publish.v1.BaseResponse
 	(*GetPublishListRequest)(nil),      // 2: api.publish.v1.GetPublishListRequest
 	(*PublishListItem)(nil),            // 3: api.publish.v1.PublishListItem
 	(*PublishList)(nil),                // 4: api.publish.v1.PublishList
-	(*GetPublishListReply)(nil),        // 5: api.publish.v1.GetPublishListReply
-	(*CreatePublishRequest)(nil),       // 6: api.publish.v1.CreatePublishRequest
-	(*CreatePublishReply)(nil),         // 7: api.publish.v1.CreatePublishReply
-	(*UpdatePublishRequest)(nil),       // 8: api.publish.v1.UpdatePublishRequest
-	(*UpdatePublishReply)(nil),         // 9: api.publish.v1.UpdatePublishReply
-	(*DeletePublishRequest)(nil),       // 10: api.publish.v1.DeletePublishRequest
-	(*DeletePublishReply)(nil),         // 11: api.publish.v1.DeletePublishReply
-	(*UpdatePublishStatusRequest)(nil), // 12: api.publish.v1.UpdatePublishStatusRequest
-	(*UpdatePublishStatusReply)(nil),   // 13: api.publish.v1.UpdatePublishStatusReply
+	(*GetPublishRequest)(nil),          // 5: api.publish.v1.GetPublishRequest
+	(*PublishInfo)(nil),                // 6: api.publish.v1.PublishInfo
+	(*GetPublishReply)(nil),            // 7: api.publish.v1.GetPublishReply
+	(*GetPublishListReply)(nil),        // 8: api.publish.v1.GetPublishListReply
+	(*CreatePublishRequest)(nil),       // 9: api.publish.v1.CreatePublishRequest
+	(*CreatePublishReply)(nil),         // 10: api.publish.v1.CreatePublishReply
+	(*UpdatePublishRequest)(nil),       // 11: api.publish.v1.UpdatePublishRequest
+	(*UpdatePublishReply)(nil),         // 12: api.publish.v1.UpdatePublishReply
+	(*DeletePublishRequest)(nil),       // 13: api.publish.v1.DeletePublishRequest
+	(*DeletePublishReply)(nil),         // 14: api.publish.v1.DeletePublishReply
+	(*UpdatePublishStatusRequest)(nil), // 15: api.publish.v1.UpdatePublishStatusRequest
+	(*UpdatePublishStatusReply)(nil),   // 16: api.publish.v1.UpdatePublishStatusReply
 }
-var file_api_publish_v1_publish_proto_depIdxs = []int32{
+var file_publish_v1_publish_proto_depIdxs = []int32{
 	3,  // 0: api.publish.v1.PublishList.items:type_name -> api.publish.v1.PublishListItem
-	4,  // 1: api.publish.v1.GetPublishListReply.data:type_name -> api.publish.v1.PublishList
-	2,  // 2: api.publish.v1.Publish.GetPublishList:input_type -> api.publish.v1.GetPublishListRequest
-	6,  // 3: api.publish.v1.Publish.CreatePublish:input_type -> api.publish.v1.CreatePublishRequest
-	8,  // 4: api.publish.v1.Publish.UpdatePublish:input_type -> api.publish.v1.UpdatePublishRequest
-	10, // 5: api.publish.v1.Publish.DeletePublish:input_type -> api.publish.v1.DeletePublishRequest
-	12, // 6: api.publish.v1.Publish.UpdatePublishStatus:input_type -> api.publish.v1.UpdatePublishStatusRequest
-	5,  // 7: api.publish.v1.Publish.GetPublishList:output_type -> api.publish.v1.GetPublishListReply
-	7,  // 8: api.publish.v1.Publish.CreatePublish:output_type -> api.publish.v1.CreatePublishReply
-	9,  // 9: api.publish.v1.Publish.UpdatePublish:output_type -> api.publish.v1.UpdatePublishReply
-	11, // 10: api.publish.v1.Publish.DeletePublish:output_type -> api.publish.v1.DeletePublishReply
-	13, // 11: api.publish.v1.Publish.UpdatePublishStatus:output_type -> api.publish.v1.UpdatePublishStatusReply
-	7,  // [7:12] is the sub-list for method output_type
-	2,  // [2:7] is the sub-list for method input_type
-	2,  // [2:2] is the sub-list for extension type_name
-	2,  // [2:2] is the sub-list for extension extendee
-	0,  // [0:2] is the sub-list for field type_name
+	6,  // 1: api.publish.v1.GetPublishReply.data:type_name -> api.publish.v1.PublishInfo
+	4,  // 2: api.publish.v1.GetPublishListReply.data:type_name -> api.publish.v1.PublishList
+	2,  // 3: api.publish.v1.Publish.GetPublishList:input_type -> api.publish.v1.GetPublishListRequest
+	9,  // 4: api.publish.v1.Publish.CreatePublish:input_type -> api.publish.v1.CreatePublishRequest
+	5,  // 5: api.publish.v1.Publish.GetPublish:input_type -> api.publish.v1.GetPublishRequest
+	11, // 6: api.publish.v1.Publish.UpdatePublish:input_type -> api.publish.v1.UpdatePublishRequest
+	13, // 7: api.publish.v1.Publish.DeletePublish:input_type -> api.publish.v1.DeletePublishRequest
+	15, // 8: api.publish.v1.Publish.UpdatePublishStatus:input_type -> api.publish.v1.UpdatePublishStatusRequest
+	8,  // 9: api.publish.v1.Publish.GetPublishList:output_type -> api.publish.v1.GetPublishListReply
+	10, // 10: api.publish.v1.Publish.CreatePublish:output_type -> api.publish.v1.CreatePublishReply
+	7,  // 11: api.publish.v1.Publish.GetPublish:output_type -> api.publish.v1.GetPublishReply
+	12, // 12: api.publish.v1.Publish.UpdatePublish:output_type -> api.publish.v1.UpdatePublishReply
+	14, // 13: api.publish.v1.Publish.DeletePublish:output_type -> api.publish.v1.DeletePublishReply
+	16, // 14: api.publish.v1.Publish.UpdatePublishStatus:output_type -> api.publish.v1.UpdatePublishStatusReply
+	9,  // [9:15] is the sub-list for method output_type
+	3,  // [3:9] is the sub-list for method input_type
+	3,  // [3:3] is the sub-list for extension type_name
+	3,  // [3:3] is the sub-list for extension extendee
+	0,  // [0:3] is the sub-list for field type_name
 }
 
-func init() { file_api_publish_v1_publish_proto_init() }
-func file_api_publish_v1_publish_proto_init() {
-	if File_api_publish_v1_publish_proto != nil {
+func init() { file_publish_v1_publish_proto_init() }
+func file_publish_v1_publish_proto_init() {
+	if File_publish_v1_publish_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_publish_v1_publish_proto_rawDesc), len(file_api_publish_v1_publish_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_publish_v1_publish_proto_rawDesc), len(file_publish_v1_publish_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   14,
+			NumMessages:   17,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_api_publish_v1_publish_proto_goTypes,
-		DependencyIndexes: file_api_publish_v1_publish_proto_depIdxs,
-		MessageInfos:      file_api_publish_v1_publish_proto_msgTypes,
+		GoTypes:           file_publish_v1_publish_proto_goTypes,
+		DependencyIndexes: file_publish_v1_publish_proto_depIdxs,
+		MessageInfos:      file_publish_v1_publish_proto_msgTypes,
 	}.Build()
-	File_api_publish_v1_publish_proto = out.File
-	file_api_publish_v1_publish_proto_goTypes = nil
-	file_api_publish_v1_publish_proto_depIdxs = nil
+	File_publish_v1_publish_proto = out.File
+	file_publish_v1_publish_proto_goTypes = nil
+	file_publish_v1_publish_proto_depIdxs = nil
 }

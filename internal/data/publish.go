@@ -10,6 +10,7 @@ import (
 
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
+	"gorm.io/gorm"
 )
 
 type publishRepo struct {
@@ -129,9 +130,6 @@ func (u *publishRepo) CreatePublish(ctx context.Context, req *v1.CreatePublishRe
 
 	if err := tx.Model(&Publish{}).Create(publish).Error; err != nil {
 		tx.Rollback()
-		if utils.IsDuplicateEntryError(err) {
-			return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "数据已经存在")
-		}
 		u.log.Error("create publish failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
@@ -149,18 +147,17 @@ func (u *publishRepo) CreatePublish(ctx context.Context, req *v1.CreatePublishRe
 
 // UpdatePublish 更新发布内容
 func (u *publishRepo) UpdatePublish(ctx context.Context, req *v1.UpdatePublishRequest) (*v1.UpdatePublishReply, error) {
-	if req.Id == 0 {
-		return nil, fmt.Errorf("id is required")
-	}
-
-	if req.PublishName == "" {
-		return nil, fmt.Errorf("name is required")
-	}
-
-	updates := map[string]interface{}{
-		"publish_name": req.PublishName,
-		"status":       int(req.Status),
-		"remark":       req.Remark,
+	publish := map[string]interface{}{
+		"id":             req.Id,
+		"title":          req.Title,
+		"publish_type":   req.PublishType,
+		"province_id":    req.ProvinceId,
+		"city_id":        req.CityId,
+		"address":        req.Address,
+		"audit_status":   0,
+		"publish_status": 0,
+		"remark":         req.Remark,
+		"updated_time":   time.Now(),
 	}
 
 	// 启动MySQL事务
@@ -169,17 +166,16 @@ func (u *publishRepo) UpdatePublish(ctx context.Context, req *v1.UpdatePublishRe
 	if err := tx.Model(&Publish{}).
 		Where("id = ?", req.Id).
 		Where("deleted_flag = ?", 0).
-		Updates(updates).Error; err != nil {
+		Updates(publish).Error; err != nil {
 		tx.Rollback()
-		if utils.IsDuplicateEntryError(err) {
-			return nil, fmt.Errorf("发布内容名称 %s 已经存在", req.PublishName)
-		}
-		return nil, err
+		u.log.Error("update publish failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	if err := tx.Commit().Error; err != nil {
 		tx.Rollback()
-		return nil, err
+		u.log.Error("update publish failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	return &v1.UpdatePublishReply{
@@ -189,10 +185,6 @@ func (u *publishRepo) UpdatePublish(ctx context.Context, req *v1.UpdatePublishRe
 
 // DeletePublish 删除发布内容
 func (u *publishRepo) DeletePublish(ctx context.Context, req *v1.DeletePublishRequest) (*v1.DeletePublishReply, error) {
-	if req.Id == 0 {
-		return nil, fmt.Errorf("id is required")
-	}
-
 	publish := map[string]interface{}{
 		"deleted_flag": 1,
 		"deleted_time": time.Now(),
@@ -204,12 +196,14 @@ func (u *publishRepo) DeletePublish(ctx context.Context, req *v1.DeletePublishRe
 
 	if result.Error != nil {
 		tx.Rollback()
-		return nil, result.Error
+		u.log.Error("delete publish failed: %v", result.Error)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	if err := tx.Commit().Error; err != nil {
 		tx.Rollback()
-		return nil, err
+		u.log.Error("delete publish failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	return &v1.DeletePublishReply{
@@ -235,5 +229,30 @@ func (u *publishRepo) UpdatePublishStatus(ctx context.Context, req *v1.UpdatePub
 
 	return &v1.UpdatePublishStatusReply{
 		Code: 200, Success: true, Message: "更新成功",
+	}, nil
+}
+
+// GetPublish 查询发布内容
+func (u *publishRepo) GetPublish(ctx context.Context, req *v1.GetPublishRequest) (*v1.GetPublishReply, error) {
+	publish := &Publish{}
+
+	if err := u.data.db.Model(&Publish{}).Where("id = ?", req.Id).Where("deleted_flag = ?", 0).First(publish).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "发布内容不存在")
+		}
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	return &v1.GetPublishReply{
+		Code: 200, Success: true, Message: "查询成功",
+		Data: &v1.PublishInfo{
+			Id:            publish.Id,
+			Title:         publish.Title,
+			PublishStatus: int32(publish.PublishStatus),
+			AuditStatus:   int32(publish.AuditStatus),
+			Remark:        publish.Remark,
+			CreatedTime:   publish.CreatedTime.Format("2006-01-02 15:04:05"),
+			UpdatedTime:   publish.UpdatedTime.Format("2006-01-02 15:04:05"),
+		},
 	}, nil
 }

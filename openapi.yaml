@@ -136,10 +136,28 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/api.publish.v1.UpdatePublishStatusReply'
     /api/v1/publish/{id}:
+        get:
+            tags:
+                - Publish
+            description: GetPublish 查询发布内容
+            operationId: Publish_GetPublish
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.publish.v1.GetPublishReply'
         put:
             tags:
                 - Publish
-            description: UpdateUser 更新发布内容
+            description: UpdatePublish 更新发布内容
             operationId: Publish_UpdatePublish
             parameters:
                 - name: id
@@ -796,6 +814,39 @@ components:
                     type: boolean
                 data:
                     $ref: '#/components/schemas/api.publish.v1.PublishList'
+        api.publish.v1.GetPublishReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    $ref: '#/components/schemas/api.publish.v1.PublishInfo'
+        api.publish.v1.PublishInfo:
+            type: object
+            properties:
+                id:
+                    type: string
+                title:
+                    type: string
+                publishStatus:
+                    type: integer
+                    format: int32
+                auditStatus:
+                    type: integer
+                    format: int32
+                coverImage:
+                    type: string
+                remark:
+                    type: string
+                createdTime:
+                    type: string
+                updatedTime:
+                    type: string
         api.publish.v1.PublishList:
             type: object
             properties:
@@ -843,17 +894,30 @@ components:
             properties:
                 id:
                     type: string
-                publishName:
+                title:
                     type: string
-                status:
+                publishType:
                     type: integer
                     format: int32
+                provinceId:
+                    type: integer
+                    format: int32
+                cityId:
+                    type: integer
+                    format: int32
+                address:
+                    type: string
                 remark:
                     type: string
-                permissions:
-                    type: array
-                    items:
-                        type: string
+                catType:
+                    type: integer
+                    format: int32
+                catBreed:
+                    type: integer
+                    format: int32
+                catGender:
+                    type: integer
+                    format: int32
         api.publish.v1.UpdatePublishStatusReply:
             type: object
             properties:

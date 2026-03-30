@@ -74,3 +74,13 @@ func (s *PublishService) UpdatePublishStatus(ctx context.Context, req *pb.Update
 
 	return res, nil
 }
+
+// GetPublish 查询发布内容
+func (s *PublishService) GetPublish(ctx context.Context, req *pb.GetPublishRequest) (*pb.GetPublishReply, error) {
+	res, err := s.publish.GetPublish(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}

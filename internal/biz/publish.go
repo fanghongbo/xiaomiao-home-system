@@ -19,6 +19,8 @@ type PublishRepo interface {
 	DeletePublish(ctx context.Context, req *v1.DeletePublishRequest) (*v1.DeletePublishReply, error)
 	// UpdatePublishStatus 更新发布内容状态
 	UpdatePublishStatus(ctx context.Context, req *v1.UpdatePublishStatusRequest) (*v1.UpdatePublishStatusReply, error)
+	// GetPublish 查询发布内容
+	GetPublish(ctx context.Context, req *v1.GetPublishRequest) (*v1.GetPublishReply, error)
 }
 
 // PublishUsecase is a Publish usecase.
@@ -79,6 +81,17 @@ func (u *PublishUsecase) DeletePublish(ctx context.Context, req *v1.DeletePublis
 // UpdatePublishStatus 更新发布内容状态
 func (u *PublishUsecase) UpdatePublishStatus(ctx context.Context, req *v1.UpdatePublishStatusRequest) (*v1.UpdatePublishStatusReply, error) {
 	res, err := u.repo.UpdatePublishStatus(ctx, req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+// GetPublish 查询发布内容
+func (u *PublishUsecase) GetPublish(ctx context.Context, req *v1.GetPublishRequest) (*v1.GetPublishReply, error) {
+	res, err := u.repo.GetPublish(ctx, req)
 
 	if err != nil {
 		return nil, err
