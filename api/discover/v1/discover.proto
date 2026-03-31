@@ -28,8 +28,11 @@ message BaseResponse {}
 message GetDiscoverListRequest {
 	int32 page = 1 [(validate.rules).int32 = {gte: 1}];
 	int32 size = 2 [(validate.rules).int32 = {gte: 10, lte: 200}];
-	int32 p_type = 3 [(validate.rules).int32 = {gte: 0, lte: 4}];
-	int32 c_type = 4 [(validate.rules).int32 = {gte: 0, lte: 20}];
+	int32 province_id = 3 [(validate.rules).int32 = {gte: 0}];
+	int32 city_id = 4 [(validate.rules).int32 = {gte: 0}];
+	int32 p_type = 5 [(validate.rules).int32 = {gte: 0, lte: 4}];
+	int32 c_breed = 6 [(validate.rules).int32 = {gte: 0, lte: 20}];
+	int32 c_type = 7 [(validate.rules).int32 = {gte: 0, lte: 2}];
 }
 
 message DiscoverListItem {

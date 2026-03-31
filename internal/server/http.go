@@ -26,11 +26,12 @@ import (
 
 func NewWhiteListMatcher() selector.MatchFunc {
 	whiteList := map[string]bool{
-		"/api.user.v1.User/GetSecretKey":  true,
-		"/api.user.v1.User/WebLogin":      true,
-		"/api.user.v1.User/AppLogin":      true,
-		"/api.user.v1.User/MpLogin":       true,
-		"/api.file.v1.File/GetStaticFile": true,
+		"/api.user.v1.User/GetSecretKey":            true,
+		"/api.user.v1.User/WebLogin":                true,
+		"/api.user.v1.User/AppLogin":                true,
+		"/api.user.v1.User/MpLogin":                 true,
+		"/api.file.v1.File/GetStaticFile":           true,
+		"/api.discover.v1.Discover/GetDiscoverList": true,
 	}
 
 	return func(ctx context.Context, operation string) bool {

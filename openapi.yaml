@@ -84,7 +84,22 @@ paths:
                   schema:
                     type: integer
                     format: int32
+                - name: provinceId
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: cityId
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
                 - name: pType
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: cBreed
                   in: query
                   schema:
                     type: integer
