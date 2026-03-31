@@ -190,7 +190,7 @@ CREATE TABLE
     KEY idx_cat_type (cat_type) USING BTREE,
     KEY idx_breed_id (breed_id) USING BTREE,
     KEY idx_age (age) USING BTREE,
-    KEY idx_weight (weight) USING BTREE,
+    KEY idx_weight (weight) USING BTREE
 ) ENGINE = innodb
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci
