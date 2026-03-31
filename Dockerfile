@@ -16,8 +16,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY --from=builder /src/bin /app
 
 WORKDIR /app
+RUN mv xiaomiao-home-system server
 
-EXPOSE 8000
-EXPOSE 9000
+EXPOSE 8080
+EXPOSE 8090
 
 CMD ["./server", "-conf", "/configs"]
