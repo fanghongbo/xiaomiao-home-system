@@ -25,6 +25,35 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.user.v1.AppLoginReply'
+    /api/v1/cat/list:
+        get:
+            tags:
+                - Cat
+            description: GetCatList 查询小猫列表
+            operationId: Cat_GetCatList
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: size
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: cType
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.cat.v1.GetCatListReply'
     /api/v1/collect/list:
         get:
             tags:
@@ -777,6 +806,48 @@ paths:
                                 $ref: '#/components/schemas/api.file.v1.StaticFileReply'
 components:
     schemas:
+        api.cat.v1.CatList:
+            type: object
+            properties:
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.cat.v1.CatListItem'
+                total:
+                    type: string
+        api.cat.v1.CatListItem:
+            type: object
+            properties:
+                id:
+                    type: string
+                title:
+                    type: string
+                postStatus:
+                    type: integer
+                    format: int32
+                auditStatus:
+                    type: integer
+                    format: int32
+                coverImage:
+                    type: string
+                remark:
+                    type: string
+                createdTime:
+                    type: string
+                updatedTime:
+                    type: string
+        api.cat.v1.GetCatListReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    $ref: '#/components/schemas/api.cat.v1.CatList'
         api.collect.v1.CollectList:
             type: object
             properties:
@@ -1609,13 +1680,7 @@ components:
                     format: enum
                 loginIdentity:
                     type: string
-                    description: |-
-                        统一身份标识：
-                         账号登录: username
-                         邮箱登录: email
-                         短信登录: mobile
-                         微信登录: unionid/openid
-                         QQ登录: openid
+                    description: "统一身份标识：\r\n 账号登录: username\r\n 邮箱登录: email\r\n 短信登录: mobile\r\n 微信登录: unionid/openid\r\n QQ登录: openid"
                 password:
                     type: string
                     description: 账号/邮箱密码登录时使用（其余方式可不传）
@@ -1666,6 +1731,7 @@ components:
                 data:
                     type: string
 tags:
+    - name: Cat
     - name: Collect
     - name: Discover
     - name: File

@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package api.cat.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "xiaomiao-home-system/api/cat/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.cat.v1";
+option java_outer_classname = "CatProtoV1";
+
+service Cat {
+	// GetCatList 查询小猫列表
+	rpc GetCatList (GetCatListRequest) returns (GetCatListReply) {
+		option (google.api.http) = {
+			get: "/api/v1/cat/list",
+		};
+	}
+}
+
+// 基础请求体
+message BaseRequest {}
+
+// 基础响应体
+message BaseResponse {}
+
+message GetCatListRequest {
+	int32 page = 1 [(validate.rules).int32 = {gte: 1}];
+	int32 size = 2 [(validate.rules).int32 = {gte: 10, lte: 200}];
+	int32 c_type = 3 [(validate.rules).int32 = {gte: 0, lte: 20}];
+}
+
+message CatListItem {
+	int64 id = 1;
+	string title = 2;
+	int32 postStatus = 3;
+	int32 auditStatus = 4;
+	string coverImage = 5;
+	string remark = 6;
+	string createdTime = 7;
+	string updatedTime = 8;
+}
+
+message CatList {
+	repeated CatListItem items = 1;
+	int64 total = 2;
+}
+
+message GetCatListReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	CatList data = 4;
+}
