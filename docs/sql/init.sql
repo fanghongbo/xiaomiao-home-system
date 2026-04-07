@@ -179,17 +179,14 @@ CREATE TABLE
     breed_type   int(11) DEFAULT 0 COMMENT '品种类型 0: 未知',
     weight       DECIMAL(5,2) DEFAULT 0 COMMENT '小猫体重,单位kg,例如:2.50',
     birthday     date DEFAULT NULL COMMENT '生日',
-    -- 健康信息
     neuter_status tinyint(1) DEFAULT 0 COMMENT '绝育状态, 0: 未知, 1: 已绝育, 2: 未绝育',
     health_status tinyint(1) DEFAULT 0 COMMENT '健康状态, 0: 未知, 1: 健康, 2: 生病, 3: 残疾, 4: 其他',
-    health_desc varchar(500) DEFAULT '' COMMENT '疾病/缺陷说明'
+    health_desc varchar(500) DEFAULT '' COMMENT '疾病/缺陷说明',
     dewormed_status tinyint(1) DEFAULT 0 COMMENT '驱虫状态, 0: 未知, 1: 已驱虫, 2: 未驱虫',
-    -- 疫苗信息
     vaccine_status tinyint(1) DEFAULT 0 COMMENT '疫苗状态, 0: 未知, 1: 全程接种, 2: 部分接种, 3: 未接种',
     vaccine_types varchar(100) DEFAULT '' COMMENT '疫苗类型,逗号分隔: 0: 未知, 1: 猫三联, 2: 狂犬疫苗, 3: 猫白血病, 4: 其他',
-    vaccine_last_date date DEFAULT NULL COMMENT '最后接种日期'
-    vaccine_cert_image varchar(500) DEFAULT '' COMMENT '疫苗本凭证图片地址'
-    -- 描述信息
+    vaccine_last_date date DEFAULT NULL COMMENT '最后接种日期',
+    vaccine_cert_image varchar(500) DEFAULT '' COMMENT '疫苗本凭证图片地址',
     remark  longtext COMMENT '描述',
     deleted_flag tinyint(1)           DEFAULT 0 COMMENT '删除标记, 0: 未删除,  1: 已删除',
     created_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -197,8 +194,7 @@ CREATE TABLE
     deleted_time datetime                     DEFAULT  '1970-01-01 08:00:00' COMMENT '删除时间',
     KEY idx_name (name) USING BTREE,
     KEY idx_cat_type (cat_type) USING BTREE,
-    KEY idx_breed_id (breed_id) USING BTREE,
-    KEY idx_age (age) USING BTREE,
+    KEY idx_breed_type (breed_type) USING BTREE,
     KEY idx_weight (weight) USING BTREE
 ) ENGINE = innodb
   DEFAULT CHARSET = utf8mb4

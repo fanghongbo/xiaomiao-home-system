@@ -25,6 +25,25 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.user.v1.AppLoginReply'
+    /api/v1/cat:
+        post:
+            tags:
+                - Cat
+            description: CreateCat 创建小猫
+            operationId: Cat_CreateCat
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.cat.v1.CreateCatRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.cat.v1.CreateCatReply'
     /api/v1/cat/list:
         get:
             tags:
@@ -54,6 +73,49 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.cat.v1.GetCatListReply'
+    /api/v1/cat/{id}:
+        put:
+            tags:
+                - Cat
+            description: UpdateCat 更新小猫
+            operationId: Cat_UpdateCat
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.cat.v1.UpdateCatRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.cat.v1.UpdateCatReply'
+        delete:
+            tags:
+                - Cat
+            description: DeleteCat 删除小猫
+            operationId: Cat_DeleteCat
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.cat.v1.DeleteCatReply'
     /api/v1/collect/list:
         get:
             tags:
@@ -820,21 +882,100 @@ components:
             properties:
                 id:
                     type: string
-                title:
+                name:
                     type: string
-                postStatus:
+                gender:
                     type: integer
                     format: int32
-                auditStatus:
+                breedType:
                     type: integer
                     format: int32
-                coverImage:
+                weight:
+                    type: number
+                    format: float
+                birthday:
+                    type: string
+                neuterStatus:
+                    type: integer
+                    format: int32
+                healthStatus:
+                    type: integer
+                    format: int32
+                dewormedStatus:
+                    type: integer
+                    format: int32
+                vaccineStatus:
+                    type: integer
+                    format: int32
+                remark:
+                    type: string
+        api.cat.v1.CreateCatReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: string
+        api.cat.v1.CreateCatRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                gender:
+                    type: integer
+                    format: int32
+                catType:
+                    type: integer
+                    format: int32
+                breedType:
+                    type: integer
+                    format: int32
+                weight:
+                    type: number
+                    format: float
+                birthday:
+                    type: string
+                neuterStatus:
+                    type: integer
+                    format: int32
+                healthStatus:
+                    type: integer
+                    format: int32
+                healthDesc:
+                    type: string
+                dewormedStatus:
+                    type: integer
+                    format: int32
+                vaccineStatus:
+                    type: integer
+                    format: int32
+                vaccineTypes:
+                    type: array
+                    items:
+                        type: integer
+                        format: int32
+                vaccineLastDate:
+                    type: string
+                vaccineCertImage:
                     type: string
                 remark:
                     type: string
-                createdTime:
+        api.cat.v1.DeleteCatReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
                     type: string
-                updatedTime:
+                success:
+                    type: boolean
+                data:
                     type: string
         api.cat.v1.GetCatListReply:
             type: object
@@ -848,6 +989,64 @@ components:
                     type: boolean
                 data:
                     $ref: '#/components/schemas/api.cat.v1.CatList'
+        api.cat.v1.UpdateCatReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: string
+        api.cat.v1.UpdateCatRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                gender:
+                    type: integer
+                    format: int32
+                catType:
+                    type: integer
+                    format: int32
+                breedType:
+                    type: integer
+                    format: int32
+                weight:
+                    type: number
+                    format: float
+                birthday:
+                    type: string
+                neuterStatus:
+                    type: integer
+                    format: int32
+                healthStatus:
+                    type: integer
+                    format: int32
+                healthDesc:
+                    type: string
+                dewormedStatus:
+                    type: integer
+                    format: int32
+                vaccineStatus:
+                    type: integer
+                    format: int32
+                vaccineTypes:
+                    type: array
+                    items:
+                        type: integer
+                        format: int32
+                vaccineLastDate:
+                    type: string
+                vaccineCertImage:
+                    type: string
+                remark:
+                    type: string
         api.collect.v1.CollectList:
             type: object
             properties:

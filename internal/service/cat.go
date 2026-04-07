@@ -34,3 +34,30 @@ func (s *CatService) GetCatList(ctx context.Context, req *pb.GetCatListRequest) 
 
 	return res, nil
 }
+
+// CreateCat 创建小猫
+func (s *CatService) CreateCat(ctx context.Context, req *pb.CreateCatRequest) (*pb.CreateCatReply, error) {
+	res, err := s.cat.CreateCat(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+// UpdateCat 更新小猫
+func (s *CatService) UpdateCat(ctx context.Context, req *pb.UpdateCatRequest) (*pb.UpdateCatReply, error) {
+	res, err := s.cat.UpdateCat(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+// DeleteCat 删除小猫
+func (s *CatService) DeleteCat(ctx context.Context, req *pb.DeleteCatRequest) (*pb.DeleteCatReply, error) {
+	res, err := s.cat.DeleteCat(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}

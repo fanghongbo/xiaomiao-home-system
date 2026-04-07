@@ -176,3 +176,44 @@ type Post struct {
 func (u Post) TableName() string {
 	return "t_post"
 }
+
+type Cat struct {
+	Id               int64     `gorm:"column:id"`
+	Name             string    `gorm:"column:name"`
+	Gender           int       `gorm:"column:gender"`
+	CatType          int       `gorm:"column:cat_type"`
+	BreedType        int       `gorm:"column:breed_type"`
+	Weight           float64   `gorm:"column:weight"`
+	Birthday         time.Time `gorm:"column:birthday"`
+	NeuterStatus     int       `gorm:"column:neuter_status"`
+	HealthStatus     int       `gorm:"column:health_status"`
+	HealthDesc       string    `gorm:"column:health_desc"`
+	DewormedStatus   int       `gorm:"column:dewormed_status"`
+	VaccineStatus    int       `gorm:"column:vaccine_status"`
+	VaccineTypes     string    `gorm:"column:vaccine_types"`
+	VaccineLastDate  time.Time `gorm:"column:vaccine_last_date"`
+	VaccineCertImage string    `gorm:"column:vaccine_cert_image"`
+	Remark           string    `gorm:"column:remark"`
+	DeletedFlag      int       `gorm:"column:deleted_flag"`
+	CreatedTime      time.Time `gorm:"column:created_time"`
+	UpdatedTime      time.Time `gorm:"column:updated_time"`
+	DeletedTime      time.Time `gorm:"column:deleted_time"`
+}
+
+func (u Cat) TableName() string {
+	return "t_cat"
+}
+
+type UserCat struct {
+	Id          int64     `gorm:"column:id"`
+	UserId      int64     `gorm:"column:user_id"`
+	CatId       int64     `gorm:"column:cat_id"`
+	CreatedTime time.Time `gorm:"column:created_time"`
+	UpdatedTime time.Time `gorm:"column:updated_time"`
+	DeletedFlag int       `gorm:"column:deleted_flag"`
+	DeletedTime time.Time `gorm:"column:deleted_time"`
+}
+
+func (u UserCat) TableName() string {
+	return "t_user_cat"
+}
