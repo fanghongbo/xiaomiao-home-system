@@ -74,6 +74,24 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/api.cat.v1.GetCatListReply'
     /api/v1/cat/{id}:
+        get:
+            tags:
+                - Cat
+            description: GetCat 查询小猫信息
+            operationId: Cat_GetCat
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.cat.v1.GetCatReply'
         put:
             tags:
                 - Cat
@@ -868,6 +886,52 @@ paths:
                                 $ref: '#/components/schemas/api.file.v1.StaticFileReply'
 components:
     schemas:
+        api.cat.v1.CatInfo:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                gender:
+                    type: integer
+                    format: int32
+                catType:
+                    type: integer
+                    format: int32
+                breedType:
+                    type: integer
+                    format: int32
+                weight:
+                    type: number
+                    format: float
+                birthday:
+                    type: string
+                neuterStatus:
+                    type: integer
+                    format: int32
+                healthStatus:
+                    type: integer
+                    format: int32
+                healthDesc:
+                    type: string
+                dewormedStatus:
+                    type: integer
+                    format: int32
+                vaccineStatus:
+                    type: integer
+                    format: int32
+                vaccineTypes:
+                    type: array
+                    items:
+                        type: integer
+                        format: int32
+                vaccineLastDate:
+                    type: string
+                vaccineCertImage:
+                    type: string
+                remark:
+                    type: string
         api.cat.v1.CatList:
             type: object
             properties:
@@ -929,9 +993,6 @@ components:
                 gender:
                     type: integer
                     format: int32
-                catType:
-                    type: integer
-                    format: int32
                 breedType:
                     type: integer
                     format: int32
@@ -989,6 +1050,18 @@ components:
                     type: boolean
                 data:
                     $ref: '#/components/schemas/api.cat.v1.CatList'
+        api.cat.v1.GetCatReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    $ref: '#/components/schemas/api.cat.v1.CatInfo'
         api.cat.v1.UpdateCatReply:
             type: object
             properties:
@@ -1009,9 +1082,6 @@ components:
                 name:
                     type: string
                 gender:
-                    type: integer
-                    format: int32
-                catType:
                     type: integer
                     format: int32
                 breedType:
@@ -1879,7 +1949,13 @@ components:
                     format: enum
                 loginIdentity:
                     type: string
-                    description: "统一身份标识：\r\n 账号登录: username\r\n 邮箱登录: email\r\n 短信登录: mobile\r\n 微信登录: unionid/openid\r\n QQ登录: openid"
+                    description: |-
+                        统一身份标识：
+                         账号登录: username
+                         邮箱登录: email
+                         短信登录: mobile
+                         微信登录: unionid/openid
+                         QQ登录: openid
                 password:
                     type: string
                     description: 账号/邮箱密码登录时使用（其余方式可不传）

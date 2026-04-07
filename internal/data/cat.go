@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"slices"
+	"strconv"
 	"strings"
 	"time"
 	v1 "xiaomiao-home-system/api/cat/v1"
@@ -132,7 +133,7 @@ func (u *catRepo) CreateCat(ctx context.Context, req *v1.CreateCatRequest) (*v1.
 		"id":              catId,
 		"name":            req.Name,
 		"gender":          req.Gender,
-		"cat_type":        req.CatType,
+		"cat_type":        2,
 		"breed_type":      req.BreedType,
 		"weight":          req.Weight,
 		"birthday":        birthday,
@@ -231,6 +232,7 @@ func (u *catRepo) UpdateCat(ctx context.Context, req *v1.UpdateCatRequest) (*v1.
 
 	// 判断当前小猫是否属于当前用户
 	if !slices.Contains(userCatIds, req.Id) {
+		u.log.Error("cat not found or no permission: %v", req.Id)
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "小猫不存在或无权限")
 	}
 
@@ -244,7 +246,7 @@ func (u *catRepo) UpdateCat(ctx context.Context, req *v1.UpdateCatRequest) (*v1.
 	catInfo := map[string]interface{}{
 		"name":            req.Name,
 		"gender":          req.Gender,
-		"cat_type":        req.CatType,
+		"cat_type":        2,
 		"breed_type":      req.BreedType,
 		"weight":          req.Weight,
 		"birthday":        birthday,
@@ -313,6 +315,19 @@ func (u *catRepo) DeleteCat(ctx context.Context, req *v1.DeleteCatRequest) (*v1.
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
+	// 查询当前小猫是否属于当前用户
+	userCatIds, err := u.GetCatIdsByUserId(ctx, userId)
+	if err != nil {
+		u.log.Error("get cat ids by user id failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	// 判断当前小猫是否属于当前用户
+	if !slices.Contains(userCatIds, req.Id) {
+		u.log.Error("cat not found or no permission: %v", req.Id)
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "小猫不存在或无权限")
+	}
+
 	tx := u.data.db.Begin()
 
 	updateInfo := map[string]interface{}{
@@ -350,4 +365,85 @@ func (u *catRepo) GetCatIdsByUserId(ctx context.Context, userId int64) ([]int64,
 		return nil, err
 	}
 	return catIds, nil
+}
+
+// GetCat 查询小猫信息
+func (u *catRepo) GetCat(ctx context.Context, req *v1.GetCatRequest) (*v1.GetCatReply, error) {
+	userId, err := utils.GetCurrentUserId(ctx)
+	if err != nil {
+		u.log.Error("get current user id failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	// 查询当前小猫是否属于当前用户
+	userCatIds, err := u.GetCatIdsByUserId(ctx, userId)
+	if err != nil {
+		u.log.Error("get cat ids by user id failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	// 判断当前小猫是否属于当前用户
+	if !slices.Contains(userCatIds, req.Id) {
+		u.log.Error("cat not found or no permission: %v", req.Id)
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "小猫不存在或无权限")
+	}
+
+	row := u.data.db.Model(&Cat{}).Select("id", "name", "gender", "breed_type", "weight", "birthday", "neuter_status", "health_status", "health_desc", "dewormed_status", "vaccine_status", "vaccine_types", "vaccine_last_date", "vaccine_cert_image", "remark", "created_time", "updated_time").Where("id = ?", req.Id).Where("deleted_flag = ?", 0).Limit(1).Row()
+
+	var (
+		id               int64
+		name             string
+		gender           int32
+		breedType        int32
+		weight           float32
+		birthday         time.Time
+		neuterStatus     int32
+		healthStatus     int32
+		healthDesc       string
+		dewormedStatus   int32
+		vaccineStatus    int32
+		vaccineTypes     string
+		vaccineLastDate  time.Time
+		vaccineCertImage string
+		remark           string
+	)
+
+	if err := row.Scan(&id, &name, &gender, &breedType, &weight, &birthday, &neuterStatus, &healthStatus, &healthDesc, &dewormedStatus, &vaccineStatus, &vaccineTypes, &vaccineLastDate, &vaccineCertImage, &remark); err != nil {
+		u.log.Error("get cat failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	catInfo := &v1.CatInfo{
+		Id:               id,
+		Name:             name,
+		Gender:           gender,
+		BreedType:        breedType,
+		Weight:           weight,
+		Birthday:         birthday.Format("2006-01-02"),
+		NeuterStatus:     neuterStatus,
+		HealthStatus:     healthStatus,
+		HealthDesc:       healthDesc,
+		DewormedStatus:   dewormedStatus,
+		VaccineStatus:    vaccineStatus,
+		VaccineTypes:     []int32{},
+		VaccineLastDate:  vaccineLastDate.Format("2006-01-02"),
+		VaccineCertImage: vaccineCertImage,
+		Remark:           remark,
+	}
+
+	if vaccineTypes != "" {
+		for _, vaccineType := range strings.Split(vaccineTypes, ",") {
+			vaccineTypeInt, err := strconv.ParseInt(vaccineType, 10, 32)
+			if err != nil {
+				u.log.Error("parse vaccine type failed: %v", err)
+				return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+			}
+			catInfo.VaccineTypes = append(catInfo.VaccineTypes, int32(vaccineTypeInt))
+		}
+	}
+
+	return &v1.GetCatReply{
+		Code: 200, Success: true, Message: "查询成功",
+		Data: catInfo,
+	}, nil
 }

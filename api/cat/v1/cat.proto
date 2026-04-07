@@ -40,6 +40,13 @@ service Cat {
 			delete: "/api/v1/cat/{id}"
 		};	
 	}
+
+	// GetCat 查询小猫信息
+	rpc GetCat (GetCatRequest) returns (GetCatReply) {
+		option (google.api.http) = {
+			get: "/api/v1/cat/{id}"
+		};	
+	}
 }
 
 // 基础请求体
@@ -83,19 +90,18 @@ message GetCatListReply {
 message CreateCatRequest {
 	string name = 1 [(validate.rules).string = {min_len: 1, max_len: 64}];
 	int32 gender = 2 [(validate.rules).int32 = {gte: 0, lte: 2}];
-	int32 catType = 3 [(validate.rules).int32 = {gte: 0, lte: 2}];
-	int32 breedType = 4 [(validate.rules).int32 = {gte: 0, lte: 30}];
-	float weight = 5 [(validate.rules).float = {gte: 0, lte: 50}];
-	string birthday = 6 [(validate.rules).string = {min_len: 1}];
-	int32 neuterStatus = 7 [(validate.rules).int32 = {gte: 0, lte: 2}];
-	int32 healthStatus = 8 [(validate.rules).int32 = {gte: 0, lte: 4}];
-	string healthDesc = 9;
-	int32 dewormedStatus = 10 [(validate.rules).int32 = {gte: 0, lte: 2}];
-	int32 vaccineStatus = 11 [(validate.rules).int32 = {gte: 0, lte: 3}];
-	repeated int32 vaccineTypes = 12;
-	string vaccineLastDate = 13;
-	string vaccineCertImage = 14;
-	string remark = 15 [(validate.rules).string = {min_len: 1, max_len: 500}];
+	int32 breedType = 3 [(validate.rules).int32 = {gte: 0, lte: 30}];
+	float weight = 4 [(validate.rules).float = {gte: 0, lte: 50}];
+	string birthday = 5 [(validate.rules).string = {min_len: 1}];
+	int32 neuterStatus = 6 [(validate.rules).int32 = {gte: 0, lte: 2}];
+	int32 healthStatus = 7 [(validate.rules).int32 = {gte: 0, lte: 4}];
+	string healthDesc = 8;
+	int32 dewormedStatus = 9 [(validate.rules).int32 = {gte: 0, lte: 2}];
+	int32 vaccineStatus = 10 [(validate.rules).int32 = {gte: 0, lte: 3}];
+	repeated int32 vaccineTypes = 11;
+	string vaccineLastDate = 12;
+	string vaccineCertImage = 13;
+	string remark = 14 [(validate.rules).string = {min_len: 1, max_len: 500}];
 }
 
 message CreateCatReply {
@@ -109,19 +115,18 @@ message UpdateCatRequest {
 	int64 id = 1 [(validate.rules).int64 = {gt: 0}];
 	string name = 2 [(validate.rules).string = {min_len: 1, max_len: 64}];
 	int32 gender = 3 [(validate.rules).int32 = {gte: 0, lte: 2}];
-	int32 catType = 4 [(validate.rules).int32 = {gte: 0, lte: 2}];
-	int32 breedType = 5 [(validate.rules).int32 = {gte: 0, lte: 30}];
-	float weight = 6 [(validate.rules).float = {gte: 0, lte: 50}];
-	string birthday = 7 [(validate.rules).string = {min_len: 1}];
-	int32 neuterStatus = 8 [(validate.rules).int32 = {gte: 0, lte: 2}];
-	int32 healthStatus = 9 [(validate.rules).int32 = {gte: 0, lte: 4}];
-	string healthDesc = 10;
-	int32 dewormedStatus = 11 [(validate.rules).int32 = {gte: 0, lte: 2}];
-	int32 vaccineStatus = 12 [(validate.rules).int32 = {gte: 0, lte: 3}];
-	repeated int32 vaccineTypes = 13;
-	string vaccineLastDate = 14;
-	string vaccineCertImage = 15;
-	string remark = 16 [(validate.rules).string = {min_len: 1, max_len: 500}];
+	int32 breedType = 4 [(validate.rules).int32 = {gte: 0, lte: 30}];
+	float weight = 5 [(validate.rules).float = {gte: 0, lte: 50}];
+	string birthday = 6 [(validate.rules).string = {min_len: 1}];
+	int32 neuterStatus = 7 [(validate.rules).int32 = {gte: 0, lte: 2}];
+	int32 healthStatus = 8 [(validate.rules).int32 = {gte: 0, lte: 4}];
+	string healthDesc = 9;
+	int32 dewormedStatus = 10 [(validate.rules).int32 = {gte: 0, lte: 2}];
+	int32 vaccineStatus = 11 [(validate.rules).int32 = {gte: 0, lte: 3}];
+	repeated int32 vaccineTypes = 12;
+	string vaccineLastDate = 13;
+	string vaccineCertImage = 14;
+	string remark = 15 [(validate.rules).string = {min_len: 1, max_len: 500}];
 }
 
 message UpdateCatReply {
@@ -140,4 +145,34 @@ message DeleteCatReply {
 	string message = 2;
 	bool success = 3;
 	string data = 4;
+}
+
+message GetCatRequest {
+	int64 id = 1 [(validate.rules).int64 = {gt: 0}];
+}
+
+message CatInfo {
+    int64 id = 1;
+	string name = 2;
+	int32 gender = 3;
+	int32 catType = 4;
+	int32 breedType = 5;
+	float weight = 6;
+	string birthday = 7;
+	int32 neuterStatus = 8;
+	int32 healthStatus = 9;
+	string healthDesc = 10;
+	int32 dewormedStatus = 11;
+	int32 vaccineStatus = 12;
+	repeated int32 vaccineTypes = 13;
+	string vaccineLastDate = 14;
+	string vaccineCertImage = 15;
+	string remark = 16;
+}
+
+message GetCatReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	CatInfo data = 4;
 }
