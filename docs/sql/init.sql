@@ -174,13 +174,22 @@ CREATE TABLE
 (
     id           bigint PRIMARY KEY COMMENT '小猫id',
     name         varchar(64) NOT NULL COMMENT '小猫名称',
-    gender       tinyint(1)  default 0 COMMENT '性别, 0: 未知, 1: 弟弟, 2: 妹妹',
-    cat_type      int(11) NOT NULL COMMENT '类型id 1:流浪猫, 2:家养猫',
-    breed_id     int(11) DEFAULT NULL COMMENT '品种id',
-    age          int(11) DEFAULT NULL COMMENT '年龄(月)',
-    weight       int(11) DEFAULT NULL COMMENT '体重',
-    health_status tinyint(1) NOT NULL COMMENT '健康状态, 0: 健康, 1: 生病, 2: 残疾, 3: 其他',
-    health_remark longtext DEFAULT NULL COMMENT '健康描述',
+    gender       tinyint(1)  DEFAULT 0 COMMENT '性别, 0: 未知, 1: 弟弟, 2: 妹妹',
+    cat_type     tinyint(1) DEFAULT 0 COMMENT '类型, 0: 未知, 1: 流浪猫, 2:家养猫',
+    breed_type   int(11) DEFAULT 0 COMMENT '品种类型 0: 未知',
+    weight       DECIMAL(5,2) DEFAULT 0 COMMENT '小猫体重,单位kg,例如:2.50',
+    birthday     date DEFAULT NULL COMMENT '生日',
+    -- 健康信息
+    neuter_status tinyint(1) DEFAULT 0 COMMENT '绝育状态, 0: 未知, 1: 已绝育, 2: 未绝育',
+    health_status tinyint(1) DEFAULT 0 COMMENT '健康状态, 0: 未知, 1: 健康, 2: 生病, 3: 残疾, 4: 其他',
+    health_desc varchar(500) DEFAULT '' COMMENT '疾病/缺陷说明'
+    dewormed_status tinyint(1) DEFAULT 0 COMMENT '驱虫状态, 0: 未知, 1: 已驱虫, 2: 未驱虫',
+    -- 疫苗信息
+    vaccine_status tinyint(1) DEFAULT 0 COMMENT '疫苗状态, 0: 未知, 1: 全程接种, 2: 部分接种, 3: 未接种',
+    vaccine_types varchar(100) DEFAULT '' COMMENT '疫苗类型,逗号分隔: 0: 未知, 1: 猫三联, 2: 狂犬疫苗, 3: 猫白血病, 4: 其他',
+    vaccine_last_date date DEFAULT NULL COMMENT '最后接种日期'
+    vaccine_cert_image varchar(500) DEFAULT '' COMMENT '疫苗本凭证图片地址'
+    -- 描述信息
     remark  longtext COMMENT '描述',
     deleted_flag tinyint(1)           DEFAULT 0 COMMENT '删除标记, 0: 未删除,  1: 已删除',
     created_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -196,21 +205,20 @@ CREATE TABLE
   COLLATE = utf8mb4_unicode_ci
   ROW_FORMAT = DYNAMIC COMMENT ='小猫信息表';
 
-
 -- 小猫图片关联表
 CREATE TABLE
     IF NOT EXISTS t_cat_image
 (
     id           bigint PRIMARY KEY COMMENT '关联id',
     cat_id   bigint NOT NULL COMMENT '小猫id',
-    image_url    varchar(255) NOT NULL COMMENT '图片url',
+    image    varchar(500) NOT NULL COMMENT '图片url',
     deleted_flag tinyint(1)           DEFAULT 0 COMMENT '删除标记, 0: 未删除,  1: 已删除',
     created_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     updated_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     deleted_time datetime                     DEFAULT  '1970-01-01 08:00:00' COMMENT '删除时间',
     KEY idx_cat_id (cat_id) USING BTREE,
     KEY idx_image_url (image_url) USING BTREE,
-    UNIQUE KEY uk_cat_id_image_url (cat_id, image_url, deleted_flag, deleted_time) USING BTREE
+    UNIQUE KEY uk_cat_id_image (cat_id, image, deleted_flag, deleted_time) USING BTREE
 ) ENGINE = innodb
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci
@@ -292,14 +300,14 @@ CREATE TABLE
 (
     id           bigint PRIMARY KEY COMMENT '关联id',
     post_id   bigint NOT NULL COMMENT '发布id',
-    image_url    varchar(255) NOT NULL COMMENT '图片url',
+    image    varchar(255) NOT NULL COMMENT '图片url',
     deleted_flag tinyint(1)           DEFAULT 0 COMMENT '删除标记, 0: 未删除,  1: 已删除',
     created_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     updated_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     deleted_time datetime                     DEFAULT  '1970-01-01 08:00:00' COMMENT '删除时间',
     KEY idx_post_id (post_id) USING BTREE,
-    KEY idx_image_url (image_url) USING BTREE,
-    UNIQUE KEY uk_post_id_image_url (post_id, image_url, deleted_flag, deleted_time) USING BTREE
+    KEY idx_image_url (image) USING BTREE,
+    UNIQUE KEY uk_post_id_image (post_id, image, deleted_flag, deleted_time) USING BTREE
 ) ENGINE = innodb
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci
