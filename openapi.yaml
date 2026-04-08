@@ -314,7 +314,7 @@ paths:
         post:
             tags:
                 - UserCat
-            description: CreateUserCat 创建小猫
+            description: CreateUserCat 创建用户小猫
             operationId: UserCat_CreateUserCat
             requestBody:
                 content:
@@ -333,7 +333,7 @@ paths:
         get:
             tags:
                 - UserCat
-            description: GetUserCatList 查询小猫列表
+            description: GetUserCatList 查询用户小猫列表
             operationId: UserCat_GetUserCatList
             parameters:
                 - name: page
@@ -362,7 +362,7 @@ paths:
         get:
             tags:
                 - UserCat
-            description: GetUserCat 查询小猫信息
+            description: GetUserCat 查询用户小猫信息
             operationId: UserCat_GetUserCat
             parameters:
                 - name: id
@@ -380,7 +380,7 @@ paths:
         put:
             tags:
                 - UserCat
-            description: UpdateUserCat 更新小猫
+            description: UpdateUserCat 更新用户小猫
             operationId: UserCat_UpdateUserCat
             parameters:
                 - name: id
@@ -404,7 +404,7 @@ paths:
         delete:
             tags:
                 - UserCat
-            description: DeleteUserCat 删除小猫
+            description: DeleteUserCat 删除用户小猫
             operationId: UserCat_DeleteUserCat
             parameters:
                 - name: id
@@ -419,6 +419,19 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.user.cat.v1.DeleteUserCatReply'
+    /api/v1/user/cats:
+        get:
+            tags:
+                - UserCat
+            description: GetUserCats 查询用户所有小猫
+            operationId: UserCat_GetUserCats
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.cat.v1.GetUserCatsReply'
     /api/v1/user/collect/list:
         get:
             tags:
@@ -1141,6 +1154,22 @@ components:
                 status:
                     type: integer
                     format: int32
+        api.user.cat.v1.CatItem:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                gender:
+                    type: integer
+                    format: int32
+                catType:
+                    type: integer
+                    format: int32
+                breedType:
+                    type: integer
+                    format: int32
         api.user.cat.v1.CreateUserCatReply:
             type: object
             properties:
@@ -1230,6 +1259,20 @@ components:
                     type: boolean
                 data:
                     $ref: '#/components/schemas/api.user.cat.v1.UserCatInfo'
+        api.user.cat.v1.GetUserCatsReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.user.cat.v1.CatItem'
         api.user.cat.v1.UpdateUserCatReply:
             type: object
             properties:

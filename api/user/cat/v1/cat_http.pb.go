@@ -23,18 +23,21 @@ const OperationUserCatCreateUserCat = "/api.user.cat.v1.UserCat/CreateUserCat"
 const OperationUserCatDeleteUserCat = "/api.user.cat.v1.UserCat/DeleteUserCat"
 const OperationUserCatGetUserCat = "/api.user.cat.v1.UserCat/GetUserCat"
 const OperationUserCatGetUserCatList = "/api.user.cat.v1.UserCat/GetUserCatList"
+const OperationUserCatGetUserCats = "/api.user.cat.v1.UserCat/GetUserCats"
 const OperationUserCatUpdateUserCat = "/api.user.cat.v1.UserCat/UpdateUserCat"
 
 type UserCatHTTPServer interface {
-	// CreateUserCat CreateUserCat 创建小猫
+	// CreateUserCat CreateUserCat 创建用户小猫
 	CreateUserCat(context.Context, *CreateUserCatRequest) (*CreateUserCatReply, error)
-	// DeleteUserCat DeleteUserCat 删除小猫
+	// DeleteUserCat DeleteUserCat 删除用户小猫
 	DeleteUserCat(context.Context, *DeleteUserCatRequest) (*DeleteUserCatReply, error)
-	// GetUserCat GetUserCat 查询小猫信息
+	// GetUserCat GetUserCat 查询用户小猫信息
 	GetUserCat(context.Context, *GetUserCatRequest) (*GetUserCatReply, error)
-	// GetUserCatList GetUserCatList 查询小猫列表
+	// GetUserCatList GetUserCatList 查询用户小猫列表
 	GetUserCatList(context.Context, *GetUserCatListRequest) (*GetUserCatListReply, error)
-	// UpdateUserCat UpdateUserCat 更新小猫
+	// GetUserCats GetUserCats 查询用户所有小猫
+	GetUserCats(context.Context, *GetUserCatsRequest) (*GetUserCatsReply, error)
+	// UpdateUserCat UpdateUserCat 更新用户小猫
 	UpdateUserCat(context.Context, *UpdateUserCatRequest) (*UpdateUserCatReply, error)
 }
 
@@ -45,6 +48,7 @@ func RegisterUserCatHTTPServer(s *http.Server, srv UserCatHTTPServer) {
 	r.PUT("/api/v1/user/cat/{id}", _UserCat_UpdateUserCat0_HTTP_Handler(srv))
 	r.DELETE("/api/v1/user/cat/{id}", _UserCat_DeleteUserCat0_HTTP_Handler(srv))
 	r.GET("/api/v1/user/cat/{id}", _UserCat_GetUserCat0_HTTP_Handler(srv))
+	r.GET("/api/v1/user/cats", _UserCat_GetUserCats0_HTTP_Handler(srv))
 }
 
 func _UserCat_GetUserCatList0_HTTP_Handler(srv UserCatHTTPServer) func(ctx http.Context) error {
@@ -157,16 +161,37 @@ func _UserCat_GetUserCat0_HTTP_Handler(srv UserCatHTTPServer) func(ctx http.Cont
 	}
 }
 
+func _UserCat_GetUserCats0_HTTP_Handler(srv UserCatHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetUserCatsRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationUserCatGetUserCats)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetUserCats(ctx, req.(*GetUserCatsRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetUserCatsReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type UserCatHTTPClient interface {
-	// CreateUserCat CreateUserCat 创建小猫
+	// CreateUserCat CreateUserCat 创建用户小猫
 	CreateUserCat(ctx context.Context, req *CreateUserCatRequest, opts ...http.CallOption) (rsp *CreateUserCatReply, err error)
-	// DeleteUserCat DeleteUserCat 删除小猫
+	// DeleteUserCat DeleteUserCat 删除用户小猫
 	DeleteUserCat(ctx context.Context, req *DeleteUserCatRequest, opts ...http.CallOption) (rsp *DeleteUserCatReply, err error)
-	// GetUserCat GetUserCat 查询小猫信息
+	// GetUserCat GetUserCat 查询用户小猫信息
 	GetUserCat(ctx context.Context, req *GetUserCatRequest, opts ...http.CallOption) (rsp *GetUserCatReply, err error)
-	// GetUserCatList GetUserCatList 查询小猫列表
+	// GetUserCatList GetUserCatList 查询用户小猫列表
 	GetUserCatList(ctx context.Context, req *GetUserCatListRequest, opts ...http.CallOption) (rsp *GetUserCatListReply, err error)
-	// UpdateUserCat UpdateUserCat 更新小猫
+	// GetUserCats GetUserCats 查询用户所有小猫
+	GetUserCats(ctx context.Context, req *GetUserCatsRequest, opts ...http.CallOption) (rsp *GetUserCatsReply, err error)
+	// UpdateUserCat UpdateUserCat 更新用户小猫
 	UpdateUserCat(ctx context.Context, req *UpdateUserCatRequest, opts ...http.CallOption) (rsp *UpdateUserCatReply, err error)
 }
 
@@ -178,7 +203,7 @@ func NewUserCatHTTPClient(client *http.Client) UserCatHTTPClient {
 	return &UserCatHTTPClientImpl{client}
 }
 
-// CreateUserCat CreateUserCat 创建小猫
+// CreateUserCat CreateUserCat 创建用户小猫
 func (c *UserCatHTTPClientImpl) CreateUserCat(ctx context.Context, in *CreateUserCatRequest, opts ...http.CallOption) (*CreateUserCatReply, error) {
 	var out CreateUserCatReply
 	pattern := "/api/v1/user/cat"
@@ -192,7 +217,7 @@ func (c *UserCatHTTPClientImpl) CreateUserCat(ctx context.Context, in *CreateUse
 	return &out, nil
 }
 
-// DeleteUserCat DeleteUserCat 删除小猫
+// DeleteUserCat DeleteUserCat 删除用户小猫
 func (c *UserCatHTTPClientImpl) DeleteUserCat(ctx context.Context, in *DeleteUserCatRequest, opts ...http.CallOption) (*DeleteUserCatReply, error) {
 	var out DeleteUserCatReply
 	pattern := "/api/v1/user/cat/{id}"
@@ -206,7 +231,7 @@ func (c *UserCatHTTPClientImpl) DeleteUserCat(ctx context.Context, in *DeleteUse
 	return &out, nil
 }
 
-// GetUserCat GetUserCat 查询小猫信息
+// GetUserCat GetUserCat 查询用户小猫信息
 func (c *UserCatHTTPClientImpl) GetUserCat(ctx context.Context, in *GetUserCatRequest, opts ...http.CallOption) (*GetUserCatReply, error) {
 	var out GetUserCatReply
 	pattern := "/api/v1/user/cat/{id}"
@@ -220,7 +245,7 @@ func (c *UserCatHTTPClientImpl) GetUserCat(ctx context.Context, in *GetUserCatRe
 	return &out, nil
 }
 
-// GetUserCatList GetUserCatList 查询小猫列表
+// GetUserCatList GetUserCatList 查询用户小猫列表
 func (c *UserCatHTTPClientImpl) GetUserCatList(ctx context.Context, in *GetUserCatListRequest, opts ...http.CallOption) (*GetUserCatListReply, error) {
 	var out GetUserCatListReply
 	pattern := "/api/v1/user/cat/list"
@@ -234,7 +259,21 @@ func (c *UserCatHTTPClientImpl) GetUserCatList(ctx context.Context, in *GetUserC
 	return &out, nil
 }
 
-// UpdateUserCat UpdateUserCat 更新小猫
+// GetUserCats GetUserCats 查询用户所有小猫
+func (c *UserCatHTTPClientImpl) GetUserCats(ctx context.Context, in *GetUserCatsRequest, opts ...http.CallOption) (*GetUserCatsReply, error) {
+	var out GetUserCatsReply
+	pattern := "/api/v1/user/cats"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationUserCatGetUserCats))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// UpdateUserCat UpdateUserCat 更新用户小猫
 func (c *UserCatHTTPClientImpl) UpdateUserCat(ctx context.Context, in *UpdateUserCatRequest, opts ...http.CallOption) (*UpdateUserCatReply, error) {
 	var out UpdateUserCatReply
 	pattern := "/api/v1/user/cat/{id}"

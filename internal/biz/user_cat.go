@@ -19,6 +19,8 @@ type UserCatRepo interface {
 	DeleteUserCat(ctx context.Context, req *v1.DeleteUserCatRequest) (*v1.DeleteUserCatReply, error)
 	// GetUserCat 查询我的小猫信息
 	GetUserCat(ctx context.Context, req *v1.GetUserCatRequest) (*v1.GetUserCatReply, error)
+	// GetUserCats 查询用户所有小猫
+	GetUserCats(ctx context.Context, req *v1.GetUserCatsRequest) (*v1.GetUserCatsReply, error)
 }
 
 // UserCatUsecase is a UserCat usecase.
@@ -73,6 +75,15 @@ func (u *UserCatUsecase) DeleteUserCat(ctx context.Context, req *v1.DeleteUserCa
 // GetUserCat 查询我的小猫信息
 func (u *UserCatUsecase) GetUserCat(ctx context.Context, req *v1.GetUserCatRequest) (*v1.GetUserCatReply, error) {
 	res, err := u.repo.GetUserCat(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+// GetUserCats 查询用户所有小猫
+func (u *UserCatUsecase) GetUserCats(ctx context.Context, req *v1.GetUserCatsRequest) (*v1.GetUserCatsReply, error) {
+	res, err := u.repo.GetUserCats(ctx, req)
 	if err != nil {
 		return nil, err
 	}

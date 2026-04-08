@@ -24,22 +24,25 @@ const (
 	UserCat_UpdateUserCat_FullMethodName  = "/api.user.cat.v1.UserCat/UpdateUserCat"
 	UserCat_DeleteUserCat_FullMethodName  = "/api.user.cat.v1.UserCat/DeleteUserCat"
 	UserCat_GetUserCat_FullMethodName     = "/api.user.cat.v1.UserCat/GetUserCat"
+	UserCat_GetUserCats_FullMethodName    = "/api.user.cat.v1.UserCat/GetUserCats"
 )
 
 // UserCatClient is the client API for UserCat service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserCatClient interface {
-	// GetUserCatList 查询小猫列表
+	// GetUserCatList 查询用户小猫列表
 	GetUserCatList(ctx context.Context, in *GetUserCatListRequest, opts ...grpc.CallOption) (*GetUserCatListReply, error)
-	// CreateUserCat 创建小猫
+	// CreateUserCat 创建用户小猫
 	CreateUserCat(ctx context.Context, in *CreateUserCatRequest, opts ...grpc.CallOption) (*CreateUserCatReply, error)
-	// UpdateUserCat 更新小猫
+	// UpdateUserCat 更新用户小猫
 	UpdateUserCat(ctx context.Context, in *UpdateUserCatRequest, opts ...grpc.CallOption) (*UpdateUserCatReply, error)
-	// DeleteUserCat 删除小猫
+	// DeleteUserCat 删除用户小猫
 	DeleteUserCat(ctx context.Context, in *DeleteUserCatRequest, opts ...grpc.CallOption) (*DeleteUserCatReply, error)
-	// GetUserCat 查询小猫信息
+	// GetUserCat 查询用户小猫信息
 	GetUserCat(ctx context.Context, in *GetUserCatRequest, opts ...grpc.CallOption) (*GetUserCatReply, error)
+	// GetUserCats 查询用户所有小猫
+	GetUserCats(ctx context.Context, in *GetUserCatsRequest, opts ...grpc.CallOption) (*GetUserCatsReply, error)
 }
 
 type userCatClient struct {
@@ -100,20 +103,32 @@ func (c *userCatClient) GetUserCat(ctx context.Context, in *GetUserCatRequest, o
 	return out, nil
 }
 
+func (c *userCatClient) GetUserCats(ctx context.Context, in *GetUserCatsRequest, opts ...grpc.CallOption) (*GetUserCatsReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetUserCatsReply)
+	err := c.cc.Invoke(ctx, UserCat_GetUserCats_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserCatServer is the server API for UserCat service.
 // All implementations must embed UnimplementedUserCatServer
 // for forward compatibility.
 type UserCatServer interface {
-	// GetUserCatList 查询小猫列表
+	// GetUserCatList 查询用户小猫列表
 	GetUserCatList(context.Context, *GetUserCatListRequest) (*GetUserCatListReply, error)
-	// CreateUserCat 创建小猫
+	// CreateUserCat 创建用户小猫
 	CreateUserCat(context.Context, *CreateUserCatRequest) (*CreateUserCatReply, error)
-	// UpdateUserCat 更新小猫
+	// UpdateUserCat 更新用户小猫
 	UpdateUserCat(context.Context, *UpdateUserCatRequest) (*UpdateUserCatReply, error)
-	// DeleteUserCat 删除小猫
+	// DeleteUserCat 删除用户小猫
 	DeleteUserCat(context.Context, *DeleteUserCatRequest) (*DeleteUserCatReply, error)
-	// GetUserCat 查询小猫信息
+	// GetUserCat 查询用户小猫信息
 	GetUserCat(context.Context, *GetUserCatRequest) (*GetUserCatReply, error)
+	// GetUserCats 查询用户所有小猫
+	GetUserCats(context.Context, *GetUserCatsRequest) (*GetUserCatsReply, error)
 	mustEmbedUnimplementedUserCatServer()
 }
 
@@ -138,6 +153,9 @@ func (UnimplementedUserCatServer) DeleteUserCat(context.Context, *DeleteUserCatR
 }
 func (UnimplementedUserCatServer) GetUserCat(context.Context, *GetUserCatRequest) (*GetUserCatReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetUserCat not implemented")
+}
+func (UnimplementedUserCatServer) GetUserCats(context.Context, *GetUserCatsRequest) (*GetUserCatsReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetUserCats not implemented")
 }
 func (UnimplementedUserCatServer) mustEmbedUnimplementedUserCatServer() {}
 func (UnimplementedUserCatServer) testEmbeddedByValue()                 {}
@@ -250,6 +268,24 @@ func _UserCat_GetUserCat_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserCat_GetUserCats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserCatsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserCatServer).GetUserCats(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserCat_GetUserCats_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserCatServer).GetUserCats(ctx, req.(*GetUserCatsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserCat_ServiceDesc is the grpc.ServiceDesc for UserCat service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -276,6 +312,10 @@ var UserCat_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUserCat",
 			Handler:    _UserCat_GetUserCat_Handler,
+		},
+		{
+			MethodName: "GetUserCats",
+			Handler:    _UserCat_GetUserCats_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

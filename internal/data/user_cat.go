@@ -510,3 +510,63 @@ func (u *userCatRepo) CheckUserCatUpdateCountLimit(ctx context.Context, countKey
 
 	return nil
 }
+
+// GetUserCats 查询用户所有小猫
+func (u *userCatRepo) GetUserCats(ctx context.Context, req *v1.GetUserCatsRequest) (*v1.GetUserCatsReply, error) {
+	userId, err := utils.GetCurrentUserId(ctx)
+	if err != nil {
+		u.log.Errorf("get current user id failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	items := make([]*v1.CatItem, 0)
+	total := int64(0)
+
+	baseQuery := u.data.db.Table("t_cat as t1").Joins("inner join t_user_cat as t2 on t1.id = t2.cat_id").Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0).Where("t2.user_id = ?", userId)
+
+	if err := baseQuery.Count(&total).Error; err != nil {
+		u.log.Errorf("get user cats failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	result := baseQuery.Select("t1.id", "t1.name", "t1.gender", "t1.breed_type").Order("t1.created_time DESC")
+
+	rows, err := result.Rows()
+	if err != nil {
+		u.log.Errorf("get user cats failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var (
+			id        int64
+			name      string
+			gender    int32
+			breedType int32
+		)
+
+		if err := rows.Scan(&id, &name, &gender, &breedType); err != nil {
+			u.log.Errorf("get user cats failed: %v", err)
+			return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+		}
+
+		items = append(items, &v1.CatItem{
+			Id:        id,
+			Name:      name,
+			Gender:    gender,
+			BreedType: breedType,
+		})
+	}
+
+	if err := rows.Err(); err != nil {
+		u.log.Errorf("get user cats failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	return &v1.GetUserCatsReply{
+		Code: 200, Success: true, Message: "查询成功",
+		Data: items,
+	}, nil
+}

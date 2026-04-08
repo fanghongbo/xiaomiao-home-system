@@ -1229,6 +1229,186 @@ func (x *GetUserCatReply) GetData() *UserCatInfo {
 	return nil
 }
 
+type GetUserCatsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUserCatsRequest) Reset() {
+	*x = GetUserCatsRequest{}
+	mi := &file_api_user_cat_v1_cat_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUserCatsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserCatsRequest) ProtoMessage() {}
+
+func (x *GetUserCatsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_user_cat_v1_cat_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserCatsRequest.ProtoReflect.Descriptor instead.
+func (*GetUserCatsRequest) Descriptor() ([]byte, []int) {
+	return file_api_user_cat_v1_cat_proto_rawDescGZIP(), []int{15}
+}
+
+type CatItem struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Gender        int32                  `protobuf:"varint,3,opt,name=gender,proto3" json:"gender,omitempty"`
+	CatType       int32                  `protobuf:"varint,4,opt,name=catType,proto3" json:"catType,omitempty"`
+	BreedType     int32                  `protobuf:"varint,5,opt,name=breedType,proto3" json:"breedType,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CatItem) Reset() {
+	*x = CatItem{}
+	mi := &file_api_user_cat_v1_cat_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CatItem) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CatItem) ProtoMessage() {}
+
+func (x *CatItem) ProtoReflect() protoreflect.Message {
+	mi := &file_api_user_cat_v1_cat_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CatItem.ProtoReflect.Descriptor instead.
+func (*CatItem) Descriptor() ([]byte, []int) {
+	return file_api_user_cat_v1_cat_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *CatItem) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *CatItem) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *CatItem) GetGender() int32 {
+	if x != nil {
+		return x.Gender
+	}
+	return 0
+}
+
+func (x *CatItem) GetCatType() int32 {
+	if x != nil {
+		return x.CatType
+	}
+	return 0
+}
+
+func (x *CatItem) GetBreedType() int32 {
+	if x != nil {
+		return x.BreedType
+	}
+	return 0
+}
+
+type GetUserCatsReply struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Code          int32                  `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Success       bool                   `protobuf:"varint,3,opt,name=success,proto3" json:"success,omitempty"`
+	Data          []*CatItem             `protobuf:"bytes,4,rep,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUserCatsReply) Reset() {
+	*x = GetUserCatsReply{}
+	mi := &file_api_user_cat_v1_cat_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUserCatsReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserCatsReply) ProtoMessage() {}
+
+func (x *GetUserCatsReply) ProtoReflect() protoreflect.Message {
+	mi := &file_api_user_cat_v1_cat_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserCatsReply.ProtoReflect.Descriptor instead.
+func (*GetUserCatsReply) Descriptor() ([]byte, []int) {
+	return file_api_user_cat_v1_cat_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *GetUserCatsReply) GetCode() int32 {
+	if x != nil {
+		return x.Code
+	}
+	return 0
+}
+
+func (x *GetUserCatsReply) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *GetUserCatsReply) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetUserCatsReply) GetData() []*CatItem {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
 var File_api_user_cat_v1_cat_proto protoreflect.FileDescriptor
 
 const file_api_user_cat_v1_cat_proto_rawDesc = "" +
@@ -1349,14 +1529,27 @@ const file_api_user_cat_v1_cat_proto_rawDesc = "" +
 	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12\x18\n" +
 	"\asuccess\x18\x03 \x01(\bR\asuccess\x120\n" +
-	"\x04data\x18\x04 \x01(\v2\x1c.api.user.cat.v1.UserCatInfoR\x04data2\xf0\x04\n" +
+	"\x04data\x18\x04 \x01(\v2\x1c.api.user.cat.v1.UserCatInfoR\x04data\"\x14\n" +
+	"\x12GetUserCatsRequest\"}\n" +
+	"\aCatItem\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x16\n" +
+	"\x06gender\x18\x03 \x01(\x05R\x06gender\x12\x18\n" +
+	"\acatType\x18\x04 \x01(\x05R\acatType\x12\x1c\n" +
+	"\tbreedType\x18\x05 \x01(\x05R\tbreedType\"\x88\x01\n" +
+	"\x10GetUserCatsReply\x12\x12\n" +
+	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12\x18\n" +
+	"\asuccess\x18\x03 \x01(\bR\asuccess\x12,\n" +
+	"\x04data\x18\x04 \x03(\v2\x18.api.user.cat.v1.CatItemR\x04data2\xe2\x05\n" +
 	"\aUserCat\x12}\n" +
 	"\x0eGetUserCatList\x12&.api.user.cat.v1.GetUserCatListRequest\x1a$.api.user.cat.v1.GetUserCatListReply\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/api/v1/user/cat/list\x12x\n" +
 	"\rCreateUserCat\x12%.api.user.cat.v1.CreateUserCatRequest\x1a#.api.user.cat.v1.CreateUserCatReply\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/api/v1/user/cat\x12}\n" +
 	"\rUpdateUserCat\x12%.api.user.cat.v1.UpdateUserCatRequest\x1a#.api.user.cat.v1.UpdateUserCatReply\" \x82\xd3\xe4\x93\x02\x1a:\x01*\x1a\x15/api/v1/user/cat/{id}\x12z\n" +
 	"\rDeleteUserCat\x12%.api.user.cat.v1.DeleteUserCatRequest\x1a#.api.user.cat.v1.DeleteUserCatReply\"\x1d\x82\xd3\xe4\x93\x02\x17*\x15/api/v1/user/cat/{id}\x12q\n" +
 	"\n" +
-	"GetUserCat\x12\".api.user.cat.v1.GetUserCatRequest\x1a .api.user.cat.v1.GetUserCatReply\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/api/v1/user/cat/{id}BL\n" +
+	"GetUserCat\x12\".api.user.cat.v1.GetUserCatRequest\x1a .api.user.cat.v1.GetUserCatReply\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/api/v1/user/cat/{id}\x12p\n" +
+	"\vGetUserCats\x12#.api.user.cat.v1.GetUserCatsRequest\x1a!.api.user.cat.v1.GetUserCatsReply\"\x19\x82\xd3\xe4\x93\x02\x13\x12\x11/api/v1/user/catsBL\n" +
 	"\x0fapi.user.cat.v1B\x0eUserCatProtoV1P\x01Z'xiaomiao-home-system/api/user/cat/v1;v1b\x06proto3"
 
 var (
@@ -1371,7 +1564,7 @@ func file_api_user_cat_v1_cat_proto_rawDescGZIP() []byte {
 	return file_api_user_cat_v1_cat_proto_rawDescData
 }
 
-var file_api_user_cat_v1_cat_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_api_user_cat_v1_cat_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_api_user_cat_v1_cat_proto_goTypes = []any{
 	(*BaseRequest)(nil),           // 0: api.user.cat.v1.BaseRequest
 	(*BaseResponse)(nil),          // 1: api.user.cat.v1.BaseResponse
@@ -1388,26 +1581,32 @@ var file_api_user_cat_v1_cat_proto_goTypes = []any{
 	(*GetUserCatRequest)(nil),     // 12: api.user.cat.v1.GetUserCatRequest
 	(*UserCatInfo)(nil),           // 13: api.user.cat.v1.UserCatInfo
 	(*GetUserCatReply)(nil),       // 14: api.user.cat.v1.GetUserCatReply
+	(*GetUserCatsRequest)(nil),    // 15: api.user.cat.v1.GetUserCatsRequest
+	(*CatItem)(nil),               // 16: api.user.cat.v1.CatItem
+	(*GetUserCatsReply)(nil),      // 17: api.user.cat.v1.GetUserCatsReply
 }
 var file_api_user_cat_v1_cat_proto_depIdxs = []int32{
 	3,  // 0: api.user.cat.v1.UserCatList.items:type_name -> api.user.cat.v1.UserCatListItem
 	4,  // 1: api.user.cat.v1.GetUserCatListReply.data:type_name -> api.user.cat.v1.UserCatList
 	13, // 2: api.user.cat.v1.GetUserCatReply.data:type_name -> api.user.cat.v1.UserCatInfo
-	2,  // 3: api.user.cat.v1.UserCat.GetUserCatList:input_type -> api.user.cat.v1.GetUserCatListRequest
-	6,  // 4: api.user.cat.v1.UserCat.CreateUserCat:input_type -> api.user.cat.v1.CreateUserCatRequest
-	8,  // 5: api.user.cat.v1.UserCat.UpdateUserCat:input_type -> api.user.cat.v1.UpdateUserCatRequest
-	10, // 6: api.user.cat.v1.UserCat.DeleteUserCat:input_type -> api.user.cat.v1.DeleteUserCatRequest
-	12, // 7: api.user.cat.v1.UserCat.GetUserCat:input_type -> api.user.cat.v1.GetUserCatRequest
-	5,  // 8: api.user.cat.v1.UserCat.GetUserCatList:output_type -> api.user.cat.v1.GetUserCatListReply
-	7,  // 9: api.user.cat.v1.UserCat.CreateUserCat:output_type -> api.user.cat.v1.CreateUserCatReply
-	9,  // 10: api.user.cat.v1.UserCat.UpdateUserCat:output_type -> api.user.cat.v1.UpdateUserCatReply
-	11, // 11: api.user.cat.v1.UserCat.DeleteUserCat:output_type -> api.user.cat.v1.DeleteUserCatReply
-	14, // 12: api.user.cat.v1.UserCat.GetUserCat:output_type -> api.user.cat.v1.GetUserCatReply
-	8,  // [8:13] is the sub-list for method output_type
-	3,  // [3:8] is the sub-list for method input_type
-	3,  // [3:3] is the sub-list for extension type_name
-	3,  // [3:3] is the sub-list for extension extendee
-	0,  // [0:3] is the sub-list for field type_name
+	16, // 3: api.user.cat.v1.GetUserCatsReply.data:type_name -> api.user.cat.v1.CatItem
+	2,  // 4: api.user.cat.v1.UserCat.GetUserCatList:input_type -> api.user.cat.v1.GetUserCatListRequest
+	6,  // 5: api.user.cat.v1.UserCat.CreateUserCat:input_type -> api.user.cat.v1.CreateUserCatRequest
+	8,  // 6: api.user.cat.v1.UserCat.UpdateUserCat:input_type -> api.user.cat.v1.UpdateUserCatRequest
+	10, // 7: api.user.cat.v1.UserCat.DeleteUserCat:input_type -> api.user.cat.v1.DeleteUserCatRequest
+	12, // 8: api.user.cat.v1.UserCat.GetUserCat:input_type -> api.user.cat.v1.GetUserCatRequest
+	15, // 9: api.user.cat.v1.UserCat.GetUserCats:input_type -> api.user.cat.v1.GetUserCatsRequest
+	5,  // 10: api.user.cat.v1.UserCat.GetUserCatList:output_type -> api.user.cat.v1.GetUserCatListReply
+	7,  // 11: api.user.cat.v1.UserCat.CreateUserCat:output_type -> api.user.cat.v1.CreateUserCatReply
+	9,  // 12: api.user.cat.v1.UserCat.UpdateUserCat:output_type -> api.user.cat.v1.UpdateUserCatReply
+	11, // 13: api.user.cat.v1.UserCat.DeleteUserCat:output_type -> api.user.cat.v1.DeleteUserCatReply
+	14, // 14: api.user.cat.v1.UserCat.GetUserCat:output_type -> api.user.cat.v1.GetUserCatReply
+	17, // 15: api.user.cat.v1.UserCat.GetUserCats:output_type -> api.user.cat.v1.GetUserCatsReply
+	10, // [10:16] is the sub-list for method output_type
+	4,  // [4:10] is the sub-list for method input_type
+	4,  // [4:4] is the sub-list for extension type_name
+	4,  // [4:4] is the sub-list for extension extendee
+	0,  // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_api_user_cat_v1_cat_proto_init() }
@@ -1421,7 +1620,7 @@ func file_api_user_cat_v1_cat_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_user_cat_v1_cat_proto_rawDesc), len(file_api_user_cat_v1_cat_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   15,
+			NumMessages:   18,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

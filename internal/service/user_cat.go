@@ -70,3 +70,12 @@ func (s *UserCatService) GetUserCat(ctx context.Context, req *pb.GetUserCatReque
 	}
 	return res, nil
 }
+
+// GetUserCats 查询用户所有小猫
+func (s *UserCatService) GetUserCats(ctx context.Context, req *pb.GetUserCatsRequest) (*pb.GetUserCatsReply, error) {
+	res, err := s.userCat.GetUserCats(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}

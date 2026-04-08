@@ -2028,3 +2028,353 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = GetUserCatReplyValidationError{}
+
+// Validate checks the field values on GetUserCatsRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *GetUserCatsRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetUserCatsRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetUserCatsRequestMultiError, or nil if none found.
+func (m *GetUserCatsRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetUserCatsRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return GetUserCatsRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetUserCatsRequestMultiError is an error wrapping multiple validation errors
+// returned by GetUserCatsRequest.ValidateAll() if the designated constraints
+// aren't met.
+type GetUserCatsRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetUserCatsRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetUserCatsRequestMultiError) AllErrors() []error { return m }
+
+// GetUserCatsRequestValidationError is the validation error returned by
+// GetUserCatsRequest.Validate if the designated constraints aren't met.
+type GetUserCatsRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetUserCatsRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetUserCatsRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetUserCatsRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetUserCatsRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetUserCatsRequestValidationError) ErrorName() string {
+	return "GetUserCatsRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e GetUserCatsRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetUserCatsRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetUserCatsRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetUserCatsRequestValidationError{}
+
+// Validate checks the field values on CatItem with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *CatItem) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CatItem with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in CatItemMultiError, or nil if none found.
+func (m *CatItem) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CatItem) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	// no validation rules for Name
+
+	// no validation rules for Gender
+
+	// no validation rules for CatType
+
+	// no validation rules for BreedType
+
+	if len(errors) > 0 {
+		return CatItemMultiError(errors)
+	}
+
+	return nil
+}
+
+// CatItemMultiError is an error wrapping multiple validation errors returned
+// by CatItem.ValidateAll() if the designated constraints aren't met.
+type CatItemMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CatItemMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CatItemMultiError) AllErrors() []error { return m }
+
+// CatItemValidationError is the validation error returned by CatItem.Validate
+// if the designated constraints aren't met.
+type CatItemValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CatItemValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CatItemValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CatItemValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CatItemValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CatItemValidationError) ErrorName() string { return "CatItemValidationError" }
+
+// Error satisfies the builtin error interface
+func (e CatItemValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCatItem.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CatItemValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CatItemValidationError{}
+
+// Validate checks the field values on GetUserCatsReply with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *GetUserCatsReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on GetUserCatsReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// GetUserCatsReplyMultiError, or nil if none found.
+func (m *GetUserCatsReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *GetUserCatsReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Code
+
+	// no validation rules for Message
+
+	// no validation rules for Success
+
+	for idx, item := range m.GetData() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, GetUserCatsReplyValidationError{
+						field:  fmt.Sprintf("Data[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, GetUserCatsReplyValidationError{
+						field:  fmt.Sprintf("Data[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return GetUserCatsReplyValidationError{
+					field:  fmt.Sprintf("Data[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return GetUserCatsReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// GetUserCatsReplyMultiError is an error wrapping multiple validation errors
+// returned by GetUserCatsReply.ValidateAll() if the designated constraints
+// aren't met.
+type GetUserCatsReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m GetUserCatsReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m GetUserCatsReplyMultiError) AllErrors() []error { return m }
+
+// GetUserCatsReplyValidationError is the validation error returned by
+// GetUserCatsReply.Validate if the designated constraints aren't met.
+type GetUserCatsReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetUserCatsReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetUserCatsReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetUserCatsReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetUserCatsReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetUserCatsReplyValidationError) ErrorName() string { return "GetUserCatsReplyValidationError" }
+
+// Error satisfies the builtin error interface
+func (e GetUserCatsReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetUserCatsReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetUserCatsReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetUserCatsReplyValidationError{}

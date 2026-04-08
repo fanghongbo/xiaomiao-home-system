@@ -11,14 +11,14 @@ option java_package = "api.user.cat.v1";
 option java_outer_classname = "UserCatProtoV1";
 
 service UserCat {
-	// GetUserCatList 查询小猫列表
+	// GetUserCatList 查询用户小猫列表
 	rpc GetUserCatList (GetUserCatListRequest) returns (GetUserCatListReply) {
 		option (google.api.http) = {
 			get: "/api/v1/user/cat/list",
 		};
 	}
 
-	// CreateUserCat 创建小猫
+	// CreateUserCat 创建用户小猫
 	rpc CreateUserCat (CreateUserCatRequest) returns (CreateUserCatReply) {
 		option (google.api.http) = {
 			post: "/api/v1/user/cat",
@@ -26,7 +26,7 @@ service UserCat {
 		};	
 	}
 
-	// UpdateUserCat 更新小猫
+	// UpdateUserCat 更新用户小猫
 	rpc UpdateUserCat (UpdateUserCatRequest) returns (UpdateUserCatReply) {
 		option (google.api.http) = {
 			put: "/api/v1/user/cat/{id}",
@@ -34,17 +34,24 @@ service UserCat {
 		};	
 	}
 
-	// DeleteUserCat 删除小猫
+	// DeleteUserCat 删除用户小猫
 	rpc DeleteUserCat (DeleteUserCatRequest) returns (DeleteUserCatReply) {
 		option (google.api.http) = {
 			delete: "/api/v1/user/cat/{id}"
 		};	
 	}
 
-	// GetUserCat 查询小猫信息
+	// GetUserCat 查询用户小猫信息
 	rpc GetUserCat (GetUserCatRequest) returns (GetUserCatReply) {
 		option (google.api.http) = {
 			get: "/api/v1/user/cat/{id}"
+		};	
+	}
+
+	// GetUserCats 查询用户所有小猫
+	rpc GetUserCats (GetUserCatsRequest) returns (GetUserCatsReply) {
+		option (google.api.http) = {
+			get: "/api/v1/user/cats"
 		};	
 	}
 }
@@ -175,4 +182,21 @@ message GetUserCatReply {
 	string message = 2;
 	bool success = 3;
 	UserCatInfo data = 4;
+}
+
+message GetUserCatsRequest {}
+
+message CatItem {
+    int64 id = 1;
+	string name = 2;
+	int32 gender = 3;
+	int32 catType = 4;
+	int32 breedType = 5;
+}
+
+message GetUserCatsReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	repeated CatItem data = 4;
 }
