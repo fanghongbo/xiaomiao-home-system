@@ -82,19 +82,19 @@ func (u *userRepo) WebLogin(ctx context.Context, req *v1.WebLoginRequest) (*v1.W
 
 	clientIp, err := utils.GetUserIP(ctx)
 	if err != nil {
-		u.log.Error("get user ip failed: %v", err)
+		u.log.Errorf("get user ip failed: %v", err)
 		clientIp = "127.0.0.1"
 	}
 
 	// 获取登录错误次数
 	loginErrorCount, err := u.GetLoginErrorCount(ctx, req.LoginType, req.LoginIdentity, clientIp)
 	if err != nil {
-		u.log.Error("get login error count failed: %v", err)
+		u.log.Errorf("get login error count failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	if loginErrorCount >= invalidLoginCount {
-		u.log.Error("login error count too many: %d", loginErrorCount)
+		u.log.Errorf("login error count too many: %d", loginErrorCount)
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "登录错误次数过多, 请稍后再试")
 	}
 
@@ -110,10 +110,10 @@ func (u *userRepo) WebLogin(ctx context.Context, req *v1.WebLoginRequest) (*v1.W
 	}
 
 	if err != nil {
-		u.log.Error("web login failed: %v", err)
+		u.log.Errorf("web login failed: %v", err)
 
 		if err = u.IncLoginErrorCount(ctx, req.LoginType, req.LoginIdentity, clientIp, time.Duration(loginBanDuration)*time.Minute); err != nil {
-			u.log.Error("inc login error count failed: %v", err)
+			u.log.Errorf("inc login error count failed: %v", err)
 		}
 
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "账号或密码错误, 请稍后再试")
@@ -128,7 +128,7 @@ func (u *userRepo) GetLoginErrorCount(ctx context.Context, loginType v1.LoginTyp
 
 	count, err := u.data.rdb.Get(ctx, redisKey).Int64()
 	if err != nil && err != redis.Nil {
-		u.log.Error("get login error count failed: %v", err)
+		u.log.Errorf("get login error count failed: %v", err)
 		return 0, err
 	}
 
@@ -141,12 +141,12 @@ func (u *userRepo) IncLoginErrorCount(ctx context.Context, loginType v1.LoginTyp
 
 	_, err := u.data.rdb.Incr(ctx, redisKey).Result()
 	if err != nil {
-		u.log.Error("inc login error count failed: %v", err)
+		u.log.Errorf("inc login error count failed: %v", err)
 		return err
 	}
 
 	if err = u.data.rdb.Expire(ctx, redisKey, ttl).Err(); err != nil {
-		u.log.Error("set login error count expire failed: %v", err)
+		u.log.Errorf("set login error count expire failed: %v", err)
 		return err
 	}
 
@@ -159,7 +159,7 @@ func (u *userRepo) ClearLoginErrorCount(ctx context.Context, loginType v1.LoginT
 
 	err := u.data.rdb.Del(ctx, redisKey).Err()
 	if err != nil {
-		u.log.Error("clear login error count failed: %v", err)
+		u.log.Errorf("clear login error count failed: %v", err)
 		return err
 	}
 
@@ -193,13 +193,13 @@ func (u *userRepo) GetUserPasswordInfo(ctx context.Context, accountType AccountT
 func (u *userRepo) CheckUserPassword(ctx context.Context, accountType AccountType, req *v1.WebLoginRequest) (bool, error) {
 	userPasswordInfo, err := u.GetUserPasswordInfo(ctx, accountType, req)
 	if err != nil {
-		u.log.Error("get user password info failed: %v", err)
+		u.log.Errorf("get user password info failed: %v", err)
 		return false, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "用户名或密码错误, 请检查后重试")
 	}
 
 	pwd, err := password.New(req.Password, userPasswordInfo.Slat)
 	if err != nil {
-		u.log.Error("check password failed: %v", err)
+		u.log.Errorf("check password failed: %v", err)
 		return false, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -245,7 +245,7 @@ func (u *userRepo) WebLoginAccount(ctx context.Context, req *v1.WebLoginRequest,
 	accountType := u.CheckLoginAccountType(req.LoginIdentity)
 
 	if ok, err := u.CheckUserPassword(ctx, accountType, req); err != nil {
-		u.log.Error("check user password failed: %v", err)
+		u.log.Errorf("check user password failed: %v", err)
 		return nil, err
 	} else if !ok {
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "账号或密码错误, 请稍后再试")
@@ -254,7 +254,7 @@ func (u *userRepo) WebLoginAccount(ctx context.Context, req *v1.WebLoginRequest,
 	// 查询用户信息
 	userInfo, err := u.GetWebLoginAccountInfo(ctx, accountType, req)
 	if err != nil {
-		u.log.Error("get web login user info failed: %v", err)
+		u.log.Errorf("get web login user info failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -267,7 +267,7 @@ func (u *userRepo) WebLoginAccount(ctx context.Context, req *v1.WebLoginRequest,
 	// 生成jwt token
 	token, err := jwt.GenerateToken(jwtConfig, userInfo.Id, userInfo.Nickname)
 	if err != nil {
-		u.log.Error("generate jwt token failed: %v", err)
+		u.log.Errorf("generate jwt token failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -291,10 +291,10 @@ func (u *userRepo) GetUserByNickname(ctx context.Context, nickname string) (*v1.
 
 	if err := u.data.db.Table("t_user as t1").Joins("inner join t_user_password as t2 on t1.id = t2.user_id").Select("t1.id, t1.nickname, t1.avatar, t1.gender, t1.birthday, t1.signature, t1.status").Where("t1.nickname = ?", nickname).Where("t1.deleted_flag = ?", 0).First(&user).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
-			u.log.Error("user not found: %v", err)
+			u.log.Errorf("user not found: %v", err)
 			return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "用户不存在")
 		}
-		u.log.Error("get user by nickname failed: %v", err)
+		u.log.Errorf("get user by nickname failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -347,13 +347,13 @@ func (u *userRepo) GetUserInfo(ctx context.Context, userId int64) (*v1.UserInfo,
 func (u *userRepo) GetWebLoginUserInfo(ctx context.Context, req *v1.GetWebLoginUserInfoRequest) (*v1.GetWebLoginUserInfoReply, error) {
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
-		u.log.Error("get current user id failed: %v", err)
+		u.log.Errorf("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	userInfo, err := u.GetUserInfo(ctx, userId)
 	if err != nil {
-		u.log.Error("get user info failed: %v", err)
+		u.log.Errorf("get user info failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -385,7 +385,7 @@ func (u *userRepo) WebLogout(ctx context.Context, req *v1.WebLogoutRequest) (*v1
 	// 获取当前用户ID（用于日志记录）
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
-		u.log.Error("get current user id failed: %v", err)
+		u.log.Errorf("get current user id failed: %v", err)
 	} else {
 		u.log.Infof("user logout: userId=%d", userId)
 	}
@@ -406,7 +406,7 @@ func (u *userRepo) WebCheckLogin(ctx context.Context, req *v1.WebCheckLoginReque
 	// 由于此接口需要JWT认证，如果能执行到这里说明用户已登录
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
-		u.log.Error("get current user id failed: %v", err)
+		u.log.Errorf("get current user id failed: %v", err)
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_INVALID_SESSION.String(), "未登录")
 	}
 

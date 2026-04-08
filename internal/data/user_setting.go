@@ -66,7 +66,7 @@ func (u *userSettingRepo) CheckUserSettingUpdateCountLimit(ctx context.Context, 
 func (u *userSettingRepo) UpdateUserBaseSetting(ctx context.Context, req *v1.UpdateUserBaseSettingRequest) (*v1.UpdateUserBaseSettingReply, error) {
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
-		u.log.Error("get current user id failed: %v", err)
+		u.log.Errorf("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -85,7 +85,7 @@ func (u *userSettingRepo) UpdateUserBaseSetting(ctx context.Context, req *v1.Upd
 	}
 
 	if err := u.data.db.Table("t_user").Where("id = ?", userId).Updates(userInfo).Error; err != nil {
-		u.log.Error("update user base setting failed: %v", err)
+		u.log.Errorf("update user base setting failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -117,7 +117,7 @@ func (u *userSettingRepo) CheckPassword(password string) bool {
 func (u *userSettingRepo) UpdateUserPassword(ctx context.Context, req *v1.UpdateUserPasswordRequest) (*v1.UpdateUserPasswordReply, error) {
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
-		u.log.Error("get current user id failed: %v", err)
+		u.log.Errorf("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -131,13 +131,13 @@ func (u *userSettingRepo) UpdateUserPassword(ctx context.Context, req *v1.Update
 
 	salt, err := password.NewSalt(10)
 	if err != nil {
-		u.log.Error("generate salt failed: %v", err)
+		u.log.Errorf("generate salt failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	passwordHash, err := password.New(req.Password, salt)
 	if err != nil {
-		u.log.Error("generate password hash failed: %v", err)
+		u.log.Errorf("generate password hash failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -145,7 +145,7 @@ func (u *userSettingRepo) UpdateUserPassword(ctx context.Context, req *v1.Update
 		"password": passwordHash,
 		"salt":     salt,
 	}).Error; err != nil {
-		u.log.Error("update user password failed: %v", err)
+		u.log.Errorf("update user password failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -191,7 +191,7 @@ func (u *userSettingRepo) upsertNotifySetting(userId int64, settingName string, 
 func (u *userSettingRepo) UpdateUserSystemNotifySetting(ctx context.Context, req *v1.UpdateUserSystemNotifySettingRequest) (*v1.UpdateUserSystemNotifySettingReply, error) {
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
-		u.log.Error("get current user id failed: %v", err)
+		u.log.Errorf("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -200,7 +200,7 @@ func (u *userSettingRepo) UpdateUserSystemNotifySetting(ctx context.Context, req
 	}
 
 	if err := u.upsertNotifySetting(userId, "system_notify_receive", req.Enable); err != nil {
-		u.log.Error("set receive user system notify failed: %v", err)
+		u.log.Errorf("set receive user system notify failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -216,7 +216,7 @@ func (u *userSettingRepo) UpdateUserSystemNotifySetting(ctx context.Context, req
 func (u *userSettingRepo) UpdateUserInteractNotifySetting(ctx context.Context, req *v1.UpdateUserInteractNotifySettingRequest) (*v1.UpdateUserInteractNotifySettingReply, error) {
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
-		u.log.Error("get current user id failed: %v", err)
+		u.log.Errorf("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -225,7 +225,7 @@ func (u *userSettingRepo) UpdateUserInteractNotifySetting(ctx context.Context, r
 	}
 
 	if err := u.upsertNotifySetting(userId, "interact_notify_receive", req.Enable); err != nil {
-		u.log.Error("set receive user interact notify failed: %v", err)
+		u.log.Errorf("set receive user interact notify failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -241,7 +241,7 @@ func (u *userSettingRepo) UpdateUserInteractNotifySetting(ctx context.Context, r
 func (u *userSettingRepo) UpdateUserAdoptNotifySetting(ctx context.Context, req *v1.UpdateUserAdoptNotifySettingRequest) (*v1.UpdateUserAdoptNotifySettingReply, error) {
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
-		u.log.Error("get current user id failed: %v", err)
+		u.log.Errorf("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -250,7 +250,7 @@ func (u *userSettingRepo) UpdateUserAdoptNotifySetting(ctx context.Context, req 
 	}
 
 	if err := u.upsertNotifySetting(userId, "adopt_notify_receive", req.Enable); err != nil {
-		u.log.Error("set receive user adopt notify failed: %v", err)
+		u.log.Errorf("set receive user adopt notify failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -266,7 +266,7 @@ func (u *userSettingRepo) UpdateUserAdoptNotifySetting(ctx context.Context, req 
 func (u *userSettingRepo) UpdateUserEmailNotifySetting(ctx context.Context, req *v1.UpdateUserEmailNotifySettingRequest) (*v1.UpdateUserEmailNotifySettingReply, error) {
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
-		u.log.Error("get current user id failed: %v", err)
+		u.log.Errorf("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -275,7 +275,7 @@ func (u *userSettingRepo) UpdateUserEmailNotifySetting(ctx context.Context, req 
 	}
 
 	if err := u.upsertNotifySetting(userId, "email_notify_receive", req.Enable); err != nil {
-		u.log.Error("set receive user email notify failed: %v", err)
+		u.log.Errorf("set receive user email notify failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -291,7 +291,7 @@ func (u *userSettingRepo) UpdateUserEmailNotifySetting(ctx context.Context, req 
 func (u *userSettingRepo) GetUserNotifySetting(ctx context.Context, req *v1.GetUserNotifySettingRequest) (*v1.GetUserNotifySettingReply, error) {
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
-		u.log.Error("get current user id failed: %v", err)
+		u.log.Errorf("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -300,7 +300,7 @@ func (u *userSettingRepo) GetUserNotifySetting(ctx context.Context, req *v1.GetU
 		if err == gorm.ErrRecordNotFound {
 			systemVal = 1
 		} else {
-			u.log.Error("get user notify setting failed: %v", err)
+			u.log.Errorf("get user notify setting failed: %v", err)
 			return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 		}
 	}
@@ -310,7 +310,7 @@ func (u *userSettingRepo) GetUserNotifySetting(ctx context.Context, req *v1.GetU
 		if err == gorm.ErrRecordNotFound {
 			interactVal = 1
 		} else {
-			u.log.Error("get user notify setting failed: %v", err)
+			u.log.Errorf("get user notify setting failed: %v", err)
 			return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 		}
 	}
@@ -320,7 +320,7 @@ func (u *userSettingRepo) GetUserNotifySetting(ctx context.Context, req *v1.GetU
 		if err == gorm.ErrRecordNotFound {
 			adoptVal = 1
 		} else {
-			u.log.Error("get user notify setting failed: %v", err)
+			u.log.Errorf("get user notify setting failed: %v", err)
 			return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 		}
 	}
@@ -330,7 +330,7 @@ func (u *userSettingRepo) GetUserNotifySetting(ctx context.Context, req *v1.GetU
 		if err == gorm.ErrRecordNotFound {
 			emailVal = 1
 		} else {
-			u.log.Error("get user notify setting failed: %v", err)
+			u.log.Errorf("get user notify setting failed: %v", err)
 			return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 		}
 	}

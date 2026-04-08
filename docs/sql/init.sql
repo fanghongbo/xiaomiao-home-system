@@ -328,25 +328,6 @@ CREATE TABLE
   COLLATE = utf8mb4_unicode_ci
   ROW_FORMAT = DYNAMIC COMMENT ='用户小猫关联表';
 
--- 用户领养表
-Create TABLE
-    IF NOT EXISTS t_user_adopt
-(
-    id           bigint PRIMARY KEY COMMENT '关联id',
-    user_id      bigint NOT NULL COMMENT '用户id',
-    cat_id       bigint NOT NULL COMMENT '小猫id',
-    deleted_flag tinyint(1)           DEFAULT 0 COMMENT '删除标记, 0: 未删除,  1: 已删除',
-    created_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    updated_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    deleted_time datetime                     DEFAULT  '1970-01-01 08:00:00' COMMENT '删除时间',
-    KEY idx_user_id (user_id) USING BTREE,
-    KEY idx_cat_id (cat_id) USING BTREE,
-    UNIQUE KEY uk_user_id_cat_id (user_id, cat_id, deleted_flag, deleted_time) USING BTREE
-) ENGINE = innodb
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_unicode_ci
-  ROW_FORMAT = DYNAMIC COMMENT ='用户小猫关联表';
-
 -- 领养表
 CREATE TABLE
     IF NOT EXISTS t_adopt

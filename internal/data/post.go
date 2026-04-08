@@ -33,7 +33,7 @@ func (u *postRepo) GetPostList(ctx context.Context, req *v1.GetPostListRequest) 
 
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
-		u.log.Error("get current user id failed: %v", err)
+		u.log.Errorf("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -44,7 +44,7 @@ func (u *postRepo) GetPostList(ctx context.Context, req *v1.GetPostListRequest) 
 	}
 
 	if err := baseQuery.Count(&total).Error; err != nil {
-		u.log.Error("get post list failed: %v", err)
+		u.log.Errorf("get post list failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -54,7 +54,7 @@ func (u *postRepo) GetPostList(ctx context.Context, req *v1.GetPostListRequest) 
 
 	rows, err := result.Rows()
 	if err != nil {
-		u.log.Error("get post list failed: %v", err)
+		u.log.Errorf("get post list failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -62,33 +62,33 @@ func (u *postRepo) GetPostList(ctx context.Context, req *v1.GetPostListRequest) 
 
 	for rows.Next() {
 		var (
-			id            int64
-			title         string
-			postStatus int
-			auditStatus   int
-			remark        string
-			createdTime   time.Time
-			updatedTime   time.Time
+			id          int64
+			title       string
+			postStatus  int
+			auditStatus int
+			remark      string
+			createdTime time.Time
+			updatedTime time.Time
 		)
 
 		if err := rows.Scan(&id, &title, &postStatus, &auditStatus, &remark, &createdTime, &updatedTime); err != nil {
-			u.log.Error("get post list failed: %v", err)
+			u.log.Errorf("get post list failed: %v", err)
 			return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 		}
 
 		items = append(items, &v1.PostListItem{
-			Id:            id,
-			Title:         title,
-			PostStatus: int32(postStatus),
-			AuditStatus:   int32(auditStatus),
-			Remark:        remark,
-			CreatedTime:   createdTime.Format("2006-01-02 15:04:05"),
-			UpdatedTime:   updatedTime.Format("2006-01-02 15:04:05"),
+			Id:          id,
+			Title:       title,
+			PostStatus:  int32(postStatus),
+			AuditStatus: int32(auditStatus),
+			Remark:      remark,
+			CreatedTime: createdTime.Format("2006-01-02 15:04:05"),
+			UpdatedTime: updatedTime.Format("2006-01-02 15:04:05"),
 		})
 	}
 
 	if err := rows.Err(); err != nil {
-		u.log.Error("get post list failed: %v", err)
+		u.log.Errorf("get post list failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -105,29 +105,29 @@ func (u *postRepo) GetPostList(ctx context.Context, req *v1.GetPostListRequest) 
 func (u *postRepo) CreatePost(ctx context.Context, req *v1.CreatePostRequest) (*v1.CreatePostReply, error) {
 	id, err := u.data.gid.NextID()
 	if err != nil {
-		u.log.Error("generate id failed: %v", err)
+		u.log.Errorf("generate id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
-		u.log.Error("get current user id failed: %v", err)
+		u.log.Errorf("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	post := map[string]interface{}{
-		"id":             id,
-		"user_id":        userId,
-		"title":          req.Title,
-		"post_type":   req.PostType,
-		"province_id":    req.ProvinceId,
-		"city_id":        req.CityId,
-		"address":        req.Address,
-		"audit_status":   0,
-		"post_status": 0,
-		"remark":         req.Remark,
-		"created_time":   time.Now(),
-		"updated_time":   time.Now(),
+		"id":           id,
+		"user_id":      userId,
+		"title":        req.Title,
+		"post_type":    req.PostType,
+		"province_id":  req.ProvinceId,
+		"city_id":      req.CityId,
+		"address":      req.Address,
+		"audit_status": 0,
+		"post_status":  0,
+		"remark":       req.Remark,
+		"created_time": time.Now(),
+		"updated_time": time.Now(),
 	}
 
 	// 启动MySQL事务
@@ -135,13 +135,13 @@ func (u *postRepo) CreatePost(ctx context.Context, req *v1.CreatePostRequest) (*
 
 	if err := tx.Model(&Post{}).Create(post).Error; err != nil {
 		tx.Rollback()
-		u.log.Error("create post failed: %v", err)
+		u.log.Errorf("create post failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	if err := tx.Commit().Error; err != nil {
 		tx.Rollback()
-		u.log.Error("create post failed: %v", err)
+		u.log.Errorf("create post failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -154,21 +154,21 @@ func (u *postRepo) CreatePost(ctx context.Context, req *v1.CreatePostRequest) (*
 func (u *postRepo) UpdatePost(ctx context.Context, req *v1.UpdatePostRequest) (*v1.UpdatePostReply, error) {
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
-		u.log.Error("get current user id failed: %v", err)
+		u.log.Errorf("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	post := map[string]interface{}{
-		"id":             req.Id,
-		"title":          req.Title,
-		"post_type":   req.PostType,
-		"province_id":    req.ProvinceId,
-		"city_id":        req.CityId,
-		"address":        req.Address,
-		"audit_status":   0,
-		"post_status": 0,
-		"remark":         req.Remark,
-		"updated_time":   time.Now(),
+		"id":           req.Id,
+		"title":        req.Title,
+		"post_type":    req.PostType,
+		"province_id":  req.ProvinceId,
+		"city_id":      req.CityId,
+		"address":      req.Address,
+		"audit_status": 0,
+		"post_status":  0,
+		"remark":       req.Remark,
+		"updated_time": time.Now(),
 	}
 
 	// 启动MySQL事务
@@ -181,7 +181,7 @@ func (u *postRepo) UpdatePost(ctx context.Context, req *v1.UpdatePostRequest) (*
 		Updates(post)
 	if result.Error != nil {
 		tx.Rollback()
-		u.log.Error("update post failed: %v", result.Error)
+		u.log.Errorf("update post failed: %v", result.Error)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 	if result.RowsAffected == 0 {
@@ -191,7 +191,7 @@ func (u *postRepo) UpdatePost(ctx context.Context, req *v1.UpdatePostRequest) (*
 
 	if err := tx.Commit().Error; err != nil {
 		tx.Rollback()
-		u.log.Error("update post failed: %v", err)
+		u.log.Errorf("update post failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -204,7 +204,7 @@ func (u *postRepo) UpdatePost(ctx context.Context, req *v1.UpdatePostRequest) (*
 func (u *postRepo) DeletePost(ctx context.Context, req *v1.DeletePostRequest) (*v1.DeletePostReply, error) {
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
-		u.log.Error("get current user id failed: %v", err)
+		u.log.Errorf("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -219,7 +219,7 @@ func (u *postRepo) DeletePost(ctx context.Context, req *v1.DeletePostRequest) (*
 
 	if result.Error != nil {
 		tx.Rollback()
-		u.log.Error("delete post failed: %v", result.Error)
+		u.log.Errorf("delete post failed: %v", result.Error)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 	if result.RowsAffected == 0 {
@@ -229,7 +229,7 @@ func (u *postRepo) DeletePost(ctx context.Context, req *v1.DeletePostRequest) (*
 
 	if err := tx.Commit().Error; err != nil {
 		tx.Rollback()
-		u.log.Error("delete post failed: %v", err)
+		u.log.Errorf("delete post failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -265,7 +265,7 @@ func (u *postRepo) GetPost(ctx context.Context, req *v1.GetPostRequest) (*v1.Get
 
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
-		u.log.Error("get current user id failed: %v", err)
+		u.log.Errorf("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -281,7 +281,7 @@ func (u *postRepo) GetPost(ctx context.Context, req *v1.GetPostRequest) (*v1.Get
 		Data: &v1.PostInfo{
 			Id:          post.Id,
 			Title:       post.Title,
-			PostType: int32(post.PostType),
+			PostType:    int32(post.PostType),
 			ProvinceId:  int32(post.ProvinceId),
 			CityId:      int32(post.CityId),
 			Address:     post.Address,

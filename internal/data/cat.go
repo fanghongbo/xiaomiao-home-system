@@ -35,14 +35,14 @@ func (u *catRepo) GetCatList(ctx context.Context, req *v1.GetCatListRequest) (*v
 
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
-		u.log.Error("get current user id failed: %v", err)
+		u.log.Errorf("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	baseQuery := u.data.db.Table("t_cat as t1").Joins("inner join t_user_cat as t2 on t1.id = t2.cat_id").Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0).Where("t2.user_id = ?", userId)
 
 	if err := baseQuery.Count(&total).Error; err != nil {
-		u.log.Error("get cat list failed: %v", err)
+		u.log.Errorf("get cat list failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -52,7 +52,7 @@ func (u *catRepo) GetCatList(ctx context.Context, req *v1.GetCatListRequest) (*v
 
 	rows, err := result.Rows()
 	if err != nil {
-		u.log.Error("get cat list failed: %v", err)
+		u.log.Errorf("get cat list failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -76,7 +76,7 @@ func (u *catRepo) GetCatList(ctx context.Context, req *v1.GetCatListRequest) (*v
 		)
 
 		if err := rows.Scan(&id, &name, &gender, &breedType, &weight, &birthday, &neuterStatus, &healthStatus, &dewormedStatus, &vaccineStatus, &remark, &createdTime, &updatedTime); err != nil {
-			u.log.Error("get cat list failed: %v", err)
+			u.log.Errorf("get cat list failed: %v", err)
 			return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 		}
 
@@ -96,7 +96,7 @@ func (u *catRepo) GetCatList(ctx context.Context, req *v1.GetCatListRequest) (*v
 	}
 
 	if err := rows.Err(); err != nil {
-		u.log.Error("get cat list failed: %v", err)
+		u.log.Errorf("get cat list failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -113,19 +113,19 @@ func (u *catRepo) GetCatList(ctx context.Context, req *v1.GetCatListRequest) (*v
 func (u *catRepo) CreateCat(ctx context.Context, req *v1.CreateCatRequest) (*v1.CreateCatReply, error) {
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
-		u.log.Error("get current user id failed: %v", err)
+		u.log.Errorf("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	catId, err := u.data.gid.NextID()
 	if err != nil {
-		u.log.Error("generate cat id failed: %v", err)
+		u.log.Errorf("generate cat id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	birthday, err := time.Parse("2006-01-02", req.Birthday)
 	if err != nil {
-		u.log.Error("parse birthday failed: %v", err)
+		u.log.Errorf("parse birthday failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -167,7 +167,7 @@ func (u *catRepo) CreateCat(ctx context.Context, req *v1.CreateCatRequest) (*v1.
 		if req.VaccineLastDate != "" {
 			vaccineLastDate, err := time.Parse("2006-01-02", req.VaccineLastDate)
 			if err != nil {
-				u.log.Error("parse vaccine last date failed: %v", err)
+				u.log.Errorf("parse vaccine last date failed: %v", err)
 				return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 			}
 
@@ -179,14 +179,14 @@ func (u *catRepo) CreateCat(ctx context.Context, req *v1.CreateCatRequest) (*v1.
 
 	if err := tx.Model(&Cat{}).Create(catInfo).Error; err != nil {
 		tx.Rollback()
-		u.log.Error("create cat failed: %v", err)
+		u.log.Errorf("create cat failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	userCatId, err := u.data.gid.NextID()
 	if err != nil {
 		tx.Rollback()
-		u.log.Error("generate user cat id failed: %v", err)
+		u.log.Errorf("generate user cat id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -200,13 +200,13 @@ func (u *catRepo) CreateCat(ctx context.Context, req *v1.CreateCatRequest) (*v1.
 
 	if err := tx.Model(&UserCat{}).Create(userCatInfo).Error; err != nil {
 		tx.Rollback()
-		u.log.Error("create user cat failed: %v", err)
+		u.log.Errorf("create user cat failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	if err := tx.Commit().Error; err != nil {
 		tx.Rollback()
-		u.log.Error("create cat failed: %v", err)
+		u.log.Errorf("create cat failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -219,27 +219,27 @@ func (u *catRepo) CreateCat(ctx context.Context, req *v1.CreateCatRequest) (*v1.
 func (u *catRepo) UpdateCat(ctx context.Context, req *v1.UpdateCatRequest) (*v1.UpdateCatReply, error) {
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
-		u.log.Error("get current user id failed: %v", err)
+		u.log.Errorf("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	// 查询当前小猫是否属于当前用户
 	userCatIds, err := u.GetCatIdsByUserId(ctx, userId)
 	if err != nil {
-		u.log.Error("get cat ids by user id failed: %v", err)
+		u.log.Errorf("get cat ids by user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	// 判断当前小猫是否属于当前用户
 	if !slices.Contains(userCatIds, req.Id) {
-		u.log.Error("cat not found or no permission: %v", req.Id)
+		u.log.Errorf("cat not found or no permission: %v", req.Id)
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "小猫不存在或无权限")
 	}
 
 	// 更新小猫信息
 	birthday, err := time.Parse("2006-01-02", req.Birthday)
 	if err != nil {
-		u.log.Error("parse birthday failed: %v", err)
+		u.log.Errorf("parse birthday failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -279,7 +279,7 @@ func (u *catRepo) UpdateCat(ctx context.Context, req *v1.UpdateCatRequest) (*v1.
 		if req.VaccineLastDate != "" {
 			vaccineLastDate, err := time.Parse("2006-01-02", req.VaccineLastDate)
 			if err != nil {
-				u.log.Error("parse vaccine last date failed: %v", err)
+				u.log.Errorf("parse vaccine last date failed: %v", err)
 				return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 			}
 
@@ -291,13 +291,13 @@ func (u *catRepo) UpdateCat(ctx context.Context, req *v1.UpdateCatRequest) (*v1.
 
 	if err := tx.Model(&Cat{}).Where("id = ?", req.Id).Where("deleted_flag = ?", 0).Updates(catInfo).Error; err != nil {
 		tx.Rollback()
-		u.log.Error("update cat failed: %v", err)
+		u.log.Errorf("update cat failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	if err := tx.Commit().Error; err != nil {
 		tx.Rollback()
-		u.log.Error("update cat failed: %v", err)
+		u.log.Errorf("update cat failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -310,20 +310,20 @@ func (u *catRepo) UpdateCat(ctx context.Context, req *v1.UpdateCatRequest) (*v1.
 func (u *catRepo) DeleteCat(ctx context.Context, req *v1.DeleteCatRequest) (*v1.DeleteCatReply, error) {
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
-		u.log.Error("get current user id failed: %v", err)
+		u.log.Errorf("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	// 查询当前小猫是否属于当前用户
 	userCatIds, err := u.GetCatIdsByUserId(ctx, userId)
 	if err != nil {
-		u.log.Error("get cat ids by user id failed: %v", err)
+		u.log.Errorf("get cat ids by user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	// 判断当前小猫是否属于当前用户
 	if !slices.Contains(userCatIds, req.Id) {
-		u.log.Error("cat not found or no permission: %v", req.Id)
+		u.log.Errorf("cat not found or no permission: %v", req.Id)
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "小猫不存在或无权限")
 	}
 
@@ -336,19 +336,19 @@ func (u *catRepo) DeleteCat(ctx context.Context, req *v1.DeleteCatRequest) (*v1.
 
 	if err := tx.Model(&Cat{}).Where("id = ?", req.Id).Where("deleted_flag = ?", 0).Updates(updateInfo).Error; err != nil {
 		tx.Rollback()
-		u.log.Error("delete cat failed: %v", err)
+		u.log.Errorf("delete cat failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	if err := tx.Model(&UserCat{}).Where("cat_id = ?", req.Id).Where("user_id = ?", userId).Where("deleted_flag = ?", 0).Updates(updateInfo).Error; err != nil {
 		tx.Rollback()
-		u.log.Error("delete user cat failed: %v", err)
+		u.log.Errorf("delete user cat failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	if err := tx.Commit().Error; err != nil {
 		tx.Rollback()
-		u.log.Error("delete cat failed: %v", err)
+		u.log.Errorf("delete cat failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -370,20 +370,20 @@ func (u *catRepo) GetCatIdsByUserId(ctx context.Context, userId int64) ([]int64,
 func (u *catRepo) GetCat(ctx context.Context, req *v1.GetCatRequest) (*v1.GetCatReply, error) {
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
-		u.log.Error("get current user id failed: %v", err)
+		u.log.Errorf("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	// 查询当前小猫是否属于当前用户
 	userCatIds, err := u.GetCatIdsByUserId(ctx, userId)
 	if err != nil {
-		u.log.Error("get cat ids by user id failed: %v", err)
+		u.log.Errorf("get cat ids by user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	// 判断当前小猫是否属于当前用户
 	if !slices.Contains(userCatIds, req.Id) {
-		u.log.Error("cat not found or no permission: %v", req.Id)
+		u.log.Errorf("cat not found or no permission: %v", req.Id)
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "小猫不存在或无权限")
 	}
 
@@ -408,7 +408,7 @@ func (u *catRepo) GetCat(ctx context.Context, req *v1.GetCatRequest) (*v1.GetCat
 	)
 
 	if err := row.Scan(&id, &name, &gender, &breedType, &weight, &birthday, &neuterStatus, &healthStatus, &healthDesc, &dewormedStatus, &vaccineStatus, &vaccineTypes, &vaccineLastDate, &vaccineCertImage, &remark); err != nil {
-		u.log.Error("get cat failed: %v", err)
+		u.log.Errorf("get cat failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -437,7 +437,7 @@ func (u *catRepo) GetCat(ctx context.Context, req *v1.GetCatRequest) (*v1.GetCat
 		for _, vaccineType := range strings.Split(vaccineTypes, ",") {
 			vaccineTypeInt, err := strconv.ParseInt(vaccineType, 10, 32)
 			if err != nil {
-				u.log.Error("parse vaccine type failed: %v", err)
+				u.log.Errorf("parse vaccine type failed: %v", err)
 				return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 			}
 			catInfo.VaccineTypes = append(catInfo.VaccineTypes, int32(vaccineTypeInt))

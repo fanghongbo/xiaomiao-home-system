@@ -31,14 +31,14 @@ func (u *collectRepo) GetCollectList(ctx context.Context, req *v1.GetCollectList
 
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
-		u.log.Error("get current user id failed: %v", err)
+		u.log.Errorf("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	baseQuery := u.data.db.Model(&Post{}).Where("deleted_flag = ?", 0).Where("user_id = ?", userId)
 
 	if err := baseQuery.Count(&total).Error; err != nil {
-		u.log.Error("get collect list failed: %v", err)
+		u.log.Errorf("get collect list failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -48,7 +48,7 @@ func (u *collectRepo) GetCollectList(ctx context.Context, req *v1.GetCollectList
 
 	rows, err := result.Rows()
 	if err != nil {
-		u.log.Error("get collect list failed: %v", err)
+		u.log.Errorf("get collect list failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -56,33 +56,33 @@ func (u *collectRepo) GetCollectList(ctx context.Context, req *v1.GetCollectList
 
 	for rows.Next() {
 		var (
-			id            int64
-			title         string
-			postStatus int
-			auditStatus   int
-			remark        string
-			createdTime   time.Time
-			updatedTime   time.Time
+			id          int64
+			title       string
+			postStatus  int
+			auditStatus int
+			remark      string
+			createdTime time.Time
+			updatedTime time.Time
 		)
 
 		if err := rows.Scan(&id, &title, &postStatus, &auditStatus, &remark, &createdTime, &updatedTime); err != nil {
-			u.log.Error("get collect list failed: %v", err)
+			u.log.Errorf("get collect list failed: %v", err)
 			return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 		}
 
 		items = append(items, &v1.CollectListItem{
-			Id:            id,
-			Title:         title,
-			PostStatus: int32(postStatus),
-			AuditStatus:   int32(auditStatus),
-			Remark:        remark,
-			CreatedTime:   createdTime.Format("2006-01-02 15:04:05"),
-			UpdatedTime:   updatedTime.Format("2006-01-02 15:04:05"),
+			Id:          id,
+			Title:       title,
+			PostStatus:  int32(postStatus),
+			AuditStatus: int32(auditStatus),
+			Remark:      remark,
+			CreatedTime: createdTime.Format("2006-01-02 15:04:05"),
+			UpdatedTime: updatedTime.Format("2006-01-02 15:04:05"),
 		})
 	}
 
 	if err := rows.Err(); err != nil {
-		u.log.Error("get collect list failed: %v", err)
+		u.log.Errorf("get collect list failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 

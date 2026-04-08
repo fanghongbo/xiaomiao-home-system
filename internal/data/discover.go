@@ -83,7 +83,7 @@ func (u *discoverRepo) GetDiscoverList(ctx context.Context, req *v1.GetDiscoverL
 
 	cacheData, err := u.GetQueryCache(ctx, req)
 	if err != nil {
-		u.log.Error("get query cache failed: %v", err)
+		u.log.Errorf("get query cache failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -95,7 +95,7 @@ func (u *discoverRepo) GetDiscoverList(ctx context.Context, req *v1.GetDiscoverL
 	baseQuery := u.data.db.Model(&Post{}).Where("deleted_flag = ?", 0)
 
 	if err := baseQuery.Count(&total).Error; err != nil {
-		u.log.Error("get discover list failed: %v", err)
+		u.log.Errorf("get discover list failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -105,7 +105,7 @@ func (u *discoverRepo) GetDiscoverList(ctx context.Context, req *v1.GetDiscoverL
 
 	rows, err := result.Rows()
 	if err != nil {
-		u.log.Error("get discover list failed: %v", err)
+		u.log.Errorf("get discover list failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -123,7 +123,7 @@ func (u *discoverRepo) GetDiscoverList(ctx context.Context, req *v1.GetDiscoverL
 		)
 
 		if err := rows.Scan(&id, &title, &postStatus, &auditStatus, &remark, &createdTime, &updatedTime); err != nil {
-			u.log.Error("get discover list failed: %v", err)
+			u.log.Errorf("get discover list failed: %v", err)
 			return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 		}
 
@@ -139,7 +139,7 @@ func (u *discoverRepo) GetDiscoverList(ctx context.Context, req *v1.GetDiscoverL
 	}
 
 	if err := rows.Err(); err != nil {
-		u.log.Error("get discover list failed: %v", err)
+		u.log.Errorf("get discover list failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -147,7 +147,7 @@ func (u *discoverRepo) GetDiscoverList(ctx context.Context, req *v1.GetDiscoverL
 	res.Data.Total = total
 
 	if err := u.SetQueryCache(ctx, req, res.Data); err != nil {
-		u.log.Error("set query cache failed: %v", err)
+		u.log.Errorf("set query cache failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
