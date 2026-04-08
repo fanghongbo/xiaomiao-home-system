@@ -16,6 +16,8 @@ import (
 )
 
 const (
+	catMaxCreateCount = 100
+	catCreateCountTTL = 8 * time.Hour
 	catMaxUpdateCount = 10
 	catUpdateCountTTL = 8 * time.Hour
 )
@@ -475,14 +477,14 @@ func (u *catRepo) CheckCatCreateCountLimit(ctx context.Context, countKeyPrefix s
 		return errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 	if n == 1 {
-		if err := u.data.rdb.Expire(ctx, key, catUpdateCountTTL).Err(); err != nil {
+		if err := u.data.rdb.Expire(ctx, key, catCreateCountTTL).Err(); err != nil {
 			u.log.Errorf("set cat create count ttl failed, key=%s: %v", countKeyPrefix, err)
 			return errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 		}
 	}
 
-	if n > catMaxUpdateCount {
-		return errors.BadRequest(v1.ErrorReason_ERR_TOO_MANY_REQUEST.String(), "今日已达最大创建次数, 请明日再试")
+	if n > catMaxCreateCount {
+		return errors.BadRequest(v1.ErrorReason_ERR_TOO_MANY_REQUEST.String(), "今日已达最大创建次数, 请明天再试")
 	}
 
 	return nil

@@ -220,7 +220,6 @@ CREATE TABLE
   COLLATE = utf8mb4_unicode_ci
   ROW_FORMAT = DYNAMIC COMMENT ='小猫图片关联表';
 
-
 -- 发布内容表
 CREATE TABLE
     IF NOT EXISTS t_post
