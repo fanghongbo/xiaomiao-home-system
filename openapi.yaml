@@ -25,157 +25,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.user.v1.AppLoginReply'
-    /api/v1/cat:
-        post:
-            tags:
-                - Cat
-            description: CreateCat 创建小猫
-            operationId: Cat_CreateCat
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.cat.v1.CreateCatRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.cat.v1.CreateCatReply'
-    /api/v1/cat/list:
-        get:
-            tags:
-                - Cat
-            description: GetCatList 查询小猫列表
-            operationId: Cat_GetCatList
-            parameters:
-                - name: page
-                  in: query
-                  schema:
-                    type: integer
-                    format: int32
-                - name: size
-                  in: query
-                  schema:
-                    type: integer
-                    format: int32
-                - name: cType
-                  in: query
-                  schema:
-                    type: integer
-                    format: int32
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.cat.v1.GetCatListReply'
-    /api/v1/cat/{id}:
-        get:
-            tags:
-                - Cat
-            description: GetCat 查询小猫信息
-            operationId: Cat_GetCat
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.cat.v1.GetCatReply'
-        put:
-            tags:
-                - Cat
-            description: UpdateCat 更新小猫
-            operationId: Cat_UpdateCat
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.cat.v1.UpdateCatRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.cat.v1.UpdateCatReply'
-        delete:
-            tags:
-                - Cat
-            description: DeleteCat 删除小猫
-            operationId: Cat_DeleteCat
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.cat.v1.DeleteCatReply'
-    /api/v1/collect/list:
-        get:
-            tags:
-                - Collect
-            description: GetCollectList 查询收藏列表
-            operationId: Collect_GetCollectList
-            parameters:
-                - name: page
-                  in: query
-                  schema:
-                    type: integer
-                    format: int32
-                - name: size
-                  in: query
-                  schema:
-                    type: integer
-                    format: int32
-                - name: cType
-                  in: query
-                  schema:
-                    type: integer
-                    format: int32
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.collect.v1.GetCollectListReply'
-    /api/v1/collect/types:
-        get:
-            tags:
-                - Collect
-            description: GetCollectTypes 查询收藏分类
-            operationId: Collect_GetCollectTypes
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.collect.v1.GetCollectTypesReply'
     /api/v1/discover/list:
         get:
             tags:
@@ -262,140 +111,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.user.v1.MpLoginReply'
-    /api/v1/post:
-        post:
-            tags:
-                - Post
-            description: CreatePost 创建发布内容
-            operationId: Post_CreatePost
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.post.v1.CreatePostRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.post.v1.CreatePostReply'
-    /api/v1/post/list:
-        get:
-            tags:
-                - Post
-            description: GetPostList 查询发布内容列表
-            operationId: Post_GetPostList
-            parameters:
-                - name: page
-                  in: query
-                  schema:
-                    type: integer
-                    format: int32
-                - name: size
-                  in: query
-                  schema:
-                    type: integer
-                    format: int32
-                - name: pType
-                  in: query
-                  schema:
-                    type: integer
-                    format: int32
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.post.v1.GetPostListReply'
-    /api/v1/post/status/{id}:
-        put:
-            tags:
-                - Post
-            description: UpdatePostStatus 更新发布内容状态
-            operationId: Post_UpdatePostStatus
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.post.v1.UpdatePostStatusRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.post.v1.UpdatePostStatusReply'
-    /api/v1/post/{id}:
-        get:
-            tags:
-                - Post
-            description: GetPost 查询发布内容
-            operationId: Post_GetPost
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.post.v1.GetPostReply'
-        put:
-            tags:
-                - Post
-            description: UpdatePost 更新发布内容
-            operationId: Post_UpdatePost
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.post.v1.UpdatePostRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.post.v1.UpdatePostReply'
-        delete:
-            tags:
-                - Post
-            description: DeletePost 删除发布内容
-            operationId: Post_DeletePost
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.post.v1.DeletePostReply'
     /api/v1/role:
         post:
             tags:
@@ -595,6 +310,157 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.user.setting.v1.UpdateUserBaseSettingReply'
+    /api/v1/user/cat:
+        post:
+            tags:
+                - UserCat
+            description: CreateUserCat 创建小猫
+            operationId: UserCat_CreateUserCat
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.user.cat.v1.CreateUserCatRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.cat.v1.CreateUserCatReply'
+    /api/v1/user/cat/list:
+        get:
+            tags:
+                - UserCat
+            description: GetUserCatList 查询小猫列表
+            operationId: UserCat_GetUserCatList
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: size
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: cType
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.cat.v1.GetUserCatListReply'
+    /api/v1/user/cat/{id}:
+        get:
+            tags:
+                - UserCat
+            description: GetUserCat 查询小猫信息
+            operationId: UserCat_GetUserCat
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.cat.v1.GetUserCatReply'
+        put:
+            tags:
+                - UserCat
+            description: UpdateUserCat 更新小猫
+            operationId: UserCat_UpdateUserCat
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.user.cat.v1.UpdateUserCatRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.cat.v1.UpdateUserCatReply'
+        delete:
+            tags:
+                - UserCat
+            description: DeleteUserCat 删除小猫
+            operationId: UserCat_DeleteUserCat
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.cat.v1.DeleteUserCatReply'
+    /api/v1/user/collect/list:
+        get:
+            tags:
+                - UserCollect
+            description: GetUserCollectList 查询用户收藏列表
+            operationId: UserCollect_GetUserCollectList
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: size
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: cType
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.collect.v1.GetUserCollectListReply'
+    /api/v1/user/collect/types:
+        get:
+            tags:
+                - UserCollect
+            description: GetUserCollectTypes 查询用户收藏分类
+            operationId: UserCollect_GetUserCollectTypes
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.collect.v1.GetUserCollectTypesReply'
     /api/v1/user/email/notify/setting:
         post:
             tags:
@@ -789,6 +655,140 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.user.setting.v1.UpdateUserPasswordReply'
+    /api/v1/user/post:
+        post:
+            tags:
+                - UserPost
+            description: CreateUserPost 创建用户发布内容
+            operationId: UserPost_CreateUserPost
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.user.post.v1.CreateUserPostRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.post.v1.CreateUserPostReply'
+    /api/v1/user/post/list:
+        get:
+            tags:
+                - UserPost
+            description: GetUserPostList 查询用户发布内容列表
+            operationId: UserPost_GetUserPostList
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: size
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: pType
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.post.v1.GetUserPostListReply'
+    /api/v1/user/post/status/{id}:
+        put:
+            tags:
+                - UserPost
+            description: UpdateUserPostStatus 更新用户发布内容状态
+            operationId: UserPost_UpdateUserPostStatus
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.user.post.v1.UpdateUserPostStatusRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.post.v1.UpdateUserPostStatusReply'
+    /api/v1/user/post/{id}:
+        get:
+            tags:
+                - UserPost
+            description: GetUserPost 查询用户发布内容
+            operationId: UserPost_GetUserPost
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.post.v1.GetUserPostReply'
+        put:
+            tags:
+                - UserPost
+            description: UpdateUserPost 更新用户发布内容
+            operationId: UserPost_UpdateUserPost
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.user.post.v1.UpdateUserPostRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.post.v1.UpdateUserPostReply'
+        delete:
+            tags:
+                - UserPost
+            description: DeleteUserPost 删除用户发布内容
+            operationId: UserPost_DeleteUserPost
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.post.v1.DeleteUserPostReply'
     /api/v1/user/system/notify/setting:
         post:
             tags:
@@ -886,293 +886,6 @@ paths:
                                 $ref: '#/components/schemas/api.file.v1.StaticFileReply'
 components:
     schemas:
-        api.cat.v1.CatInfo:
-            type: object
-            properties:
-                id:
-                    type: string
-                name:
-                    type: string
-                gender:
-                    type: integer
-                    format: int32
-                catType:
-                    type: integer
-                    format: int32
-                breedType:
-                    type: integer
-                    format: int32
-                weight:
-                    type: number
-                    format: float
-                birthday:
-                    type: string
-                neuterStatus:
-                    type: integer
-                    format: int32
-                healthStatus:
-                    type: integer
-                    format: int32
-                healthDesc:
-                    type: string
-                dewormedStatus:
-                    type: integer
-                    format: int32
-                vaccineStatus:
-                    type: integer
-                    format: int32
-                vaccineTypes:
-                    type: array
-                    items:
-                        type: integer
-                        format: int32
-                vaccineLastDate:
-                    type: string
-                vaccineCertImage:
-                    type: string
-                remark:
-                    type: string
-        api.cat.v1.CatList:
-            type: object
-            properties:
-                items:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/api.cat.v1.CatListItem'
-                total:
-                    type: string
-        api.cat.v1.CatListItem:
-            type: object
-            properties:
-                id:
-                    type: string
-                name:
-                    type: string
-                gender:
-                    type: integer
-                    format: int32
-                breedType:
-                    type: integer
-                    format: int32
-                weight:
-                    type: number
-                    format: float
-                birthday:
-                    type: string
-                neuterStatus:
-                    type: integer
-                    format: int32
-                healthStatus:
-                    type: integer
-                    format: int32
-                dewormedStatus:
-                    type: integer
-                    format: int32
-                vaccineStatus:
-                    type: integer
-                    format: int32
-                remark:
-                    type: string
-        api.cat.v1.CreateCatReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                success:
-                    type: boolean
-                data:
-                    type: string
-        api.cat.v1.CreateCatRequest:
-            type: object
-            properties:
-                name:
-                    type: string
-                gender:
-                    type: integer
-                    format: int32
-                breedType:
-                    type: integer
-                    format: int32
-                weight:
-                    type: number
-                    format: float
-                birthday:
-                    type: string
-                neuterStatus:
-                    type: integer
-                    format: int32
-                healthStatus:
-                    type: integer
-                    format: int32
-                healthDesc:
-                    type: string
-                dewormedStatus:
-                    type: integer
-                    format: int32
-                vaccineStatus:
-                    type: integer
-                    format: int32
-                vaccineTypes:
-                    type: array
-                    items:
-                        type: integer
-                        format: int32
-                vaccineLastDate:
-                    type: string
-                vaccineCertImage:
-                    type: string
-                remark:
-                    type: string
-        api.cat.v1.DeleteCatReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                success:
-                    type: boolean
-                data:
-                    type: string
-        api.cat.v1.GetCatListReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                success:
-                    type: boolean
-                data:
-                    $ref: '#/components/schemas/api.cat.v1.CatList'
-        api.cat.v1.GetCatReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                success:
-                    type: boolean
-                data:
-                    $ref: '#/components/schemas/api.cat.v1.CatInfo'
-        api.cat.v1.UpdateCatReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                success:
-                    type: boolean
-                data:
-                    type: string
-        api.cat.v1.UpdateCatRequest:
-            type: object
-            properties:
-                id:
-                    type: string
-                name:
-                    type: string
-                gender:
-                    type: integer
-                    format: int32
-                breedType:
-                    type: integer
-                    format: int32
-                weight:
-                    type: number
-                    format: float
-                birthday:
-                    type: string
-                neuterStatus:
-                    type: integer
-                    format: int32
-                healthStatus:
-                    type: integer
-                    format: int32
-                healthDesc:
-                    type: string
-                dewormedStatus:
-                    type: integer
-                    format: int32
-                vaccineStatus:
-                    type: integer
-                    format: int32
-                vaccineTypes:
-                    type: array
-                    items:
-                        type: integer
-                        format: int32
-                vaccineLastDate:
-                    type: string
-                vaccineCertImage:
-                    type: string
-                remark:
-                    type: string
-        api.collect.v1.CollectList:
-            type: object
-            properties:
-                items:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/api.collect.v1.CollectListItem'
-                total:
-                    type: string
-        api.collect.v1.CollectListItem:
-            type: object
-            properties:
-                id:
-                    type: string
-                title:
-                    type: string
-                postStatus:
-                    type: integer
-                    format: int32
-                auditStatus:
-                    type: integer
-                    format: int32
-                coverImage:
-                    type: string
-                remark:
-                    type: string
-                createdTime:
-                    type: string
-                updatedTime:
-                    type: string
-        api.collect.v1.GetCollectListReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                success:
-                    type: boolean
-                data:
-                    $ref: '#/components/schemas/api.collect.v1.CollectList'
-        api.collect.v1.GetCollectTypesReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                success:
-                    type: boolean
-                data:
-                    type: array
-                    items:
-                        type: string
         api.discover.v1.DiscoverList:
             type: object
             properties:
@@ -1280,205 +993,6 @@ components:
                     type: string
                     description: 文件二进制内容
                     format: bytes
-        api.post.v1.CreatePostReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                success:
-                    type: boolean
-                data:
-                    type: string
-        api.post.v1.CreatePostRequest:
-            type: object
-            properties:
-                title:
-                    type: string
-                postType:
-                    type: integer
-                    format: int32
-                provinceId:
-                    type: integer
-                    format: int32
-                cityId:
-                    type: integer
-                    format: int32
-                address:
-                    type: string
-                remark:
-                    type: string
-                catType:
-                    type: integer
-                    format: int32
-                catBreed:
-                    type: integer
-                    format: int32
-                catGender:
-                    type: integer
-                    format: int32
-        api.post.v1.DeletePostReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                success:
-                    type: boolean
-                data:
-                    type: string
-        api.post.v1.GetPostListReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                success:
-                    type: boolean
-                data:
-                    $ref: '#/components/schemas/api.post.v1.PostList'
-        api.post.v1.GetPostReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                success:
-                    type: boolean
-                data:
-                    $ref: '#/components/schemas/api.post.v1.PostInfo'
-        api.post.v1.PostInfo:
-            type: object
-            properties:
-                id:
-                    type: string
-                title:
-                    type: string
-                postType:
-                    type: integer
-                    format: int32
-                provinceId:
-                    type: integer
-                    format: int32
-                cityId:
-                    type: integer
-                    format: int32
-                address:
-                    type: string
-                remark:
-                    type: string
-                catType:
-                    type: integer
-                    format: int32
-                catBreed:
-                    type: integer
-                    format: int32
-                catGender:
-                    type: integer
-                    format: int32
-                createdTime:
-                    type: string
-                updatedTime:
-                    type: string
-        api.post.v1.PostList:
-            type: object
-            properties:
-                items:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/api.post.v1.PostListItem'
-                total:
-                    type: string
-        api.post.v1.PostListItem:
-            type: object
-            properties:
-                id:
-                    type: string
-                title:
-                    type: string
-                postStatus:
-                    type: integer
-                    format: int32
-                auditStatus:
-                    type: integer
-                    format: int32
-                coverImage:
-                    type: string
-                remark:
-                    type: string
-                createdTime:
-                    type: string
-                updatedTime:
-                    type: string
-        api.post.v1.UpdatePostReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                success:
-                    type: boolean
-                data:
-                    type: string
-        api.post.v1.UpdatePostRequest:
-            type: object
-            properties:
-                id:
-                    type: string
-                title:
-                    type: string
-                postType:
-                    type: integer
-                    format: int32
-                provinceId:
-                    type: integer
-                    format: int32
-                cityId:
-                    type: integer
-                    format: int32
-                address:
-                    type: string
-                remark:
-                    type: string
-                catType:
-                    type: integer
-                    format: int32
-                catBreed:
-                    type: integer
-                    format: int32
-                catGender:
-                    type: integer
-                    format: int32
-        api.post.v1.UpdatePostStatusReply:
-            type: object
-            properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
-                    type: string
-                success:
-                    type: boolean
-                data:
-                    type: string
-        api.post.v1.UpdatePostStatusRequest:
-            type: object
-            properties:
-                id:
-                    type: string
-                status:
-                    type: integer
-                    format: int32
         api.role.v1.CreateRoleReply:
             type: object
             properties:
@@ -1627,6 +1141,293 @@ components:
                 status:
                     type: integer
                     format: int32
+        api.user.cat.v1.CreateUserCatReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: string
+        api.user.cat.v1.CreateUserCatRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                gender:
+                    type: integer
+                    format: int32
+                breedType:
+                    type: integer
+                    format: int32
+                weight:
+                    type: number
+                    format: float
+                birthday:
+                    type: string
+                neuterStatus:
+                    type: integer
+                    format: int32
+                healthStatus:
+                    type: integer
+                    format: int32
+                healthDesc:
+                    type: string
+                dewormedStatus:
+                    type: integer
+                    format: int32
+                vaccineStatus:
+                    type: integer
+                    format: int32
+                vaccineTypes:
+                    type: array
+                    items:
+                        type: integer
+                        format: int32
+                vaccineLastDate:
+                    type: string
+                vaccineCertImage:
+                    type: string
+                remark:
+                    type: string
+        api.user.cat.v1.DeleteUserCatReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: string
+        api.user.cat.v1.GetUserCatListReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    $ref: '#/components/schemas/api.user.cat.v1.UserCatList'
+        api.user.cat.v1.GetUserCatReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    $ref: '#/components/schemas/api.user.cat.v1.UserCatInfo'
+        api.user.cat.v1.UpdateUserCatReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: string
+        api.user.cat.v1.UpdateUserCatRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                gender:
+                    type: integer
+                    format: int32
+                breedType:
+                    type: integer
+                    format: int32
+                weight:
+                    type: number
+                    format: float
+                birthday:
+                    type: string
+                neuterStatus:
+                    type: integer
+                    format: int32
+                healthStatus:
+                    type: integer
+                    format: int32
+                healthDesc:
+                    type: string
+                dewormedStatus:
+                    type: integer
+                    format: int32
+                vaccineStatus:
+                    type: integer
+                    format: int32
+                vaccineTypes:
+                    type: array
+                    items:
+                        type: integer
+                        format: int32
+                vaccineLastDate:
+                    type: string
+                vaccineCertImage:
+                    type: string
+                remark:
+                    type: string
+        api.user.cat.v1.UserCatInfo:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                gender:
+                    type: integer
+                    format: int32
+                catType:
+                    type: integer
+                    format: int32
+                breedType:
+                    type: integer
+                    format: int32
+                weight:
+                    type: number
+                    format: float
+                birthday:
+                    type: string
+                neuterStatus:
+                    type: integer
+                    format: int32
+                healthStatus:
+                    type: integer
+                    format: int32
+                healthDesc:
+                    type: string
+                dewormedStatus:
+                    type: integer
+                    format: int32
+                vaccineStatus:
+                    type: integer
+                    format: int32
+                vaccineTypes:
+                    type: array
+                    items:
+                        type: integer
+                        format: int32
+                vaccineLastDate:
+                    type: string
+                vaccineCertImage:
+                    type: string
+                remark:
+                    type: string
+        api.user.cat.v1.UserCatList:
+            type: object
+            properties:
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.user.cat.v1.UserCatListItem'
+                total:
+                    type: string
+        api.user.cat.v1.UserCatListItem:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                gender:
+                    type: integer
+                    format: int32
+                breedType:
+                    type: integer
+                    format: int32
+                weight:
+                    type: number
+                    format: float
+                birthday:
+                    type: string
+                neuterStatus:
+                    type: integer
+                    format: int32
+                healthStatus:
+                    type: integer
+                    format: int32
+                dewormedStatus:
+                    type: integer
+                    format: int32
+                vaccineStatus:
+                    type: integer
+                    format: int32
+                remark:
+                    type: string
+        api.user.collect.v1.GetUserCollectListReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    $ref: '#/components/schemas/api.user.collect.v1.UserCollectList'
+        api.user.collect.v1.GetUserCollectTypesReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: array
+                    items:
+                        type: string
+        api.user.collect.v1.UserCollectList:
+            type: object
+            properties:
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.user.collect.v1.UserCollectListItem'
+                total:
+                    type: string
+        api.user.collect.v1.UserCollectListItem:
+            type: object
+            properties:
+                id:
+                    type: string
+                title:
+                    type: string
+                postStatus:
+                    type: integer
+                    format: int32
+                auditStatus:
+                    type: integer
+                    format: int32
+                coverImage:
+                    type: string
+                remark:
+                    type: string
+                createdTime:
+                    type: string
+                updatedTime:
+                    type: string
         api.user.notification.v1.BatchUserNotificationsReply:
             type: object
             properties:
@@ -1732,6 +1533,205 @@ components:
                     type: integer
                     format: int32
                 content:
+                    type: string
+                createdTime:
+                    type: string
+                updatedTime:
+                    type: string
+        api.user.post.v1.CreateUserPostReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: string
+        api.user.post.v1.CreateUserPostRequest:
+            type: object
+            properties:
+                title:
+                    type: string
+                postType:
+                    type: integer
+                    format: int32
+                provinceId:
+                    type: integer
+                    format: int32
+                cityId:
+                    type: integer
+                    format: int32
+                address:
+                    type: string
+                remark:
+                    type: string
+                catType:
+                    type: integer
+                    format: int32
+                catBreed:
+                    type: integer
+                    format: int32
+                catGender:
+                    type: integer
+                    format: int32
+        api.user.post.v1.DeleteUserPostReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: string
+        api.user.post.v1.GetUserPostListReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    $ref: '#/components/schemas/api.user.post.v1.UserPostList'
+        api.user.post.v1.GetUserPostReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    $ref: '#/components/schemas/api.user.post.v1.UserPostInfo'
+        api.user.post.v1.UpdateUserPostReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: string
+        api.user.post.v1.UpdateUserPostRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                title:
+                    type: string
+                postType:
+                    type: integer
+                    format: int32
+                provinceId:
+                    type: integer
+                    format: int32
+                cityId:
+                    type: integer
+                    format: int32
+                address:
+                    type: string
+                remark:
+                    type: string
+                catType:
+                    type: integer
+                    format: int32
+                catBreed:
+                    type: integer
+                    format: int32
+                catGender:
+                    type: integer
+                    format: int32
+        api.user.post.v1.UpdateUserPostStatusReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: string
+        api.user.post.v1.UpdateUserPostStatusRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                status:
+                    type: integer
+                    format: int32
+        api.user.post.v1.UserPostInfo:
+            type: object
+            properties:
+                id:
+                    type: string
+                title:
+                    type: string
+                postType:
+                    type: integer
+                    format: int32
+                provinceId:
+                    type: integer
+                    format: int32
+                cityId:
+                    type: integer
+                    format: int32
+                address:
+                    type: string
+                remark:
+                    type: string
+                catType:
+                    type: integer
+                    format: int32
+                catBreed:
+                    type: integer
+                    format: int32
+                catGender:
+                    type: integer
+                    format: int32
+                createdTime:
+                    type: string
+                updatedTime:
+                    type: string
+        api.user.post.v1.UserPostList:
+            type: object
+            properties:
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.user.post.v1.UserPostListItem'
+                total:
+                    type: string
+        api.user.post.v1.UserPostListItem:
+            type: object
+            properties:
+                id:
+                    type: string
+                title:
+                    type: string
+                postStatus:
+                    type: integer
+                    format: int32
+                auditStatus:
+                    type: integer
+                    format: int32
+                coverImage:
+                    type: string
+                remark:
                     type: string
                 createdTime:
                     type: string
@@ -1949,13 +1949,7 @@ components:
                     format: enum
                 loginIdentity:
                     type: string
-                    description: |-
-                        统一身份标识：
-                         账号登录: username
-                         邮箱登录: email
-                         短信登录: mobile
-                         微信登录: unionid/openid
-                         QQ登录: openid
+                    description: "统一身份标识：\r\n 账号登录: username\r\n 邮箱登录: email\r\n 短信登录: mobile\r\n 微信登录: unionid/openid\r\n QQ登录: openid"
                 password:
                     type: string
                     description: 账号/邮箱密码登录时使用（其余方式可不传）
@@ -2006,12 +2000,12 @@ components:
                 data:
                     type: string
 tags:
-    - name: Cat
-    - name: Collect
     - name: Discover
     - name: File
-    - name: Post
     - name: Role
     - name: User
+    - name: UserCat
+    - name: UserCollect
     - name: UserNotification
+    - name: UserPost
     - name: UserSetting

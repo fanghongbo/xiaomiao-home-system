@@ -177,6 +177,20 @@ func (u Post) TableName() string {
 	return "t_post"
 }
 
+type UserPost struct {
+	Id          int64     `gorm:"column:id"`
+	UserId      int64     `gorm:"column:user_id"`
+	PostId      int64     `gorm:"column:post_id"`
+	CreatedTime time.Time `gorm:"column:created_time"`
+	UpdatedTime time.Time `gorm:"column:updated_time"`
+	DeletedFlag int       `gorm:"column:deleted_flag"`
+	DeletedTime time.Time `gorm:"column:deleted_time"`
+}
+
+func (u UserPost) TableName() string {
+	return "t_user_post"
+}
+
 type Cat struct {
 	Id               int64     `gorm:"column:id"`
 	Name             string    `gorm:"column:name"`

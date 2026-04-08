@@ -1,12 +1,13 @@
 package server
 
 import (
-	collectV1 "xiaomiao-home-system/api/collect/v1"
 	discoverV1 "xiaomiao-home-system/api/discover/v1"
 	fileV1 "xiaomiao-home-system/api/file/v1"
-	postV1 "xiaomiao-home-system/api/post/v1"
 	roleV1 "xiaomiao-home-system/api/role/v1"
+	userCatV1 "xiaomiao-home-system/api/user/cat/v1"
+	userCollectV1 "xiaomiao-home-system/api/user/collect/v1"
 	userNotificationV1 "xiaomiao-home-system/api/user/notification/v1"
+	userPostV1 "xiaomiao-home-system/api/user/post/v1"
 	userSettingV1 "xiaomiao-home-system/api/user/setting/v1"
 	userV1 "xiaomiao-home-system/api/user/v1"
 	"xiaomiao-home-system/internal/conf"
@@ -22,7 +23,7 @@ import (
 )
 
 // NewGRPCServer new a gRPC server.
-func NewGRPCServer(c *conf.Server, user *service.UserService, role *service.RoleService, userNotification *service.UserNotificationService, userSetting *service.UserSettingService, file *service.FileService, post *service.PostService, collect *service.CollectService, discover *service.DiscoverService, logger log.Logger) *grpc.Server {
+func NewGRPCServer(c *conf.Server, user *service.UserService, role *service.RoleService, userNotification *service.UserNotificationService, userSetting *service.UserSettingService, file *service.FileService, userPost *service.UserPostService, userCollect *service.UserCollectService, discover *service.DiscoverService, userCat *service.UserCatService, logger log.Logger) *grpc.Server {
 	var opts = []grpc.ServerOption{
 		grpc.Middleware(
 			recovery.Recovery(),
@@ -51,8 +52,9 @@ func NewGRPCServer(c *conf.Server, user *service.UserService, role *service.Role
 	userNotificationV1.RegisterUserNotificationServer(srv, userNotification)
 	userSettingV1.RegisterUserSettingServer(srv, userSetting)
 	fileV1.RegisterFileServer(srv, file)
-	postV1.RegisterPostServer(srv, post)
-	collectV1.RegisterCollectServer(srv, collect)
+	userPostV1.RegisterUserPostServer(srv, userPost)
+	userCollectV1.RegisterUserCollectServer(srv, userCollect)
 	discoverV1.RegisterDiscoverServer(srv, discover)
+	userCatV1.RegisterUserCatServer(srv, userCat)
 	return srv
 }

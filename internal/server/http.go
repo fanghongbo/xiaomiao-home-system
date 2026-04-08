@@ -2,12 +2,12 @@ package server
 
 import (
 	"context"
-	catV1 "xiaomiao-home-system/api/cat/v1"
-	collectV1 "xiaomiao-home-system/api/collect/v1"
 	discoverV1 "xiaomiao-home-system/api/discover/v1"
-	postV1 "xiaomiao-home-system/api/post/v1"
 	roleV1 "xiaomiao-home-system/api/role/v1"
+	userCatV1 "xiaomiao-home-system/api/user/cat/v1"
+	userCollectV1 "xiaomiao-home-system/api/user/collect/v1"
 	userNotificationV1 "xiaomiao-home-system/api/user/notification/v1"
+	userPostV1 "xiaomiao-home-system/api/user/post/v1"
 	userSettingV1 "xiaomiao-home-system/api/user/setting/v1"
 	userV1 "xiaomiao-home-system/api/user/v1"
 	"xiaomiao-home-system/internal/conf"
@@ -44,7 +44,7 @@ func NewWhiteListMatcher() selector.MatchFunc {
 }
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Server, jwtConfig *conf.Jwt, staticConfig *conf.Static, user *service.UserService, role *service.RoleService, userNotification *service.UserNotificationService, userSetting *service.UserSettingService, file *service.FileService, post *service.PostService, collect *service.CollectService, discover *service.DiscoverService, cat *service.CatService, logger log.Logger) *http.Server {
+func NewHTTPServer(c *conf.Server, jwtConfig *conf.Jwt, staticConfig *conf.Static, user *service.UserService, role *service.RoleService, userNotification *service.UserNotificationService, userSetting *service.UserSettingService, file *service.FileService, userPost *service.UserPostService, userCollect *service.UserCollectService, discover *service.DiscoverService, userCat *service.UserCatService, logger log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
@@ -82,9 +82,9 @@ func NewHTTPServer(c *conf.Server, jwtConfig *conf.Jwt, staticConfig *conf.Stati
 	roleV1.RegisterRoleHTTPServer(srv, role)
 	userNotificationV1.RegisterUserNotificationHTTPServer(srv, userNotification)
 	userSettingV1.RegisterUserSettingHTTPServer(srv, userSetting)
-	postV1.RegisterPostHTTPServer(srv, post)
-	collectV1.RegisterCollectHTTPServer(srv, collect)
+	userPostV1.RegisterUserPostHTTPServer(srv, userPost)
+	userCollectV1.RegisterUserCollectHTTPServer(srv, userCollect)
 	discoverV1.RegisterDiscoverHTTPServer(srv, discover)
-	catV1.RegisterCatHTTPServer(srv, cat)
+	userCatV1.RegisterUserCatHTTPServer(srv, userCat)
 	return srv
 }

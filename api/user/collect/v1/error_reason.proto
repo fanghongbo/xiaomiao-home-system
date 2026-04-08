@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package user.collect.v1;
+import "errors/errors.proto";
+
+option go_package = "xiaomiao-home-system/api/user/collect/v1;v1";
+option java_multiple_files = true;
+option java_package = "user.collect.v1";
+option objc_class_prefix = "APIUSERCOLLECTV1";
+
+enum ErrorReason {
+  option (errors.default_code) = 500;
+
+  ERR_INVALID_SESSION = 0 [(errors.code) = 400];
+  ERR_INVALID_REQUEST = 1 [(errors.code) = 400];
+  ERR_BAD_REQUEST = 2 [(errors.code) = 400];
+  ERR_SYSTEM_EXCEPTION = 3 [(errors.code) = 500];
+  ERR_TOO_MANY_REQUEST = 4 [(errors.code) = 400];
+}

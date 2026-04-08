@@ -225,7 +225,6 @@ CREATE TABLE
     IF NOT EXISTS t_post
 (
     id           bigint PRIMARY KEY COMMENT '发布信息id',
-    user_id      varchar(50) NOT NULL COMMENT '用户id',
     title         varchar(64) NOT NULL COMMENT '标题',
     post_type  tinyint(1) NOT NULL COMMENT '发布类型, 1: 领养, 2: 寻猫, 3: 日常, 4: 求助',
     province_id  bigint DEFAULT NULL COMMENT '省份id',
@@ -240,7 +239,6 @@ CREATE TABLE
     created_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     updated_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     deleted_time datetime                     DEFAULT  '1970-01-01 08:00:00' COMMENT '删除时间',
-    KEY idx_user_id (user_id) USING BTREE,
     KEY idx_post_type (post_type) USING BTREE,
     KEY idx_audit_status (audit_status) USING BTREE,
     KEY idx_post_status (post_status) USING BTREE,
@@ -249,11 +247,30 @@ CREATE TABLE
 ) ENGINE = innodb
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci
-  ROW_FORMAT = DYNAMIC COMMENT ='用户设置表';
+  ROW_FORMAT = DYNAMIC COMMENT ='发布内容表';
 
--- 收藏分类表
+-- 发布小猫关联表
 CREATE TABLE
-    IF NOT EXISTS t_collect
+    IF NOT EXISTS t_user_post
+(
+    id           bigint PRIMARY KEY COMMENT '关联id',
+    user_id       bigint NOT NULL COMMENT '用户id',
+    post_id   bigint NOT NULL COMMENT '发布id',
+    deleted_flag tinyint(1)           DEFAULT 0 COMMENT '删除标记, 0: 未删除,  1: 已删除',
+    created_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    deleted_time datetime                     DEFAULT  '1970-01-01 08:00:00' COMMENT '删除时间',
+    KEY idx_post_id (post_id) USING BTREE,
+    KEY idx_user_id (user_id) USING BTREE,
+    UNIQUE KEY uk_post_id_user_id (post_id, user_id, deleted_flag, deleted_time) USING BTREE
+) ENGINE = innodb
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci
+  ROW_FORMAT = DYNAMIC COMMENT ='用户发布内容关联表';
+
+-- 用户收藏表
+CREATE TABLE
+    IF NOT EXISTS t_user_collect
 (
     id           bigint PRIMARY KEY COMMENT '收藏id',
     user_id      bigint NOT NULL COMMENT '用户id',
@@ -268,7 +285,7 @@ CREATE TABLE
 ) ENGINE = innodb
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci
-  ROW_FORMAT = DYNAMIC COMMENT ='收藏表';
+  ROW_FORMAT = DYNAMIC COMMENT ='用户收藏表';
 
 -- 发布小猫关联表
 CREATE TABLE

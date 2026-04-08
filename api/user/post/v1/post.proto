@@ -1,0 +1,181 @@
+syntax = "proto3";
+
+package api.user.post.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "xiaomiao-home-system/api/user/post/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.user.post.v1";
+option java_outer_classname = "UserPostProtoV1";
+
+service UserPost {
+	// GetUserPostList 查询用户发布内容列表
+	rpc GetUserPostList (GetUserPostListRequest) returns (GetUserPostListReply) {
+		option (google.api.http) = {
+			get: "/api/v1/user/post/list",
+		};
+	}
+
+	// CreateUserPost 创建用户发布内容
+	rpc CreateUserPost (CreateUserPostRequest) returns (CreateUserPostReply) {
+		option (google.api.http) = {
+			post: "/api/v1/user/post",
+			body: "*"
+		};	
+	}
+
+	// GetUserPost 查询用户发布内容
+	rpc GetUserPost (GetUserPostRequest) returns (GetUserPostReply) {
+		option (google.api.http) = {
+			get: "/api/v1/user/post/{id}"
+		};	
+	}
+
+	// UpdateUserPost 更新用户发布内容
+	rpc UpdateUserPost (UpdateUserPostRequest) returns (UpdateUserPostReply) {
+		option (google.api.http) = {
+			put: "/api/v1/user/post/{id}",
+			body: "*"
+		};	
+	}
+
+	// DeleteUserPost 删除用户发布内容
+	rpc DeleteUserPost (DeleteUserPostRequest) returns (DeleteUserPostReply) {
+		option (google.api.http) = {
+			delete: "/api/v1/user/post/{id}"
+		};	
+	}
+
+	// UpdateUserPostStatus 更新用户发布内容状态
+	rpc UpdateUserPostStatus (UpdateUserPostStatusRequest) returns (UpdateUserPostStatusReply) {
+		option (google.api.http) = {
+			put: "/api/v1/user/post/status/{id}",
+			body: "*"
+		};	
+	}
+}
+
+// 基础请求体
+message BaseRequest {}
+
+// 基础响应体
+message BaseResponse {}
+
+message GetUserPostListRequest {
+	int32 page = 1 [(validate.rules).int32 = {gte: 1}];
+	int32 size = 2 [(validate.rules).int32 = {gte: 10, lte: 200}];
+	int32 p_type = 3 [(validate.rules).int32 = {gte: 0, lte: 4}];
+}
+
+message UserPostListItem {
+	int64 id = 1;
+	string title = 2;
+	int32 postStatus = 3;
+	int32 auditStatus = 4;
+	string coverImage = 5;
+	string remark = 6;
+	string createdTime = 7;
+	string updatedTime = 8;
+}
+
+message UserPostList {
+	repeated UserPostListItem items = 1;
+	int64 total = 2;
+}
+
+message GetUserPostListReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	UserPostList data = 4;
+}
+
+message GetUserPostRequest {
+	int64 id = 1 [(validate.rules).int64 = {gt: 0}];
+}
+
+message UserPostInfo {
+    int64 id = 1;
+	string title = 2;
+	int32 postType = 3;
+	int32 provinceId = 4;
+	int32 cityId = 5;
+	string address = 6;
+	string remark = 7;
+	int32 catType = 8;
+	int32 catBreed = 9;
+	int32 catGender = 10;
+	string createdTime = 11;
+	string updatedTime = 12;
+}
+
+message GetUserPostReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	UserPostInfo data = 4;
+}
+
+message CreateUserPostRequest {
+	string title = 1 [(validate.rules).string = {min_len: 1}];
+	int32 postType = 2 [(validate.rules).int32 = { gte: 0, lte: 4 }];
+	int32 provinceId = 3 [(validate.rules).int32 = { gte: 0 }];
+	int32 cityId = 4 [(validate.rules).int32 = { gte: 0  }];
+	string address = 5 [(validate.rules).string = {min_len: 1}];
+	string remark = 6 [(validate.rules).string = {min_len: 1}];
+	int32 catType = 7 [(validate.rules).int32 = { gte: 1, lte: 2 }];
+	int32 catBreed = 8 [(validate.rules).int32 = { gte: 0, lte: 20 }];
+	int32 catGender = 9 [(validate.rules).int32 = { gte: 0, lte: 2 }];
+}
+
+message CreateUserPostReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	string data = 4;
+}
+
+message UpdateUserPostRequest {
+	int64 id = 1 [(validate.rules).int64 = {gt: 0}];
+	string title = 2 [(validate.rules).string = {min_len: 1}];
+	int32 postType = 3 [(validate.rules).int32 = { gte: 0, lte: 4 }];
+	int32 provinceId = 4 [(validate.rules).int32 = { gte: 0 }];
+	int32 cityId = 5 [(validate.rules).int32 = { gte: 0  }];
+	string address = 6 [(validate.rules).string = {min_len: 1}];
+	string remark = 7 [(validate.rules).string = {min_len: 1}];
+	int32 catType = 8 [(validate.rules).int32 = { gte: 1, lte: 2 }];
+	int32 catBreed = 9 [(validate.rules).int32 = { gte: 0, lte: 20 }];
+	int32 catGender = 10 [(validate.rules).int32 = { gte: 0, lte: 2 }];
+}
+
+message UpdateUserPostReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	string data = 4;
+}
+
+message DeleteUserPostRequest {
+	int64 id = 1 [(validate.rules).int64 = {gt: 0}];
+}
+
+message DeleteUserPostReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	string data = 4;
+}
+
+message UpdateUserPostStatusRequest {
+	int64 id = 1 [(validate.rules).int64 = {gt: 0}];
+	int32 status = 2;
+}
+
+message UpdateUserPostStatusReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	string data = 4;
+}
