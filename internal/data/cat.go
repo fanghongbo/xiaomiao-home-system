@@ -15,6 +15,14 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 )
 
+const (
+	catMaxUpdateCount = 10
+	catUpdateCountTTL = 8 * time.Hour
+)
+
+const redisKeyCatCreateCount = "cat:create:count"
+const redisKeyCatUpdateCount = "cat:update:count"
+
 type catRepo struct {
 	data *Data
 	log  *log.Helper
@@ -115,6 +123,10 @@ func (u *catRepo) CreateCat(ctx context.Context, req *v1.CreateCatRequest) (*v1.
 	if err != nil {
 		u.log.Errorf("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	if err := u.CheckCatCreateCountLimit(ctx, redisKeyCatCreateCount, userId); err != nil {
+		return nil, err
 	}
 
 	catId, err := u.data.gid.NextID()
@@ -221,6 +233,10 @@ func (u *catRepo) UpdateCat(ctx context.Context, req *v1.UpdateCatRequest) (*v1.
 	if err != nil {
 		u.log.Errorf("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	if err := u.CheckCatUpdateCountLimit(ctx, redisKeyCatUpdateCount, userId, req.Id); err != nil {
+		return nil, err
 	}
 
 	// 查询当前小猫是否属于当前用户
@@ -448,4 +464,48 @@ func (u *catRepo) GetCat(ctx context.Context, req *v1.GetCatRequest) (*v1.GetCat
 		Code: 200, Success: true, Message: "查询成功",
 		Data: catInfo,
 	}, nil
+}
+
+// CheckCatCreateCountLimit 检查小猫创建次数限制
+func (u *catRepo) CheckCatCreateCountLimit(ctx context.Context, countKeyPrefix string, userId int64) error {
+	key := fmt.Sprintf("%s:%d", countKeyPrefix, userId)
+	n, err := u.data.rdb.Incr(ctx, key).Result()
+	if err != nil {
+		u.log.Errorf("increase cat create count failed, key=%s: %v", countKeyPrefix, err)
+		return errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+	if n == 1 {
+		if err := u.data.rdb.Expire(ctx, key, catUpdateCountTTL).Err(); err != nil {
+			u.log.Errorf("set cat create count ttl failed, key=%s: %v", countKeyPrefix, err)
+			return errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+		}
+	}
+
+	if n > catMaxUpdateCount {
+		return errors.BadRequest(v1.ErrorReason_ERR_TOO_MANY_REQUEST.String(), "今日已达最大创建次数, 请明日再试")
+	}
+
+	return nil
+}
+
+// CheckCatUpdateCountLimit 检查小猫更新次数限制
+func (u *catRepo) CheckCatUpdateCountLimit(ctx context.Context, countKeyPrefix string, userId int64, catId int64) error {
+	key := fmt.Sprintf("%s:%d:%d", countKeyPrefix, userId, catId)
+	n, err := u.data.rdb.Incr(ctx, key).Result()
+	if err != nil {
+		u.log.Errorf("increase cat update count failed, key=%s: %v", countKeyPrefix, err)
+		return errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+	if n == 1 {
+		if err := u.data.rdb.Expire(ctx, key, catUpdateCountTTL).Err(); err != nil {
+			u.log.Errorf("set cat action count ttl failed, key=%s: %v", countKeyPrefix, err)
+			return errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+		}
+	}
+
+	if n > catMaxUpdateCount {
+		return errors.BadRequest(v1.ErrorReason_ERR_TOO_MANY_REQUEST.String(), "今日已达最大更新次数, 请明日再试")
+	}
+
+	return nil
 }
