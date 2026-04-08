@@ -17,6 +17,8 @@ type CatRepo interface {
 	UpdateCat(ctx context.Context, req *v1.UpdateCatRequest) (*v1.UpdateCatReply, error)
 	// DeleteCat 删除小猫
 	DeleteCat(ctx context.Context, req *v1.DeleteCatRequest) (*v1.DeleteCatReply, error)
+	// GetCat 查询小猫信息
+	GetCat(ctx context.Context, req *v1.GetCatRequest) (*v1.GetCatReply, error)
 }
 
 // CatUsecase is a Cat usecase.
@@ -62,6 +64,15 @@ func (u *CatUsecase) UpdateCat(ctx context.Context, req *v1.UpdateCatRequest) (*
 // DeleteCat 删除小猫
 func (u *CatUsecase) DeleteCat(ctx context.Context, req *v1.DeleteCatRequest) (*v1.DeleteCatReply, error) {
 	res, err := u.repo.DeleteCat(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+// GetCat 查询小猫信息
+func (u *CatUsecase) GetCat(ctx context.Context, req *v1.GetCatRequest) (*v1.GetCatReply, error) {
+	res, err := u.repo.GetCat(ctx, req)
 	if err != nil {
 		return nil, err
 	}

@@ -255,7 +255,6 @@ func (u *catRepo) UpdateCat(ctx context.Context, req *v1.UpdateCatRequest) (*v1.
 		"dewormed_status": req.DewormedStatus,
 		"vaccine_status":  req.VaccineStatus,
 		"remark":          req.Remark,
-		"created_time":    time.Now(),
 		"updated_time":    time.Now(),
 	}
 
@@ -388,7 +387,7 @@ func (u *catRepo) GetCat(ctx context.Context, req *v1.GetCatRequest) (*v1.GetCat
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "小猫不存在或无权限")
 	}
 
-	row := u.data.db.Model(&Cat{}).Select("id", "name", "gender", "breed_type", "weight", "birthday", "neuter_status", "health_status", "health_desc", "dewormed_status", "vaccine_status", "vaccine_types", "vaccine_last_date", "vaccine_cert_image", "remark", "created_time", "updated_time").Where("id = ?", req.Id).Where("deleted_flag = ?", 0).Limit(1).Row()
+	row := u.data.db.Model(&Cat{}).Select("id", "name", "gender", "breed_type", "weight", "birthday", "neuter_status", "health_status", "health_desc", "dewormed_status", "vaccine_status", "vaccine_types", "vaccine_last_date", "vaccine_cert_image", "remark").Where("id = ?", req.Id).Where("deleted_flag = ?", 0).Limit(1).Row()
 
 	var (
 		id               int64
@@ -403,7 +402,7 @@ func (u *catRepo) GetCat(ctx context.Context, req *v1.GetCatRequest) (*v1.GetCat
 		dewormedStatus   int32
 		vaccineStatus    int32
 		vaccineTypes     string
-		vaccineLastDate  time.Time
+		vaccineLastDate  *time.Time
 		vaccineCertImage string
 		remark           string
 	)
@@ -426,9 +425,12 @@ func (u *catRepo) GetCat(ctx context.Context, req *v1.GetCatRequest) (*v1.GetCat
 		DewormedStatus:   dewormedStatus,
 		VaccineStatus:    vaccineStatus,
 		VaccineTypes:     []int32{},
-		VaccineLastDate:  vaccineLastDate.Format("2006-01-02"),
 		VaccineCertImage: vaccineCertImage,
 		Remark:           remark,
+	}
+
+	if vaccineLastDate != nil {
+		catInfo.VaccineLastDate = vaccineLastDate.Format("2006-01-02")
 	}
 
 	if vaccineTypes != "" {

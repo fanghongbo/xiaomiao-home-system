@@ -61,3 +61,12 @@ func (s *CatService) DeleteCat(ctx context.Context, req *pb.DeleteCatRequest) (*
 	}
 	return res, nil
 }
+
+// GetCat 查询小猫信息
+func (s *CatService) GetCat(ctx context.Context, req *pb.GetCatRequest) (*pb.GetCatReply, error) {
+	res, err := s.cat.GetCat(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
