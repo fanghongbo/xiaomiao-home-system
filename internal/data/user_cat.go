@@ -12,6 +12,7 @@ import (
 
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/go-redis/redis/v8"
 )
 
 const (
@@ -377,7 +378,26 @@ func (u *userCatRepo) DeleteUserCat(ctx context.Context, req *v1.DeleteUserCatRe
 // CheckUserCatBelongToUser 检查当前小猫是否属于当前用户
 func (u *userCatRepo) CheckUserCatBelongToUser(ctx context.Context, userId int64, catId int64) (bool, error) {
 	var count int64
+
+	redisKey := fmt.Sprintf("user:cat:belong:%d:%d", userId, catId)
+
+	n, err := u.data.cache.Get(ctx, redisKey).Int()
+	if err != nil {
+		if err != redis.Nil {
+			u.log.Errorf("get user cat belong to user cache error: %v", err)
+			return false, nil
+		}
+	} else {
+		return n > 0, nil
+	}
+
 	if err := u.data.db.Model(&UserCat{}).Where("user_id = ?", userId).Where("cat_id = ?", catId).Where("deleted_flag = ?", 0).Count(&count).Error; err != nil {
+		u.log.Errorf("get user cat belong to user db error: %v", err)
+		return false, err
+	}
+
+	if err := u.data.cache.Set(ctx, redisKey, count, 5*time.Minute).Err(); err != nil {
+		u.log.Errorf("set user cat belong to user cache error: %v", err)
 		return false, err
 	}
 	return count > 0, nil
@@ -470,13 +490,13 @@ func (u *userCatRepo) GetUserCat(ctx context.Context, req *v1.GetUserCatRequest)
 // CheckUserCatCreateCountLimit 检查我的小猫创建次数限制
 func (u *userCatRepo) CheckUserCatCreateCountLimit(ctx context.Context, countKeyPrefix string, userId int64) error {
 	key := fmt.Sprintf("%s:%d", countKeyPrefix, userId)
-	n, err := u.data.rdb.Incr(ctx, key).Result()
+	n, err := u.data.cache.Incr(ctx, key).Result()
 	if err != nil {
 		u.log.Errorf("increase user cat create count failed, key=%s: %v", countKeyPrefix, err)
 		return errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 	if n == 1 {
-		if err := u.data.rdb.Expire(ctx, key, userCatCreateCountTTL).Err(); err != nil {
+		if err := u.data.cache.Expire(ctx, key, userCatCreateCountTTL).Err(); err != nil {
 			u.log.Errorf("set user cat create count ttl failed, key=%s: %v", countKeyPrefix, err)
 			return errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 		}
@@ -492,13 +512,13 @@ func (u *userCatRepo) CheckUserCatCreateCountLimit(ctx context.Context, countKey
 // CheckUserCatUpdateCountLimit 检查我的小猫更新次数限制
 func (u *userCatRepo) CheckUserCatUpdateCountLimit(ctx context.Context, countKeyPrefix string, userId int64, catId int64) error {
 	key := fmt.Sprintf("%s:%d:%d", countKeyPrefix, userId, catId)
-	n, err := u.data.rdb.Incr(ctx, key).Result()
+	n, err := u.data.cache.Incr(ctx, key).Result()
 	if err != nil {
 		u.log.Errorf("increase user cat update count failed, key=%s: %v", countKeyPrefix, err)
 		return errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 	if n == 1 {
-		if err := u.data.rdb.Expire(ctx, key, userCatUpdateCountTTL).Err(); err != nil {
+		if err := u.data.cache.Expire(ctx, key, userCatUpdateCountTTL).Err(); err != nil {
 			u.log.Errorf("set user cat action count ttl failed, key=%s: %v", countKeyPrefix, err)
 			return errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 		}

@@ -155,22 +155,22 @@ func (u UserSetting) TableName() string {
 }
 
 type Post struct {
-	Id          int64     `gorm:"column:id"`
-	UserId      string    `gorm:"column:user_id"`
-	Title       string    `gorm:"column:title"`
-	PostType    int       `gorm:"column:post_type"`
-	ProvinceId  int64     `gorm:"column:province_id"`
-	CityId      int64     `gorm:"column:city_id"`
-	Address     string    `gorm:"column:address"`
-	AuditStatus int       `gorm:"column:audit_status"`
-	AuditRemark string    `gorm:"column:audit_remark"`
-	AuditTime   time.Time `gorm:"column:audit_time"`
-	PostStatus  int       `gorm:"column:post_status"`
-	Remark      string    `gorm:"column:remark"`
-	DeletedFlag int       `gorm:"column:deleted_flag"`
-	CreatedTime time.Time `gorm:"column:created_time"`
-	UpdatedTime time.Time `gorm:"column:updated_time"`
-	DeletedTime time.Time `gorm:"column:deleted_time"`
+	Id          int64      `gorm:"column:id"`
+	Title       string     `gorm:"column:title"`
+	PostType    int        `gorm:"column:post_type"`
+	ProvinceId  int64      `gorm:"column:province_id"`
+	CityId      int64      `gorm:"column:city_id"`
+	Address     string     `gorm:"column:address"`
+	LostTime    *time.Time `gorm:"column:lost_time"`
+	AuditStatus int        `gorm:"column:audit_status"`
+	AuditRemark string     `gorm:"column:audit_remark"`
+	AuditTime   *time.Time `gorm:"column:audit_time"`
+	PostStatus  int        `gorm:"column:post_status"`
+	Remark      string     `gorm:"column:remark"`
+	DeletedFlag int        `gorm:"column:deleted_flag"`
+	CreatedTime time.Time  `gorm:"column:created_time"`
+	UpdatedTime time.Time  `gorm:"column:updated_time"`
+	DeletedTime *time.Time `gorm:"column:deleted_time"`
 }
 
 func (u Post) TableName() string {
@@ -230,4 +230,18 @@ type UserCat struct {
 
 func (u UserCat) TableName() string {
 	return "t_user_cat"
+}
+
+type PostCat struct {
+	Id          int64     `gorm:"column:id"`
+	PostId      int64     `gorm:"column:post_id"`
+	CatId       int64     `gorm:"column:cat_id"`
+	CreatedTime time.Time `gorm:"column:created_time"`
+	UpdatedTime time.Time `gorm:"column:updated_time"`
+	DeletedFlag int       `gorm:"column:deleted_flag"`
+	DeletedTime time.Time `gorm:"column:deleted_time"`
+}
+
+func (u PostCat) TableName() string {
+	return "t_post_cat"
 }

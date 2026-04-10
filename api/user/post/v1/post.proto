@@ -96,19 +96,31 @@ message GetUserPostRequest {
 	int64 id = 1 [(validate.rules).int64 = {gt: 0}];
 }
 
+message CatInfo {
+	int64 id = 1;
+	string name = 2;
+	int32 catType = 3;
+	int32 breedType = 4;
+	int32 gender = 5;
+	float weight = 6;
+}
+
+message UserInfo {
+	int64 id = 1;
+	string name = 2;
+}
+
 message UserPostInfo {
     int64 id = 1;
 	string title = 2;
 	int32 postType = 3;
-	int32 provinceId = 4;
-	int32 cityId = 5;
-	string address = 6;
-	string remark = 7;
-	int32 catType = 8;
-	int32 catBreed = 9;
-	int32 catGender = 10;
-	string createdTime = 11;
-	string updatedTime = 12;
+	CatInfo cat = 4;
+	UserInfo user = 5;
+	int32 provinceId = 6;
+	int32 cityId = 7;
+	string lostTime = 8;
+	string address = 9;
+	string remark = 10;
 }
 
 message GetUserPostReply {
@@ -121,13 +133,15 @@ message GetUserPostReply {
 message CreateUserPostRequest {
 	string title = 1 [(validate.rules).string = {min_len: 1}];
 	int32 postType = 2 [(validate.rules).int32 = { gte: 0, lte: 4 }];
-	int32 provinceId = 3 [(validate.rules).int32 = { gte: 0 }];
-	int32 cityId = 4 [(validate.rules).int32 = { gte: 0  }];
-	string address = 5 [(validate.rules).string = {min_len: 1}];
-	string remark = 6 [(validate.rules).string = {min_len: 1}];
-	int32 catType = 7 [(validate.rules).int32 = { gte: 1, lte: 2 }];
-	int32 catBreed = 8 [(validate.rules).int32 = { gte: 0, lte: 20 }];
-	int32 catGender = 9 [(validate.rules).int32 = { gte: 0, lte: 2 }];
+	int64 catId = 3 [(validate.rules).int64 = { gte: 0 }];
+	int32 provinceId = 4 [(validate.rules).int32 = { gte: 0 }];
+	int32 cityId = 5 [(validate.rules).int32 = { gte: 0  }];
+	string lostTime = 6;
+	string address = 7;
+	string remark = 8 [(validate.rules).string = {min_len: 1}];
+	int32 catType = 9;
+	int32 breedType = 10;
+	int32 gender = 11;
 }
 
 message CreateUserPostReply {
@@ -141,13 +155,15 @@ message UpdateUserPostRequest {
 	int64 id = 1 [(validate.rules).int64 = {gt: 0}];
 	string title = 2 [(validate.rules).string = {min_len: 1}];
 	int32 postType = 3 [(validate.rules).int32 = { gte: 0, lte: 4 }];
-	int32 provinceId = 4 [(validate.rules).int32 = { gte: 0 }];
-	int32 cityId = 5 [(validate.rules).int32 = { gte: 0  }];
-	string address = 6 [(validate.rules).string = {min_len: 1}];
-	string remark = 7 [(validate.rules).string = {min_len: 1}];
-	int32 catType = 8 [(validate.rules).int32 = { gte: 1, lte: 2 }];
-	int32 catBreed = 9 [(validate.rules).int32 = { gte: 0, lte: 20 }];
-	int32 catGender = 10 [(validate.rules).int32 = { gte: 0, lte: 2 }];
+	int64 catId = 4 [(validate.rules).int64 = { gte: 0 }];
+	int32 provinceId = 5 [(validate.rules).int32 = { gte: 0 }];
+	int32 cityId = 6 [(validate.rules).int32 = { gte: 0  }];
+	string lostTime = 7;
+	string address = 8;
+	string remark = 9 [(validate.rules).string = {min_len: 1}];
+	int32 catType = 10;
+	int32 breedType = 11;
+	int32 gender = 12;
 }
 
 message UpdateUserPostReply {

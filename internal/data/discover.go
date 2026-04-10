@@ -30,7 +30,7 @@ func NewDiscoverRepo(data *Data, logger log.Logger) biz.DiscoverRepo {
 func (u *discoverRepo) GetQueryCache(ctx context.Context, req *v1.GetDiscoverListRequest) (*v1.DiscoverList, error) {
 	redisKey := fmt.Sprintf("discover:list:%d:%d:%d:%d:%d:%d:%d", req.ProvinceId, req.CityId, req.PType, req.CBreed, req.CType, req.Page, req.Size)
 
-	jsonData, err := u.data.rdb.Get(ctx, redisKey).Result()
+	jsonData, err := u.data.cache.Get(ctx, redisKey).Result()
 	if err != nil {
 		if err == redis.Nil {
 			return nil, nil
@@ -56,7 +56,7 @@ func (u *discoverRepo) SetQueryCache(ctx context.Context, req *v1.GetDiscoverLis
 	}
 
 	ttl := time.Minute * 1
-	if err := u.data.rdb.Set(ctx, redisKey, jsonData, ttl).Err(); err != nil {
+	if err := u.data.cache.Set(ctx, redisKey, jsonData, ttl).Err(); err != nil {
 		return err
 	}
 

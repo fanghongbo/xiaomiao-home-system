@@ -126,7 +126,7 @@ func (u *userRepo) WebLogin(ctx context.Context, req *v1.WebLoginRequest) (*v1.W
 func (u *userRepo) GetLoginErrorCount(ctx context.Context, loginType v1.LoginType, loginIdentity string, clientIp string) (int64, error) {
 	redisKey := fmt.Sprintf("login:error:count:%d:%s:%s", loginType.Number(), loginIdentity, clientIp)
 
-	count, err := u.data.rdb.Get(ctx, redisKey).Int64()
+	count, err := u.data.cache.Get(ctx, redisKey).Int64()
 	if err != nil && err != redis.Nil {
 		u.log.Errorf("get login error count failed: %v", err)
 		return 0, err
@@ -139,13 +139,13 @@ func (u *userRepo) GetLoginErrorCount(ctx context.Context, loginType v1.LoginTyp
 func (u *userRepo) IncLoginErrorCount(ctx context.Context, loginType v1.LoginType, loginIdentity string, clientIp string, ttl time.Duration) error {
 	redisKey := fmt.Sprintf("login:error:count:%d:%s:%s", loginType.Number(), loginIdentity, clientIp)
 
-	_, err := u.data.rdb.Incr(ctx, redisKey).Result()
+	_, err := u.data.cache.Incr(ctx, redisKey).Result()
 	if err != nil {
 		u.log.Errorf("inc login error count failed: %v", err)
 		return err
 	}
 
-	if err = u.data.rdb.Expire(ctx, redisKey, ttl).Err(); err != nil {
+	if err = u.data.cache.Expire(ctx, redisKey, ttl).Err(); err != nil {
 		u.log.Errorf("set login error count expire failed: %v", err)
 		return err
 	}
@@ -157,7 +157,7 @@ func (u *userRepo) IncLoginErrorCount(ctx context.Context, loginType v1.LoginTyp
 func (u *userRepo) ClearLoginErrorCount(ctx context.Context, loginType v1.LoginType, loginIdentity string, clientIp string) error {
 	redisKey := fmt.Sprintf("login:error:count:%d:%s:%s", loginType.Number(), loginIdentity, clientIp)
 
-	err := u.data.rdb.Del(ctx, redisKey).Err()
+	err := u.data.cache.Del(ctx, redisKey).Err()
 	if err != nil {
 		u.log.Errorf("clear login error count failed: %v", err)
 		return err

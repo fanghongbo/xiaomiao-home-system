@@ -45,13 +45,13 @@ func NewFileRepo(data *Data, logger log.Logger) biz.FileRepo {
 }
 
 // DownloadFile 下载文件
-func (f *fileRepo) DownloadFile(ctx context.Context, req *v1.DownloadFileRequest) (*v1.DownloadFileReply, error) {
+func (u *fileRepo) DownloadFile(ctx context.Context, req *v1.DownloadFileRequest) (*v1.DownloadFileReply, error) {
 	return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 }
 
 // UpdateAvatar 上传头像
-func (f *fileRepo) UploadAvatar(ctx context.Context, req *v1.UploadAvatarRequest) (*v1.UploadAvatarReply, error) {
-	fileReader, fileHeader, err := f.pickUploadImage(ctx, req)
+func (u *fileRepo) UploadAvatar(ctx context.Context, req *v1.UploadAvatarRequest) (*v1.UploadAvatarReply, error) {
+	fileReader, fileHeader, err := u.pickUploadImage(ctx, req)
 	if err != nil {
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_INVALID_REQUEST.String(), "请上传头像文件")
 	}
@@ -69,19 +69,19 @@ func (f *fileRepo) UploadAvatar(ctx context.Context, req *v1.UploadAvatarRequest
 		return nil, errors.Unauthorized(v1.ErrorReason_ERR_INVALID_SESSION.String(), "登录失效, 请重新登录")
 	}
 
-	if err := f.CheckAvatarUploadCountLimit(ctx, userId); err != nil {
+	if err := u.CheckAvatarUploadCountLimit(ctx, userId); err != nil {
 		return nil, err
 	}
 
-	fileSuffix, err := f.resolveAvatarSuffix(fileHeader)
+	fileSuffix, err := u.resolveAvatarSuffix(fileHeader)
 	if err != nil {
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_INVALID_REQUEST.String(), err.Error())
 	}
 
 	relativeDir := filepath.Join("avatar", strconv.FormatInt(userId, 10))
-	absoluteDir := filepath.Join(f.data.static.BaseDir, relativeDir)
+	absoluteDir := filepath.Join(u.data.static.BaseDir, relativeDir)
 	if err := os.MkdirAll(absoluteDir, 0o755); err != nil {
-		f.log.Errorf("mkdir upload dir failed: %v", err)
+		u.log.Errorf("mkdir upload dir failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -89,21 +89,21 @@ func (f *fileRepo) UploadAvatar(ctx context.Context, req *v1.UploadAvatarRequest
 	absolutePath := filepath.Join(absoluteDir, finalName)
 
 	// 清理该用户目录下旧头像文件，避免残留 avatar.* 历史文件
-	if err := f.removeOldAvatarFiles(absoluteDir, absolutePath); err != nil {
-		f.log.Errorf("remove old avatar files failed: %v", err)
+	if err := u.removeOldAvatarFiles(absoluteDir, absolutePath); err != nil {
+		u.log.Errorf("remove old avatar files failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	dst, err := os.Create(absolutePath)
 	if err != nil {
-		f.log.Errorf("create avatar file failed: %v", err)
+		u.log.Errorf("create avatar file failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 	defer dst.Close()
 
 	written, err := io.Copy(dst, io.LimitReader(fileReader, maxAvatarSize+1))
 	if err != nil {
-		f.log.Errorf("save avatar file failed: %v", err)
+		u.log.Errorf("save avatar file failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 	if written > maxAvatarSize {
@@ -112,15 +112,15 @@ func (f *fileRepo) UploadAvatar(ctx context.Context, req *v1.UploadAvatarRequest
 	}
 
 	avatarPath := strings.ReplaceAll(filepath.ToSlash(filepath.Join(relativeDir, finalName)), "\\", "/")
-	if err := f.data.db.Model(&User{}).
+	if err := u.data.db.Model(&User{}).
 		Where("id = ?", userId).
 		Where("deleted_flag = ?", 0).
 		Update("avatar", avatarPath).Error; err != nil {
-		f.log.Errorf("update user avatar failed: %v", err)
+		u.log.Errorf("update user avatar failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	frontendAvatarURL := strings.TrimRight(f.data.static.BaseUrl, "/") + "/static/" + avatarPath
+	frontendAvatarURL := strings.TrimRight(u.data.static.BaseUrl, "/") + "/static/" + avatarPath
 
 	return &v1.UploadAvatarReply{
 		Code:    200,
@@ -132,16 +132,16 @@ func (f *fileRepo) UploadAvatar(ctx context.Context, req *v1.UploadAvatarRequest
 	}, nil
 }
 
-func (f *fileRepo) CheckAvatarUploadCountLimit(ctx context.Context, userId int64) error {
+func (u *fileRepo) CheckAvatarUploadCountLimit(ctx context.Context, userId int64) error {
 	uploadCountKey := fmt.Sprintf("user:avatar:upload:count:%d", userId)
-	uploadCount, err := f.data.rdb.Incr(ctx, uploadCountKey).Result()
+	uploadCount, err := u.data.cache.Incr(ctx, uploadCountKey).Result()
 	if err != nil {
-		f.log.Errorf("increase avatar upload count failed: %v", err)
+		u.log.Errorf("increase avatar upload count failed: %v", err)
 		return errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 	if uploadCount == 1 {
-		if err := f.data.rdb.Expire(ctx, uploadCountKey, avatarUploadCountTTL).Err(); err != nil {
-			f.log.Errorf("set avatar upload count ttl failed: %v", err)
+		if err := u.data.cache.Expire(ctx, uploadCountKey, avatarUploadCountTTL).Err(); err != nil {
+			u.log.Errorf("set avatar upload count ttl failed: %v", err)
 			return errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 		}
 	}
@@ -151,7 +151,7 @@ func (f *fileRepo) CheckAvatarUploadCountLimit(ctx context.Context, userId int64
 	return nil
 }
 
-func (f *fileRepo) resolveAvatarSuffix(meta *UploadImageMeta) (string, error) {
+func (u *fileRepo) resolveAvatarSuffix(meta *UploadImageMeta) (string, error) {
 	contentType := strings.ToLower(strings.TrimSpace(meta.contentType))
 	switch contentType {
 	case "image/jpeg", "image/jpg":
@@ -175,7 +175,7 @@ func (f *fileRepo) resolveAvatarSuffix(meta *UploadImageMeta) (string, error) {
 	}
 }
 
-func (f *fileRepo) removeOldAvatarFiles(dir string, keepPath string) error {
+func (u *fileRepo) removeOldAvatarFiles(dir string, keepPath string) error {
 	entries, err := os.ReadDir(dir)
 	if err != nil {
 		return err
@@ -199,7 +199,7 @@ func (f *fileRepo) removeOldAvatarFiles(dir string, keepPath string) error {
 	return nil
 }
 
-func (f *fileRepo) pickUploadImage(ctx context.Context, req *v1.UploadAvatarRequest) (io.ReadCloser, *UploadImageMeta, error) {
+func (u *fileRepo) pickUploadImage(ctx context.Context, req *v1.UploadAvatarRequest) (io.ReadCloser, *UploadImageMeta, error) {
 	if req != nil && len(req.Content) > 0 {
 		if int64(len(req.Content)) > maxAvatarSize {
 			return nil, nil, errors.BadRequest(v1.ErrorReason_ERR_INVALID_REQUEST.String(), "头像文件不能超过 5MB")
@@ -226,7 +226,7 @@ func (f *fileRepo) pickUploadImage(ctx context.Context, req *v1.UploadAvatarRequ
 	if err := httpReq.ParseMultipartForm(maxAvatarSize); err != nil {
 		return nil, nil, err
 	}
-	file, fileHeader, err := f.pickAvatarFile(httpReq.MultipartForm)
+	file, fileHeader, err := u.pickAvatarFile(httpReq.MultipartForm)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -241,7 +241,7 @@ func (f *fileRepo) pickUploadImage(ctx context.Context, req *v1.UploadAvatarRequ
 	}, nil
 }
 
-func (f *fileRepo) pickAvatarFile(form *multipart.Form) (multipart.File, *multipart.FileHeader, error) {
+func (u *fileRepo) pickAvatarFile(form *multipart.Form) (multipart.File, *multipart.FileHeader, error) {
 	if form == nil {
 		return nil, nil, os.ErrInvalid
 	}

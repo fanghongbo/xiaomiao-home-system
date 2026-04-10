@@ -421,27 +421,161 @@ func (x *GetUserPostRequest) GetId() int64 {
 	return 0
 }
 
+type CatInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	CatType       int32                  `protobuf:"varint,3,opt,name=catType,proto3" json:"catType,omitempty"`
+	BreedType     int32                  `protobuf:"varint,4,opt,name=breedType,proto3" json:"breedType,omitempty"`
+	Gender        int32                  `protobuf:"varint,5,opt,name=gender,proto3" json:"gender,omitempty"`
+	Weight        float32                `protobuf:"fixed32,6,opt,name=weight,proto3" json:"weight,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CatInfo) Reset() {
+	*x = CatInfo{}
+	mi := &file_api_user_post_v1_post_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CatInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CatInfo) ProtoMessage() {}
+
+func (x *CatInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_api_user_post_v1_post_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CatInfo.ProtoReflect.Descriptor instead.
+func (*CatInfo) Descriptor() ([]byte, []int) {
+	return file_api_user_post_v1_post_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *CatInfo) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *CatInfo) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *CatInfo) GetCatType() int32 {
+	if x != nil {
+		return x.CatType
+	}
+	return 0
+}
+
+func (x *CatInfo) GetBreedType() int32 {
+	if x != nil {
+		return x.BreedType
+	}
+	return 0
+}
+
+func (x *CatInfo) GetGender() int32 {
+	if x != nil {
+		return x.Gender
+	}
+	return 0
+}
+
+func (x *CatInfo) GetWeight() float32 {
+	if x != nil {
+		return x.Weight
+	}
+	return 0
+}
+
+type UserInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UserInfo) Reset() {
+	*x = UserInfo{}
+	mi := &file_api_user_post_v1_post_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserInfo) ProtoMessage() {}
+
+func (x *UserInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_api_user_post_v1_post_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserInfo.ProtoReflect.Descriptor instead.
+func (*UserInfo) Descriptor() ([]byte, []int) {
+	return file_api_user_post_v1_post_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *UserInfo) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *UserInfo) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
 type UserPostInfo struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
 	PostType      int32                  `protobuf:"varint,3,opt,name=postType,proto3" json:"postType,omitempty"`
-	ProvinceId    int32                  `protobuf:"varint,4,opt,name=provinceId,proto3" json:"provinceId,omitempty"`
-	CityId        int32                  `protobuf:"varint,5,opt,name=cityId,proto3" json:"cityId,omitempty"`
-	Address       string                 `protobuf:"bytes,6,opt,name=address,proto3" json:"address,omitempty"`
-	Remark        string                 `protobuf:"bytes,7,opt,name=remark,proto3" json:"remark,omitempty"`
-	CatType       int32                  `protobuf:"varint,8,opt,name=catType,proto3" json:"catType,omitempty"`
-	CatBreed      int32                  `protobuf:"varint,9,opt,name=catBreed,proto3" json:"catBreed,omitempty"`
-	CatGender     int32                  `protobuf:"varint,10,opt,name=catGender,proto3" json:"catGender,omitempty"`
-	CreatedTime   string                 `protobuf:"bytes,11,opt,name=createdTime,proto3" json:"createdTime,omitempty"`
-	UpdatedTime   string                 `protobuf:"bytes,12,opt,name=updatedTime,proto3" json:"updatedTime,omitempty"`
+	Cat           *CatInfo               `protobuf:"bytes,4,opt,name=cat,proto3" json:"cat,omitempty"`
+	User          *UserInfo              `protobuf:"bytes,5,opt,name=user,proto3" json:"user,omitempty"`
+	ProvinceId    int32                  `protobuf:"varint,6,opt,name=provinceId,proto3" json:"provinceId,omitempty"`
+	CityId        int32                  `protobuf:"varint,7,opt,name=cityId,proto3" json:"cityId,omitempty"`
+	LostTime      string                 `protobuf:"bytes,8,opt,name=lostTime,proto3" json:"lostTime,omitempty"`
+	Address       string                 `protobuf:"bytes,9,opt,name=address,proto3" json:"address,omitempty"`
+	Remark        string                 `protobuf:"bytes,10,opt,name=remark,proto3" json:"remark,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *UserPostInfo) Reset() {
 	*x = UserPostInfo{}
-	mi := &file_api_user_post_v1_post_proto_msgTypes[7]
+	mi := &file_api_user_post_v1_post_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -453,7 +587,7 @@ func (x *UserPostInfo) String() string {
 func (*UserPostInfo) ProtoMessage() {}
 
 func (x *UserPostInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_api_user_post_v1_post_proto_msgTypes[7]
+	mi := &file_api_user_post_v1_post_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -466,7 +600,7 @@ func (x *UserPostInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserPostInfo.ProtoReflect.Descriptor instead.
 func (*UserPostInfo) Descriptor() ([]byte, []int) {
-	return file_api_user_post_v1_post_proto_rawDescGZIP(), []int{7}
+	return file_api_user_post_v1_post_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *UserPostInfo) GetId() int64 {
@@ -490,6 +624,20 @@ func (x *UserPostInfo) GetPostType() int32 {
 	return 0
 }
 
+func (x *UserPostInfo) GetCat() *CatInfo {
+	if x != nil {
+		return x.Cat
+	}
+	return nil
+}
+
+func (x *UserPostInfo) GetUser() *UserInfo {
+	if x != nil {
+		return x.User
+	}
+	return nil
+}
+
 func (x *UserPostInfo) GetProvinceId() int32 {
 	if x != nil {
 		return x.ProvinceId
@@ -502,6 +650,13 @@ func (x *UserPostInfo) GetCityId() int32 {
 		return x.CityId
 	}
 	return 0
+}
+
+func (x *UserPostInfo) GetLostTime() string {
+	if x != nil {
+		return x.LostTime
+	}
+	return ""
 }
 
 func (x *UserPostInfo) GetAddress() string {
@@ -518,41 +673,6 @@ func (x *UserPostInfo) GetRemark() string {
 	return ""
 }
 
-func (x *UserPostInfo) GetCatType() int32 {
-	if x != nil {
-		return x.CatType
-	}
-	return 0
-}
-
-func (x *UserPostInfo) GetCatBreed() int32 {
-	if x != nil {
-		return x.CatBreed
-	}
-	return 0
-}
-
-func (x *UserPostInfo) GetCatGender() int32 {
-	if x != nil {
-		return x.CatGender
-	}
-	return 0
-}
-
-func (x *UserPostInfo) GetCreatedTime() string {
-	if x != nil {
-		return x.CreatedTime
-	}
-	return ""
-}
-
-func (x *UserPostInfo) GetUpdatedTime() string {
-	if x != nil {
-		return x.UpdatedTime
-	}
-	return ""
-}
-
 type GetUserPostReply struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Code          int32                  `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
@@ -565,7 +685,7 @@ type GetUserPostReply struct {
 
 func (x *GetUserPostReply) Reset() {
 	*x = GetUserPostReply{}
-	mi := &file_api_user_post_v1_post_proto_msgTypes[8]
+	mi := &file_api_user_post_v1_post_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -577,7 +697,7 @@ func (x *GetUserPostReply) String() string {
 func (*GetUserPostReply) ProtoMessage() {}
 
 func (x *GetUserPostReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_user_post_v1_post_proto_msgTypes[8]
+	mi := &file_api_user_post_v1_post_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -590,7 +710,7 @@ func (x *GetUserPostReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetUserPostReply.ProtoReflect.Descriptor instead.
 func (*GetUserPostReply) Descriptor() ([]byte, []int) {
-	return file_api_user_post_v1_post_proto_rawDescGZIP(), []int{8}
+	return file_api_user_post_v1_post_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *GetUserPostReply) GetCode() int32 {
@@ -625,20 +745,22 @@ type CreateUserPostRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Title         string                 `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
 	PostType      int32                  `protobuf:"varint,2,opt,name=postType,proto3" json:"postType,omitempty"`
-	ProvinceId    int32                  `protobuf:"varint,3,opt,name=provinceId,proto3" json:"provinceId,omitempty"`
-	CityId        int32                  `protobuf:"varint,4,opt,name=cityId,proto3" json:"cityId,omitempty"`
-	Address       string                 `protobuf:"bytes,5,opt,name=address,proto3" json:"address,omitempty"`
-	Remark        string                 `protobuf:"bytes,6,opt,name=remark,proto3" json:"remark,omitempty"`
-	CatType       int32                  `protobuf:"varint,7,opt,name=catType,proto3" json:"catType,omitempty"`
-	CatBreed      int32                  `protobuf:"varint,8,opt,name=catBreed,proto3" json:"catBreed,omitempty"`
-	CatGender     int32                  `protobuf:"varint,9,opt,name=catGender,proto3" json:"catGender,omitempty"`
+	CatId         int64                  `protobuf:"varint,3,opt,name=catId,proto3" json:"catId,omitempty"`
+	ProvinceId    int32                  `protobuf:"varint,4,opt,name=provinceId,proto3" json:"provinceId,omitempty"`
+	CityId        int32                  `protobuf:"varint,5,opt,name=cityId,proto3" json:"cityId,omitempty"`
+	LostTime      string                 `protobuf:"bytes,6,opt,name=lostTime,proto3" json:"lostTime,omitempty"`
+	Address       string                 `protobuf:"bytes,7,opt,name=address,proto3" json:"address,omitempty"`
+	Remark        string                 `protobuf:"bytes,8,opt,name=remark,proto3" json:"remark,omitempty"`
+	CatType       int32                  `protobuf:"varint,9,opt,name=catType,proto3" json:"catType,omitempty"`
+	BreedType     int32                  `protobuf:"varint,10,opt,name=breedType,proto3" json:"breedType,omitempty"`
+	Gender        int32                  `protobuf:"varint,11,opt,name=gender,proto3" json:"gender,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *CreateUserPostRequest) Reset() {
 	*x = CreateUserPostRequest{}
-	mi := &file_api_user_post_v1_post_proto_msgTypes[9]
+	mi := &file_api_user_post_v1_post_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -650,7 +772,7 @@ func (x *CreateUserPostRequest) String() string {
 func (*CreateUserPostRequest) ProtoMessage() {}
 
 func (x *CreateUserPostRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_user_post_v1_post_proto_msgTypes[9]
+	mi := &file_api_user_post_v1_post_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -663,7 +785,7 @@ func (x *CreateUserPostRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateUserPostRequest.ProtoReflect.Descriptor instead.
 func (*CreateUserPostRequest) Descriptor() ([]byte, []int) {
-	return file_api_user_post_v1_post_proto_rawDescGZIP(), []int{9}
+	return file_api_user_post_v1_post_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *CreateUserPostRequest) GetTitle() string {
@@ -680,6 +802,13 @@ func (x *CreateUserPostRequest) GetPostType() int32 {
 	return 0
 }
 
+func (x *CreateUserPostRequest) GetCatId() int64 {
+	if x != nil {
+		return x.CatId
+	}
+	return 0
+}
+
 func (x *CreateUserPostRequest) GetProvinceId() int32 {
 	if x != nil {
 		return x.ProvinceId
@@ -692,6 +821,13 @@ func (x *CreateUserPostRequest) GetCityId() int32 {
 		return x.CityId
 	}
 	return 0
+}
+
+func (x *CreateUserPostRequest) GetLostTime() string {
+	if x != nil {
+		return x.LostTime
+	}
+	return ""
 }
 
 func (x *CreateUserPostRequest) GetAddress() string {
@@ -715,16 +851,16 @@ func (x *CreateUserPostRequest) GetCatType() int32 {
 	return 0
 }
 
-func (x *CreateUserPostRequest) GetCatBreed() int32 {
+func (x *CreateUserPostRequest) GetBreedType() int32 {
 	if x != nil {
-		return x.CatBreed
+		return x.BreedType
 	}
 	return 0
 }
 
-func (x *CreateUserPostRequest) GetCatGender() int32 {
+func (x *CreateUserPostRequest) GetGender() int32 {
 	if x != nil {
-		return x.CatGender
+		return x.Gender
 	}
 	return 0
 }
@@ -741,7 +877,7 @@ type CreateUserPostReply struct {
 
 func (x *CreateUserPostReply) Reset() {
 	*x = CreateUserPostReply{}
-	mi := &file_api_user_post_v1_post_proto_msgTypes[10]
+	mi := &file_api_user_post_v1_post_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -753,7 +889,7 @@ func (x *CreateUserPostReply) String() string {
 func (*CreateUserPostReply) ProtoMessage() {}
 
 func (x *CreateUserPostReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_user_post_v1_post_proto_msgTypes[10]
+	mi := &file_api_user_post_v1_post_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -766,7 +902,7 @@ func (x *CreateUserPostReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateUserPostReply.ProtoReflect.Descriptor instead.
 func (*CreateUserPostReply) Descriptor() ([]byte, []int) {
-	return file_api_user_post_v1_post_proto_rawDescGZIP(), []int{10}
+	return file_api_user_post_v1_post_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *CreateUserPostReply) GetCode() int32 {
@@ -802,20 +938,22 @@ type UpdateUserPostRequest struct {
 	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
 	PostType      int32                  `protobuf:"varint,3,opt,name=postType,proto3" json:"postType,omitempty"`
-	ProvinceId    int32                  `protobuf:"varint,4,opt,name=provinceId,proto3" json:"provinceId,omitempty"`
-	CityId        int32                  `protobuf:"varint,5,opt,name=cityId,proto3" json:"cityId,omitempty"`
-	Address       string                 `protobuf:"bytes,6,opt,name=address,proto3" json:"address,omitempty"`
-	Remark        string                 `protobuf:"bytes,7,opt,name=remark,proto3" json:"remark,omitempty"`
-	CatType       int32                  `protobuf:"varint,8,opt,name=catType,proto3" json:"catType,omitempty"`
-	CatBreed      int32                  `protobuf:"varint,9,opt,name=catBreed,proto3" json:"catBreed,omitempty"`
-	CatGender     int32                  `protobuf:"varint,10,opt,name=catGender,proto3" json:"catGender,omitempty"`
+	CatId         int64                  `protobuf:"varint,4,opt,name=catId,proto3" json:"catId,omitempty"`
+	ProvinceId    int32                  `protobuf:"varint,5,opt,name=provinceId,proto3" json:"provinceId,omitempty"`
+	CityId        int32                  `protobuf:"varint,6,opt,name=cityId,proto3" json:"cityId,omitempty"`
+	LostTime      string                 `protobuf:"bytes,7,opt,name=lostTime,proto3" json:"lostTime,omitempty"`
+	Address       string                 `protobuf:"bytes,8,opt,name=address,proto3" json:"address,omitempty"`
+	Remark        string                 `protobuf:"bytes,9,opt,name=remark,proto3" json:"remark,omitempty"`
+	CatType       int32                  `protobuf:"varint,10,opt,name=catType,proto3" json:"catType,omitempty"`
+	BreedType     int32                  `protobuf:"varint,11,opt,name=breedType,proto3" json:"breedType,omitempty"`
+	Gender        int32                  `protobuf:"varint,12,opt,name=gender,proto3" json:"gender,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *UpdateUserPostRequest) Reset() {
 	*x = UpdateUserPostRequest{}
-	mi := &file_api_user_post_v1_post_proto_msgTypes[11]
+	mi := &file_api_user_post_v1_post_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -827,7 +965,7 @@ func (x *UpdateUserPostRequest) String() string {
 func (*UpdateUserPostRequest) ProtoMessage() {}
 
 func (x *UpdateUserPostRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_user_post_v1_post_proto_msgTypes[11]
+	mi := &file_api_user_post_v1_post_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -840,7 +978,7 @@ func (x *UpdateUserPostRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateUserPostRequest.ProtoReflect.Descriptor instead.
 func (*UpdateUserPostRequest) Descriptor() ([]byte, []int) {
-	return file_api_user_post_v1_post_proto_rawDescGZIP(), []int{11}
+	return file_api_user_post_v1_post_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *UpdateUserPostRequest) GetId() int64 {
@@ -864,6 +1002,13 @@ func (x *UpdateUserPostRequest) GetPostType() int32 {
 	return 0
 }
 
+func (x *UpdateUserPostRequest) GetCatId() int64 {
+	if x != nil {
+		return x.CatId
+	}
+	return 0
+}
+
 func (x *UpdateUserPostRequest) GetProvinceId() int32 {
 	if x != nil {
 		return x.ProvinceId
@@ -876,6 +1021,13 @@ func (x *UpdateUserPostRequest) GetCityId() int32 {
 		return x.CityId
 	}
 	return 0
+}
+
+func (x *UpdateUserPostRequest) GetLostTime() string {
+	if x != nil {
+		return x.LostTime
+	}
+	return ""
 }
 
 func (x *UpdateUserPostRequest) GetAddress() string {
@@ -899,16 +1051,16 @@ func (x *UpdateUserPostRequest) GetCatType() int32 {
 	return 0
 }
 
-func (x *UpdateUserPostRequest) GetCatBreed() int32 {
+func (x *UpdateUserPostRequest) GetBreedType() int32 {
 	if x != nil {
-		return x.CatBreed
+		return x.BreedType
 	}
 	return 0
 }
 
-func (x *UpdateUserPostRequest) GetCatGender() int32 {
+func (x *UpdateUserPostRequest) GetGender() int32 {
 	if x != nil {
-		return x.CatGender
+		return x.Gender
 	}
 	return 0
 }
@@ -925,7 +1077,7 @@ type UpdateUserPostReply struct {
 
 func (x *UpdateUserPostReply) Reset() {
 	*x = UpdateUserPostReply{}
-	mi := &file_api_user_post_v1_post_proto_msgTypes[12]
+	mi := &file_api_user_post_v1_post_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -937,7 +1089,7 @@ func (x *UpdateUserPostReply) String() string {
 func (*UpdateUserPostReply) ProtoMessage() {}
 
 func (x *UpdateUserPostReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_user_post_v1_post_proto_msgTypes[12]
+	mi := &file_api_user_post_v1_post_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -950,7 +1102,7 @@ func (x *UpdateUserPostReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateUserPostReply.ProtoReflect.Descriptor instead.
 func (*UpdateUserPostReply) Descriptor() ([]byte, []int) {
-	return file_api_user_post_v1_post_proto_rawDescGZIP(), []int{12}
+	return file_api_user_post_v1_post_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *UpdateUserPostReply) GetCode() int32 {
@@ -990,7 +1142,7 @@ type DeleteUserPostRequest struct {
 
 func (x *DeleteUserPostRequest) Reset() {
 	*x = DeleteUserPostRequest{}
-	mi := &file_api_user_post_v1_post_proto_msgTypes[13]
+	mi := &file_api_user_post_v1_post_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1002,7 +1154,7 @@ func (x *DeleteUserPostRequest) String() string {
 func (*DeleteUserPostRequest) ProtoMessage() {}
 
 func (x *DeleteUserPostRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_user_post_v1_post_proto_msgTypes[13]
+	mi := &file_api_user_post_v1_post_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1015,7 +1167,7 @@ func (x *DeleteUserPostRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteUserPostRequest.ProtoReflect.Descriptor instead.
 func (*DeleteUserPostRequest) Descriptor() ([]byte, []int) {
-	return file_api_user_post_v1_post_proto_rawDescGZIP(), []int{13}
+	return file_api_user_post_v1_post_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *DeleteUserPostRequest) GetId() int64 {
@@ -1037,7 +1189,7 @@ type DeleteUserPostReply struct {
 
 func (x *DeleteUserPostReply) Reset() {
 	*x = DeleteUserPostReply{}
-	mi := &file_api_user_post_v1_post_proto_msgTypes[14]
+	mi := &file_api_user_post_v1_post_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1049,7 +1201,7 @@ func (x *DeleteUserPostReply) String() string {
 func (*DeleteUserPostReply) ProtoMessage() {}
 
 func (x *DeleteUserPostReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_user_post_v1_post_proto_msgTypes[14]
+	mi := &file_api_user_post_v1_post_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1062,7 +1214,7 @@ func (x *DeleteUserPostReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteUserPostReply.ProtoReflect.Descriptor instead.
 func (*DeleteUserPostReply) Descriptor() ([]byte, []int) {
-	return file_api_user_post_v1_post_proto_rawDescGZIP(), []int{14}
+	return file_api_user_post_v1_post_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *DeleteUserPostReply) GetCode() int32 {
@@ -1103,7 +1255,7 @@ type UpdateUserPostStatusRequest struct {
 
 func (x *UpdateUserPostStatusRequest) Reset() {
 	*x = UpdateUserPostStatusRequest{}
-	mi := &file_api_user_post_v1_post_proto_msgTypes[15]
+	mi := &file_api_user_post_v1_post_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1115,7 +1267,7 @@ func (x *UpdateUserPostStatusRequest) String() string {
 func (*UpdateUserPostStatusRequest) ProtoMessage() {}
 
 func (x *UpdateUserPostStatusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_user_post_v1_post_proto_msgTypes[15]
+	mi := &file_api_user_post_v1_post_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1128,7 +1280,7 @@ func (x *UpdateUserPostStatusRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateUserPostStatusRequest.ProtoReflect.Descriptor instead.
 func (*UpdateUserPostStatusRequest) Descriptor() ([]byte, []int) {
-	return file_api_user_post_v1_post_proto_rawDescGZIP(), []int{15}
+	return file_api_user_post_v1_post_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *UpdateUserPostStatusRequest) GetId() int64 {
@@ -1157,7 +1309,7 @@ type UpdateUserPostStatusReply struct {
 
 func (x *UpdateUserPostStatusReply) Reset() {
 	*x = UpdateUserPostStatusReply{}
-	mi := &file_api_user_post_v1_post_proto_msgTypes[16]
+	mi := &file_api_user_post_v1_post_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1169,7 +1321,7 @@ func (x *UpdateUserPostStatusReply) String() string {
 func (*UpdateUserPostStatusReply) ProtoMessage() {}
 
 func (x *UpdateUserPostStatusReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_user_post_v1_post_proto_msgTypes[16]
+	mi := &file_api_user_post_v1_post_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1182,7 +1334,7 @@ func (x *UpdateUserPostStatusReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateUserPostStatusReply.ProtoReflect.Descriptor instead.
 func (*UpdateUserPostStatusReply) Descriptor() ([]byte, []int) {
-	return file_api_user_post_v1_post_proto_rawDescGZIP(), []int{16}
+	return file_api_user_post_v1_post_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *UpdateUserPostStatusReply) GetCode() int32 {
@@ -1248,59 +1400,72 @@ const file_api_user_post_v1_post_proto_rawDesc = "" +
 	"\asuccess\x18\x03 \x01(\bR\asuccess\x122\n" +
 	"\x04data\x18\x04 \x01(\v2\x1e.api.user.post.v1.UserPostListR\x04data\"-\n" +
 	"\x12GetUserPostRequest\x12\x17\n" +
-	"\x02id\x18\x01 \x01(\x03B\a\xfaB\x04\"\x02 \x00R\x02id\"\xd2\x02\n" +
+	"\x02id\x18\x01 \x01(\x03B\a\xfaB\x04\"\x02 \x00R\x02id\"\x95\x01\n" +
+	"\aCatInfo\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x18\n" +
+	"\acatType\x18\x03 \x01(\x05R\acatType\x12\x1c\n" +
+	"\tbreedType\x18\x04 \x01(\x05R\tbreedType\x12\x16\n" +
+	"\x06gender\x18\x05 \x01(\x05R\x06gender\x12\x16\n" +
+	"\x06weight\x18\x06 \x01(\x02R\x06weight\".\n" +
+	"\bUserInfo\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\"\xb3\x02\n" +
 	"\fUserPostInfo\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x14\n" +
 	"\x05title\x18\x02 \x01(\tR\x05title\x12\x1a\n" +
-	"\bpostType\x18\x03 \x01(\x05R\bpostType\x12\x1e\n" +
+	"\bpostType\x18\x03 \x01(\x05R\bpostType\x12+\n" +
+	"\x03cat\x18\x04 \x01(\v2\x19.api.user.post.v1.CatInfoR\x03cat\x12.\n" +
+	"\x04user\x18\x05 \x01(\v2\x1a.api.user.post.v1.UserInfoR\x04user\x12\x1e\n" +
 	"\n" +
-	"provinceId\x18\x04 \x01(\x05R\n" +
+	"provinceId\x18\x06 \x01(\x05R\n" +
 	"provinceId\x12\x16\n" +
-	"\x06cityId\x18\x05 \x01(\x05R\x06cityId\x12\x18\n" +
-	"\aaddress\x18\x06 \x01(\tR\aaddress\x12\x16\n" +
-	"\x06remark\x18\a \x01(\tR\x06remark\x12\x18\n" +
-	"\acatType\x18\b \x01(\x05R\acatType\x12\x1a\n" +
-	"\bcatBreed\x18\t \x01(\x05R\bcatBreed\x12\x1c\n" +
-	"\tcatGender\x18\n" +
-	" \x01(\x05R\tcatGender\x12 \n" +
-	"\vcreatedTime\x18\v \x01(\tR\vcreatedTime\x12 \n" +
-	"\vupdatedTime\x18\f \x01(\tR\vupdatedTime\"\x8e\x01\n" +
+	"\x06cityId\x18\a \x01(\x05R\x06cityId\x12\x1a\n" +
+	"\blostTime\x18\b \x01(\tR\blostTime\x12\x18\n" +
+	"\aaddress\x18\t \x01(\tR\aaddress\x12\x16\n" +
+	"\x06remark\x18\n" +
+	" \x01(\tR\x06remark\"\x8e\x01\n" +
 	"\x10GetUserPostReply\x12\x12\n" +
 	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12\x18\n" +
 	"\asuccess\x18\x03 \x01(\bR\asuccess\x122\n" +
-	"\x04data\x18\x04 \x01(\v2\x1e.api.user.post.v1.UserPostInfoR\x04data\"\xe0\x02\n" +
+	"\x04data\x18\x04 \x01(\v2\x1e.api.user.post.v1.UserPostInfoR\x04data\"\xed\x02\n" +
 	"\x15CreateUserPostRequest\x12\x1d\n" +
 	"\x05title\x18\x01 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\x05title\x12%\n" +
-	"\bpostType\x18\x02 \x01(\x05B\t\xfaB\x06\x1a\x04\x18\x04(\x00R\bpostType\x12'\n" +
+	"\bpostType\x18\x02 \x01(\x05B\t\xfaB\x06\x1a\x04\x18\x04(\x00R\bpostType\x12\x1d\n" +
+	"\x05catId\x18\x03 \x01(\x03B\a\xfaB\x04\"\x02(\x00R\x05catId\x12'\n" +
 	"\n" +
-	"provinceId\x18\x03 \x01(\x05B\a\xfaB\x04\x1a\x02(\x00R\n" +
+	"provinceId\x18\x04 \x01(\x05B\a\xfaB\x04\x1a\x02(\x00R\n" +
 	"provinceId\x12\x1f\n" +
-	"\x06cityId\x18\x04 \x01(\x05B\a\xfaB\x04\x1a\x02(\x00R\x06cityId\x12!\n" +
-	"\aaddress\x18\x05 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\aaddress\x12\x1f\n" +
-	"\x06remark\x18\x06 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\x06remark\x12#\n" +
-	"\acatType\x18\a \x01(\x05B\t\xfaB\x06\x1a\x04\x18\x02(\x01R\acatType\x12%\n" +
-	"\bcatBreed\x18\b \x01(\x05B\t\xfaB\x06\x1a\x04\x18\x14(\x00R\bcatBreed\x12'\n" +
-	"\tcatGender\x18\t \x01(\x05B\t\xfaB\x06\x1a\x04\x18\x02(\x00R\tcatGender\"q\n" +
+	"\x06cityId\x18\x05 \x01(\x05B\a\xfaB\x04\x1a\x02(\x00R\x06cityId\x12\x1a\n" +
+	"\blostTime\x18\x06 \x01(\tR\blostTime\x12\x18\n" +
+	"\aaddress\x18\a \x01(\tR\aaddress\x12\x1f\n" +
+	"\x06remark\x18\b \x01(\tB\a\xfaB\x04r\x02\x10\x01R\x06remark\x12\x18\n" +
+	"\acatType\x18\t \x01(\x05R\acatType\x12\x1c\n" +
+	"\tbreedType\x18\n" +
+	" \x01(\x05R\tbreedType\x12\x16\n" +
+	"\x06gender\x18\v \x01(\x05R\x06gender\"q\n" +
 	"\x13CreateUserPostReply\x12\x12\n" +
 	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12\x18\n" +
 	"\asuccess\x18\x03 \x01(\bR\asuccess\x12\x12\n" +
-	"\x04data\x18\x04 \x01(\tR\x04data\"\xf9\x02\n" +
+	"\x04data\x18\x04 \x01(\tR\x04data\"\x86\x03\n" +
 	"\x15UpdateUserPostRequest\x12\x17\n" +
 	"\x02id\x18\x01 \x01(\x03B\a\xfaB\x04\"\x02 \x00R\x02id\x12\x1d\n" +
 	"\x05title\x18\x02 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\x05title\x12%\n" +
-	"\bpostType\x18\x03 \x01(\x05B\t\xfaB\x06\x1a\x04\x18\x04(\x00R\bpostType\x12'\n" +
+	"\bpostType\x18\x03 \x01(\x05B\t\xfaB\x06\x1a\x04\x18\x04(\x00R\bpostType\x12\x1d\n" +
+	"\x05catId\x18\x04 \x01(\x03B\a\xfaB\x04\"\x02(\x00R\x05catId\x12'\n" +
 	"\n" +
-	"provinceId\x18\x04 \x01(\x05B\a\xfaB\x04\x1a\x02(\x00R\n" +
+	"provinceId\x18\x05 \x01(\x05B\a\xfaB\x04\x1a\x02(\x00R\n" +
 	"provinceId\x12\x1f\n" +
-	"\x06cityId\x18\x05 \x01(\x05B\a\xfaB\x04\x1a\x02(\x00R\x06cityId\x12!\n" +
-	"\aaddress\x18\x06 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\aaddress\x12\x1f\n" +
-	"\x06remark\x18\a \x01(\tB\a\xfaB\x04r\x02\x10\x01R\x06remark\x12#\n" +
-	"\acatType\x18\b \x01(\x05B\t\xfaB\x06\x1a\x04\x18\x02(\x01R\acatType\x12%\n" +
-	"\bcatBreed\x18\t \x01(\x05B\t\xfaB\x06\x1a\x04\x18\x14(\x00R\bcatBreed\x12'\n" +
-	"\tcatGender\x18\n" +
-	" \x01(\x05B\t\xfaB\x06\x1a\x04\x18\x02(\x00R\tcatGender\"q\n" +
+	"\x06cityId\x18\x06 \x01(\x05B\a\xfaB\x04\x1a\x02(\x00R\x06cityId\x12\x1a\n" +
+	"\blostTime\x18\a \x01(\tR\blostTime\x12\x18\n" +
+	"\aaddress\x18\b \x01(\tR\aaddress\x12\x1f\n" +
+	"\x06remark\x18\t \x01(\tB\a\xfaB\x04r\x02\x10\x01R\x06remark\x12\x18\n" +
+	"\acatType\x18\n" +
+	" \x01(\x05R\acatType\x12\x1c\n" +
+	"\tbreedType\x18\v \x01(\x05R\tbreedType\x12\x16\n" +
+	"\x06gender\x18\f \x01(\x05R\x06gender\"q\n" +
 	"\x13UpdateUserPostReply\x12\x12\n" +
 	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12\x18\n" +
@@ -1342,7 +1507,7 @@ func file_api_user_post_v1_post_proto_rawDescGZIP() []byte {
 	return file_api_user_post_v1_post_proto_rawDescData
 }
 
-var file_api_user_post_v1_post_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
+var file_api_user_post_v1_post_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
 var file_api_user_post_v1_post_proto_goTypes = []any{
 	(*BaseRequest)(nil),                 // 0: api.user.post.v1.BaseRequest
 	(*BaseResponse)(nil),                // 1: api.user.post.v1.BaseResponse
@@ -1351,38 +1516,42 @@ var file_api_user_post_v1_post_proto_goTypes = []any{
 	(*UserPostList)(nil),                // 4: api.user.post.v1.UserPostList
 	(*GetUserPostListReply)(nil),        // 5: api.user.post.v1.GetUserPostListReply
 	(*GetUserPostRequest)(nil),          // 6: api.user.post.v1.GetUserPostRequest
-	(*UserPostInfo)(nil),                // 7: api.user.post.v1.UserPostInfo
-	(*GetUserPostReply)(nil),            // 8: api.user.post.v1.GetUserPostReply
-	(*CreateUserPostRequest)(nil),       // 9: api.user.post.v1.CreateUserPostRequest
-	(*CreateUserPostReply)(nil),         // 10: api.user.post.v1.CreateUserPostReply
-	(*UpdateUserPostRequest)(nil),       // 11: api.user.post.v1.UpdateUserPostRequest
-	(*UpdateUserPostReply)(nil),         // 12: api.user.post.v1.UpdateUserPostReply
-	(*DeleteUserPostRequest)(nil),       // 13: api.user.post.v1.DeleteUserPostRequest
-	(*DeleteUserPostReply)(nil),         // 14: api.user.post.v1.DeleteUserPostReply
-	(*UpdateUserPostStatusRequest)(nil), // 15: api.user.post.v1.UpdateUserPostStatusRequest
-	(*UpdateUserPostStatusReply)(nil),   // 16: api.user.post.v1.UpdateUserPostStatusReply
+	(*CatInfo)(nil),                     // 7: api.user.post.v1.CatInfo
+	(*UserInfo)(nil),                    // 8: api.user.post.v1.UserInfo
+	(*UserPostInfo)(nil),                // 9: api.user.post.v1.UserPostInfo
+	(*GetUserPostReply)(nil),            // 10: api.user.post.v1.GetUserPostReply
+	(*CreateUserPostRequest)(nil),       // 11: api.user.post.v1.CreateUserPostRequest
+	(*CreateUserPostReply)(nil),         // 12: api.user.post.v1.CreateUserPostReply
+	(*UpdateUserPostRequest)(nil),       // 13: api.user.post.v1.UpdateUserPostRequest
+	(*UpdateUserPostReply)(nil),         // 14: api.user.post.v1.UpdateUserPostReply
+	(*DeleteUserPostRequest)(nil),       // 15: api.user.post.v1.DeleteUserPostRequest
+	(*DeleteUserPostReply)(nil),         // 16: api.user.post.v1.DeleteUserPostReply
+	(*UpdateUserPostStatusRequest)(nil), // 17: api.user.post.v1.UpdateUserPostStatusRequest
+	(*UpdateUserPostStatusReply)(nil),   // 18: api.user.post.v1.UpdateUserPostStatusReply
 }
 var file_api_user_post_v1_post_proto_depIdxs = []int32{
 	3,  // 0: api.user.post.v1.UserPostList.items:type_name -> api.user.post.v1.UserPostListItem
 	4,  // 1: api.user.post.v1.GetUserPostListReply.data:type_name -> api.user.post.v1.UserPostList
-	7,  // 2: api.user.post.v1.GetUserPostReply.data:type_name -> api.user.post.v1.UserPostInfo
-	2,  // 3: api.user.post.v1.UserPost.GetUserPostList:input_type -> api.user.post.v1.GetUserPostListRequest
-	9,  // 4: api.user.post.v1.UserPost.CreateUserPost:input_type -> api.user.post.v1.CreateUserPostRequest
-	6,  // 5: api.user.post.v1.UserPost.GetUserPost:input_type -> api.user.post.v1.GetUserPostRequest
-	11, // 6: api.user.post.v1.UserPost.UpdateUserPost:input_type -> api.user.post.v1.UpdateUserPostRequest
-	13, // 7: api.user.post.v1.UserPost.DeleteUserPost:input_type -> api.user.post.v1.DeleteUserPostRequest
-	15, // 8: api.user.post.v1.UserPost.UpdateUserPostStatus:input_type -> api.user.post.v1.UpdateUserPostStatusRequest
-	5,  // 9: api.user.post.v1.UserPost.GetUserPostList:output_type -> api.user.post.v1.GetUserPostListReply
-	10, // 10: api.user.post.v1.UserPost.CreateUserPost:output_type -> api.user.post.v1.CreateUserPostReply
-	8,  // 11: api.user.post.v1.UserPost.GetUserPost:output_type -> api.user.post.v1.GetUserPostReply
-	12, // 12: api.user.post.v1.UserPost.UpdateUserPost:output_type -> api.user.post.v1.UpdateUserPostReply
-	14, // 13: api.user.post.v1.UserPost.DeleteUserPost:output_type -> api.user.post.v1.DeleteUserPostReply
-	16, // 14: api.user.post.v1.UserPost.UpdateUserPostStatus:output_type -> api.user.post.v1.UpdateUserPostStatusReply
-	9,  // [9:15] is the sub-list for method output_type
-	3,  // [3:9] is the sub-list for method input_type
-	3,  // [3:3] is the sub-list for extension type_name
-	3,  // [3:3] is the sub-list for extension extendee
-	0,  // [0:3] is the sub-list for field type_name
+	7,  // 2: api.user.post.v1.UserPostInfo.cat:type_name -> api.user.post.v1.CatInfo
+	8,  // 3: api.user.post.v1.UserPostInfo.user:type_name -> api.user.post.v1.UserInfo
+	9,  // 4: api.user.post.v1.GetUserPostReply.data:type_name -> api.user.post.v1.UserPostInfo
+	2,  // 5: api.user.post.v1.UserPost.GetUserPostList:input_type -> api.user.post.v1.GetUserPostListRequest
+	11, // 6: api.user.post.v1.UserPost.CreateUserPost:input_type -> api.user.post.v1.CreateUserPostRequest
+	6,  // 7: api.user.post.v1.UserPost.GetUserPost:input_type -> api.user.post.v1.GetUserPostRequest
+	13, // 8: api.user.post.v1.UserPost.UpdateUserPost:input_type -> api.user.post.v1.UpdateUserPostRequest
+	15, // 9: api.user.post.v1.UserPost.DeleteUserPost:input_type -> api.user.post.v1.DeleteUserPostRequest
+	17, // 10: api.user.post.v1.UserPost.UpdateUserPostStatus:input_type -> api.user.post.v1.UpdateUserPostStatusRequest
+	5,  // 11: api.user.post.v1.UserPost.GetUserPostList:output_type -> api.user.post.v1.GetUserPostListReply
+	12, // 12: api.user.post.v1.UserPost.CreateUserPost:output_type -> api.user.post.v1.CreateUserPostReply
+	10, // 13: api.user.post.v1.UserPost.GetUserPost:output_type -> api.user.post.v1.GetUserPostReply
+	14, // 14: api.user.post.v1.UserPost.UpdateUserPost:output_type -> api.user.post.v1.UpdateUserPostReply
+	16, // 15: api.user.post.v1.UserPost.DeleteUserPost:output_type -> api.user.post.v1.DeleteUserPostReply
+	18, // 16: api.user.post.v1.UserPost.UpdateUserPostStatus:output_type -> api.user.post.v1.UpdateUserPostStatusReply
+	11, // [11:17] is the sub-list for method output_type
+	5,  // [5:11] is the sub-list for method input_type
+	5,  // [5:5] is the sub-list for extension type_name
+	5,  // [5:5] is the sub-list for extension extendee
+	0,  // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_api_user_post_v1_post_proto_init() }
@@ -1396,7 +1565,7 @@ func file_api_user_post_v1_post_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_user_post_v1_post_proto_rawDesc), len(file_api_user_post_v1_post_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   17,
+			NumMessages:   19,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

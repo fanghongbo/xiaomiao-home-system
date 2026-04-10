@@ -1581,6 +1581,25 @@ components:
                     type: string
                 updatedTime:
                     type: string
+        api.user.post.v1.CatInfo:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                catType:
+                    type: integer
+                    format: int32
+                breedType:
+                    type: integer
+                    format: int32
+                gender:
+                    type: integer
+                    format: int32
+                weight:
+                    type: number
+                    format: float
         api.user.post.v1.CreateUserPostReply:
             type: object
             properties:
@@ -1601,12 +1620,16 @@ components:
                 postType:
                     type: integer
                     format: int32
+                catId:
+                    type: string
                 provinceId:
                     type: integer
                     format: int32
                 cityId:
                     type: integer
                     format: int32
+                lostTime:
+                    type: string
                 address:
                     type: string
                 remark:
@@ -1614,10 +1637,10 @@ components:
                 catType:
                     type: integer
                     format: int32
-                catBreed:
+                breedType:
                     type: integer
                     format: int32
-                catGender:
+                gender:
                     type: integer
                     format: int32
         api.user.post.v1.DeleteUserPostReply:
@@ -1678,12 +1701,16 @@ components:
                 postType:
                     type: integer
                     format: int32
+                catId:
+                    type: string
                 provinceId:
                     type: integer
                     format: int32
                 cityId:
                     type: integer
                     format: int32
+                lostTime:
+                    type: string
                 address:
                     type: string
                 remark:
@@ -1691,10 +1718,10 @@ components:
                 catType:
                     type: integer
                     format: int32
-                catBreed:
+                breedType:
                     type: integer
                     format: int32
-                catGender:
+                gender:
                     type: integer
                     format: int32
         api.user.post.v1.UpdateUserPostStatusReply:
@@ -1717,6 +1744,13 @@ components:
                 status:
                     type: integer
                     format: int32
+        api.user.post.v1.UserInfo:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
         api.user.post.v1.UserPostInfo:
             type: object
             properties:
@@ -1727,28 +1761,21 @@ components:
                 postType:
                     type: integer
                     format: int32
+                cat:
+                    $ref: '#/components/schemas/api.user.post.v1.CatInfo'
+                user:
+                    $ref: '#/components/schemas/api.user.post.v1.UserInfo'
                 provinceId:
                     type: integer
                     format: int32
                 cityId:
                     type: integer
                     format: int32
+                lostTime:
+                    type: string
                 address:
                     type: string
                 remark:
-                    type: string
-                catType:
-                    type: integer
-                    format: int32
-                catBreed:
-                    type: integer
-                    format: int32
-                catGender:
-                    type: integer
-                    format: int32
-                createdTime:
-                    type: string
-                updatedTime:
                     type: string
         api.user.post.v1.UserPostList:
             type: object

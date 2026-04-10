@@ -19,12 +19,12 @@ import (
 )
 
 // ProviderSet is data providers.
-var ProviderSet = wire.NewSet(NewData, NewGID, NewDB, NewRDB, NewUserRepo, NewRoleRepo, NewUserPostRepo, NewUserNotificationRepo, NewUserSettingRepo, NewFileRepo, NewUserCollectRepo, NewDiscoverRepo, NewUserCatRepo)
+var ProviderSet = wire.NewSet(NewData, NewGID, NewDB, NewCache, NewUserRepo, NewRoleRepo, NewUserPostRepo, NewUserNotificationRepo, NewUserSettingRepo, NewFileRepo, NewUserCollectRepo, NewDiscoverRepo, NewUserCatRepo)
 
 // Data .
 type Data struct {
 	db       *gorm.DB
-	rdb      *redis.Client
+	cache    *redis.Client
 	log      *klog.Helper
 	config   *conf.Config
 	dbConfig *conf.Data
@@ -86,11 +86,11 @@ func NewDB(conf *conf.Data, logger klog.Logger) *gorm.DB {
 	return db
 }
 
-// NewRDB 初始化redis
-func NewRDB(conf *conf.Data, logger klog.Logger) *redis.Client {
+// NewCache 初始化redis
+func NewCache(conf *conf.Data, logger klog.Logger) *redis.Client {
 	log := klog.NewHelper(klog.With(logger, "module", "xiaomiao-home-system/data/redis"))
 
-	rdb := redis.NewClient(&redis.Options{
+	client := redis.NewClient(&redis.Options{
 		Addr:            conf.Redis.Addr,
 		Password:        conf.Redis.Password,
 		DB:              int(conf.Redis.Db),
@@ -104,13 +104,13 @@ func NewRDB(conf *conf.Data, logger klog.Logger) *redis.Client {
 		ReadTimeout:     conf.Redis.ReadTimeout.AsDuration(),
 	})
 
-	if err := rdb.Ping(context.Background()).Err(); err != nil {
+	if err := client.Ping(context.Background()).Err(); err != nil {
 		log.Fatalf("failed opening connection to redis: %v", err)
 	}
 
-	rdb.AddHook(redisotel.TracingHook{})
+	client.AddHook(redisotel.TracingHook{})
 
-	return rdb
+	return client
 }
 
 // NewData .
@@ -119,7 +119,7 @@ func NewData(dbConfig *conf.Data, config *conf.Config, static *conf.Static, jwt 
 
 	d := &Data{
 		db:       NewDB(dbConfig, logger),
-		rdb:      NewRDB(dbConfig, logger),
+		cache:    NewCache(dbConfig, logger),
 		gid:      NewGID(logger),
 		config:   config,
 		dbConfig: dbConfig,
@@ -139,7 +139,7 @@ func NewData(dbConfig *conf.Data, config *conf.Config, static *conf.Static, jwt 
 			}
 		}
 
-		if err := d.rdb.Close(); err != nil {
+		if err := d.cache.Close(); err != nil {
 			log.Error(err)
 		}
 	}, nil

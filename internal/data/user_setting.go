@@ -43,13 +43,13 @@ func NewUserSettingRepo(data *Data, logger log.Logger) biz.UserSettingRepo {
 // CheckUserSettingUpdateCountLimit 检查用户设置更新次数限制
 func (u *userSettingRepo) CheckUserSettingUpdateCountLimit(ctx context.Context, userId int64, countKeyPrefix string) error {
 	key := fmt.Sprintf("%s:%d", countKeyPrefix, userId)
-	n, err := u.data.rdb.Incr(ctx, key).Result()
+	n, err := u.data.cache.Incr(ctx, key).Result()
 	if err != nil {
 		u.log.Errorf("increase notify setting update count failed, key=%s: %v", countKeyPrefix, err)
 		return errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 	if n == 1 {
-		if err := u.data.rdb.Expire(ctx, key, userSettingUpdateCountTTL).Err(); err != nil {
+		if err := u.data.cache.Expire(ctx, key, userSettingUpdateCountTTL).Err(); err != nil {
 			u.log.Errorf("set notify setting update count ttl failed, key=%s: %v", countKeyPrefix, err)
 			return errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 		}

@@ -869,6 +869,219 @@ var _ interface {
 	ErrorName() string
 } = GetUserPostRequestValidationError{}
 
+// Validate checks the field values on CatInfo with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *CatInfo) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CatInfo with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in CatInfoMultiError, or nil if none found.
+func (m *CatInfo) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CatInfo) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	// no validation rules for Name
+
+	// no validation rules for CatType
+
+	// no validation rules for BreedType
+
+	// no validation rules for Gender
+
+	// no validation rules for Weight
+
+	if len(errors) > 0 {
+		return CatInfoMultiError(errors)
+	}
+
+	return nil
+}
+
+// CatInfoMultiError is an error wrapping multiple validation errors returned
+// by CatInfo.ValidateAll() if the designated constraints aren't met.
+type CatInfoMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CatInfoMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CatInfoMultiError) AllErrors() []error { return m }
+
+// CatInfoValidationError is the validation error returned by CatInfo.Validate
+// if the designated constraints aren't met.
+type CatInfoValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CatInfoValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CatInfoValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CatInfoValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CatInfoValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CatInfoValidationError) ErrorName() string { return "CatInfoValidationError" }
+
+// Error satisfies the builtin error interface
+func (e CatInfoValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCatInfo.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CatInfoValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CatInfoValidationError{}
+
+// Validate checks the field values on UserInfo with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *UserInfo) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on UserInfo with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in UserInfoMultiError, or nil
+// if none found.
+func (m *UserInfo) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *UserInfo) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	// no validation rules for Name
+
+	if len(errors) > 0 {
+		return UserInfoMultiError(errors)
+	}
+
+	return nil
+}
+
+// UserInfoMultiError is an error wrapping multiple validation errors returned
+// by UserInfo.ValidateAll() if the designated constraints aren't met.
+type UserInfoMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UserInfoMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UserInfoMultiError) AllErrors() []error { return m }
+
+// UserInfoValidationError is the validation error returned by
+// UserInfo.Validate if the designated constraints aren't met.
+type UserInfoValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UserInfoValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UserInfoValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UserInfoValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UserInfoValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UserInfoValidationError) ErrorName() string { return "UserInfoValidationError" }
+
+// Error satisfies the builtin error interface
+func (e UserInfoValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUserInfo.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UserInfoValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UserInfoValidationError{}
+
 // Validate checks the field values on UserPostInfo with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -897,23 +1110,73 @@ func (m *UserPostInfo) validate(all bool) error {
 
 	// no validation rules for PostType
 
+	if all {
+		switch v := interface{}(m.GetCat()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, UserPostInfoValidationError{
+					field:  "Cat",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, UserPostInfoValidationError{
+					field:  "Cat",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCat()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UserPostInfoValidationError{
+				field:  "Cat",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetUser()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, UserPostInfoValidationError{
+					field:  "User",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, UserPostInfoValidationError{
+					field:  "User",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUser()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UserPostInfoValidationError{
+				field:  "User",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	// no validation rules for ProvinceId
 
 	// no validation rules for CityId
 
+	// no validation rules for LostTime
+
 	// no validation rules for Address
 
 	// no validation rules for Remark
-
-	// no validation rules for CatType
-
-	// no validation rules for CatBreed
-
-	// no validation rules for CatGender
-
-	// no validation rules for CreatedTime
-
-	// no validation rules for UpdatedTime
 
 	if len(errors) > 0 {
 		return UserPostInfoMultiError(errors)
@@ -1171,6 +1434,17 @@ func (m *CreateUserPostRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if m.GetCatId() < 0 {
+		err := CreateUserPostRequestValidationError{
+			field:  "CatId",
+			reason: "value must be greater than or equal to 0",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if m.GetProvinceId() < 0 {
 		err := CreateUserPostRequestValidationError{
 			field:  "ProvinceId",
@@ -1193,16 +1467,9 @@ func (m *CreateUserPostRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if utf8.RuneCountInString(m.GetAddress()) < 1 {
-		err := CreateUserPostRequestValidationError{
-			field:  "Address",
-			reason: "value length must be at least 1 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
+	// no validation rules for LostTime
+
+	// no validation rules for Address
 
 	if utf8.RuneCountInString(m.GetRemark()) < 1 {
 		err := CreateUserPostRequestValidationError{
@@ -1215,38 +1482,11 @@ func (m *CreateUserPostRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if val := m.GetCatType(); val < 1 || val > 2 {
-		err := CreateUserPostRequestValidationError{
-			field:  "CatType",
-			reason: "value must be inside range [1, 2]",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
+	// no validation rules for CatType
 
-	if val := m.GetCatBreed(); val < 0 || val > 20 {
-		err := CreateUserPostRequestValidationError{
-			field:  "CatBreed",
-			reason: "value must be inside range [0, 20]",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
+	// no validation rules for BreedType
 
-	if val := m.GetCatGender(); val < 0 || val > 2 {
-		err := CreateUserPostRequestValidationError{
-			field:  "CatGender",
-			reason: "value must be inside range [0, 2]",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
+	// no validation rules for Gender
 
 	if len(errors) > 0 {
 		return CreateUserPostRequestMultiError(errors)
@@ -1493,6 +1733,17 @@ func (m *UpdateUserPostRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if m.GetCatId() < 0 {
+		err := UpdateUserPostRequestValidationError{
+			field:  "CatId",
+			reason: "value must be greater than or equal to 0",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if m.GetProvinceId() < 0 {
 		err := UpdateUserPostRequestValidationError{
 			field:  "ProvinceId",
@@ -1515,16 +1766,9 @@ func (m *UpdateUserPostRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if utf8.RuneCountInString(m.GetAddress()) < 1 {
-		err := UpdateUserPostRequestValidationError{
-			field:  "Address",
-			reason: "value length must be at least 1 runes",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
+	// no validation rules for LostTime
+
+	// no validation rules for Address
 
 	if utf8.RuneCountInString(m.GetRemark()) < 1 {
 		err := UpdateUserPostRequestValidationError{
@@ -1537,38 +1781,11 @@ func (m *UpdateUserPostRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if val := m.GetCatType(); val < 1 || val > 2 {
-		err := UpdateUserPostRequestValidationError{
-			field:  "CatType",
-			reason: "value must be inside range [1, 2]",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
+	// no validation rules for CatType
 
-	if val := m.GetCatBreed(); val < 0 || val > 20 {
-		err := UpdateUserPostRequestValidationError{
-			field:  "CatBreed",
-			reason: "value must be inside range [0, 20]",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
+	// no validation rules for BreedType
 
-	if val := m.GetCatGender(); val < 0 || val > 2 {
-		err := UpdateUserPostRequestValidationError{
-			field:  "CatGender",
-			reason: "value must be inside range [0, 2]",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
+	// no validation rules for Gender
 
 	if len(errors) > 0 {
 		return UpdateUserPostRequestMultiError(errors)
