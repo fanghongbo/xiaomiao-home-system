@@ -103,7 +103,7 @@ func (u *userPostRepo) GetUserPostList(ctx context.Context, req *v1.GetUserPostL
 }
 
 // CheckPostParams 检查发布内容参数
-func (u *userPostRepo) CheckPostParams(req *v1.CreateUserPostRequest) error {
+func (u *userPostRepo) CheckCreateUserPostParams(req *v1.CreateUserPostRequest) error {
 	if len(req.Title) > 64 {
 		return fmt.Errorf("标题长度不能超过64个字符")
 	}
@@ -131,7 +131,7 @@ func (u *userPostRepo) CheckPostParams(req *v1.CreateUserPostRequest) error {
 			}
 
 			// Gender
-			if req.Gender < 1 || req.Gender > 2 {
+			if req.Gender < 0 || req.Gender > 2 {
 				return fmt.Errorf("性别错误")
 			}
 		}
@@ -204,7 +204,7 @@ func (u *userPostRepo) CreateUserPost(ctx context.Context, req *v1.CreateUserPos
 	}
 
 	// 检查发布内容参数
-	err = u.CheckPostParams(req)
+	err = u.CheckCreateUserPostParams(req)
 	if err != nil {
 		u.log.Errorf("check post params failed: %v", err)
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), err.Error())
@@ -226,15 +226,22 @@ func (u *userPostRepo) CreateUserPost(ctx context.Context, req *v1.CreateUserPos
 		postInfo["city_id"] = req.CityId
 		postInfo["province_id"] = req.ProvinceId
 		postInfo["address"] = req.Address
+		postInfo["lost_time"] = nil
 	case 2: // 寻猫
 		postInfo["lost_time"] = req.LostTime
 		postInfo["city_id"] = req.CityId
 		postInfo["province_id"] = req.ProvinceId
 		postInfo["address"] = req.Address
 	case 3: // 日常
-		// todo: check catId
+		postInfo["lost_time"] = nil
+		postInfo["city_id"] = 0
+		postInfo["province_id"] = 0
+		postInfo["address"] = nil
 	case 4: // 求助
-		// todo: check catId
+		postInfo["lost_time"] = nil
+		postInfo["city_id"] = 0
+		postInfo["province_id"] = 0
+		postInfo["address"] = nil
 	default:
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "发布类型错误")
 	}
@@ -331,6 +338,93 @@ func (u *userPostRepo) CreateUserPost(ctx context.Context, req *v1.CreateUserPos
 	}, nil
 }
 
+// CheckUpdateUserPostParams 检查发布内容参数
+func (u *userPostRepo) CheckUpdateUserPostParams(req *v1.UpdateUserPostRequest) error {
+	if len(req.Title) > 64 {
+		return fmt.Errorf("标题长度不能超过64个字符")
+	}
+
+	if len(req.Title) < 1 {
+		return fmt.Errorf("标题不能为空")
+	}
+
+	// postType
+	if req.PostType < 1 || req.PostType > 4 {
+		return fmt.Errorf("发布类型错误")
+	}
+
+	// remark
+	if len(req.Remark) > 500 || len(req.Remark) < 1 {
+		return fmt.Errorf("描述长度不能超过500个字符，且不能为空")
+	}
+
+	switch req.PostType {
+	case 1: // 领养
+		if req.CatType == 1 {
+			// BreedType
+			if req.BreedType < 1 || req.BreedType > 10 {
+				return fmt.Errorf("品种类型错误")
+			}
+
+			// Gender
+			if req.Gender < 0 || req.Gender > 2 {
+				return fmt.Errorf("性别错误")
+			}
+		}
+
+		// CityId
+		if req.CityId < 1 {
+			return fmt.Errorf("城市错误")
+		}
+
+		// ProvinceId
+		if req.ProvinceId < 1 {
+			return fmt.Errorf("省份错误")
+		}
+
+		// Address
+		if len(req.Address) > 255 || len(req.Address) < 1 {
+			return fmt.Errorf("地址长度不能超过255个字符，且不能为空")
+		}
+	case 2: // 寻猫
+		if req.CatId < 1 {
+			return fmt.Errorf("小猫id错误")
+		}
+
+		// LostTime
+		if len(req.LostTime) < 1 {
+			return fmt.Errorf("丢失时间不能为空")
+		}
+
+		// CityId
+		if req.CityId < 1 {
+			return fmt.Errorf("城市错误")
+		}
+
+		// ProvinceId
+		if req.ProvinceId < 1 {
+			return fmt.Errorf("省份错误")
+		}
+
+		// Address
+		if len(req.Address) > 255 || len(req.Address) < 1 {
+			return fmt.Errorf("地址长度不能超过255个字符，且不能为空")
+		}
+	case 3: // 日常
+		if req.CatId < 1 {
+			return fmt.Errorf("小猫id错误")
+		}
+	case 4: // 求助
+		if req.CatId < 1 {
+			return fmt.Errorf("小猫id错误")
+		}
+	default:
+		return fmt.Errorf("发布类型错误")
+	}
+
+	return nil
+}
+
 // UpdateUserPost 更新发布内容
 func (u *userPostRepo) UpdateUserPost(ctx context.Context, req *v1.UpdateUserPostRequest) (*v1.UpdateUserPostReply, error) {
 	userId, err := utils.GetCurrentUserId(ctx)
@@ -351,41 +445,164 @@ func (u *userPostRepo) UpdateUserPost(ctx context.Context, req *v1.UpdateUserPos
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "发布内容不存在或无权限")
 	}
 
-	// post := map[string]interface{}{
-	// 	"id":           req.Id,
-	// 	"title":        req.Title,
-	// 	"post_type":    req.PostType,
-	// 	"province_id":  req.ProvinceId,
-	// 	"city_id":      req.CityId,
-	// 	"address":      req.Address,
-	// 	"audit_status": 0,
-	// 	"post_status":  0,
-	// 	"remark":       req.Remark,
-	// 	"updated_time": time.Now(),
-	// }
+	// 检查发布内容参数
+	err = u.CheckUpdateUserPostParams(req)
+	if err != nil {
+		u.log.Errorf("check post params failed: %v", err)
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), err.Error())
+	}
 
-	// // 启动MySQL事务
-	// tx := u.data.db.Begin()
+	postInfo := map[string]interface{}{
+		"title":        req.Title,
+		"post_type":    req.PostType,
+		"remark":       req.Remark,
+		"audit_status": 0,
+		"post_status":  0,
+		"created_time": time.Now(),
+		"updated_time": time.Now(),
+	}
 
-	// result := tx.Model(&Post{}).
-	// 	Where("id = ?", req.Id).
-	// 	Where("deleted_flag = ?", 0).
-	// 	Updates(post)
-	// if result.Error != nil {
-	// 	tx.Rollback()
-	// 	u.log.Errorf("update post failed: %v", result.Error)
-	// 	return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
-	// }
-	// if result.RowsAffected == 0 {
-	// 	tx.Rollback()
-	// 	return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "发布内容不存在或无权限")
-	// }
+	switch req.PostType {
+	case 1: // 领养
+		postInfo["city_id"] = req.CityId
+		postInfo["province_id"] = req.ProvinceId
+		postInfo["address"] = req.Address
+		postInfo["lost_time"] = nil
+	case 2: // 寻猫
+		postInfo["lost_time"] = req.LostTime
+		postInfo["city_id"] = req.CityId
+		postInfo["province_id"] = req.ProvinceId
+		postInfo["address"] = req.Address
+	case 3: // 日常
+		postInfo["lost_time"] = nil
+		postInfo["city_id"] = 0
+		postInfo["province_id"] = 0
+		postInfo["address"] = nil
+	case 4: // 求助
+		postInfo["lost_time"] = nil
+		postInfo["city_id"] = 0
+		postInfo["province_id"] = 0
+		postInfo["address"] = nil
+	default:
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "发布类型错误")
+	}
 
-	// if err := tx.Commit().Error; err != nil {
-	// 	tx.Rollback()
-	// 	u.log.Errorf("update post failed: %v", err)
-	// 	return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
-	// }
+	// 查询历史已关联的小猫信息
+	catInfo, err := u.GetPostCatInfo(ctx, req.Id)
+	if err != nil {
+		u.log.Errorf("get post cat info failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	// 启动MySQL事务
+	tx := u.data.db.Begin()
+
+	if err := tx.Model(&Post{}).Where("id = ?", req.Id).Updates(postInfo).Error; err != nil {
+		tx.Rollback()
+		u.log.Errorf("create post failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	// 领养且为流浪猫类型的时候，检查是否需要重新创建小猫信息
+	if req.PostType == 1 && req.CatType == 1 {
+		// 历史关联的小猫信息如果是流浪猫类型，则直接更新这个小猫信息
+		if catInfo.CatType == 1 {
+			updateCatInfo := map[string]interface{}{
+				"name":         "流浪猫",
+				"gender":       req.Gender,
+				"cat_type":     1,
+				"breed_type":   req.BreedType,
+				"updated_time": time.Now(),
+			}
+
+			if err := tx.Model(&Cat{}).Where("id = ?", catInfo.Id).Updates(updateCatInfo).Error; err != nil {
+				tx.Rollback()
+				u.log.Errorf("update cat failed: %v", err)
+				return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+			}
+
+			req.CatId = catInfo.Id
+		} else {
+			// 如果这个小猫信息是其他类型，则需要删除这个小猫信息, 并重新创建一个流浪猫信息
+			catId, err := u.data.gid.NextID()
+			if err != nil {
+				tx.Rollback()
+				u.log.Errorf("generate cat id failed: %v", err)
+				return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+			}
+
+			catInfo := map[string]interface{}{
+				"id":           catId,
+				"name":         "流浪猫",
+				"gender":       req.Gender,
+				"cat_type":     1,
+				"breed_type":   req.BreedType,
+				"created_time": time.Now(),
+				"updated_time": time.Now(),
+			}
+
+			if err := tx.Model(&Cat{}).Create(catInfo).Error; err != nil {
+				tx.Rollback()
+				u.log.Errorf("create cat failed: %v", err)
+				return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+			}
+
+			req.CatId = int64(catId)
+		}
+	}
+
+	// 检查是否需要重新关联小猫和发布内容
+	// 如果本次修改的小猫信息和历史小猫信息不一致，则先删除历史小猫和发布内容的关联, 如果一致则不需要变更
+	if catInfo.Id != req.CatId {
+		updateInfo := map[string]interface{}{
+			"deleted_flag": 1,
+			"deleted_time": time.Now(),
+		}
+
+		// 删除历史流浪猫信息
+		if catInfo.CatType == 1 {
+			if err := tx.Model(&Cat{}).Where("id = ?", catInfo.Id).Where("deleted_flag = ?", 0).Updates(updateInfo).Error; err != nil {
+				tx.Rollback()
+				u.log.Errorf("delete cat failed: %v", err)
+				return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+			}
+		}
+
+		// 删除历史关联的小猫和发布内容的关联信息
+		if err := tx.Model(&PostCat{}).Where("post_id = ?", req.Id).Where("cat_id = ?", catInfo.Id).Where("deleted_flag = ?", 0).Updates(updateInfo).Error; err != nil {
+			tx.Rollback()
+			u.log.Errorf("delete post cat failed: %v", err)
+			return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+		}
+
+		// 重新创建发布内容与小猫的关联
+		postCatId, err := u.data.gid.NextID()
+		if err != nil {
+			tx.Rollback()
+			u.log.Errorf("generate post cat id failed: %v", err)
+			return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+		}
+
+		postCatInfo := map[string]interface{}{
+			"id":           postCatId,
+			"post_id":      req.Id,
+			"cat_id":       req.CatId,
+			"created_time": time.Now(),
+			"updated_time": time.Now(),
+		}
+
+		if err := tx.Model(&PostCat{}).Create(postCatInfo).Error; err != nil {
+			tx.Rollback()
+			u.log.Errorf("create post cat failed: %v", err)
+			return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+		}
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		tx.Rollback()
+		u.log.Errorf("create post failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
 
 	return &v1.UpdateUserPostReply{
 		Code: 200, Success: true, Message: "修改成功",
@@ -583,11 +800,10 @@ func (u *userPostRepo) GetPostCatInfo(ctx context.Context, postId int64) (*v1.Ca
 	row := u.data.db.Table("t_cat as t1").Joins("inner join t_post_cat as t2 on t1.id = t2.cat_id").Where("t2.post_id = ?", postId).Where("t2.deleted_flag = ?", 0).Where("t1.deleted_flag = ?", 0).Select("t1.id", "t1.name", "t1.cat_type", "t1.breed_type", "t1.gender", "t1.weight").Limit(1).Row()
 
 	if err := row.Scan(&id, &name, &catType, &breedType, &gender, &weight); err != nil {
-		u.log.Errorf("get post cat info failed: %v", err)
 		if err == gorm.ErrRecordNotFound {
-			return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "小猫不存在")
+			return nil, fmt.Errorf("小猫不存在")
 		}
-		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+		return nil, err
 	}
 
 	return &v1.CatInfo{
