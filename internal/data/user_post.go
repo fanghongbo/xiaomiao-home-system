@@ -580,7 +580,7 @@ func (u *userPostRepo) GetPostCatInfo(ctx context.Context, postId int64) (*v1.Ca
 		weight    float32
 	)
 
-	row := u.data.db.Table("t_post_cat as t1").Joins("inner join t_cat as t2 on t1.cat_id = t2.id").Where("t1.post_id = ?", postId).Where("t2.deleted_flag = ?", 0).Where("t1.deleted_flag = ?", 0).Select("t2.id", "t2.name", "t2.cat_type", "t2.breed_type", "t2.gender", "t2.weight").Limit(1).Row()
+	row := u.data.db.Table("t_cat as t1").Joins("inner join t_post_cat as t2 on t1.id = t2.cat_id").Where("t2.post_id = ?", postId).Where("t2.deleted_flag = ?", 0).Where("t1.deleted_flag = ?", 0).Select("t1.id", "t1.name", "t1.cat_type", "t1.breed_type", "t1.gender", "t1.weight").Limit(1).Row()
 
 	if err := row.Scan(&id, &name, &catType, &breedType, &gender, &weight); err != nil {
 		u.log.Errorf("get post cat info failed: %v", err)
