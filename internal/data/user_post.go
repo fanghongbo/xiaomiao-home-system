@@ -104,11 +104,11 @@ func (u *userPostRepo) GetUserPostList(ctx context.Context, req *v1.GetUserPostL
 
 // CheckPostParams 检查发布内容参数
 func (u *userPostRepo) CheckCreateUserPostParams(req *v1.CreateUserPostRequest) error {
-	if len(req.Title) > 64 {
+	if utils.GetUtf8RuneCount(req.Title) > 64 {
 		return fmt.Errorf("标题长度不能超过64个字符")
 	}
 
-	if len(req.Title) < 1 {
+	if utils.GetUtf8RuneCount(req.Title) < 1 {
 		return fmt.Errorf("标题不能为空")
 	}
 
@@ -118,7 +118,7 @@ func (u *userPostRepo) CheckCreateUserPostParams(req *v1.CreateUserPostRequest) 
 	}
 
 	// remark
-	if len(req.Remark) > 500 || len(req.Remark) < 1 {
+	if utils.GetUtf8RuneCount(req.Remark) > 500 || utils.GetUtf8RuneCount(req.Remark) < 1 {
 		return fmt.Errorf("描述长度不能超过500个字符，且不能为空")
 	}
 
@@ -147,7 +147,7 @@ func (u *userPostRepo) CheckCreateUserPostParams(req *v1.CreateUserPostRequest) 
 		}
 
 		// Address
-		if len(req.Address) > 255 || len(req.Address) < 1 {
+		if utils.GetUtf8RuneCount(req.Address) > 255 || utils.GetUtf8RuneCount(req.Address) < 1 {
 			return fmt.Errorf("地址长度不能超过255个字符，且不能为空")
 		}
 	case 2: // 寻猫
@@ -171,7 +171,7 @@ func (u *userPostRepo) CheckCreateUserPostParams(req *v1.CreateUserPostRequest) 
 		}
 
 		// Address
-		if len(req.Address) > 255 || len(req.Address) < 1 {
+		if utils.GetUtf8RuneCount(req.Address) > 255 || utils.GetUtf8RuneCount(req.Address) < 1 {
 			return fmt.Errorf("地址长度不能超过255个字符，且不能为空")
 		}
 	case 3: // 日常
@@ -340,11 +340,11 @@ func (u *userPostRepo) CreateUserPost(ctx context.Context, req *v1.CreateUserPos
 
 // CheckUpdateUserPostParams 检查发布内容参数
 func (u *userPostRepo) CheckUpdateUserPostParams(req *v1.UpdateUserPostRequest) error {
-	if len(req.Title) > 64 {
+	if utils.GetUtf8RuneCount(req.Title) > 64 {
 		return fmt.Errorf("标题长度不能超过64个字符")
 	}
 
-	if len(req.Title) < 1 {
+	if utils.GetUtf8RuneCount(req.Title) < 1 {
 		return fmt.Errorf("标题不能为空")
 	}
 
@@ -354,7 +354,7 @@ func (u *userPostRepo) CheckUpdateUserPostParams(req *v1.UpdateUserPostRequest) 
 	}
 
 	// remark
-	if len(req.Remark) > 500 || len(req.Remark) < 1 {
+	if utils.GetUtf8RuneCount(req.Remark) > 500 || utils.GetUtf8RuneCount(req.Remark) < 1 {
 		return fmt.Errorf("描述长度不能超过500个字符，且不能为空")
 	}
 
@@ -383,7 +383,7 @@ func (u *userPostRepo) CheckUpdateUserPostParams(req *v1.UpdateUserPostRequest) 
 		}
 
 		// Address
-		if len(req.Address) > 255 || len(req.Address) < 1 {
+		if utils.GetUtf8RuneCount(req.Address) > 255 || utils.GetUtf8RuneCount(req.Address) < 1 {
 			return fmt.Errorf("地址长度不能超过255个字符，且不能为空")
 		}
 	case 2: // 寻猫
