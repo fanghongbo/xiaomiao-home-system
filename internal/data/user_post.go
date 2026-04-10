@@ -458,7 +458,6 @@ func (u *userPostRepo) UpdateUserPost(ctx context.Context, req *v1.UpdateUserPos
 		"remark":       req.Remark,
 		"audit_status": 0,
 		"post_status":  0,
-		"created_time": time.Now(),
 		"updated_time": time.Now(),
 	}
 
@@ -634,8 +633,16 @@ func (u *userPostRepo) DeleteUserPost(ctx context.Context, req *v1.DeleteUserPos
 		"deleted_time": time.Now(),
 	}
 
+	// 查询历史已关联的小猫信息
+	catInfo, err := u.GetPostCatInfo(ctx, req.Id)
+	if err != nil {
+		u.log.Errorf("get post cat info failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
 	tx := u.data.db.Begin()
 
+	// 删除发布内容
 	result := tx.Model(&Post{}).Where("id = ?", req.Id).Where("deleted_flag = ?", 0).Updates(updateInfo)
 
 	if result.Error != nil {
@@ -643,20 +650,46 @@ func (u *userPostRepo) DeleteUserPost(ctx context.Context, req *v1.DeleteUserPos
 		u.log.Errorf("delete post failed: %v", result.Error)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
+
 	if result.RowsAffected == 0 {
 		tx.Rollback()
 		return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "发布内容不存在或无权限")
 	}
 
+	// 删除用户发布内容关联信息
 	result = tx.Model(&UserPost{}).Where("post_id = ?", req.Id).Where("user_id = ?", userId).Where("deleted_flag = ?", 0).Updates(updateInfo)
 	if result.Error != nil {
 		tx.Rollback()
 		u.log.Errorf("delete user post failed: %v", result.Error)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
+
 	if result.RowsAffected == 0 {
 		tx.Rollback()
 		return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "发布内容不存在或无权限")
+	}
+
+	// 删除发布内容和小猫关联
+	result = tx.Model(&PostCat{}).Where("post_id = ?", req.Id).Where("cat_id = ?", catInfo.Id).Where("deleted_flag = ?", 0).Updates(updateInfo)
+	if result.Error != nil {
+		tx.Rollback()
+		u.log.Errorf("delete post cat failed: %v", result.Error)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	if result.RowsAffected == 0 {
+		tx.Rollback()
+		return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "发布内容和小猫关联不存在或无权限")
+	}
+
+	// 删除小猫信息
+	if catInfo.CatType == 1 {
+		result = tx.Model(&Cat{}).Where("id = ?", catInfo.Id).Where("deleted_flag = ?", 0).Updates(updateInfo)
+		if result.Error != nil {
+			tx.Rollback()
+			u.log.Errorf("delete cat failed: %v", result.Error)
+			return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+		}
 	}
 
 	if err := tx.Commit().Error; err != nil {
