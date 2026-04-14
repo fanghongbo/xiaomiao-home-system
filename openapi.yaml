@@ -954,6 +954,9 @@ components:
                 auditStatus:
                     type: integer
                     format: int32
+                collectStatus:
+                    type: integer
+                    format: int32
                 coverImage:
                     type: string
                 remark:
@@ -1530,6 +1533,9 @@ components:
                 auditStatus:
                     type: integer
                     format: int32
+                collectStatus:
+                    type: integer
+                    format: int32
                 coverImage:
                     type: string
                 remark:
@@ -1864,6 +1870,9 @@ components:
                     type: integer
                     format: int32
                 auditStatus:
+                    type: integer
+                    format: int32
+                collectStatus:
                     type: integer
                     format: int32
                 coverImage:

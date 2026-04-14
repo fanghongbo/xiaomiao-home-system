@@ -63,13 +63,14 @@ func (u *userPostRepo) GetUserPostList(ctx context.Context, req *v1.GetUserPostL
 
 	for rows.Next() {
 		var (
-			id          int64
-			title       string
-			postStatus  int
-			auditStatus int
-			remark      string
-			createdTime time.Time
-			updatedTime time.Time
+			id            int64
+			title         string
+			postStatus    int
+			auditStatus   int
+			collectStatus int32
+			remark        string
+			createdTime   time.Time
+			updatedTime   time.Time
 		)
 
 		if err := rows.Scan(&id, &title, &postStatus, &auditStatus, &remark, &createdTime, &updatedTime); err != nil {
@@ -77,14 +78,28 @@ func (u *userPostRepo) GetUserPostList(ctx context.Context, req *v1.GetUserPostL
 			return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 		}
 
+		userCollectRepo := NewUserCollectRepo(u.data, u.log.Logger())
+		isCollect, err := userCollectRepo.GetUserPostCollectStatus(ctx, id)
+		if err != nil {
+			u.log.Errorf("get user post collect status failed: %v", err)
+			return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+		}
+
+		if isCollect {
+			collectStatus = 1
+		} else {
+			collectStatus = 0
+		}
+
 		items = append(items, &v1.UserPostListItem{
-			Id:          id,
-			Title:       title,
-			PostStatus:  int32(postStatus),
-			AuditStatus: int32(auditStatus),
-			Remark:      remark,
-			CreatedTime: createdTime.Format("2006-01-02 15:04:05"),
-			UpdatedTime: updatedTime.Format("2006-01-02 15:04:05"),
+			Id:            id,
+			Title:         title,
+			PostStatus:    int32(postStatus),
+			AuditStatus:   int32(auditStatus),
+			CollectStatus: collectStatus,
+			Remark:        remark,
+			CreatedTime:   createdTime.Format("2006-01-02 15:04:05"),
+			UpdatedTime:   updatedTime.Format("2006-01-02 15:04:05"),
 		})
 	}
 

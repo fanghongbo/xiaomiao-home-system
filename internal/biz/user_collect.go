@@ -17,6 +17,8 @@ type UserCollectRepo interface {
 	AddUserCollect(ctx context.Context, req *v1.AddUserCollectRequest) (*v1.AddUserCollectReply, error)
 	// CancelUserCollect 取消用户收藏
 	CancelUserCollect(ctx context.Context, req *v1.CancelUserCollectRequest) (*v1.CancelUserCollectReply, error)
+	// GetUserPostCollectStatus 查询用户发布内容收藏状态
+	GetUserPostCollectStatus(ctx context.Context, postId int64) (bool, error)
 }
 
 // UserCollectUsecase is a UserCollect usecase.
@@ -69,6 +71,17 @@ func (u *UserCollectUsecase) CancelUserCollect(ctx context.Context, req *v1.Canc
 
 	if err != nil {
 		return nil, err
+	}
+
+	return res, nil
+}
+
+// GetUserPostCollectStatus 查询用户发布内容收藏状态
+func (u *UserCollectUsecase) GetUserPostCollectStatus(ctx context.Context, postId int64) (bool, error) {
+	res, err := u.repo.GetUserPostCollectStatus(ctx, postId)
+
+	if err != nil {
+		return false, err
 	}
 
 	return res, nil

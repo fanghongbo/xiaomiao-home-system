@@ -26,9 +26,14 @@ func NewDiscoverRepo(data *Data, logger log.Logger) biz.DiscoverRepo {
 	}
 }
 
-// GetQueryCache 获取查询缓存
-func (u *discoverRepo) GetQueryCache(ctx context.Context, req *v1.GetDiscoverListRequest) (*v1.DiscoverList, error) {
-	redisKey := fmt.Sprintf("discover:list:%d:%d:%d:%d:%d", req.ProvinceId, req.CityId, req.PType, req.CBreed, req.Page, req.Size)
+// getQueryCacheKey 获取查询缓存key
+func (u *discoverRepo) getQueryCacheKey(req *v1.GetDiscoverListRequest) string {
+	return fmt.Sprintf("discover:list:%d:%d:%d:%d:%d:%d", req.ProvinceId, req.CityId, req.PType, req.CBreed, req.Page, req.Size)
+}
+
+// getQueryCache 获取查询缓存
+func (u *discoverRepo) getQueryCache(ctx context.Context, req *v1.GetDiscoverListRequest) (*v1.DiscoverList, error) {
+	redisKey := u.getQueryCacheKey(req)
 
 	jsonData, err := u.data.cache.Get(ctx, redisKey).Result()
 	if err != nil {
@@ -46,9 +51,9 @@ func (u *discoverRepo) GetQueryCache(ctx context.Context, req *v1.GetDiscoverLis
 	return &data, nil
 }
 
-// SetQueryCache 设置查询缓存
-func (u *discoverRepo) SetQueryCache(ctx context.Context, req *v1.GetDiscoverListRequest, data *v1.DiscoverList) error {
-	redisKey := fmt.Sprintf("discover:list:%d:%d:%d:%d:%d", req.ProvinceId, req.CityId, req.PType, req.CBreed, req.Page, req.Size)
+// setQueryCache 设置查询缓存
+func (u *discoverRepo) setQueryCache(ctx context.Context, req *v1.GetDiscoverListRequest, data *v1.DiscoverList) error {
+	redisKey := u.getQueryCacheKey(req)
 
 	jsonData, err := json.Marshal(data)
 	if err != nil {
@@ -81,7 +86,7 @@ func (u *discoverRepo) GetDiscoverList(ctx context.Context, req *v1.GetDiscoverL
 		return res, nil
 	}
 
-	cacheData, err := u.GetQueryCache(ctx, req)
+	cacheData, err := u.getQueryCache(ctx, req)
 	if err != nil {
 		u.log.Errorf("get query cache failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
@@ -121,13 +126,14 @@ func (u *discoverRepo) GetDiscoverList(ctx context.Context, req *v1.GetDiscoverL
 
 	for rows.Next() {
 		var (
-			id          int64
-			title       string
-			postStatus  int
-			auditStatus int
-			remark      string
-			createdTime time.Time
-			updatedTime time.Time
+			id            int64
+			title         string
+			postStatus    int
+			auditStatus   int
+			collectStatus int32
+			remark        string
+			createdTime   time.Time
+			updatedTime   time.Time
 		)
 
 		if err := rows.Scan(&id, &title, &postStatus, &auditStatus, &remark, &createdTime, &updatedTime); err != nil {
@@ -135,14 +141,28 @@ func (u *discoverRepo) GetDiscoverList(ctx context.Context, req *v1.GetDiscoverL
 			return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 		}
 
+		userCollectRepo := NewUserCollectRepo(u.data, u.log.Logger())
+		isCollect, err := userCollectRepo.GetUserPostCollectStatus(ctx, id)
+		if err != nil {
+			u.log.Errorf("get user post collect status failed: %v", err)
+			return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+		}
+
+		if isCollect {
+			collectStatus = 1
+		} else {
+			collectStatus = 0
+		}
+
 		items = append(items, &v1.DiscoverListItem{
-			Id:          id,
-			Title:       title,
-			PostStatus:  int32(postStatus),
-			AuditStatus: int32(auditStatus),
-			Remark:      remark,
-			CreatedTime: createdTime.Format("2006-01-02 15:04:05"),
-			UpdatedTime: updatedTime.Format("2006-01-02 15:04:05"),
+			Id:            id,
+			Title:         title,
+			PostStatus:    int32(postStatus),
+			AuditStatus:   int32(auditStatus),
+			CollectStatus: collectStatus,
+			Remark:        remark,
+			CreatedTime:   createdTime.Format("2006-01-02 15:04:05"),
+			UpdatedTime:   updatedTime.Format("2006-01-02 15:04:05"),
 		})
 	}
 
@@ -154,7 +174,7 @@ func (u *discoverRepo) GetDiscoverList(ctx context.Context, req *v1.GetDiscoverL
 	res.Data.Items = items
 	res.Data.Total = total
 
-	if err := u.SetQueryCache(ctx, req, res.Data); err != nil {
+	if err := u.setQueryCache(ctx, req, res.Data); err != nil {
 		u.log.Errorf("set query cache failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}

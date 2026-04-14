@@ -2,6 +2,7 @@ package data
 
 import (
 	"context"
+	"fmt"
 	"time"
 	v1 "xiaomiao-home-system/api/user/collect/v1"
 	"xiaomiao-home-system/internal/biz"
@@ -9,6 +10,7 @@ import (
 
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/go-redis/redis/v8"
 )
 
 type userCollectRepo struct {
@@ -71,13 +73,15 @@ func (u *userCollectRepo) GetUserCollectList(ctx context.Context, req *v1.GetUse
 		}
 
 		items = append(items, &v1.UserCollectListItem{
-			Id:          id,
-			Title:       title,
-			PostStatus:  int32(postStatus),
-			AuditStatus: int32(auditStatus),
-			Remark:      remark,
-			CreatedTime: createdTime.Format("2006-01-02 15:04:05"),
-			UpdatedTime: updatedTime.Format("2006-01-02 15:04:05"),
+			Id:            id,
+			Title:         title,
+			PostStatus:    int32(postStatus),
+			AuditStatus:   int32(auditStatus),
+			CollectStatus: 1,
+			CoverImage:    "",
+			Remark:        remark,
+			CreatedTime:   createdTime.Format("2006-01-02 15:04:05"),
+			UpdatedTime:   updatedTime.Format("2006-01-02 15:04:05"),
 		})
 	}
 
@@ -161,4 +165,69 @@ func (u *userCollectRepo) CancelUserCollect(ctx context.Context, req *v1.CancelU
 		Code: 200, Success: true, Message: "取消成功",
 		Data: "取消成功",
 	}, nil
+}
+
+// GetUserPostCollectStatus 查询用户发布内容收藏状态
+func (u *userCollectRepo) GetUserPostCollectStatus(ctx context.Context, postId int64) (bool, error) {
+	userId, err := utils.GetCurrentUserId(ctx)
+	if err != nil {
+		u.log.Errorf("get current user id failed: %v", err)
+		return false, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	var count int64
+
+	count, err = u.getUserPostCollectStatusCache(ctx, userId, postId)
+	if err != nil {
+		if !errors.Is(err, redis.Nil) {
+			u.log.Errorf("get user post collect status cache failed: %v", err)
+			return false, err
+		}
+	} else {
+		return count > 0, nil
+	}
+
+	if err := u.data.db.Model(&UserCollect{}).Where("user_id = ?", userId).Where("post_id = ?", postId).Where("deleted_flag = ?", 0).Count(&count).Error; err != nil {
+		u.log.Errorf("check user post collect status failed: %v", err)
+		return false, err
+	}
+
+	if err := u.setUserPostCollectStatusCache(ctx, userId, postId, count); err != nil {
+		u.log.Errorf("set user post collect status cache failed: %v", err)
+		return false, err
+	}
+
+	return count > 0, nil
+}
+
+// getUserPostCollectStatusCacheKey 获取查询缓存key
+func (u *userCollectRepo) getUserPostCollectStatusCacheKey(userId int64, postId int64) string {
+	return fmt.Sprintf("user:post:collect:status:%d:%d", userId, postId)
+}
+
+// getUserPostCollectStatusCache 获取用户发布内容收藏状态缓存
+func (u *userCollectRepo) getUserPostCollectStatusCache(ctx context.Context, userId int64, postId int64) (int64, error) {
+	redisKey := u.getUserPostCollectStatusCacheKey(userId, postId)
+
+	count, err := u.data.cache.Get(ctx, redisKey).Int64()
+	if err != nil {
+		if err == redis.Nil {
+			return 0, nil
+		}
+		return 0, err
+	}
+
+	return count, nil
+}
+
+// setUserPostCollectStatusCache 设置用户发布内容收藏状态缓存
+func (u *userCollectRepo) setUserPostCollectStatusCache(ctx context.Context, userId int64, postId int64, count int64) error {
+	redisKey := u.getUserPostCollectStatusCacheKey(userId, postId)
+
+	ttl := time.Minute * 1
+	if err := u.data.cache.Set(ctx, redisKey, count, ttl).Err(); err != nil {
+		return err
+	}
+
+	return nil
 }

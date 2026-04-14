@@ -74,10 +74,11 @@ message UserPostListItem {
 	string title = 2;
 	int32 postStatus = 3;
 	int32 auditStatus = 4;
-	string coverImage = 5;
-	string remark = 6;
-	string createdTime = 7;
-	string updatedTime = 8;
+	int32 collectStatus = 5;
+	string coverImage = 7;
+	string remark = 8;
+	string createdTime = 9;
+	string updatedTime = 10;
 }
 
 message UserPostList {
