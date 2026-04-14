@@ -32,7 +32,6 @@ message GetDiscoverListRequest {
 	int32 city_id = 4 [(validate.rules).int32 = {gte: 0}];
 	int32 p_type = 5 [(validate.rules).int32 = {gte: 0, lte: 4}];
 	int32 c_breed = 6 [(validate.rules).int32 = {gte: 0, lte: 20}];
-	int32 c_type = 7 [(validate.rules).int32 = {gte: 0, lte: 2}];
 }
 
 message DiscoverListItem {
