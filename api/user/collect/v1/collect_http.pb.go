@@ -19,10 +19,16 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
+const OperationUserCollectAddUserCollect = "/api.user.collect.v1.UserCollect/AddUserCollect"
+const OperationUserCollectCancelUserCollect = "/api.user.collect.v1.UserCollect/CancelUserCollect"
 const OperationUserCollectGetUserCollectList = "/api.user.collect.v1.UserCollect/GetUserCollectList"
 const OperationUserCollectGetUserCollectTypes = "/api.user.collect.v1.UserCollect/GetUserCollectTypes"
 
 type UserCollectHTTPServer interface {
+	// AddUserCollect AddUserCollect 添加用户收藏
+	AddUserCollect(context.Context, *AddUserCollectRequest) (*AddUserCollectReply, error)
+	// CancelUserCollect CancelUserCollect 取消用户收藏
+	CancelUserCollect(context.Context, *CancelUserCollectRequest) (*CancelUserCollectReply, error)
 	// GetUserCollectList GetUserCollectList 查询用户收藏列表
 	GetUserCollectList(context.Context, *GetUserCollectListRequest) (*GetUserCollectListReply, error)
 	// GetUserCollectTypes GetUserCollectTypes 查询用户收藏分类
@@ -33,6 +39,8 @@ func RegisterUserCollectHTTPServer(s *http.Server, srv UserCollectHTTPServer) {
 	r := s.Route("/")
 	r.GET("/api/v1/user/collect/list", _UserCollect_GetUserCollectList0_HTTP_Handler(srv))
 	r.GET("/api/v1/user/collect/types", _UserCollect_GetUserCollectTypes0_HTTP_Handler(srv))
+	r.POST("/api/v1/user/collect/add", _UserCollect_AddUserCollect0_HTTP_Handler(srv))
+	r.POST("/api/v1/user/collect/cancel", _UserCollect_CancelUserCollect0_HTTP_Handler(srv))
 }
 
 func _UserCollect_GetUserCollectList0_HTTP_Handler(srv UserCollectHTTPServer) func(ctx http.Context) error {
@@ -73,7 +81,55 @@ func _UserCollect_GetUserCollectTypes0_HTTP_Handler(srv UserCollectHTTPServer) f
 	}
 }
 
+func _UserCollect_AddUserCollect0_HTTP_Handler(srv UserCollectHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in AddUserCollectRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationUserCollectAddUserCollect)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.AddUserCollect(ctx, req.(*AddUserCollectRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*AddUserCollectReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _UserCollect_CancelUserCollect0_HTTP_Handler(srv UserCollectHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in CancelUserCollectRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationUserCollectCancelUserCollect)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.CancelUserCollect(ctx, req.(*CancelUserCollectRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*CancelUserCollectReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type UserCollectHTTPClient interface {
+	// AddUserCollect AddUserCollect 添加用户收藏
+	AddUserCollect(ctx context.Context, req *AddUserCollectRequest, opts ...http.CallOption) (rsp *AddUserCollectReply, err error)
+	// CancelUserCollect CancelUserCollect 取消用户收藏
+	CancelUserCollect(ctx context.Context, req *CancelUserCollectRequest, opts ...http.CallOption) (rsp *CancelUserCollectReply, err error)
 	// GetUserCollectList GetUserCollectList 查询用户收藏列表
 	GetUserCollectList(ctx context.Context, req *GetUserCollectListRequest, opts ...http.CallOption) (rsp *GetUserCollectListReply, err error)
 	// GetUserCollectTypes GetUserCollectTypes 查询用户收藏分类
@@ -86,6 +142,34 @@ type UserCollectHTTPClientImpl struct {
 
 func NewUserCollectHTTPClient(client *http.Client) UserCollectHTTPClient {
 	return &UserCollectHTTPClientImpl{client}
+}
+
+// AddUserCollect AddUserCollect 添加用户收藏
+func (c *UserCollectHTTPClientImpl) AddUserCollect(ctx context.Context, in *AddUserCollectRequest, opts ...http.CallOption) (*AddUserCollectReply, error) {
+	var out AddUserCollectReply
+	pattern := "/api/v1/user/collect/add"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationUserCollectAddUserCollect))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// CancelUserCollect CancelUserCollect 取消用户收藏
+func (c *UserCollectHTTPClientImpl) CancelUserCollect(ctx context.Context, in *CancelUserCollectRequest, opts ...http.CallOption) (*CancelUserCollectReply, error) {
+	var out CancelUserCollectReply
+	pattern := "/api/v1/user/collect/cancel"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationUserCollectCancelUserCollect))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
 }
 
 // GetUserCollectList GetUserCollectList 查询用户收藏列表

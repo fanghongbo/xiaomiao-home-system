@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v7.34.1
-// source: api/discover/v1/discover.proto
+// source: discover/v1/discover.proto
 
 package v1
 
@@ -32,7 +32,7 @@ type BaseRequest struct {
 
 func (x *BaseRequest) Reset() {
 	*x = BaseRequest{}
-	mi := &file_api_discover_v1_discover_proto_msgTypes[0]
+	mi := &file_discover_v1_discover_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -44,7 +44,7 @@ func (x *BaseRequest) String() string {
 func (*BaseRequest) ProtoMessage() {}
 
 func (x *BaseRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_discover_v1_discover_proto_msgTypes[0]
+	mi := &file_discover_v1_discover_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -57,7 +57,7 @@ func (x *BaseRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BaseRequest.ProtoReflect.Descriptor instead.
 func (*BaseRequest) Descriptor() ([]byte, []int) {
-	return file_api_discover_v1_discover_proto_rawDescGZIP(), []int{0}
+	return file_discover_v1_discover_proto_rawDescGZIP(), []int{0}
 }
 
 // 基础响应体
@@ -69,7 +69,7 @@ type BaseResponse struct {
 
 func (x *BaseResponse) Reset() {
 	*x = BaseResponse{}
-	mi := &file_api_discover_v1_discover_proto_msgTypes[1]
+	mi := &file_discover_v1_discover_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -81,7 +81,7 @@ func (x *BaseResponse) String() string {
 func (*BaseResponse) ProtoMessage() {}
 
 func (x *BaseResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_discover_v1_discover_proto_msgTypes[1]
+	mi := &file_discover_v1_discover_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -94,7 +94,7 @@ func (x *BaseResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BaseResponse.ProtoReflect.Descriptor instead.
 func (*BaseResponse) Descriptor() ([]byte, []int) {
-	return file_api_discover_v1_discover_proto_rawDescGZIP(), []int{1}
+	return file_discover_v1_discover_proto_rawDescGZIP(), []int{1}
 }
 
 type GetDiscoverListRequest struct {
@@ -105,14 +105,13 @@ type GetDiscoverListRequest struct {
 	CityId        int32                  `protobuf:"varint,4,opt,name=city_id,json=cityId,proto3" json:"city_id,omitempty"`
 	PType         int32                  `protobuf:"varint,5,opt,name=p_type,json=pType,proto3" json:"p_type,omitempty"`
 	CBreed        int32                  `protobuf:"varint,6,opt,name=c_breed,json=cBreed,proto3" json:"c_breed,omitempty"`
-	CType         int32                  `protobuf:"varint,7,opt,name=c_type,json=cType,proto3" json:"c_type,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GetDiscoverListRequest) Reset() {
 	*x = GetDiscoverListRequest{}
-	mi := &file_api_discover_v1_discover_proto_msgTypes[2]
+	mi := &file_discover_v1_discover_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -124,7 +123,7 @@ func (x *GetDiscoverListRequest) String() string {
 func (*GetDiscoverListRequest) ProtoMessage() {}
 
 func (x *GetDiscoverListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_discover_v1_discover_proto_msgTypes[2]
+	mi := &file_discover_v1_discover_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -137,7 +136,7 @@ func (x *GetDiscoverListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetDiscoverListRequest.ProtoReflect.Descriptor instead.
 func (*GetDiscoverListRequest) Descriptor() ([]byte, []int) {
-	return file_api_discover_v1_discover_proto_rawDescGZIP(), []int{2}
+	return file_discover_v1_discover_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *GetDiscoverListRequest) GetPage() int32 {
@@ -182,13 +181,6 @@ func (x *GetDiscoverListRequest) GetCBreed() int32 {
 	return 0
 }
 
-func (x *GetDiscoverListRequest) GetCType() int32 {
-	if x != nil {
-		return x.CType
-	}
-	return 0
-}
-
 type DiscoverListItem struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -205,7 +197,7 @@ type DiscoverListItem struct {
 
 func (x *DiscoverListItem) Reset() {
 	*x = DiscoverListItem{}
-	mi := &file_api_discover_v1_discover_proto_msgTypes[3]
+	mi := &file_discover_v1_discover_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -217,7 +209,7 @@ func (x *DiscoverListItem) String() string {
 func (*DiscoverListItem) ProtoMessage() {}
 
 func (x *DiscoverListItem) ProtoReflect() protoreflect.Message {
-	mi := &file_api_discover_v1_discover_proto_msgTypes[3]
+	mi := &file_discover_v1_discover_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -230,7 +222,7 @@ func (x *DiscoverListItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DiscoverListItem.ProtoReflect.Descriptor instead.
 func (*DiscoverListItem) Descriptor() ([]byte, []int) {
-	return file_api_discover_v1_discover_proto_rawDescGZIP(), []int{3}
+	return file_discover_v1_discover_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *DiscoverListItem) GetId() int64 {
@@ -299,7 +291,7 @@ type DiscoverList struct {
 
 func (x *DiscoverList) Reset() {
 	*x = DiscoverList{}
-	mi := &file_api_discover_v1_discover_proto_msgTypes[4]
+	mi := &file_discover_v1_discover_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -311,7 +303,7 @@ func (x *DiscoverList) String() string {
 func (*DiscoverList) ProtoMessage() {}
 
 func (x *DiscoverList) ProtoReflect() protoreflect.Message {
-	mi := &file_api_discover_v1_discover_proto_msgTypes[4]
+	mi := &file_discover_v1_discover_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -324,7 +316,7 @@ func (x *DiscoverList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DiscoverList.ProtoReflect.Descriptor instead.
 func (*DiscoverList) Descriptor() ([]byte, []int) {
-	return file_api_discover_v1_discover_proto_rawDescGZIP(), []int{4}
+	return file_discover_v1_discover_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *DiscoverList) GetItems() []*DiscoverListItem {
@@ -353,7 +345,7 @@ type GetDiscoverListReply struct {
 
 func (x *GetDiscoverListReply) Reset() {
 	*x = GetDiscoverListReply{}
-	mi := &file_api_discover_v1_discover_proto_msgTypes[5]
+	mi := &file_discover_v1_discover_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -365,7 +357,7 @@ func (x *GetDiscoverListReply) String() string {
 func (*GetDiscoverListReply) ProtoMessage() {}
 
 func (x *GetDiscoverListReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_discover_v1_discover_proto_msgTypes[5]
+	mi := &file_discover_v1_discover_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -378,7 +370,7 @@ func (x *GetDiscoverListReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetDiscoverListReply.ProtoReflect.Descriptor instead.
 func (*GetDiscoverListReply) Descriptor() ([]byte, []int) {
-	return file_api_discover_v1_discover_proto_rawDescGZIP(), []int{5}
+	return file_discover_v1_discover_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *GetDiscoverListReply) GetCode() int32 {
@@ -409,13 +401,13 @@ func (x *GetDiscoverListReply) GetData() *DiscoverList {
 	return nil
 }
 
-var File_api_discover_v1_discover_proto protoreflect.FileDescriptor
+var File_discover_v1_discover_proto protoreflect.FileDescriptor
 
-const file_api_discover_v1_discover_proto_rawDesc = "" +
+const file_discover_v1_discover_proto_rawDesc = "" +
 	"\n" +
-	"\x1eapi/discover/v1/discover.proto\x12\x0fapi.discover.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\"\r\n" +
+	"\x1adiscover/v1/discover.proto\x12\x0fapi.discover.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x17validate/validate.proto\"\r\n" +
 	"\vBaseRequest\"\x0e\n" +
-	"\fBaseResponse\"\x89\x02\n" +
+	"\fBaseResponse\"\xe7\x01\n" +
 	"\x16GetDiscoverListRequest\x12\x1b\n" +
 	"\x04page\x18\x01 \x01(\x05B\a\xfaB\x04\x1a\x02(\x01R\x04page\x12\x1e\n" +
 	"\x04size\x18\x02 \x01(\x05B\n" +
@@ -425,8 +417,7 @@ const file_api_discover_v1_discover_proto_rawDesc = "" +
 	"provinceId\x12 \n" +
 	"\acity_id\x18\x04 \x01(\x05B\a\xfaB\x04\x1a\x02(\x00R\x06cityId\x12 \n" +
 	"\x06p_type\x18\x05 \x01(\x05B\t\xfaB\x06\x1a\x04\x18\x04(\x00R\x05pType\x12\"\n" +
-	"\ac_breed\x18\x06 \x01(\x05B\t\xfaB\x06\x1a\x04\x18\x14(\x00R\x06cBreed\x12 \n" +
-	"\x06c_type\x18\a \x01(\x05B\t\xfaB\x06\x1a\x04\x18\x02(\x00R\x05cType\"\xf6\x01\n" +
+	"\ac_breed\x18\x06 \x01(\x05B\t\xfaB\x06\x1a\x04\x18\x14(\x00R\x06cBreed\"\xf6\x01\n" +
 	"\x10DiscoverListItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x14\n" +
 	"\x05title\x18\x02 \x01(\tR\x05title\x12\x1e\n" +
@@ -453,19 +444,19 @@ const file_api_discover_v1_discover_proto_rawDesc = "" +
 	"\x0fapi.discover.v1B\x0fDiscoverProtoV1P\x01Z'xiaomiao-home-system/api/discover/v1;v1b\x06proto3"
 
 var (
-	file_api_discover_v1_discover_proto_rawDescOnce sync.Once
-	file_api_discover_v1_discover_proto_rawDescData []byte
+	file_discover_v1_discover_proto_rawDescOnce sync.Once
+	file_discover_v1_discover_proto_rawDescData []byte
 )
 
-func file_api_discover_v1_discover_proto_rawDescGZIP() []byte {
-	file_api_discover_v1_discover_proto_rawDescOnce.Do(func() {
-		file_api_discover_v1_discover_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_api_discover_v1_discover_proto_rawDesc), len(file_api_discover_v1_discover_proto_rawDesc)))
+func file_discover_v1_discover_proto_rawDescGZIP() []byte {
+	file_discover_v1_discover_proto_rawDescOnce.Do(func() {
+		file_discover_v1_discover_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_discover_v1_discover_proto_rawDesc), len(file_discover_v1_discover_proto_rawDesc)))
 	})
-	return file_api_discover_v1_discover_proto_rawDescData
+	return file_discover_v1_discover_proto_rawDescData
 }
 
-var file_api_discover_v1_discover_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
-var file_api_discover_v1_discover_proto_goTypes = []any{
+var file_discover_v1_discover_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_discover_v1_discover_proto_goTypes = []any{
 	(*BaseRequest)(nil),            // 0: api.discover.v1.BaseRequest
 	(*BaseResponse)(nil),           // 1: api.discover.v1.BaseResponse
 	(*GetDiscoverListRequest)(nil), // 2: api.discover.v1.GetDiscoverListRequest
@@ -473,7 +464,7 @@ var file_api_discover_v1_discover_proto_goTypes = []any{
 	(*DiscoverList)(nil),           // 4: api.discover.v1.DiscoverList
 	(*GetDiscoverListReply)(nil),   // 5: api.discover.v1.GetDiscoverListReply
 }
-var file_api_discover_v1_discover_proto_depIdxs = []int32{
+var file_discover_v1_discover_proto_depIdxs = []int32{
 	3, // 0: api.discover.v1.DiscoverList.items:type_name -> api.discover.v1.DiscoverListItem
 	4, // 1: api.discover.v1.GetDiscoverListReply.data:type_name -> api.discover.v1.DiscoverList
 	2, // 2: api.discover.v1.Discover.GetDiscoverList:input_type -> api.discover.v1.GetDiscoverListRequest
@@ -485,26 +476,26 @@ var file_api_discover_v1_discover_proto_depIdxs = []int32{
 	0, // [0:2] is the sub-list for field type_name
 }
 
-func init() { file_api_discover_v1_discover_proto_init() }
-func file_api_discover_v1_discover_proto_init() {
-	if File_api_discover_v1_discover_proto != nil {
+func init() { file_discover_v1_discover_proto_init() }
+func file_discover_v1_discover_proto_init() {
+	if File_discover_v1_discover_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_discover_v1_discover_proto_rawDesc), len(file_api_discover_v1_discover_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_discover_v1_discover_proto_rawDesc), len(file_discover_v1_discover_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_api_discover_v1_discover_proto_goTypes,
-		DependencyIndexes: file_api_discover_v1_discover_proto_depIdxs,
-		MessageInfos:      file_api_discover_v1_discover_proto_msgTypes,
+		GoTypes:           file_discover_v1_discover_proto_goTypes,
+		DependencyIndexes: file_discover_v1_discover_proto_depIdxs,
+		MessageInfos:      file_discover_v1_discover_proto_msgTypes,
 	}.Build()
-	File_api_discover_v1_discover_proto = out.File
-	file_api_discover_v1_discover_proto_goTypes = nil
-	file_api_discover_v1_discover_proto_depIdxs = nil
+	File_discover_v1_discover_proto = out.File
+	file_discover_v1_discover_proto_goTypes = nil
+	file_discover_v1_discover_proto_depIdxs = nil
 }

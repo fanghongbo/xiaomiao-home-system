@@ -62,11 +62,6 @@ paths:
                   schema:
                     type: integer
                     format: int32
-                - name: cType
-                  in: query
-                  schema:
-                    type: integer
-                    format: int32
             responses:
                 "200":
                     description: OK
@@ -432,6 +427,44 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.user.cat.v1.GetUserCatsReply'
+    /api/v1/user/collect/add:
+        post:
+            tags:
+                - UserCollect
+            description: AddUserCollect 添加用户收藏
+            operationId: UserCollect_AddUserCollect
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.user.collect.v1.AddUserCollectRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.collect.v1.AddUserCollectReply'
+    /api/v1/user/collect/cancel:
+        post:
+            tags:
+                - UserCollect
+            description: CancelUserCollect 取消用户收藏
+            operationId: UserCollect_CancelUserCollect
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.user.collect.v1.CancelUserCollectRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.collect.v1.CancelUserCollectReply'
     /api/v1/user/collect/list:
         get:
             tags:
@@ -1414,6 +1447,40 @@ components:
                     type: integer
                     format: int32
                 remark:
+                    type: string
+        api.user.collect.v1.AddUserCollectReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: string
+        api.user.collect.v1.AddUserCollectRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+        api.user.collect.v1.CancelUserCollectReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: string
+        api.user.collect.v1.CancelUserCollectRequest:
+            type: object
+            properties:
+                id:
                     type: string
         api.user.collect.v1.GetUserCollectListReply:
             type: object

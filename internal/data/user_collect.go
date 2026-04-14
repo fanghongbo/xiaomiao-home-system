@@ -104,3 +104,61 @@ func (u *userCollectRepo) GetUserCollectTypes(ctx context.Context, req *v1.GetUs
 		Data: items,
 	}, nil
 }
+
+// AddUserCollect 添加用户收藏
+func (u *userCollectRepo) AddUserCollect(ctx context.Context, req *v1.AddUserCollectRequest) (*v1.AddUserCollectReply, error) {
+	userId, err := utils.GetCurrentUserId(ctx)
+	if err != nil {
+		u.log.Errorf("get current user id failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	id, err := u.data.gid.NextID()
+	if err != nil {
+		u.log.Errorf("generate id failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	collectInfo := map[string]interface{}{
+		"id":           id,
+		"user_id":      userId,
+		"post_id":      req.Id,
+		"deleted_flag": 0,
+		"created_time": time.Now(),
+		"updated_time": time.Now(),
+	}
+
+	if err := u.data.db.Model(&UserCollect{}).Create(collectInfo).Error; err != nil {
+		u.log.Errorf("create user collect failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	return &v1.AddUserCollectReply{
+		Code: 200, Success: true, Message: "添加成功",
+		Data: "添加成功",
+	}, nil
+}
+
+// CancelUserCollect 取消用户收藏
+func (u *userCollectRepo) CancelUserCollect(ctx context.Context, req *v1.CancelUserCollectRequest) (*v1.CancelUserCollectReply, error) {
+	userId, err := utils.GetCurrentUserId(ctx)
+	if err != nil {
+		u.log.Errorf("get current user id failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	updateInfo := map[string]interface{}{
+		"deleted_flag": 1,
+		"deleted_time": time.Now(),
+	}
+
+	if err := u.data.db.Model(&UserCollect{}).Where("user_id = ?", userId).Where("post_id = ?", req.Id).Where("deleted_flag = ?", 0).Updates(updateInfo).Error; err != nil {
+		u.log.Errorf("cancel user collect failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	return &v1.CancelUserCollectReply{
+		Code: 200, Success: true, Message: "取消成功",
+		Data: "取消成功",
+	}, nil
+}

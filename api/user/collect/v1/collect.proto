@@ -24,6 +24,22 @@ service UserCollect {
 			get: "/api/v1/user/collect/types",
 		};
 	}
+
+	// AddUserCollect 添加用户收藏
+	rpc AddUserCollect (AddUserCollectRequest) returns (AddUserCollectReply) {
+		option (google.api.http) = {
+			post: "/api/v1/user/collect/add",
+			body: "*"
+		};
+	};
+
+	// CancelUserCollect 取消用户收藏
+	rpc CancelUserCollect (CancelUserCollectRequest) returns (CancelUserCollectReply) {
+		option (google.api.http) = {
+			post: "/api/v1/user/collect/cancel",
+			body: "*"
+		};
+	};
 }
 
 // 基础请求体
@@ -68,4 +84,26 @@ message GetUserCollectTypesReply {
 	string message = 2;
 	bool success = 3;
 	repeated int64 data = 4;
+}
+
+message AddUserCollectRequest {
+	int64 id = 1 [(validate.rules).int64 = {gt: 0}];
+}
+
+message AddUserCollectReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	string data = 4;
+}
+
+message CancelUserCollectRequest {
+	int64 id = 1 [(validate.rules).int64 = {gt: 0}];
+}
+
+message CancelUserCollectReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	string data = 4;
 }

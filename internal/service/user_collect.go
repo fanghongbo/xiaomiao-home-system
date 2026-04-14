@@ -44,3 +44,23 @@ func (s *UserCollectService) GetUserCollectTypes(ctx context.Context, req *pb.Ge
 
 	return res, nil
 }
+
+// AddUserCollect 添加用户收藏
+func (s *UserCollectService) AddUserCollect(ctx context.Context, req *pb.AddUserCollectRequest) (*pb.AddUserCollectReply, error) {
+	res, err := s.userCollect.AddUserCollect(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+// CancelUserCollect 取消用户收藏
+func (s *UserCollectService) CancelUserCollect(ctx context.Context, req *pb.CancelUserCollectRequest) (*pb.CancelUserCollectReply, error) {
+	res, err := s.userCollect.CancelUserCollect(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}

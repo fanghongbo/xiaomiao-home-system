@@ -21,6 +21,8 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	UserCollect_GetUserCollectList_FullMethodName  = "/api.user.collect.v1.UserCollect/GetUserCollectList"
 	UserCollect_GetUserCollectTypes_FullMethodName = "/api.user.collect.v1.UserCollect/GetUserCollectTypes"
+	UserCollect_AddUserCollect_FullMethodName      = "/api.user.collect.v1.UserCollect/AddUserCollect"
+	UserCollect_CancelUserCollect_FullMethodName   = "/api.user.collect.v1.UserCollect/CancelUserCollect"
 )
 
 // UserCollectClient is the client API for UserCollect service.
@@ -31,6 +33,10 @@ type UserCollectClient interface {
 	GetUserCollectList(ctx context.Context, in *GetUserCollectListRequest, opts ...grpc.CallOption) (*GetUserCollectListReply, error)
 	// GetUserCollectTypes 查询用户收藏分类
 	GetUserCollectTypes(ctx context.Context, in *GetUserCollectTypesRequest, opts ...grpc.CallOption) (*GetUserCollectTypesReply, error)
+	// AddUserCollect 添加用户收藏
+	AddUserCollect(ctx context.Context, in *AddUserCollectRequest, opts ...grpc.CallOption) (*AddUserCollectReply, error)
+	// CancelUserCollect 取消用户收藏
+	CancelUserCollect(ctx context.Context, in *CancelUserCollectRequest, opts ...grpc.CallOption) (*CancelUserCollectReply, error)
 }
 
 type userCollectClient struct {
@@ -61,6 +67,26 @@ func (c *userCollectClient) GetUserCollectTypes(ctx context.Context, in *GetUser
 	return out, nil
 }
 
+func (c *userCollectClient) AddUserCollect(ctx context.Context, in *AddUserCollectRequest, opts ...grpc.CallOption) (*AddUserCollectReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AddUserCollectReply)
+	err := c.cc.Invoke(ctx, UserCollect_AddUserCollect_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userCollectClient) CancelUserCollect(ctx context.Context, in *CancelUserCollectRequest, opts ...grpc.CallOption) (*CancelUserCollectReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CancelUserCollectReply)
+	err := c.cc.Invoke(ctx, UserCollect_CancelUserCollect_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserCollectServer is the server API for UserCollect service.
 // All implementations must embed UnimplementedUserCollectServer
 // for forward compatibility.
@@ -69,6 +95,10 @@ type UserCollectServer interface {
 	GetUserCollectList(context.Context, *GetUserCollectListRequest) (*GetUserCollectListReply, error)
 	// GetUserCollectTypes 查询用户收藏分类
 	GetUserCollectTypes(context.Context, *GetUserCollectTypesRequest) (*GetUserCollectTypesReply, error)
+	// AddUserCollect 添加用户收藏
+	AddUserCollect(context.Context, *AddUserCollectRequest) (*AddUserCollectReply, error)
+	// CancelUserCollect 取消用户收藏
+	CancelUserCollect(context.Context, *CancelUserCollectRequest) (*CancelUserCollectReply, error)
 	mustEmbedUnimplementedUserCollectServer()
 }
 
@@ -84,6 +114,12 @@ func (UnimplementedUserCollectServer) GetUserCollectList(context.Context, *GetUs
 }
 func (UnimplementedUserCollectServer) GetUserCollectTypes(context.Context, *GetUserCollectTypesRequest) (*GetUserCollectTypesReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetUserCollectTypes not implemented")
+}
+func (UnimplementedUserCollectServer) AddUserCollect(context.Context, *AddUserCollectRequest) (*AddUserCollectReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method AddUserCollect not implemented")
+}
+func (UnimplementedUserCollectServer) CancelUserCollect(context.Context, *CancelUserCollectRequest) (*CancelUserCollectReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method CancelUserCollect not implemented")
 }
 func (UnimplementedUserCollectServer) mustEmbedUnimplementedUserCollectServer() {}
 func (UnimplementedUserCollectServer) testEmbeddedByValue()                     {}
@@ -142,6 +178,42 @@ func _UserCollect_GetUserCollectTypes_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserCollect_AddUserCollect_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddUserCollectRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserCollectServer).AddUserCollect(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserCollect_AddUserCollect_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserCollectServer).AddUserCollect(ctx, req.(*AddUserCollectRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserCollect_CancelUserCollect_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CancelUserCollectRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserCollectServer).CancelUserCollect(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserCollect_CancelUserCollect_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserCollectServer).CancelUserCollect(ctx, req.(*CancelUserCollectRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserCollect_ServiceDesc is the grpc.ServiceDesc for UserCollect service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -156,6 +228,14 @@ var UserCollect_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUserCollectTypes",
 			Handler:    _UserCollect_GetUserCollectTypes_Handler,
+		},
+		{
+			MethodName: "AddUserCollect",
+			Handler:    _UserCollect_AddUserCollect_Handler,
+		},
+		{
+			MethodName: "CancelUserCollect",
+			Handler:    _UserCollect_CancelUserCollect_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

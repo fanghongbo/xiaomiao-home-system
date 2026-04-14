@@ -13,6 +13,10 @@ type UserCollectRepo interface {
 	GetUserCollectList(ctx context.Context, req *v1.GetUserCollectListRequest) (*v1.GetUserCollectListReply, error)
 	// GetUserCollectTypes 查询用户收藏分类
 	GetUserCollectTypes(ctx context.Context, req *v1.GetUserCollectTypesRequest) (*v1.GetUserCollectTypesReply, error)
+	// AddUserCollect 添加用户收藏
+	AddUserCollect(ctx context.Context, req *v1.AddUserCollectRequest) (*v1.AddUserCollectReply, error)
+	// CancelUserCollect 取消用户收藏
+	CancelUserCollect(ctx context.Context, req *v1.CancelUserCollectRequest) (*v1.CancelUserCollectReply, error)
 }
 
 // UserCollectUsecase is a UserCollect usecase.
@@ -40,6 +44,28 @@ func (u *UserCollectUsecase) GetUserCollectList(ctx context.Context, req *v1.Get
 // GetUserCollectTypes 查询用户收藏分类
 func (u *UserCollectUsecase) GetUserCollectTypes(ctx context.Context, req *v1.GetUserCollectTypesRequest) (*v1.GetUserCollectTypesReply, error) {
 	res, err := u.repo.GetUserCollectTypes(ctx, req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+// AddUserCollect 添加用户收藏
+func (u *UserCollectUsecase) AddUserCollect(ctx context.Context, req *v1.AddUserCollectRequest) (*v1.AddUserCollectReply, error) {
+	res, err := u.repo.AddUserCollect(ctx, req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+// CancelUserCollect 取消用户收藏
+func (u *UserCollectUsecase) CancelUserCollect(ctx context.Context, req *v1.CancelUserCollectRequest) (*v1.CancelUserCollectReply, error) {
+	res, err := u.repo.CancelUserCollect(ctx, req)
 
 	if err != nil {
 		return nil, err
