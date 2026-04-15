@@ -3,6 +3,7 @@ package data
 import (
 	"context"
 	"fmt"
+	"sort"
 	"time"
 	v1 "xiaomiao-home-system/api/user/collect/v1"
 	"xiaomiao-home-system/internal/biz"
@@ -37,14 +38,18 @@ func (u *userCollectRepo) GetUserCollectList(ctx context.Context, req *v1.GetUse
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	baseQuery := u.data.db.Table("t_post as t1").Joins("inner join t_user_collect as t2 on t1.id = t2.post_id").Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0).Where("t2.user_id = ?", userId)
+	baseQuery := u.data.db.Table("t_user_collect as t1").Joins("inner join t_post as t2 on t1.post_id = t2.id").Joins("inner join t_post_cat as t3 on t2.id = t3.post_id").Joins("inner join t_cat as t4 on t3.cat_id = t4.id").Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0).Where("t3.deleted_flag = ?", 0).Where("t4.deleted_flag = ?", 0).Where("t1.user_id = ?", userId)
+
+	if req.CType > 0 {
+		baseQuery = baseQuery.Where("t4.cat_type = ?", req.CType)
+	}
 
 	if err := baseQuery.Count(&total).Error; err != nil {
 		u.log.Errorf("get user collect list failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	result := baseQuery.Select("t1.id", "t1.title", "t1.post_status", "t1.audit_status", "t1.remark", "t1.created_time", "t1.updated_time").Order("t1.created_time DESC").
+	result := baseQuery.Select("t1.id", "t2.title", "t2.post_status", "t2.audit_status", "t2.remark", "t1.created_time", "t1.updated_time").Order("t1.created_time DESC").
 		Limit(int(req.Size)).
 		Offset(int((req.Page - 1) * req.Size))
 
@@ -103,10 +108,24 @@ func (u *userCollectRepo) GetUserCollectList(ctx context.Context, req *v1.GetUse
 func (u *userCollectRepo) GetUserCollectTypes(ctx context.Context, req *v1.GetUserCollectTypesRequest) (*v1.GetUserCollectTypesReply, error) {
 	items := make([]int64, 0)
 
-	return &v1.GetUserCollectTypesReply{
-		Code: 200, Success: true, Message: "查询成功",
-		Data: items,
-	}, nil
+	userId, err := utils.GetCurrentUserId(ctx)
+	if err != nil {
+		u.log.Errorf("get current user id failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	baseQuery := u.data.db.Table("t_user_collect as t1").Joins("inner join t_post_cat as t2 on t1.post_id = t2.post_id").Joins("inner join t_cat as t3 on t2.cat_id = t3.id").Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0).Where("t3.deleted_flag = ?", 0).Where("t1.user_id = ?", userId)
+
+	if err := baseQuery.Distinct("t3.cat_type").Find(&items).Error; err != nil {
+		u.log.Errorf("get user collect types failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	sort.Slice(items, func(i, j int) bool {
+		return items[i] < items[j]
+	})
+
+	return &v1.GetUserCollectTypesReply{Code: 200, Success: true, Message: "查询成功", Data: items}, nil
 }
 
 // AddUserCollect 添加用户收藏
