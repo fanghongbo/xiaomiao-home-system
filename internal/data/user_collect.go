@@ -133,7 +133,15 @@ func (u *userCollectRepo) AddUserCollect(ctx context.Context, req *v1.AddUserCol
 	}
 
 	if err := u.data.db.Model(&UserCollect{}).Create(collectInfo).Error; err != nil {
+		if utils.IsDuplicateEntryError(err) {
+			return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "已收藏")
+		}
 		u.log.Errorf("create user collect failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	if err := u.removeUserPostCollectStatusCache(ctx, userId, req.Id); err != nil {
+		u.log.Errorf("remove user post collect status cache failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -157,7 +165,15 @@ func (u *userCollectRepo) CancelUserCollect(ctx context.Context, req *v1.CancelU
 	}
 
 	if err := u.data.db.Model(&UserCollect{}).Where("user_id = ?", userId).Where("post_id = ?", req.Id).Where("deleted_flag = ?", 0).Updates(updateInfo).Error; err != nil {
+		if utils.IsDuplicateEntryError(err) {
+			return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "已收藏")
+		}
 		u.log.Errorf("cancel user collect failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	if err := u.removeUserPostCollectStatusCache(ctx, userId, req.Id); err != nil {
+		u.log.Errorf("remove user post collect status cache failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -211,9 +227,6 @@ func (u *userCollectRepo) getUserPostCollectStatusCache(ctx context.Context, use
 
 	count, err := u.data.cache.Get(ctx, redisKey).Int64()
 	if err != nil {
-		if err == redis.Nil {
-			return 0, nil
-		}
 		return 0, err
 	}
 
@@ -226,6 +239,17 @@ func (u *userCollectRepo) setUserPostCollectStatusCache(ctx context.Context, use
 
 	ttl := time.Minute * 1
 	if err := u.data.cache.Set(ctx, redisKey, count, ttl).Err(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// removeUserPostCollectStatusCache 删除用户发布内容收藏状态缓存
+func (u *userCollectRepo) removeUserPostCollectStatusCache(ctx context.Context, userId int64, postId int64) error {
+	redisKey := u.getUserPostCollectStatusCacheKey(userId, postId)
+
+	if err := u.data.cache.Del(ctx, redisKey).Err(); err != nil && err != redis.Nil {
 		return err
 	}
 

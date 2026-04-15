@@ -39,11 +39,10 @@ message DiscoverListItem {
 	string title = 2;
 	int32 postStatus = 3;
 	int32 auditStatus = 4;
-	int32 collectStatus = 5;
-	string coverImage = 6;
-	string remark = 7;
-	string createdTime = 8;
-	string updatedTime = 9;
+	string coverImage = 5;
+	string remark = 6;
+	string createdTime = 7;
+	string updatedTime = 8;
 }
 
 message DiscoverList {
