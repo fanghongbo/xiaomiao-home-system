@@ -40,8 +40,8 @@ func NewUserSettingRepo(data *Data, logger log.Logger) biz.UserSettingRepo {
 	}
 }
 
-// CheckUserSettingUpdateCountLimit 检查用户设置更新次数限制
-func (u *userSettingRepo) CheckUserSettingUpdateCountLimit(ctx context.Context, userId int64, countKeyPrefix string) error {
+// checkUserSettingUpdateCountLimit 检查用户设置更新次数限制
+func (u *userSettingRepo) checkUserSettingUpdateCountLimit(ctx context.Context, userId int64, countKeyPrefix string) error {
 	key := fmt.Sprintf("%s:%d", countKeyPrefix, userId)
 	n, err := u.data.cache.Incr(ctx, key).Result()
 	if err != nil {
@@ -70,7 +70,7 @@ func (u *userSettingRepo) UpdateUserBaseSetting(ctx context.Context, req *v1.Upd
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	if err := u.CheckUserSettingUpdateCountLimit(ctx, userId, redisKeyUserBaseSettingUpdateCount); err != nil {
+	if err := u.checkUserSettingUpdateCountLimit(ctx, userId, redisKeyUserBaseSettingUpdateCount); err != nil {
 		return nil, err
 	}
 
@@ -121,7 +121,7 @@ func (u *userSettingRepo) UpdateUserPassword(ctx context.Context, req *v1.Update
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	if err := u.CheckUserSettingUpdateCountLimit(ctx, userId, redisKeyPasswordUpdateCount); err != nil {
+	if err := u.checkUserSettingUpdateCountLimit(ctx, userId, redisKeyPasswordUpdateCount); err != nil {
 		return nil, err
 	}
 
@@ -195,7 +195,7 @@ func (u *userSettingRepo) UpdateUserSystemNotifySetting(ctx context.Context, req
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	if err := u.CheckUserSettingUpdateCountLimit(ctx, userId, redisKeySystemNotifySettingUpdateCount); err != nil {
+	if err := u.checkUserSettingUpdateCountLimit(ctx, userId, redisKeySystemNotifySettingUpdateCount); err != nil {
 		return nil, err
 	}
 
@@ -220,7 +220,7 @@ func (u *userSettingRepo) UpdateUserInteractNotifySetting(ctx context.Context, r
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	if err := u.CheckUserSettingUpdateCountLimit(ctx, userId, redisKeyInteractNotifySettingUpdateCount); err != nil {
+	if err := u.checkUserSettingUpdateCountLimit(ctx, userId, redisKeyInteractNotifySettingUpdateCount); err != nil {
 		return nil, err
 	}
 
@@ -245,7 +245,7 @@ func (u *userSettingRepo) UpdateUserAdoptNotifySetting(ctx context.Context, req 
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	if err := u.CheckUserSettingUpdateCountLimit(ctx, userId, redisKeyAdoptNotifySettingUpdateCount); err != nil {
+	if err := u.checkUserSettingUpdateCountLimit(ctx, userId, redisKeyAdoptNotifySettingUpdateCount); err != nil {
 		return nil, err
 	}
 
@@ -270,7 +270,7 @@ func (u *userSettingRepo) UpdateUserEmailNotifySetting(ctx context.Context, req 
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	if err := u.CheckUserSettingUpdateCountLimit(ctx, userId, redisKeyEmailNotifySettingUpdateCount); err != nil {
+	if err := u.checkUserSettingUpdateCountLimit(ctx, userId, redisKeyEmailNotifySettingUpdateCount); err != nil {
 		return nil, err
 	}
 

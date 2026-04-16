@@ -156,6 +156,11 @@ func (u *userCollectRepo) AddUserCollect(ctx context.Context, req *v1.AddUserCol
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
+	// 检查用户添加收藏次数限制
+	if err := u.checkUserAddUserCollectCountLimit(ctx, userId); err != nil {
+		return nil, err
+	}
+
 	id, err := u.data.gid.NextID()
 	if err != nil {
 		u.log.Errorf("generate id failed: %v", err)
@@ -350,6 +355,28 @@ func (u *userCollectRepo) removeUserCollectTypesCache(ctx context.Context, userI
 
 	if err := u.data.cache.Del(ctx, redisKey).Err(); err != nil && err != redis.Nil {
 		return err
+	}
+
+	return nil
+}
+
+// CheckUserAddUserCollectCountLimit 检查用户添加收藏次数限制
+func (u *userCollectRepo) checkUserAddUserCollectCountLimit(ctx context.Context, userId int64) error {
+	key := fmt.Sprintf("user:collect:add:count:%d", userId)
+	n, err := u.data.cache.Incr(ctx, key).Result()
+	if err != nil {
+		u.log.Errorf("increase user collect add count failed, key=%s: %v", key, err)
+		return errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+	if n == 1 {
+		if err := u.data.cache.Expire(ctx, key, 8*time.Hour).Err(); err != nil {
+			u.log.Errorf("set user collect add count ttl failed, key=%s: %v", key, err)
+			return errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+		}
+	}
+
+	if n > 100 {
+		return errors.BadRequest(v1.ErrorReason_ERR_TOO_MANY_REQUEST.String(), "今日已达最大添加收藏次数, 请明日再试")
 	}
 
 	return nil
