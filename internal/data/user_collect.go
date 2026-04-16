@@ -2,6 +2,7 @@ package data
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"sort"
 	"time"
@@ -106,12 +107,24 @@ func (u *userCollectRepo) GetUserCollectList(ctx context.Context, req *v1.GetUse
 
 // GetCollectTypes 查询用户收藏分类
 func (u *userCollectRepo) GetUserCollectTypes(ctx context.Context, req *v1.GetUserCollectTypesRequest) (*v1.GetUserCollectTypesReply, error) {
-	items := make([]int64, 0)
+	items := make([]int32, 0)
+	res := &v1.GetUserCollectTypesReply{Code: 200, Success: true, Message: "查询成功"}
 
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
 		u.log.Errorf("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	types, err := u.getUserCollectTypesCache(ctx, userId)
+	if err != nil  {
+		if !errors.Is(err, redis.Nil) {
+			u.log.Errorf("get user collect types cache failed: %v", err)
+			return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+		}
+	} else {
+		res.Data = types
+		return res, nil
 	}
 
 	baseQuery := u.data.db.Table("t_user_collect as t1").Joins("inner join t_post_cat as t2 on t1.post_id = t2.post_id").Joins("inner join t_cat as t3 on t2.cat_id = t3.id").Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0).Where("t3.deleted_flag = ?", 0).Where("t1.user_id = ?", userId)
@@ -125,7 +138,14 @@ func (u *userCollectRepo) GetUserCollectTypes(ctx context.Context, req *v1.GetUs
 		return items[i] < items[j]
 	})
 
-	return &v1.GetUserCollectTypesReply{Code: 200, Success: true, Message: "查询成功", Data: items}, nil
+	if err := u.setUserCollectTypesCache(ctx, userId, items); err != nil {
+		u.log.Errorf("set user collect types cache failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	res.Data = items
+
+	return res, nil
 }
 
 // AddUserCollect 添加用户收藏
@@ -164,6 +184,11 @@ func (u *userCollectRepo) AddUserCollect(ctx context.Context, req *v1.AddUserCol
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
+	if err := u.removeUserCollectTypesCache(ctx, userId); err != nil {
+		u.log.Errorf("remove user collect types cache failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
 	return &v1.AddUserCollectReply{
 		Code: 200, Success: true, Message: "添加成功",
 		Data: "添加成功",
@@ -185,7 +210,7 @@ func (u *userCollectRepo) CancelUserCollect(ctx context.Context, req *v1.CancelU
 
 	if err := u.data.db.Model(&UserCollect{}).Where("user_id = ?", userId).Where("post_id = ?", req.Id).Where("deleted_flag = ?", 0).Updates(updateInfo).Error; err != nil {
 		if utils.IsDuplicateEntryError(err) {
-			return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "已收藏")
+			return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "已取消收藏")
 		}
 		u.log.Errorf("cancel user collect failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
@@ -193,6 +218,11 @@ func (u *userCollectRepo) CancelUserCollect(ctx context.Context, req *v1.CancelU
 
 	if err := u.removeUserPostCollectStatusCache(ctx, userId, req.Id); err != nil {
 		u.log.Errorf("remove user post collect status cache failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	if err := u.removeUserCollectTypesCache(ctx, userId); err != nil {
+		u.log.Errorf("remove user collect types cache failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -267,6 +297,56 @@ func (u *userCollectRepo) setUserPostCollectStatusCache(ctx context.Context, use
 // removeUserPostCollectStatusCache 删除用户发布内容收藏状态缓存
 func (u *userCollectRepo) removeUserPostCollectStatusCache(ctx context.Context, userId int64, postId int64) error {
 	redisKey := u.getUserPostCollectStatusCacheKey(userId, postId)
+
+	if err := u.data.cache.Del(ctx, redisKey).Err(); err != nil && err != redis.Nil {
+		return err
+	}
+
+	return nil
+}
+
+// getUserCollectTypesCacheKey 获取用户收藏分类缓存key
+func (u *userCollectRepo) getUserCollectTypesCacheKey(userId int64) string {
+	return fmt.Sprintf("user:collect:types:%d", userId)
+}
+
+// getUserCollectTypesCache 获取用户收藏分类缓存
+func (u *userCollectRepo) getUserCollectTypesCache(ctx context.Context, userId int64) ([]int32, error) {
+	redisKey := u.getUserCollectTypesCacheKey(userId)
+
+	types, err := u.data.cache.Get(ctx, redisKey).Result()
+	if err != nil {
+		return nil, err
+	}
+
+	var items []int32
+	if err := json.Unmarshal([]byte(types), &items); err != nil {
+		return nil, err
+	}
+
+	return items, nil
+}
+
+// setUserCollectTypesCache 设置用户收藏分类缓存
+func (u *userCollectRepo) setUserCollectTypesCache(ctx context.Context, userId int64, types []int32) error {
+	redisKey := u.getUserCollectTypesCacheKey(userId)
+
+	typesJSON, err := json.Marshal(types)
+	if err != nil {
+		return err
+	}
+
+	ttl := time.Second * 10
+	if err := u.data.cache.Set(ctx, redisKey, typesJSON, ttl).Err(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// removeUserCollectTypesCache 删除用户收藏分类缓存
+func (u *userCollectRepo) removeUserCollectTypesCache(ctx context.Context, userId int64) error {
+	redisKey := u.getUserCollectTypesCacheKey(userId)
 
 	if err := u.data.cache.Del(ctx, redisKey).Err(); err != nil && err != redis.Nil {
 		return err

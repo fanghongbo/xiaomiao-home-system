@@ -187,11 +187,10 @@ type DiscoverListItem struct {
 	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
 	PostStatus    int32                  `protobuf:"varint,3,opt,name=postStatus,proto3" json:"postStatus,omitempty"`
 	AuditStatus   int32                  `protobuf:"varint,4,opt,name=auditStatus,proto3" json:"auditStatus,omitempty"`
-	CollectStatus int32                  `protobuf:"varint,5,opt,name=collectStatus,proto3" json:"collectStatus,omitempty"`
-	CoverImage    string                 `protobuf:"bytes,6,opt,name=coverImage,proto3" json:"coverImage,omitempty"`
-	Remark        string                 `protobuf:"bytes,7,opt,name=remark,proto3" json:"remark,omitempty"`
-	CreatedTime   string                 `protobuf:"bytes,8,opt,name=createdTime,proto3" json:"createdTime,omitempty"`
-	UpdatedTime   string                 `protobuf:"bytes,9,opt,name=updatedTime,proto3" json:"updatedTime,omitempty"`
+	CoverImage    string                 `protobuf:"bytes,5,opt,name=coverImage,proto3" json:"coverImage,omitempty"`
+	Remark        string                 `protobuf:"bytes,6,opt,name=remark,proto3" json:"remark,omitempty"`
+	CreatedTime   string                 `protobuf:"bytes,7,opt,name=createdTime,proto3" json:"createdTime,omitempty"`
+	UpdatedTime   string                 `protobuf:"bytes,8,opt,name=updatedTime,proto3" json:"updatedTime,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -250,13 +249,6 @@ func (x *DiscoverListItem) GetPostStatus() int32 {
 func (x *DiscoverListItem) GetAuditStatus() int32 {
 	if x != nil {
 		return x.AuditStatus
-	}
-	return 0
-}
-
-func (x *DiscoverListItem) GetCollectStatus() int32 {
-	if x != nil {
-		return x.CollectStatus
 	}
 	return 0
 }
@@ -425,21 +417,20 @@ const file_discover_v1_discover_proto_rawDesc = "" +
 	"provinceId\x12 \n" +
 	"\acity_id\x18\x04 \x01(\x05B\a\xfaB\x04\x1a\x02(\x00R\x06cityId\x12 \n" +
 	"\x06p_type\x18\x05 \x01(\x05B\t\xfaB\x06\x1a\x04\x18\x04(\x00R\x05pType\x12\"\n" +
-	"\ac_breed\x18\x06 \x01(\x05B\t\xfaB\x06\x1a\x04\x18\x14(\x00R\x06cBreed\"\x9c\x02\n" +
+	"\ac_breed\x18\x06 \x01(\x05B\t\xfaB\x06\x1a\x04\x18\x14(\x00R\x06cBreed\"\xf6\x01\n" +
 	"\x10DiscoverListItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x14\n" +
 	"\x05title\x18\x02 \x01(\tR\x05title\x12\x1e\n" +
 	"\n" +
 	"postStatus\x18\x03 \x01(\x05R\n" +
 	"postStatus\x12 \n" +
-	"\vauditStatus\x18\x04 \x01(\x05R\vauditStatus\x12$\n" +
-	"\rcollectStatus\x18\x05 \x01(\x05R\rcollectStatus\x12\x1e\n" +
+	"\vauditStatus\x18\x04 \x01(\x05R\vauditStatus\x12\x1e\n" +
 	"\n" +
-	"coverImage\x18\x06 \x01(\tR\n" +
+	"coverImage\x18\x05 \x01(\tR\n" +
 	"coverImage\x12\x16\n" +
-	"\x06remark\x18\a \x01(\tR\x06remark\x12 \n" +
-	"\vcreatedTime\x18\b \x01(\tR\vcreatedTime\x12 \n" +
-	"\vupdatedTime\x18\t \x01(\tR\vupdatedTime\"]\n" +
+	"\x06remark\x18\x06 \x01(\tR\x06remark\x12 \n" +
+	"\vcreatedTime\x18\a \x01(\tR\vcreatedTime\x12 \n" +
+	"\vupdatedTime\x18\b \x01(\tR\vupdatedTime\"]\n" +
 	"\fDiscoverList\x127\n" +
 	"\x05items\x18\x01 \x03(\v2!.api.discover.v1.DiscoverListItemR\x05items\x12\x14\n" +
 	"\x05total\x18\x02 \x01(\x03R\x05total\"\x91\x01\n" +

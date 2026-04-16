@@ -954,9 +954,6 @@ components:
                 auditStatus:
                     type: integer
                     format: int32
-                collectStatus:
-                    type: integer
-                    format: int32
                 coverImage:
                     type: string
                 remark:
@@ -1510,7 +1507,8 @@ components:
                 data:
                     type: array
                     items:
-                        type: string
+                        type: integer
+                        format: int32
         api.user.collect.v1.UserCollectList:
             type: object
             properties:
