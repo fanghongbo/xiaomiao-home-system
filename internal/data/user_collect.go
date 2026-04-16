@@ -178,7 +178,9 @@ func (u *userCollectRepo) AddUserCollect(ctx context.Context, req *v1.AddUserCol
 
 	if err := u.data.db.Model(&UserCollect{}).Create(collectInfo).Error; err != nil {
 		if utils.IsDuplicateEntryError(err) {
-			return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "已收藏")
+			return &v1.AddUserCollectReply{
+				Code: 200, Success: true, Message: "已收藏",
+			}, nil
 		}
 		u.log.Errorf("create user collect failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
@@ -196,7 +198,6 @@ func (u *userCollectRepo) AddUserCollect(ctx context.Context, req *v1.AddUserCol
 
 	return &v1.AddUserCollectReply{
 		Code: 200, Success: true, Message: "添加成功",
-		Data: "添加成功",
 	}, nil
 }
 
@@ -215,7 +216,9 @@ func (u *userCollectRepo) CancelUserCollect(ctx context.Context, req *v1.CancelU
 
 	if err := u.data.db.Model(&UserCollect{}).Where("user_id = ?", userId).Where("post_id = ?", req.Id).Where("deleted_flag = ?", 0).Updates(updateInfo).Error; err != nil {
 		if utils.IsDuplicateEntryError(err) {
-			return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "已取消收藏")
+			return &v1.CancelUserCollectReply{
+				Code: 200, Success: true, Message: "已取消",
+			}, nil
 		}
 		u.log.Errorf("cancel user collect failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
@@ -233,7 +236,6 @@ func (u *userCollectRepo) CancelUserCollect(ctx context.Context, req *v1.CancelU
 
 	return &v1.CancelUserCollectReply{
 		Code: 200, Success: true, Message: "取消成功",
-		Data: "取消成功",
 	}, nil
 }
 

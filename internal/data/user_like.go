@@ -56,7 +56,9 @@ func (u *userLikeRepo) AddUserLike(ctx context.Context, req *v1.AddUserLikeReque
 
 	if err := u.data.db.Model(&UserLike{}).Create(likeInfo).Error; err != nil {
 		if utils.IsDuplicateEntryError(err) {
-			return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "已喜欢")
+			return &v1.AddUserLikeReply{
+				Code: 200, Success: true, Message: "已喜欢",
+			}, nil
 		}
 		u.log.Errorf("create user like failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
@@ -69,7 +71,6 @@ func (u *userLikeRepo) AddUserLike(ctx context.Context, req *v1.AddUserLikeReque
 
 	return &v1.AddUserLikeReply{
 		Code: 200, Success: true, Message: "添加成功",
-		Data: "添加成功",
 	}, nil
 }
 
@@ -88,7 +89,9 @@ func (u *userLikeRepo) CancelUserLike(ctx context.Context, req *v1.CancelUserLik
 
 	if err := u.data.db.Model(&UserLike{}).Where("user_id = ?", userId).Where("post_id = ?", req.Id).Where("deleted_flag = ?", 0).Updates(updateInfo).Error; err != nil {
 		if utils.IsDuplicateEntryError(err) {
-			return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "已取消喜欢")
+			return &v1.CancelUserLikeReply{
+				Code: 200, Success: true, Message: "已取消",
+			}, nil
 		}
 		u.log.Errorf("cancel user like failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
@@ -101,7 +104,6 @@ func (u *userLikeRepo) CancelUserLike(ctx context.Context, req *v1.CancelUserLik
 
 	return &v1.CancelUserLikeReply{
 		Code: 200, Success: true, Message: "取消成功",
-		Data: "取消成功",
 	}, nil
 }
 
