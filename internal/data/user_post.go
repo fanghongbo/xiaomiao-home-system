@@ -225,6 +225,18 @@ func (u *userPostRepo) CreateUserPost(ctx context.Context, req *v1.CreateUserPos
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), err.Error())
 	}
 
+	if ok, word := u.data.risk.Validate(req.Title); !ok {
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), fmt.Sprintf("标题包含敏感词: %s, 请修改标题", word))
+	}
+
+	if ok, word := u.data.risk.Validate(req.Address); !ok {
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), fmt.Sprintf("地址包含敏感词: %s, 请修改地址", word))
+	}
+
+	if ok, word := u.data.risk.Validate(req.Remark); !ok {
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), fmt.Sprintf("备注包含敏感词: %s, 请修改备注", word))
+	}
+
 	postInfo := map[string]interface{}{
 		"id":           postId,
 		"title":        req.Title,
@@ -465,6 +477,18 @@ func (u *userPostRepo) UpdateUserPost(ctx context.Context, req *v1.UpdateUserPos
 	if err != nil {
 		u.log.Errorf("check post params failed: %v", err)
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), err.Error())
+	}
+
+	if ok, word := u.data.risk.Validate(req.Title); !ok {
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), fmt.Sprintf("标题包含敏感词: %s, 请修改标题", word))
+	}
+
+	if ok, word := u.data.risk.Validate(req.Address); !ok {
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), fmt.Sprintf("地址包含敏感词: %s, 请修改地址", word))
+	}
+
+	if ok, word := u.data.risk.Validate(req.Remark); !ok {
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), fmt.Sprintf("备注包含敏感词: %s, 请修改备注", word))
 	}
 
 	postInfo := map[string]interface{}{

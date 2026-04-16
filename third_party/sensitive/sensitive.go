@@ -164,6 +164,9 @@ func (filter *Filter) FindAll(text string) []string {
 // Validate 检测字符串是否合法
 func (filter *Filter) Validate(text string) (bool, string) {
 	text = filter.RemoveNoise(text)
+	if len(text) == 0 {
+		return true, ""
+	}
 	return filter.trie.Validate(text)
 }
 

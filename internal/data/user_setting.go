@@ -70,6 +70,18 @@ func (u *userSettingRepo) UpdateUserBaseSetting(ctx context.Context, req *v1.Upd
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
+	if ok, word := u.data.risk.Validate(req.Nickname); !ok {
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), fmt.Sprintf("昵称包含敏感词: %s, 请修改昵称", word))
+	}
+
+	if ok, word := u.data.risk.Validate(req.Address); !ok {
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), fmt.Sprintf("地址包含敏感词: %s, 请修改地址", word))
+	}
+
+	if ok, word := u.data.risk.Validate(req.Signature); !ok {
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), fmt.Sprintf("个人签名包含敏感词: %s, 请修改个人签名", word))
+	}
+
 	if err := u.checkUserSettingUpdateCountLimit(ctx, userId, redisKeyUserBaseSettingUpdateCount); err != nil {
 		return nil, err
 	}

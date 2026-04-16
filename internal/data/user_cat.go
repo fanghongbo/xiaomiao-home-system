@@ -127,6 +127,18 @@ func (u *userCatRepo) CreateUserCat(ctx context.Context, req *v1.CreateUserCatRe
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
+	if ok, word := u.data.risk.Validate(req.Name); !ok {
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), fmt.Sprintf("小猫名称包含敏感词: %s, 请修改小猫名称", word))
+	}
+
+	if ok, word := u.data.risk.Validate(req.HealthDesc); !ok {
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), fmt.Sprintf("健康描述包含敏感词: %s, 请修改健康描述", word))
+	}
+
+	if ok, word := u.data.risk.Validate(req.Remark); !ok {
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), fmt.Sprintf("备注包含敏感词: %s, 请修改备注", word))
+	}
+
 	if err := u.checkUserCatCreateCountLimit(ctx, redisKeyUserCatCreateCount, userId); err != nil {
 		return nil, err
 	}
@@ -235,6 +247,18 @@ func (u *userCatRepo) UpdateUserCat(ctx context.Context, req *v1.UpdateUserCatRe
 	if err != nil {
 		u.log.Errorf("get current user id failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	if ok, word := u.data.risk.Validate(req.Name); !ok {
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), fmt.Sprintf("小猫名称包含敏感词: %s, 请修改小猫名称", word))
+	}
+
+	if ok, word := u.data.risk.Validate(req.HealthDesc); !ok {
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), fmt.Sprintf("健康描述包含敏感词: %s, 请修改健康描述", word))
+	}
+
+	if ok, word := u.data.risk.Validate(req.Remark); !ok {
+		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), fmt.Sprintf("备注包含敏感词: %s, 请修改备注", word))
 	}
 
 	if err := u.checkUserCatUpdateCountLimit(ctx, redisKeyUserCatUpdateCount, userId, req.Id); err != nil {
