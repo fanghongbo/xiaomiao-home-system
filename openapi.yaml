@@ -951,9 +951,6 @@ components:
                 postStatus:
                     type: integer
                     format: int32
-                auditStatus:
-                    type: integer
-                    format: int32
                 coverImage:
                     type: string
                 remark:

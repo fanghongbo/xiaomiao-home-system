@@ -97,7 +97,7 @@ func (u *discoverRepo) GetDiscoverList(ctx context.Context, req *v1.GetDiscoverL
 		return res, nil
 	}
 
-	baseQuery := u.data.db.Table("t_post as t1").Joins("inner join t_post_cat as t2 on t1.id = t2.post_id").Joins("inner join t_cat as t3 on t2.cat_id = t3.id").Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0).Where("t3.deleted_flag = ?", 0)
+	baseQuery := u.data.db.Table("t_post as t1").Joins("inner join t_post_cat as t2 on t1.id = t2.post_id").Joins("inner join t_cat as t3 on t2.cat_id = t3.id").Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0).Where("t3.deleted_flag = ?", 0).Where("t1.audit_status = ?", 1)
 
 	if req.PType > 0 {
 		baseQuery = baseQuery.Where("t1.post_type = ?", req.PType)
@@ -112,7 +112,7 @@ func (u *discoverRepo) GetDiscoverList(ctx context.Context, req *v1.GetDiscoverL
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	result := baseQuery.Select("t1.id", "t1.title", "t1.post_status", "t1.audit_status", "t1.remark", "t1.created_time", "t1.updated_time").Order("t1.created_time DESC").
+	result := baseQuery.Select("t1.id", "t1.title", "t1.post_status", "t1.remark", "t1.created_time", "t1.updated_time").Order("t1.created_time DESC").
 		Limit(int(req.Size)).
 		Offset(int((req.Page - 1) * req.Size))
 
@@ -129,13 +129,12 @@ func (u *discoverRepo) GetDiscoverList(ctx context.Context, req *v1.GetDiscoverL
 			id            int64
 			title         string
 			postStatus    int
-			auditStatus   int
 			remark        string
 			createdTime   time.Time
 			updatedTime   time.Time
 		)
 
-		if err := rows.Scan(&id, &title, &postStatus, &auditStatus, &remark, &createdTime, &updatedTime); err != nil {
+		if err := rows.Scan(&id, &title, &postStatus, &remark, &createdTime, &updatedTime); err != nil {
 			u.log.Errorf("get discover list failed: %v", err)
 			return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 		}
@@ -144,7 +143,6 @@ func (u *discoverRepo) GetDiscoverList(ctx context.Context, req *v1.GetDiscoverL
 			Id:            id,
 			Title:         title,
 			PostStatus:    int32(postStatus),
-			AuditStatus:   int32(auditStatus),
 			Remark:        remark,
 			CreatedTime:   createdTime.Format("2006-01-02 15:04:05"),
 			UpdatedTime:   updatedTime.Format("2006-01-02 15:04:05"),
