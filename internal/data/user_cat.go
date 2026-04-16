@@ -127,7 +127,7 @@ func (u *userCatRepo) CreateUserCat(ctx context.Context, req *v1.CreateUserCatRe
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	if err := u.CheckUserCatCreateCountLimit(ctx, redisKeyUserCatCreateCount, userId); err != nil {
+	if err := u.checkUserCatCreateCountLimit(ctx, redisKeyUserCatCreateCount, userId); err != nil {
 		return nil, err
 	}
 
@@ -237,12 +237,12 @@ func (u *userCatRepo) UpdateUserCat(ctx context.Context, req *v1.UpdateUserCatRe
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	if err := u.CheckUserCatUpdateCountLimit(ctx, redisKeyUserCatUpdateCount, userId, req.Id); err != nil {
+	if err := u.checkUserCatUpdateCountLimit(ctx, redisKeyUserCatUpdateCount, userId, req.Id); err != nil {
 		return nil, err
 	}
 
 	// 查询当前小猫是否属于当前用户
-	belongToUser, err := u.CheckUserCatBelongToUser(ctx, userId, req.Id)
+	belongToUser, err := u.checkUserCatBelongToUser(ctx, userId, req.Id)
 	if err != nil {
 		u.log.Errorf("check user cat belong to user failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
@@ -333,7 +333,7 @@ func (u *userCatRepo) DeleteUserCat(ctx context.Context, req *v1.DeleteUserCatRe
 	}
 
 	// 查询当前小猫是否属于当前用户
-	belongToUser, err := u.CheckUserCatBelongToUser(ctx, userId, req.Id)
+	belongToUser, err := u.checkUserCatBelongToUser(ctx, userId, req.Id)
 	if err != nil {
 		u.log.Errorf("check user cat belong to user failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
@@ -375,8 +375,8 @@ func (u *userCatRepo) DeleteUserCat(ctx context.Context, req *v1.DeleteUserCatRe
 	}, nil
 }
 
-// CheckUserCatBelongToUser 检查当前小猫是否属于当前用户
-func (u *userCatRepo) CheckUserCatBelongToUser(ctx context.Context, userId int64, catId int64) (bool, error) {
+// checkUserCatBelongToUser 检查当前小猫是否属于当前用户
+func (u *userCatRepo) checkUserCatBelongToUser(ctx context.Context, userId int64, catId int64) (bool, error) {
 	var count int64
 
 	redisKey := fmt.Sprintf("user:cat:belong:%d:%d", userId, catId)
@@ -412,7 +412,7 @@ func (u *userCatRepo) GetUserCat(ctx context.Context, req *v1.GetUserCatRequest)
 	}
 
 	// 查询当前小猫是否属于当前用户
-	belongToUser, err := u.CheckUserCatBelongToUser(ctx, userId, req.Id)
+	belongToUser, err := u.checkUserCatBelongToUser(ctx, userId, req.Id)
 	if err != nil {
 		u.log.Errorf("check user cat belong to user failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
@@ -487,8 +487,8 @@ func (u *userCatRepo) GetUserCat(ctx context.Context, req *v1.GetUserCatRequest)
 	}, nil
 }
 
-// CheckUserCatCreateCountLimit 检查我的小猫创建次数限制
-func (u *userCatRepo) CheckUserCatCreateCountLimit(ctx context.Context, countKeyPrefix string, userId int64) error {
+// checkUserCatCreateCountLimit 检查我的小猫创建次数限制
+func (u *userCatRepo) checkUserCatCreateCountLimit(ctx context.Context, countKeyPrefix string, userId int64) error {
 	key := fmt.Sprintf("%s:%d", countKeyPrefix, userId)
 	n, err := u.data.cache.Incr(ctx, key).Result()
 	if err != nil {
@@ -509,8 +509,8 @@ func (u *userCatRepo) CheckUserCatCreateCountLimit(ctx context.Context, countKey
 	return nil
 }
 
-// CheckUserCatUpdateCountLimit 检查我的小猫更新次数限制
-func (u *userCatRepo) CheckUserCatUpdateCountLimit(ctx context.Context, countKeyPrefix string, userId int64, catId int64) error {
+// checkUserCatUpdateCountLimit 检查我的小猫更新次数限制
+func (u *userCatRepo) checkUserCatUpdateCountLimit(ctx context.Context, countKeyPrefix string, userId int64, catId int64) error {
 	key := fmt.Sprintf("%s:%d:%d", countKeyPrefix, userId, catId)
 	n, err := u.data.cache.Incr(ctx, key).Result()
 	if err != nil {

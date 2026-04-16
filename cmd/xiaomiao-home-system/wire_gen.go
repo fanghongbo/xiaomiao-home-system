@@ -58,8 +58,11 @@ func wireApp(confServer *conf.Server, confData *conf.Data, config *conf.Config, 
 	userCatRepo := data.NewUserCatRepo(dataData, logger)
 	userCatUsecase := biz.NewUserCatUsecase(userCatRepo, logger)
 	userCatService := service.NewUserCatService(userCatUsecase, config, logger)
-	grpcServer := server.NewGRPCServer(confServer, userService, roleService, userNotificationService, userSettingService, fileService, userPostService, userCollectService, discoverService, userCatService, logger)
-	httpServer := server.NewHTTPServer(confServer, jwt, static, userService, roleService, userNotificationService, userSettingService, fileService, userPostService, userCollectService, discoverService, userCatService, logger)
+	userLikeRepo := data.NewUserLikeRepo(dataData, logger)
+	userLikeUsecase := biz.NewUserLikeUsecase(userLikeRepo, logger)
+	userLikeService := service.NewUserLikeService(userLikeUsecase, config, logger)
+	grpcServer := server.NewGRPCServer(confServer, userService, roleService, userNotificationService, userSettingService, fileService, userPostService, userCollectService, discoverService, userCatService, userLikeService, logger)
+	httpServer := server.NewHTTPServer(confServer, jwt, static, userService, roleService, userNotificationService, userSettingService, fileService, userPostService, userCollectService, discoverService, userCatService, userLikeService, logger)
 	app := newApp(logger, taskManager, grpcServer, httpServer, registry)
 	return app, func() {
 		cleanup()

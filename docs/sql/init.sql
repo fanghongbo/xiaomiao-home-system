@@ -269,6 +269,25 @@ CREATE TABLE
   COLLATE = utf8mb4_unicode_ci
   ROW_FORMAT = DYNAMIC COMMENT ='用户发布内容关联表';
 
+-- 用户喜欢关联表
+CREATE TABLE
+    IF NOT EXISTS t_user_like
+(
+    id           bigint PRIMARY KEY COMMENT '关联id',
+    user_id       bigint NOT NULL COMMENT '用户id',
+    post_id   bigint NOT NULL COMMENT '发布id',
+    deleted_flag tinyint(1)           DEFAULT 0 COMMENT '删除标记, 0: 未删除,  1: 已删除',
+    created_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    deleted_time datetime                     DEFAULT  '1970-01-01 08:00:00' COMMENT '删除时间',
+    KEY idx_post_id (post_id) USING BTREE,
+    KEY idx_user_id (user_id) USING BTREE,
+    UNIQUE KEY uk_user_id_post_id (user_id, post_id, deleted_flag, deleted_time) USING BTREE
+) ENGINE = innodb
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci
+  ROW_FORMAT = DYNAMIC COMMENT ='用户喜欢关联表';
+
 -- 用户收藏表
 CREATE TABLE
     IF NOT EXISTS t_user_collect

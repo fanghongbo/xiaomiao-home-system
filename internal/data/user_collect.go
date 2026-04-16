@@ -360,7 +360,7 @@ func (u *userCollectRepo) removeUserCollectTypesCache(ctx context.Context, userI
 	return nil
 }
 
-// CheckUserAddUserCollectCountLimit 检查用户添加收藏次数限制
+// checkUserAddUserCollectCountLimit 检查用户添加收藏次数限制
 func (u *userCollectRepo) checkUserAddUserCollectCountLimit(ctx context.Context, userId int64) error {
 	key := fmt.Sprintf("user:collect:add:count:%d", userId)
 	n, err := u.data.cache.Incr(ctx, key).Result()

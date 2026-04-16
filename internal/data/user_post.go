@@ -801,7 +801,19 @@ func (u *userPostRepo) GetUserPost(ctx context.Context, req *v1.GetUserPostReque
 
 	return &v1.GetUserPostReply{
 		Code: 200, Success: true, Message: "查询成功",
-		Data: &v1.UserPostInfo{Id: post.Id, Title: post.Title, PostType: int32(post.PostType), ProvinceId: int32(post.ProvinceId), CityId: int32(post.CityId), LostTime: lostTime, Address: post.Address, Cat: catInfo, User: userInfo, Remark: post.Remark},
+		Data: &v1.UserPostInfo{
+			Id:          post.Id,
+			Title:       post.Title,
+			PostType:    int32(post.PostType),
+			ProvinceId:  int32(post.ProvinceId),
+			CityId:      int32(post.CityId),
+			LostTime:    lostTime,
+			Address:     post.Address,
+			Cat:         catInfo,
+			User:        userInfo,
+			Remark:      post.Remark,
+			CreatedTime: post.CreatedTime.Format("2006-01-02 15:04:05"),
+			UpdatedTime: post.UpdatedTime.Format("2006-01-02 15:04:05")},
 	}, nil
 }
 
@@ -867,11 +879,14 @@ func (u *userPostRepo) GetPostCatInfo(ctx context.Context, postId int64) (*v1.Ca
 // GetPostUserInfo 查询发布内容用户信息
 func (u *userPostRepo) GetPostUserInfo(ctx context.Context, postId int64) (*v1.UserInfo, error) {
 	var (
-		id   int64
-		name string
+		id         int64
+		name       string
+		provinceId int64
+		cityId     int64
 	)
-	row := u.data.db.Table("t_user as t1").Joins("inner join t_user_post as t2 on t1.id = t2.user_id").Where("t2.post_id = ?", postId).Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0).Select("t1.id", "t1.nickname").Limit(1).Row()
-	if err := row.Scan(&id, &name); err != nil {
+
+	row := u.data.db.Table("t_user as t1").Joins("inner join t_user_post as t2 on t1.id = t2.user_id").Where("t2.post_id = ?", postId).Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0).Select("t1.id", "t1.nickname", "t1.province_id", "t1.city_id").Limit(1).Row()
+	if err := row.Scan(&id, &name, &provinceId, &cityId); err != nil {
 		u.log.Errorf("get post user info failed: %v", err)
 		if err == gorm.ErrRecordNotFound {
 			return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "用户不存在")
@@ -880,7 +895,9 @@ func (u *userPostRepo) GetPostUserInfo(ctx context.Context, postId int64) (*v1.U
 	}
 
 	return &v1.UserInfo{
-		Id:   id,
-		Name: name,
+		Id:         id,
+		Name:       name,
+		ProvinceId: int32(provinceId),
+		CityId:     int32(cityId),
 	}, nil
 }

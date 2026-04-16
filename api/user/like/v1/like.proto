@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package api.user.like.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "xiaomiao-home-system/api/user/like/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.user.like.v1";
+option java_outer_classname = "UserLikeProtoV1";
+
+service UserLike {
+	// AddUserLike 添加用户喜欢
+	rpc AddUserLike (AddUserLikeRequest) returns (AddUserLikeReply) {
+		option (google.api.http) = {
+			post: "/api/v1/user/like/add",
+			body: "*"
+		};
+	};
+
+	// CancelUserLike 取消用户喜欢
+	rpc CancelUserLike (CancelUserLikeRequest) returns (CancelUserLikeReply) {
+		option (google.api.http) = {
+			post: "/api/v1/user/like/cancel",
+			body: "*"
+		};
+	};
+}
+
+// 基础请求体
+message BaseRequest {}
+
+// 基础响应体
+message BaseResponse {}
+
+message AddUserLikeRequest {
+	int64 id = 1 [(validate.rules).int64 = {gt: 0}];
+}
+
+message AddUserLikeReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	string data = 4;
+}
+
+message CancelUserLikeRequest {
+	int64 id = 1 [(validate.rules).int64 = {gt: 0}];
+}
+
+message CancelUserLikeReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	string data = 4;
+}

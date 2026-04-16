@@ -87,7 +87,7 @@ func (u *userRepo) WebLogin(ctx context.Context, req *v1.WebLoginRequest) (*v1.W
 	}
 
 	// 获取登录错误次数
-	loginErrorCount, err := u.GetLoginErrorCount(ctx, req.LoginType, req.LoginIdentity, clientIp)
+	loginErrorCount, err := u.getLoginErrorCount(ctx, req.LoginType, req.LoginIdentity, clientIp)
 	if err != nil {
 		u.log.Errorf("get login error count failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
@@ -112,7 +112,7 @@ func (u *userRepo) WebLogin(ctx context.Context, req *v1.WebLoginRequest) (*v1.W
 	if err != nil {
 		u.log.Errorf("web login failed: %v", err)
 
-		if err = u.IncLoginErrorCount(ctx, req.LoginType, req.LoginIdentity, clientIp, time.Duration(loginBanDuration)*time.Minute); err != nil {
+		if err = u.incLoginErrorCount(ctx, req.LoginType, req.LoginIdentity, clientIp, time.Duration(loginBanDuration)*time.Minute); err != nil {
 			u.log.Errorf("inc login error count failed: %v", err)
 		}
 
@@ -122,9 +122,14 @@ func (u *userRepo) WebLogin(ctx context.Context, req *v1.WebLoginRequest) (*v1.W
 	return res, nil
 }
 
-// GetLoginErrorCount 查询登录错误次数
-func (u *userRepo) GetLoginErrorCount(ctx context.Context, loginType v1.LoginType, loginIdentity string, clientIp string) (int64, error) {
-	redisKey := fmt.Sprintf("login:error:count:%d:%s:%s", loginType.Number(), loginIdentity, clientIp)
+// getLoginErrorCountCacheKey 获取登录错误次数缓存key
+func (u *userRepo) getLoginErrorCountCacheKey(loginType v1.LoginType, loginIdentity string, clientIp string) string {
+	return fmt.Sprintf("login:error:count:%d:%s:%s", loginType.Number(), loginIdentity, clientIp)
+}
+
+// getLoginErrorCount 查询登录错误次数
+func (u *userRepo) getLoginErrorCount(ctx context.Context, loginType v1.LoginType, loginIdentity string, clientIp string) (int64, error) {
+	redisKey := u.getLoginErrorCountCacheKey(loginType, loginIdentity, clientIp)
 
 	count, err := u.data.cache.Get(ctx, redisKey).Int64()
 	if err != nil && err != redis.Nil {
@@ -135,9 +140,9 @@ func (u *userRepo) GetLoginErrorCount(ctx context.Context, loginType v1.LoginTyp
 	return count, nil
 }
 
-// IncLoginErrorCount 增加登录错误次数
-func (u *userRepo) IncLoginErrorCount(ctx context.Context, loginType v1.LoginType, loginIdentity string, clientIp string, ttl time.Duration) error {
-	redisKey := fmt.Sprintf("login:error:count:%d:%s:%s", loginType.Number(), loginIdentity, clientIp)
+// incLoginErrorCount 增加登录错误次数
+func (u *userRepo) incLoginErrorCount(ctx context.Context, loginType v1.LoginType, loginIdentity string, clientIp string, ttl time.Duration) error {
+	redisKey := u.getLoginErrorCountCacheKey(loginType, loginIdentity, clientIp)
 
 	_, err := u.data.cache.Incr(ctx, redisKey).Result()
 	if err != nil {
@@ -153,9 +158,9 @@ func (u *userRepo) IncLoginErrorCount(ctx context.Context, loginType v1.LoginTyp
 	return nil
 }
 
-// ClearLoginErrorCount 清空登录错误次数
-func (u *userRepo) ClearLoginErrorCount(ctx context.Context, loginType v1.LoginType, loginIdentity string, clientIp string) error {
-	redisKey := fmt.Sprintf("login:error:count:%d:%s:%s", loginType.Number(), loginIdentity, clientIp)
+// clearLoginErrorCount 清空登录错误次数
+func (u *userRepo) clearLoginErrorCount(ctx context.Context, loginType v1.LoginType, loginIdentity string, clientIp string) error {
+	redisKey := u.getLoginErrorCountCacheKey(loginType, loginIdentity, clientIp)
 
 	err := u.data.cache.Del(ctx, redisKey).Err()
 	if err != nil {

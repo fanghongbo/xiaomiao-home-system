@@ -109,6 +109,8 @@ message CatInfo {
 message UserInfo {
 	int64 id = 1;
 	string name = 2;
+	int32 provinceId = 3;
+	int32 cityId = 4;
 }
 
 message UserPostInfo {
@@ -122,6 +124,8 @@ message UserPostInfo {
 	string lostTime = 8;
 	string address = 9;
 	string remark = 10;
+	string createdTime = 11;
+	string updatedTime = 12;
 }
 
 message GetUserPostReply {

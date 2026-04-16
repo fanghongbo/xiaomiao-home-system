@@ -545,6 +545,44 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.user.setting.v1.UpdateUserInteractNotifySettingReply'
+    /api/v1/user/like/add:
+        post:
+            tags:
+                - UserLike
+            description: AddUserLike 添加用户喜欢
+            operationId: UserLike_AddUserLike
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.user.like.v1.AddUserLikeRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.like.v1.AddUserLikeReply'
+    /api/v1/user/like/cancel:
+        post:
+            tags:
+                - UserLike
+            description: CancelUserLike 取消用户喜欢
+            operationId: UserLike_CancelUserLike
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.user.like.v1.CancelUserLikeRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.like.v1.CancelUserLikeReply'
     /api/v1/user/notification:
         post:
             tags:
@@ -1539,6 +1577,40 @@ components:
                     type: string
                 updatedTime:
                     type: string
+        api.user.like.v1.AddUserLikeReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: string
+        api.user.like.v1.AddUserLikeRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+        api.user.like.v1.CancelUserLikeReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: string
+        api.user.like.v1.CancelUserLikeRequest:
+            type: object
+            properties:
+                id:
+                    type: string
         api.user.notification.v1.BatchUserNotificationsReply:
             type: object
             properties:
@@ -1819,6 +1891,12 @@ components:
                     type: string
                 name:
                     type: string
+                provinceId:
+                    type: integer
+                    format: int32
+                cityId:
+                    type: integer
+                    format: int32
         api.user.post.v1.UserPostInfo:
             type: object
             properties:
@@ -1844,6 +1922,10 @@ components:
                 address:
                     type: string
                 remark:
+                    type: string
+                createdTime:
+                    type: string
+                updatedTime:
                     type: string
         api.user.post.v1.UserPostList:
             type: object
@@ -2147,6 +2229,7 @@ tags:
     - name: User
     - name: UserCat
     - name: UserCollect
+    - name: UserLike
     - name: UserNotification
     - name: UserPost
     - name: UserSetting

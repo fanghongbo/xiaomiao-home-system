@@ -398,6 +398,8 @@ func (m *UserCollectListItem) validate(all bool) error {
 
 	// no validation rules for AuditStatus
 
+	// no validation rules for CollectStatus
+
 	// no validation rules for CoverImage
 
 	// no validation rules for Remark
@@ -968,3 +970,449 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = GetUserCollectTypesReplyValidationError{}
+
+// Validate checks the field values on AddUserCollectRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *AddUserCollectRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on AddUserCollectRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// AddUserCollectRequestMultiError, or nil if none found.
+func (m *AddUserCollectRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *AddUserCollectRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.GetId() <= 0 {
+		err := AddUserCollectRequestValidationError{
+			field:  "Id",
+			reason: "value must be greater than 0",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return AddUserCollectRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// AddUserCollectRequestMultiError is an error wrapping multiple validation
+// errors returned by AddUserCollectRequest.ValidateAll() if the designated
+// constraints aren't met.
+type AddUserCollectRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m AddUserCollectRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m AddUserCollectRequestMultiError) AllErrors() []error { return m }
+
+// AddUserCollectRequestValidationError is the validation error returned by
+// AddUserCollectRequest.Validate if the designated constraints aren't met.
+type AddUserCollectRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e AddUserCollectRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e AddUserCollectRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e AddUserCollectRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e AddUserCollectRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e AddUserCollectRequestValidationError) ErrorName() string {
+	return "AddUserCollectRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e AddUserCollectRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sAddUserCollectRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = AddUserCollectRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = AddUserCollectRequestValidationError{}
+
+// Validate checks the field values on AddUserCollectReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *AddUserCollectReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on AddUserCollectReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// AddUserCollectReplyMultiError, or nil if none found.
+func (m *AddUserCollectReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *AddUserCollectReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Code
+
+	// no validation rules for Message
+
+	// no validation rules for Success
+
+	// no validation rules for Data
+
+	if len(errors) > 0 {
+		return AddUserCollectReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// AddUserCollectReplyMultiError is an error wrapping multiple validation
+// errors returned by AddUserCollectReply.ValidateAll() if the designated
+// constraints aren't met.
+type AddUserCollectReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m AddUserCollectReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m AddUserCollectReplyMultiError) AllErrors() []error { return m }
+
+// AddUserCollectReplyValidationError is the validation error returned by
+// AddUserCollectReply.Validate if the designated constraints aren't met.
+type AddUserCollectReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e AddUserCollectReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e AddUserCollectReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e AddUserCollectReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e AddUserCollectReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e AddUserCollectReplyValidationError) ErrorName() string {
+	return "AddUserCollectReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e AddUserCollectReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sAddUserCollectReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = AddUserCollectReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = AddUserCollectReplyValidationError{}
+
+// Validate checks the field values on CancelUserCollectRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CancelUserCollectRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CancelUserCollectRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CancelUserCollectRequestMultiError, or nil if none found.
+func (m *CancelUserCollectRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CancelUserCollectRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if m.GetId() <= 0 {
+		err := CancelUserCollectRequestValidationError{
+			field:  "Id",
+			reason: "value must be greater than 0",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return CancelUserCollectRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// CancelUserCollectRequestMultiError is an error wrapping multiple validation
+// errors returned by CancelUserCollectRequest.ValidateAll() if the designated
+// constraints aren't met.
+type CancelUserCollectRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CancelUserCollectRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CancelUserCollectRequestMultiError) AllErrors() []error { return m }
+
+// CancelUserCollectRequestValidationError is the validation error returned by
+// CancelUserCollectRequest.Validate if the designated constraints aren't met.
+type CancelUserCollectRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CancelUserCollectRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CancelUserCollectRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CancelUserCollectRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CancelUserCollectRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CancelUserCollectRequestValidationError) ErrorName() string {
+	return "CancelUserCollectRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CancelUserCollectRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCancelUserCollectRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CancelUserCollectRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CancelUserCollectRequestValidationError{}
+
+// Validate checks the field values on CancelUserCollectReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CancelUserCollectReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CancelUserCollectReply with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CancelUserCollectReplyMultiError, or nil if none found.
+func (m *CancelUserCollectReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CancelUserCollectReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Code
+
+	// no validation rules for Message
+
+	// no validation rules for Success
+
+	// no validation rules for Data
+
+	if len(errors) > 0 {
+		return CancelUserCollectReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// CancelUserCollectReplyMultiError is an error wrapping multiple validation
+// errors returned by CancelUserCollectReply.ValidateAll() if the designated
+// constraints aren't met.
+type CancelUserCollectReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CancelUserCollectReplyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CancelUserCollectReplyMultiError) AllErrors() []error { return m }
+
+// CancelUserCollectReplyValidationError is the validation error returned by
+// CancelUserCollectReply.Validate if the designated constraints aren't met.
+type CancelUserCollectReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CancelUserCollectReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CancelUserCollectReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CancelUserCollectReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CancelUserCollectReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CancelUserCollectReplyValidationError) ErrorName() string {
+	return "CancelUserCollectReplyValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CancelUserCollectReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCancelUserCollectReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CancelUserCollectReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CancelUserCollectReplyValidationError{}

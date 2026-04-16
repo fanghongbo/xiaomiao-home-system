@@ -6,6 +6,7 @@ import (
 	roleV1 "xiaomiao-home-system/api/role/v1"
 	userCatV1 "xiaomiao-home-system/api/user/cat/v1"
 	userCollectV1 "xiaomiao-home-system/api/user/collect/v1"
+	userLikeV1 "xiaomiao-home-system/api/user/like/v1"
 	userNotificationV1 "xiaomiao-home-system/api/user/notification/v1"
 	userPostV1 "xiaomiao-home-system/api/user/post/v1"
 	userSettingV1 "xiaomiao-home-system/api/user/setting/v1"
@@ -44,7 +45,7 @@ func NewWhiteListMatcher() selector.MatchFunc {
 }
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Server, jwtConfig *conf.Jwt, staticConfig *conf.Static, user *service.UserService, role *service.RoleService, userNotification *service.UserNotificationService, userSetting *service.UserSettingService, file *service.FileService, userPost *service.UserPostService, userCollect *service.UserCollectService, discover *service.DiscoverService, userCat *service.UserCatService, logger log.Logger) *http.Server {
+func NewHTTPServer(c *conf.Server, jwtConfig *conf.Jwt, staticConfig *conf.Static, user *service.UserService, role *service.RoleService, userNotification *service.UserNotificationService, userSetting *service.UserSettingService, file *service.FileService, userPost *service.UserPostService, userCollect *service.UserCollectService, discover *service.DiscoverService, userCat *service.UserCatService, userLike *service.UserLikeService, logger log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
@@ -86,5 +87,6 @@ func NewHTTPServer(c *conf.Server, jwtConfig *conf.Jwt, staticConfig *conf.Stati
 	userCollectV1.RegisterUserCollectHTTPServer(srv, userCollect)
 	discoverV1.RegisterDiscoverHTTPServer(srv, discover)
 	userCatV1.RegisterUserCatHTTPServer(srv, userCat)
+	userLikeV1.RegisterUserLikeHTTPServer(srv, userLike)
 	return srv
 }

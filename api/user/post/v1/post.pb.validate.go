@@ -398,6 +398,8 @@ func (m *UserPostListItem) validate(all bool) error {
 
 	// no validation rules for AuditStatus
 
+	// no validation rules for CollectStatus
+
 	// no validation rules for CoverImage
 
 	// no validation rules for Remark
@@ -1005,6 +1007,10 @@ func (m *UserInfo) validate(all bool) error {
 
 	// no validation rules for Name
 
+	// no validation rules for ProvinceId
+
+	// no validation rules for CityId
+
 	if len(errors) > 0 {
 		return UserInfoMultiError(errors)
 	}
@@ -1177,6 +1183,10 @@ func (m *UserPostInfo) validate(all bool) error {
 	// no validation rules for Address
 
 	// no validation rules for Remark
+
+	// no validation rules for CreatedTime
+
+	// no validation rules for UpdatedTime
 
 	if len(errors) > 0 {
 		return UserPostInfoMultiError(errors)
