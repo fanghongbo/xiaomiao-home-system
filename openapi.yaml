@@ -1921,6 +1921,12 @@ components:
                     type: string
                 address:
                     type: string
+                collectStatus:
+                    type: integer
+                    format: int32
+                likeStatus:
+                    type: integer
+                    format: int32
                 remark:
                     type: string
                 createdTime:
@@ -2172,7 +2178,13 @@ components:
                     format: enum
                 loginIdentity:
                     type: string
-                    description: "统一身份标识：\r\n 账号登录: username\r\n 邮箱登录: email\r\n 短信登录: mobile\r\n 微信登录: unionid/openid\r\n QQ登录: openid"
+                    description: |-
+                        统一身份标识：
+                         账号登录: username
+                         邮箱登录: email
+                         短信登录: mobile
+                         微信登录: unionid/openid
+                         QQ登录: openid
                 password:
                     type: string
                     description: 账号/邮箱密码登录时使用（其余方式可不传）
