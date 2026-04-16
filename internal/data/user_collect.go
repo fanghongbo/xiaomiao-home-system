@@ -50,7 +50,7 @@ func (u *userCollectRepo) GetUserCollectList(ctx context.Context, req *v1.GetUse
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	result := baseQuery.Select("t1.id", "t2.title", "t2.post_status", "t2.audit_status", "t2.remark", "t1.created_time", "t1.updated_time").Order("t1.created_time DESC").
+	result := baseQuery.Select("t2.id", "t2.title", "t2.post_status", "t2.audit_status", "t2.remark", "t1.created_time", "t1.updated_time").Order("t1.created_time DESC").
 		Limit(int(req.Size)).
 		Offset(int((req.Page - 1) * req.Size))
 
