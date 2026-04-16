@@ -5,6 +5,7 @@ import (
 	"os"
 	"time"
 	"xiaomiao-home-system/internal/conf"
+	"xiaomiao-home-system/third_party/sensitive"
 
 	klog "github.com/go-kratos/kratos/v2/log"
 	"github.com/go-redis/redis/extra/redisotel"
@@ -31,6 +32,7 @@ type Data struct {
 	static   *conf.Static
 	jwt      *conf.Jwt
 	gid      *snowflake.Sonyflake
+	risk     *sensitive.Filter
 }
 
 func NewGID(logger klog.Logger) *snowflake.Sonyflake {
@@ -126,6 +128,11 @@ func NewData(dbConfig *conf.Data, config *conf.Config, static *conf.Static, jwt 
 		static:   static,
 		jwt:      jwt,
 		log:      log,
+		risk:     sensitive.New(),
+	}
+
+	if err := d.risk.Init(); err != nil {
+		log.Fatalf("failed to init risk service: %v", err)
 	}
 
 	return d, func() {
