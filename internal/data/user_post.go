@@ -823,51 +823,21 @@ func (u *userPostRepo) GetUserPost(ctx context.Context, req *v1.GetUserPostReque
 		lostTime = post.LostTime.Format("2006-01-02 15:04:05")
 	}
 
-	collectStatus := 0
-	userCollectRepo := NewUserCollectRepo(u.data, u.log.Logger())
-	isCollect, err := userCollectRepo.GetUserPostCollectStatus(ctx, req.Id)
-	if err != nil {
-		u.log.Errorf("get user post collect status failed: %v", err)
-		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
-	}
-
-	if isCollect {
-		collectStatus = 1
-	} else {
-		collectStatus = 0
-	}
-
-	likeStatus := 0
-	userLikeRepo := NewUserLikeRepo(u.data, u.log.Logger())
-	isLike, err := userLikeRepo.GetUserPostLikeStatus(ctx, req.Id)
-	if err != nil {
-		u.log.Errorf("get user post like status failed: %v", err)
-		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
-	}
-
-	if isLike {
-		likeStatus = 1
-	} else {
-		likeStatus = 0
-	}
-
 	return &v1.GetUserPostReply{
 		Code: 200, Success: true, Message: "查询成功",
 		Data: &v1.UserPostInfo{
-			Id:            post.Id,
-			Title:         post.Title,
-			PostType:      int32(post.PostType),
-			ProvinceId:    int32(post.ProvinceId),
-			CityId:        int32(post.CityId),
-			LostTime:      lostTime,
-			Address:       post.Address,
-			Cat:           catInfo,
-			User:          userInfo,
-			CollectStatus: int32(collectStatus),
-			LikeStatus:    int32(likeStatus),
-			Remark:        post.Remark,
-			CreatedTime:   post.CreatedTime.Format("2006-01-02 15:04:05"),
-			UpdatedTime:   post.UpdatedTime.Format("2006-01-02 15:04:05")},
+			Id:          post.Id,
+			Title:       post.Title,
+			PostType:    int32(post.PostType),
+			ProvinceId:  int32(post.ProvinceId),
+			CityId:      int32(post.CityId),
+			LostTime:    lostTime,
+			Address:     post.Address,
+			Cat:         catInfo,
+			User:        userInfo,
+			Remark:      post.Remark,
+			CreatedTime: post.CreatedTime.Format("2006-01-02 15:04:05"),
+			UpdatedTime: post.UpdatedTime.Format("2006-01-02 15:04:05")},
 	}, nil
 }
 

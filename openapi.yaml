@@ -2086,12 +2086,6 @@ components:
                     type: string
                 address:
                     type: string
-                collectStatus:
-                    type: integer
-                    format: int32
-                likeStatus:
-                    type: integer
-                    format: int32
                 remark:
                     type: string
                 createdTime:

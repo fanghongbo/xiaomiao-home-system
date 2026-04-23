@@ -592,11 +592,9 @@ type UserPostInfo struct {
 	CityId        int32                  `protobuf:"varint,7,opt,name=cityId,proto3" json:"cityId,omitempty"`
 	LostTime      string                 `protobuf:"bytes,8,opt,name=lostTime,proto3" json:"lostTime,omitempty"`
 	Address       string                 `protobuf:"bytes,9,opt,name=address,proto3" json:"address,omitempty"`
-	CollectStatus int32                  `protobuf:"varint,10,opt,name=collectStatus,proto3" json:"collectStatus,omitempty"`
-	LikeStatus    int32                  `protobuf:"varint,11,opt,name=likeStatus,proto3" json:"likeStatus,omitempty"`
-	Remark        string                 `protobuf:"bytes,12,opt,name=remark,proto3" json:"remark,omitempty"`
-	CreatedTime   string                 `protobuf:"bytes,13,opt,name=createdTime,proto3" json:"createdTime,omitempty"`
-	UpdatedTime   string                 `protobuf:"bytes,14,opt,name=updatedTime,proto3" json:"updatedTime,omitempty"`
+	Remark        string                 `protobuf:"bytes,10,opt,name=remark,proto3" json:"remark,omitempty"`
+	CreatedTime   string                 `protobuf:"bytes,11,opt,name=createdTime,proto3" json:"createdTime,omitempty"`
+	UpdatedTime   string                 `protobuf:"bytes,12,opt,name=updatedTime,proto3" json:"updatedTime,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -692,20 +690,6 @@ func (x *UserPostInfo) GetAddress() string {
 		return x.Address
 	}
 	return ""
-}
-
-func (x *UserPostInfo) GetCollectStatus() int32 {
-	if x != nil {
-		return x.CollectStatus
-	}
-	return 0
-}
-
-func (x *UserPostInfo) GetLikeStatus() int32 {
-	if x != nil {
-		return x.LikeStatus
-	}
-	return 0
 }
 
 func (x *UserPostInfo) GetRemark() string {
@@ -1472,7 +1456,7 @@ const file_user_post_v1_post_proto_rawDesc = "" +
 	"\n" +
 	"provinceId\x18\x03 \x01(\x05R\n" +
 	"provinceId\x12\x16\n" +
-	"\x06cityId\x18\x04 \x01(\x05R\x06cityId\"\xbd\x03\n" +
+	"\x06cityId\x18\x04 \x01(\x05R\x06cityId\"\xf7\x02\n" +
 	"\fUserPostInfo\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x14\n" +
 	"\x05title\x18\x02 \x01(\tR\x05title\x12\x1a\n" +
@@ -1484,15 +1468,11 @@ const file_user_post_v1_post_proto_rawDesc = "" +
 	"provinceId\x12\x16\n" +
 	"\x06cityId\x18\a \x01(\x05R\x06cityId\x12\x1a\n" +
 	"\blostTime\x18\b \x01(\tR\blostTime\x12\x18\n" +
-	"\aaddress\x18\t \x01(\tR\aaddress\x12$\n" +
-	"\rcollectStatus\x18\n" +
-	" \x01(\x05R\rcollectStatus\x12\x1e\n" +
-	"\n" +
-	"likeStatus\x18\v \x01(\x05R\n" +
-	"likeStatus\x12\x16\n" +
-	"\x06remark\x18\f \x01(\tR\x06remark\x12 \n" +
-	"\vcreatedTime\x18\r \x01(\tR\vcreatedTime\x12 \n" +
-	"\vupdatedTime\x18\x0e \x01(\tR\vupdatedTime\"\x8e\x01\n" +
+	"\aaddress\x18\t \x01(\tR\aaddress\x12\x16\n" +
+	"\x06remark\x18\n" +
+	" \x01(\tR\x06remark\x12 \n" +
+	"\vcreatedTime\x18\v \x01(\tR\vcreatedTime\x12 \n" +
+	"\vupdatedTime\x18\f \x01(\tR\vupdatedTime\"\x8e\x01\n" +
 	"\x10GetUserPostReply\x12\x12\n" +
 	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12\x18\n" +

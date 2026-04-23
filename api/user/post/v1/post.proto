@@ -123,11 +123,9 @@ message UserPostInfo {
 	int32 cityId = 7;
 	string lostTime = 8;
 	string address = 9;
-	int32 collectStatus = 10;
-	int32 likeStatus = 11;
-	string remark = 12;
-	string createdTime = 13;
-	string updatedTime = 14;
+	string remark = 10;
+	string createdTime = 11;
+	string updatedTime = 12;
 }
 
 message GetUserPostReply {
