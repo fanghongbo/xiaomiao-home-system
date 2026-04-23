@@ -17,6 +17,13 @@ service Discover {
 			get: "/api/v1/discover/list",
 		};
 	}
+
+	// GetDiscover 查询发现内容
+	rpc GetDiscover (GetDiscoverRequest) returns (GetDiscoverReply) {
+		option (google.api.http) = {
+			get: "/api/v1/discover/{id}"
+		};	
+	}
 }
 
 // 基础请求体
@@ -54,4 +61,46 @@ message GetDiscoverListReply {
 	string message = 2;
 	bool success = 3;
 	DiscoverList data = 4;
+}
+
+message GetDiscoverRequest {
+	int64 id = 1 [(validate.rules).int64 = {gt: 0}];
+}
+
+message CatInfo {
+	int64 id = 1;
+	string name = 2;
+	int32 catType = 3;
+	int32 breedType = 4;
+	int32 gender = 5;
+	float weight = 6;
+}
+
+message UserInfo {
+	int64 id = 1;
+	string name = 2;
+	int32 provinceId = 3;
+	int32 cityId = 4;
+}
+
+message DiscoverInfo {
+    int64 id = 1;
+	string title = 2;
+	int32 postType = 3;
+	CatInfo cat = 4;
+	UserInfo user = 5;
+	int32 provinceId = 6;
+	int32 cityId = 7;
+	string lostTime = 8;
+	string address = 9;
+	string remark = 10;
+	string createdTime = 11;
+	string updatedTime = 12;
+}
+
+message GetDiscoverReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	DiscoverInfo data = 4;
 }

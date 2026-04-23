@@ -21,6 +21,10 @@ type UserPostRepo interface {
 	UpdateUserPostStatus(ctx context.Context, req *v1.UpdateUserPostStatusRequest) (*v1.UpdateUserPostStatusReply, error)
 	// GetUserPost 查询发布内容
 	GetUserPost(ctx context.Context, req *v1.GetUserPostRequest) (*v1.GetUserPostReply, error)
+	// GetPostCatInfo 查询发布内容分类信息
+	GetPostCatInfo(ctx context.Context, postId int64) (*v1.CatInfo, error)
+	// GetPostUserInfo 查询发布内容用户信息
+	GetPostUserInfo(ctx context.Context, postId int64) (*v1.UserInfo, error)
 }
 
 // UserPostUsecase is a UserPost usecase.
@@ -92,6 +96,28 @@ func (u *UserPostUsecase) UpdateUserPostStatus(ctx context.Context, req *v1.Upda
 // GetUserPost 查询发布内容
 func (u *UserPostUsecase) GetUserPost(ctx context.Context, req *v1.GetUserPostRequest) (*v1.GetUserPostReply, error) {
 	res, err := u.repo.GetUserPost(ctx, req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+// GetPostCatInfo 查询发布内容分类信息
+func (u *UserPostUsecase) GetPostCatInfo(ctx context.Context, postId int64) (*v1.CatInfo, error) {
+	res, err := u.repo.GetPostCatInfo(ctx, postId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+// GetPostUserInfo 查询发布内容用户信息
+func (u *UserPostUsecase) GetPostUserInfo(ctx context.Context, postId int64) (*v1.UserInfo, error) {
+	res, err := u.repo.GetPostUserInfo(ctx, postId)
 
 	if err != nil {
 		return nil, err

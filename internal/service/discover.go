@@ -34,3 +34,13 @@ func (s *DiscoverService) GetDiscoverList(ctx context.Context, req *pb.GetDiscov
 
 	return res, nil
 }
+
+// GetDiscover 查询发现内容
+func (s *DiscoverService) GetDiscover(ctx context.Context, req *pb.GetDiscoverRequest) (*pb.GetDiscoverReply, error) {
+	res, err := s.discover.GetDiscover(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}

@@ -34,6 +34,7 @@ func NewWhiteListMatcher() selector.MatchFunc {
 		"/api.user.v1.User/MpLogin":                 true,
 		"/api.file.v1.File/GetStaticFile":           true,
 		"/api.discover.v1.Discover/GetDiscoverList": true,
+		"/api.discover.v1.Discover/GetDiscover":     true,
 	}
 
 	return func(ctx context.Context, operation string) bool {

@@ -11,6 +11,7 @@ import (
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-redis/redis/v8"
+	"gorm.io/gorm"
 )
 
 type discoverRepo struct {
@@ -26,14 +27,14 @@ func NewDiscoverRepo(data *Data, logger log.Logger) biz.DiscoverRepo {
 	}
 }
 
-// getQueryCacheKey 获取查询缓存key
-func (u *discoverRepo) getQueryCacheKey(req *v1.GetDiscoverListRequest) string {
+// getDiscoverListCacheKey 获取发现列表缓存key
+func (u *discoverRepo) getDiscoverListCacheKey(req *v1.GetDiscoverListRequest) string {
 	return fmt.Sprintf("discover:list:%d:%d:%d:%d:%d:%d", req.ProvinceId, req.CityId, req.PType, req.CBreed, req.Page, req.Size)
 }
 
-// getQueryCache 获取查询缓存
-func (u *discoverRepo) getQueryCache(ctx context.Context, req *v1.GetDiscoverListRequest) (*v1.DiscoverList, error) {
-	redisKey := u.getQueryCacheKey(req)
+// getDiscoverListCache 获取发现列表缓存
+func (u *discoverRepo) getDiscoverListCache(ctx context.Context, req *v1.GetDiscoverListRequest) (*v1.DiscoverList, error) {
+	redisKey := u.getDiscoverListCacheKey(req)
 
 	jsonData, err := u.data.cache.Get(ctx, redisKey).Result()
 	if err != nil {
@@ -51,9 +52,9 @@ func (u *discoverRepo) getQueryCache(ctx context.Context, req *v1.GetDiscoverLis
 	return &data, nil
 }
 
-// setQueryCache 设置查询缓存
-func (u *discoverRepo) setQueryCache(ctx context.Context, req *v1.GetDiscoverListRequest, data *v1.DiscoverList) error {
-	redisKey := u.getQueryCacheKey(req)
+// setDiscoverListCache 设置发现列表缓存
+func (u *discoverRepo) setDiscoverListCache(ctx context.Context, req *v1.GetDiscoverListRequest, data *v1.DiscoverList) error {
+	redisKey := u.getDiscoverListCacheKey(req)
 
 	jsonData, err := json.Marshal(data)
 	if err != nil {
@@ -86,9 +87,9 @@ func (u *discoverRepo) GetDiscoverList(ctx context.Context, req *v1.GetDiscoverL
 		return res, nil
 	}
 
-	cacheData, err := u.getQueryCache(ctx, req)
+	cacheData, err := u.getDiscoverListCache(ctx, req)
 	if err != nil {
-		u.log.Errorf("get query cache failed: %v", err)
+		u.log.Errorf("get discover list cache failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -97,7 +98,7 @@ func (u *discoverRepo) GetDiscoverList(ctx context.Context, req *v1.GetDiscoverL
 		return res, nil
 	}
 
-	baseQuery := u.data.db.Table("t_post as t1").Joins("inner join t_post_cat as t2 on t1.id = t2.post_id").Joins("inner join t_cat as t3 on t2.cat_id = t3.id").Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0).Where("t3.deleted_flag = ?", 0).Where("t1.audit_status = ?", 1)
+	baseQuery := u.data.db.Table("t_post as t1").Joins("inner join t_post_cat as t2 on t1.id = t2.post_id").Joins("inner join t_cat as t3 on t2.cat_id = t3.id").Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0).Where("t3.deleted_flag = ?", 0)
 
 	if req.PType > 0 {
 		baseQuery = baseQuery.Where("t1.post_type = ?", req.PType)
@@ -126,12 +127,12 @@ func (u *discoverRepo) GetDiscoverList(ctx context.Context, req *v1.GetDiscoverL
 
 	for rows.Next() {
 		var (
-			id            int64
-			title         string
-			postStatus    int
-			remark        string
-			createdTime   time.Time
-			updatedTime   time.Time
+			id          int64
+			title       string
+			postStatus  int
+			remark      string
+			createdTime time.Time
+			updatedTime time.Time
 		)
 
 		if err := rows.Scan(&id, &title, &postStatus, &remark, &createdTime, &updatedTime); err != nil {
@@ -140,12 +141,12 @@ func (u *discoverRepo) GetDiscoverList(ctx context.Context, req *v1.GetDiscoverL
 		}
 
 		items = append(items, &v1.DiscoverListItem{
-			Id:            id,
-			Title:         title,
-			PostStatus:    int32(postStatus),
-			Remark:        remark,
-			CreatedTime:   createdTime.Format("2006-01-02 15:04:05"),
-			UpdatedTime:   updatedTime.Format("2006-01-02 15:04:05"),
+			Id:          id,
+			Title:       title,
+			PostStatus:  int32(postStatus),
+			Remark:      remark,
+			CreatedTime: createdTime.Format("2006-01-02 15:04:05"),
+			UpdatedTime: updatedTime.Format("2006-01-02 15:04:05"),
 		})
 	}
 
@@ -157,10 +158,133 @@ func (u *discoverRepo) GetDiscoverList(ctx context.Context, req *v1.GetDiscoverL
 	res.Data.Items = items
 	res.Data.Total = total
 
-	if err := u.setQueryCache(ctx, req, res.Data); err != nil {
-		u.log.Errorf("set query cache failed: %v", err)
+	if err := u.setDiscoverListCache(ctx, req, res.Data); err != nil {
+		u.log.Errorf("set discover list cache failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	return res, nil
+}
+
+// GetDiscover 查询发现内容
+func (u *discoverRepo) GetDiscover(ctx context.Context, req *v1.GetDiscoverRequest) (*v1.GetDiscoverReply, error) {
+	post := &Post{}
+
+	res := &v1.GetDiscoverReply{
+		Code: 200, Success: true, Message: "查询成功",
+		Data: &v1.DiscoverInfo{},
+	}
+
+	cacheData, err := u.getDiscoverInfoCache(ctx, req)
+	if err != nil {
+		u.log.Errorf("get discover info cache failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	if cacheData != nil {
+		res.Data = cacheData
+		return res, nil
+	}
+
+	if err := u.data.db.Model(&Post{}).Where("id = ?", req.Id).Where("deleted_flag = ?", 0).First(post).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "发现内容不存在")
+		}
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	userPostRepo := NewUserPostRepo(u.data, u.log.Logger())
+
+	userInfo, err := userPostRepo.GetPostUserInfo(ctx, post.Id)
+	if err != nil {
+		u.log.Errorf("get post user info failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	catInfo, err := userPostRepo.GetPostCatInfo(ctx, post.Id)
+	if err != nil {
+		u.log.Errorf("get post cat info failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	lostTime := ""
+	if post.LostTime != nil {
+		lostTime = post.LostTime.Format("2006-01-02 15:04:05")
+	}
+
+	res.Data = &v1.DiscoverInfo{
+		Id:         post.Id,
+		Title:      post.Title,
+		PostType:   int32(post.PostType),
+		ProvinceId: int32(post.ProvinceId),
+		CityId:     int32(post.CityId),
+		LostTime:   lostTime,
+		Address:    post.Address,
+		Cat: &v1.CatInfo{
+			Id:        catInfo.Id,
+			Name:      catInfo.Name,
+			CatType:   catInfo.CatType,
+			BreedType: catInfo.BreedType,
+			Gender:    catInfo.Gender,
+			Weight:    catInfo.Weight,
+		},
+		User: &v1.UserInfo{
+			Id:         userInfo.Id,
+			Name:       userInfo.Name,
+			ProvinceId: int32(userInfo.ProvinceId),
+			CityId:     int32(userInfo.CityId),
+		},
+		Remark:      post.Remark,
+		CreatedTime: post.CreatedTime.Format("2006-01-02 15:04:05"),
+		UpdatedTime: post.UpdatedTime.Format("2006-01-02 15:04:05"),
+	}
+
+	if err := u.setDiscoverInfoCache(ctx, req, res.Data); err != nil {
+		u.log.Errorf("set discover info cache failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	return res, nil
+}
+
+// getDiscoverInfoCacheKey 获取发现内容缓存key
+func (u *discoverRepo) getDiscoverInfoCacheKey(req *v1.GetDiscoverRequest) string {
+	return fmt.Sprintf("discover:info:%d", req.Id)
+}
+
+// getDiscoverInfoCache 获取发现内容缓存
+func (u *discoverRepo) getDiscoverInfoCache(ctx context.Context, req *v1.GetDiscoverRequest) (*v1.DiscoverInfo, error) {
+	redisKey := u.getDiscoverInfoCacheKey(req)
+
+	jsonData, err := u.data.cache.Get(ctx, redisKey).Result()
+	if err != nil {
+		if err == redis.Nil {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	var data v1.DiscoverInfo
+	if err := json.Unmarshal([]byte(jsonData), &data); err != nil {
+		return nil, err
+	}
+
+	return &data, nil
+}
+
+// setDiscoverInfoCache 设置发现内容缓存
+func (u *discoverRepo) setDiscoverInfoCache(ctx context.Context, req *v1.GetDiscoverRequest, data *v1.DiscoverInfo) error {
+	redisKey := u.getDiscoverInfoCacheKey(req)
+
+	jsonData, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+
+	ttl := time.Minute * 1
+	if err := u.data.cache.Set(ctx, redisKey, jsonData, ttl).Err(); err != nil {
+		return err
+	}
+
+	return nil
 }
