@@ -21,18 +21,22 @@ const _ = http.SupportPackageIsVersion1
 
 const OperationUserLikeAddUserLike = "/api.user.like.v1.UserLike/AddUserLike"
 const OperationUserLikeCancelUserLike = "/api.user.like.v1.UserLike/CancelUserLike"
+const OperationUserLikeGetUserLikeStatus = "/api.user.like.v1.UserLike/GetUserLikeStatus"
 
 type UserLikeHTTPServer interface {
 	// AddUserLike AddUserLike 添加用户喜欢
 	AddUserLike(context.Context, *AddUserLikeRequest) (*AddUserLikeReply, error)
 	// CancelUserLike CancelUserLike 取消用户喜欢
 	CancelUserLike(context.Context, *CancelUserLikeRequest) (*CancelUserLikeReply, error)
+	// GetUserLikeStatus GetUserLikeStatus 查询用户喜欢状态
+	GetUserLikeStatus(context.Context, *GetUserLikeStatusRequest) (*GetUserLikeStatusReply, error)
 }
 
 func RegisterUserLikeHTTPServer(s *http.Server, srv UserLikeHTTPServer) {
 	r := s.Route("/")
 	r.POST("/api/v1/user/like/add", _UserLike_AddUserLike0_HTTP_Handler(srv))
 	r.POST("/api/v1/user/like/cancel", _UserLike_CancelUserLike0_HTTP_Handler(srv))
+	r.GET("/api/v1/user/like/status", _UserLike_GetUserLikeStatus0_HTTP_Handler(srv))
 }
 
 func _UserLike_AddUserLike0_HTTP_Handler(srv UserLikeHTTPServer) func(ctx http.Context) error {
@@ -79,11 +83,32 @@ func _UserLike_CancelUserLike0_HTTP_Handler(srv UserLikeHTTPServer) func(ctx htt
 	}
 }
 
+func _UserLike_GetUserLikeStatus0_HTTP_Handler(srv UserLikeHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetUserLikeStatusRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationUserLikeGetUserLikeStatus)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetUserLikeStatus(ctx, req.(*GetUserLikeStatusRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetUserLikeStatusReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type UserLikeHTTPClient interface {
 	// AddUserLike AddUserLike 添加用户喜欢
 	AddUserLike(ctx context.Context, req *AddUserLikeRequest, opts ...http.CallOption) (rsp *AddUserLikeReply, err error)
 	// CancelUserLike CancelUserLike 取消用户喜欢
 	CancelUserLike(ctx context.Context, req *CancelUserLikeRequest, opts ...http.CallOption) (rsp *CancelUserLikeReply, err error)
+	// GetUserLikeStatus GetUserLikeStatus 查询用户喜欢状态
+	GetUserLikeStatus(ctx context.Context, req *GetUserLikeStatusRequest, opts ...http.CallOption) (rsp *GetUserLikeStatusReply, err error)
 }
 
 type UserLikeHTTPClientImpl struct {
@@ -116,6 +141,20 @@ func (c *UserLikeHTTPClientImpl) CancelUserLike(ctx context.Context, in *CancelU
 	opts = append(opts, http.Operation(OperationUserLikeCancelUserLike))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// GetUserLikeStatus GetUserLikeStatus 查询用户喜欢状态
+func (c *UserLikeHTTPClientImpl) GetUserLikeStatus(ctx context.Context, in *GetUserLikeStatusRequest, opts ...http.CallOption) (*GetUserLikeStatusReply, error) {
+	var out GetUserLikeStatusReply
+	pattern := "/api/v1/user/like/status"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationUserLikeGetUserLikeStatus))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

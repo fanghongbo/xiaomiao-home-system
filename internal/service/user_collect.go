@@ -64,3 +64,13 @@ func (s *UserCollectService) CancelUserCollect(ctx context.Context, req *pb.Canc
 
 	return res, nil
 }
+
+// GetUserCollectStatus 查询用户收藏状态
+func (s *UserCollectService) GetUserCollectStatus(ctx context.Context, req *pb.GetUserCollectStatusRequest) (*pb.GetUserCollectStatusReply, error) {
+	res, err := s.userCollect.GetUserCollectStatus(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}

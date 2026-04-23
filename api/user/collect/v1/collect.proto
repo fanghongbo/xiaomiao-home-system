@@ -40,6 +40,13 @@ service UserCollect {
 			body: "*"
 		};
 	};
+
+	// GetUserCollectStatus 查询用户收藏状态
+	rpc GetUserCollectStatus (GetUserCollectStatusRequest) returns (GetUserCollectStatusReply) {
+		option (google.api.http) = {
+			get: "/api/v1/user/collect/status",
+		};
+	}
 }
 
 // 基础请求体
@@ -107,4 +114,19 @@ message CancelUserCollectReply {
 	string message = 2;
 	bool success = 3;
 	string data = 4;
+}
+
+message GetUserCollectStatusRequest {
+	int64 id = 1 [(validate.rules).int64 = {gt: 0}];
+}
+
+message UserCollectStatus {
+	int32 collect = 1;
+}
+
+message GetUserCollectStatusReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	UserCollectStatus data = 4;
 }

@@ -513,6 +513,24 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.user.collect.v1.GetUserCollectListReply'
+    /api/v1/user/collect/status:
+        get:
+            tags:
+                - UserCollect
+            description: GetUserCollectStatus 查询用户收藏状态
+            operationId: UserCollect_GetUserCollectStatus
+            parameters:
+                - name: id
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.collect.v1.GetUserCollectStatusReply'
     /api/v1/user/collect/types:
         get:
             tags:
@@ -602,6 +620,24 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.user.like.v1.CancelUserLikeReply'
+    /api/v1/user/like/status:
+        get:
+            tags:
+                - UserLike
+            description: GetUserLikeStatus 查询用户喜欢状态
+            operationId: UserLike_GetUserLikeStatus
+            parameters:
+                - name: id
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.user.like.v1.GetUserLikeStatusReply'
     /api/v1/user/notification:
         post:
             tags:
@@ -1622,6 +1658,18 @@ components:
                     type: boolean
                 data:
                     $ref: '#/components/schemas/api.user.collect.v1.UserCollectList'
+        api.user.collect.v1.GetUserCollectStatusReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    $ref: '#/components/schemas/api.user.collect.v1.UserCollectStatus'
         api.user.collect.v1.GetUserCollectTypesReply:
             type: object
             properties:
@@ -1670,6 +1718,12 @@ components:
                     type: string
                 updatedTime:
                     type: string
+        api.user.collect.v1.UserCollectStatus:
+            type: object
+            properties:
+                collect:
+                    type: integer
+                    format: int32
         api.user.like.v1.AddUserLikeReply:
             type: object
             properties:
@@ -1704,6 +1758,24 @@ components:
             properties:
                 id:
                     type: string
+        api.user.like.v1.GetUserLikeStatusReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    $ref: '#/components/schemas/api.user.like.v1.UserLikeStatus'
+        api.user.like.v1.UserLikeStatus:
+            type: object
+            properties:
+                like:
+                    type: integer
+                    format: int32
         api.user.notification.v1.BatchUserNotificationsReply:
             type: object
             properties:

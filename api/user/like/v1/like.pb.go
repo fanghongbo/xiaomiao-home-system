@@ -321,6 +321,162 @@ func (x *CancelUserLikeReply) GetData() string {
 	return ""
 }
 
+type GetUserLikeStatusRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUserLikeStatusRequest) Reset() {
+	*x = GetUserLikeStatusRequest{}
+	mi := &file_user_like_v1_like_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUserLikeStatusRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserLikeStatusRequest) ProtoMessage() {}
+
+func (x *GetUserLikeStatusRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_like_v1_like_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserLikeStatusRequest.ProtoReflect.Descriptor instead.
+func (*GetUserLikeStatusRequest) Descriptor() ([]byte, []int) {
+	return file_user_like_v1_like_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *GetUserLikeStatusRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type UserLikeStatus struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Like          int32                  `protobuf:"varint,1,opt,name=like,proto3" json:"like,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UserLikeStatus) Reset() {
+	*x = UserLikeStatus{}
+	mi := &file_user_like_v1_like_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserLikeStatus) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserLikeStatus) ProtoMessage() {}
+
+func (x *UserLikeStatus) ProtoReflect() protoreflect.Message {
+	mi := &file_user_like_v1_like_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserLikeStatus.ProtoReflect.Descriptor instead.
+func (*UserLikeStatus) Descriptor() ([]byte, []int) {
+	return file_user_like_v1_like_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *UserLikeStatus) GetLike() int32 {
+	if x != nil {
+		return x.Like
+	}
+	return 0
+}
+
+type GetUserLikeStatusReply struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Code          int32                  `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Success       bool                   `protobuf:"varint,3,opt,name=success,proto3" json:"success,omitempty"`
+	Data          *UserLikeStatus        `protobuf:"bytes,4,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUserLikeStatusReply) Reset() {
+	*x = GetUserLikeStatusReply{}
+	mi := &file_user_like_v1_like_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUserLikeStatusReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserLikeStatusReply) ProtoMessage() {}
+
+func (x *GetUserLikeStatusReply) ProtoReflect() protoreflect.Message {
+	mi := &file_user_like_v1_like_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserLikeStatusReply.ProtoReflect.Descriptor instead.
+func (*GetUserLikeStatusReply) Descriptor() ([]byte, []int) {
+	return file_user_like_v1_like_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *GetUserLikeStatusReply) GetCode() int32 {
+	if x != nil {
+		return x.Code
+	}
+	return 0
+}
+
+func (x *GetUserLikeStatusReply) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *GetUserLikeStatusReply) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetUserLikeStatusReply) GetData() *UserLikeStatus {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
 var File_user_like_v1_like_proto protoreflect.FileDescriptor
 
 const file_user_like_v1_like_proto_rawDesc = "" +
@@ -341,10 +497,20 @@ const file_user_like_v1_like_proto_rawDesc = "" +
 	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12\x18\n" +
 	"\asuccess\x18\x03 \x01(\bR\asuccess\x12\x12\n" +
-	"\x04data\x18\x04 \x01(\tR\x04data2\x8d\x02\n" +
+	"\x04data\x18\x04 \x01(\tR\x04data\"3\n" +
+	"\x18GetUserLikeStatusRequest\x12\x17\n" +
+	"\x02id\x18\x01 \x01(\x03B\a\xfaB\x04\"\x02 \x00R\x02id\"$\n" +
+	"\x0eUserLikeStatus\x12\x12\n" +
+	"\x04like\x18\x01 \x01(\x05R\x04like\"\x96\x01\n" +
+	"\x16GetUserLikeStatusReply\x12\x12\n" +
+	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12\x18\n" +
+	"\asuccess\x18\x03 \x01(\bR\asuccess\x124\n" +
+	"\x04data\x18\x04 \x01(\v2 .api.user.like.v1.UserLikeStatusR\x04data2\x9b\x03\n" +
 	"\bUserLike\x12y\n" +
 	"\vAddUserLike\x12$.api.user.like.v1.AddUserLikeRequest\x1a\".api.user.like.v1.AddUserLikeReply\" \x82\xd3\xe4\x93\x02\x1a:\x01*\"\x15/api/v1/user/like/add\x12\x85\x01\n" +
-	"\x0eCancelUserLike\x12'.api.user.like.v1.CancelUserLikeRequest\x1a%.api.user.like.v1.CancelUserLikeReply\"#\x82\xd3\xe4\x93\x02\x1d:\x01*\"\x18/api/v1/user/like/cancelBO\n" +
+	"\x0eCancelUserLike\x12'.api.user.like.v1.CancelUserLikeRequest\x1a%.api.user.like.v1.CancelUserLikeReply\"#\x82\xd3\xe4\x93\x02\x1d:\x01*\"\x18/api/v1/user/like/cancel\x12\x8b\x01\n" +
+	"\x11GetUserLikeStatus\x12*.api.user.like.v1.GetUserLikeStatusRequest\x1a(.api.user.like.v1.GetUserLikeStatusReply\" \x82\xd3\xe4\x93\x02\x1a\x12\x18/api/v1/user/like/statusBO\n" +
 	"\x10api.user.like.v1B\x0fUserLikeProtoV1P\x01Z(xiaomiao-home-system/api/user/like/v1;v1b\x06proto3"
 
 var (
@@ -359,25 +525,31 @@ func file_user_like_v1_like_proto_rawDescGZIP() []byte {
 	return file_user_like_v1_like_proto_rawDescData
 }
 
-var file_user_like_v1_like_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_user_like_v1_like_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_user_like_v1_like_proto_goTypes = []any{
-	(*BaseRequest)(nil),           // 0: api.user.like.v1.BaseRequest
-	(*BaseResponse)(nil),          // 1: api.user.like.v1.BaseResponse
-	(*AddUserLikeRequest)(nil),    // 2: api.user.like.v1.AddUserLikeRequest
-	(*AddUserLikeReply)(nil),      // 3: api.user.like.v1.AddUserLikeReply
-	(*CancelUserLikeRequest)(nil), // 4: api.user.like.v1.CancelUserLikeRequest
-	(*CancelUserLikeReply)(nil),   // 5: api.user.like.v1.CancelUserLikeReply
+	(*BaseRequest)(nil),              // 0: api.user.like.v1.BaseRequest
+	(*BaseResponse)(nil),             // 1: api.user.like.v1.BaseResponse
+	(*AddUserLikeRequest)(nil),       // 2: api.user.like.v1.AddUserLikeRequest
+	(*AddUserLikeReply)(nil),         // 3: api.user.like.v1.AddUserLikeReply
+	(*CancelUserLikeRequest)(nil),    // 4: api.user.like.v1.CancelUserLikeRequest
+	(*CancelUserLikeReply)(nil),      // 5: api.user.like.v1.CancelUserLikeReply
+	(*GetUserLikeStatusRequest)(nil), // 6: api.user.like.v1.GetUserLikeStatusRequest
+	(*UserLikeStatus)(nil),           // 7: api.user.like.v1.UserLikeStatus
+	(*GetUserLikeStatusReply)(nil),   // 8: api.user.like.v1.GetUserLikeStatusReply
 }
 var file_user_like_v1_like_proto_depIdxs = []int32{
-	2, // 0: api.user.like.v1.UserLike.AddUserLike:input_type -> api.user.like.v1.AddUserLikeRequest
-	4, // 1: api.user.like.v1.UserLike.CancelUserLike:input_type -> api.user.like.v1.CancelUserLikeRequest
-	3, // 2: api.user.like.v1.UserLike.AddUserLike:output_type -> api.user.like.v1.AddUserLikeReply
-	5, // 3: api.user.like.v1.UserLike.CancelUserLike:output_type -> api.user.like.v1.CancelUserLikeReply
-	2, // [2:4] is the sub-list for method output_type
-	0, // [0:2] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	7, // 0: api.user.like.v1.GetUserLikeStatusReply.data:type_name -> api.user.like.v1.UserLikeStatus
+	2, // 1: api.user.like.v1.UserLike.AddUserLike:input_type -> api.user.like.v1.AddUserLikeRequest
+	4, // 2: api.user.like.v1.UserLike.CancelUserLike:input_type -> api.user.like.v1.CancelUserLikeRequest
+	6, // 3: api.user.like.v1.UserLike.GetUserLikeStatus:input_type -> api.user.like.v1.GetUserLikeStatusRequest
+	3, // 4: api.user.like.v1.UserLike.AddUserLike:output_type -> api.user.like.v1.AddUserLikeReply
+	5, // 5: api.user.like.v1.UserLike.CancelUserLike:output_type -> api.user.like.v1.CancelUserLikeReply
+	8, // 6: api.user.like.v1.UserLike.GetUserLikeStatus:output_type -> api.user.like.v1.GetUserLikeStatusReply
+	4, // [4:7] is the sub-list for method output_type
+	1, // [1:4] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_user_like_v1_like_proto_init() }
@@ -391,7 +563,7 @@ func file_user_like_v1_like_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_like_v1_like_proto_rawDesc), len(file_user_like_v1_like_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

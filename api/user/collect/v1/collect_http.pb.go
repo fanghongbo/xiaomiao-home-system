@@ -22,6 +22,7 @@ const _ = http.SupportPackageIsVersion1
 const OperationUserCollectAddUserCollect = "/api.user.collect.v1.UserCollect/AddUserCollect"
 const OperationUserCollectCancelUserCollect = "/api.user.collect.v1.UserCollect/CancelUserCollect"
 const OperationUserCollectGetUserCollectList = "/api.user.collect.v1.UserCollect/GetUserCollectList"
+const OperationUserCollectGetUserCollectStatus = "/api.user.collect.v1.UserCollect/GetUserCollectStatus"
 const OperationUserCollectGetUserCollectTypes = "/api.user.collect.v1.UserCollect/GetUserCollectTypes"
 
 type UserCollectHTTPServer interface {
@@ -31,6 +32,8 @@ type UserCollectHTTPServer interface {
 	CancelUserCollect(context.Context, *CancelUserCollectRequest) (*CancelUserCollectReply, error)
 	// GetUserCollectList GetUserCollectList 查询用户收藏列表
 	GetUserCollectList(context.Context, *GetUserCollectListRequest) (*GetUserCollectListReply, error)
+	// GetUserCollectStatus GetUserCollectStatus 查询用户收藏状态
+	GetUserCollectStatus(context.Context, *GetUserCollectStatusRequest) (*GetUserCollectStatusReply, error)
 	// GetUserCollectTypes GetUserCollectTypes 查询用户收藏分类
 	GetUserCollectTypes(context.Context, *GetUserCollectTypesRequest) (*GetUserCollectTypesReply, error)
 }
@@ -41,6 +44,7 @@ func RegisterUserCollectHTTPServer(s *http.Server, srv UserCollectHTTPServer) {
 	r.GET("/api/v1/user/collect/types", _UserCollect_GetUserCollectTypes0_HTTP_Handler(srv))
 	r.POST("/api/v1/user/collect/add", _UserCollect_AddUserCollect0_HTTP_Handler(srv))
 	r.POST("/api/v1/user/collect/cancel", _UserCollect_CancelUserCollect0_HTTP_Handler(srv))
+	r.GET("/api/v1/user/collect/status", _UserCollect_GetUserCollectStatus0_HTTP_Handler(srv))
 }
 
 func _UserCollect_GetUserCollectList0_HTTP_Handler(srv UserCollectHTTPServer) func(ctx http.Context) error {
@@ -125,6 +129,25 @@ func _UserCollect_CancelUserCollect0_HTTP_Handler(srv UserCollectHTTPServer) fun
 	}
 }
 
+func _UserCollect_GetUserCollectStatus0_HTTP_Handler(srv UserCollectHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetUserCollectStatusRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationUserCollectGetUserCollectStatus)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetUserCollectStatus(ctx, req.(*GetUserCollectStatusRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetUserCollectStatusReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type UserCollectHTTPClient interface {
 	// AddUserCollect AddUserCollect 添加用户收藏
 	AddUserCollect(ctx context.Context, req *AddUserCollectRequest, opts ...http.CallOption) (rsp *AddUserCollectReply, err error)
@@ -132,6 +155,8 @@ type UserCollectHTTPClient interface {
 	CancelUserCollect(ctx context.Context, req *CancelUserCollectRequest, opts ...http.CallOption) (rsp *CancelUserCollectReply, err error)
 	// GetUserCollectList GetUserCollectList 查询用户收藏列表
 	GetUserCollectList(ctx context.Context, req *GetUserCollectListRequest, opts ...http.CallOption) (rsp *GetUserCollectListReply, err error)
+	// GetUserCollectStatus GetUserCollectStatus 查询用户收藏状态
+	GetUserCollectStatus(ctx context.Context, req *GetUserCollectStatusRequest, opts ...http.CallOption) (rsp *GetUserCollectStatusReply, err error)
 	// GetUserCollectTypes GetUserCollectTypes 查询用户收藏分类
 	GetUserCollectTypes(ctx context.Context, req *GetUserCollectTypesRequest, opts ...http.CallOption) (rsp *GetUserCollectTypesReply, err error)
 }
@@ -178,6 +203,20 @@ func (c *UserCollectHTTPClientImpl) GetUserCollectList(ctx context.Context, in *
 	pattern := "/api/v1/user/collect/list"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationUserCollectGetUserCollectList))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// GetUserCollectStatus GetUserCollectStatus 查询用户收藏状态
+func (c *UserCollectHTTPClientImpl) GetUserCollectStatus(ctx context.Context, in *GetUserCollectStatusRequest, opts ...http.CallOption) (*GetUserCollectStatusReply, error) {
+	var out GetUserCollectStatusReply
+	pattern := "/api/v1/user/collect/status"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationUserCollectGetUserCollectStatus))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

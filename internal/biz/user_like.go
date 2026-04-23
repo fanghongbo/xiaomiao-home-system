@@ -15,6 +15,8 @@ type UserLikeRepo interface {
 	CancelUserLike(ctx context.Context, req *v1.CancelUserLikeRequest) (*v1.CancelUserLikeReply, error)
 	// GetUserPostLikeStatus 查询用户发布内容收藏状态
 	GetUserPostLikeStatus(ctx context.Context, postId int64) (bool, error)
+	// GetUserLikeStatus 查询用户喜欢状态
+	GetUserLikeStatus(ctx context.Context, req *v1.GetUserLikeStatusRequest) (*v1.GetUserLikeStatusReply, error)
 }
 
 // UserLikeUsecase is a UserLike usecase.
@@ -56,6 +58,17 @@ func (u *UserLikeUsecase) GetUserPostLikeStatus(ctx context.Context, postId int6
 
 	if err != nil {
 		return false, err
+	}
+
+	return res, nil
+}
+
+// GetUserLikeStatus 查询用户喜欢状态
+func (u *UserLikeUsecase) GetUserLikeStatus(ctx context.Context, req *v1.GetUserLikeStatusRequest) (*v1.GetUserLikeStatusReply, error) {
+	res, err := u.repo.GetUserLikeStatus(ctx, req)
+
+	if err != nil {
+		return nil, err
 	}
 
 	return res, nil

@@ -19,8 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	UserLike_AddUserLike_FullMethodName    = "/api.user.like.v1.UserLike/AddUserLike"
-	UserLike_CancelUserLike_FullMethodName = "/api.user.like.v1.UserLike/CancelUserLike"
+	UserLike_AddUserLike_FullMethodName       = "/api.user.like.v1.UserLike/AddUserLike"
+	UserLike_CancelUserLike_FullMethodName    = "/api.user.like.v1.UserLike/CancelUserLike"
+	UserLike_GetUserLikeStatus_FullMethodName = "/api.user.like.v1.UserLike/GetUserLikeStatus"
 )
 
 // UserLikeClient is the client API for UserLike service.
@@ -31,6 +32,8 @@ type UserLikeClient interface {
 	AddUserLike(ctx context.Context, in *AddUserLikeRequest, opts ...grpc.CallOption) (*AddUserLikeReply, error)
 	// CancelUserLike 取消用户喜欢
 	CancelUserLike(ctx context.Context, in *CancelUserLikeRequest, opts ...grpc.CallOption) (*CancelUserLikeReply, error)
+	// GetUserLikeStatus 查询用户喜欢状态
+	GetUserLikeStatus(ctx context.Context, in *GetUserLikeStatusRequest, opts ...grpc.CallOption) (*GetUserLikeStatusReply, error)
 }
 
 type userLikeClient struct {
@@ -61,6 +64,16 @@ func (c *userLikeClient) CancelUserLike(ctx context.Context, in *CancelUserLikeR
 	return out, nil
 }
 
+func (c *userLikeClient) GetUserLikeStatus(ctx context.Context, in *GetUserLikeStatusRequest, opts ...grpc.CallOption) (*GetUserLikeStatusReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetUserLikeStatusReply)
+	err := c.cc.Invoke(ctx, UserLike_GetUserLikeStatus_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserLikeServer is the server API for UserLike service.
 // All implementations must embed UnimplementedUserLikeServer
 // for forward compatibility.
@@ -69,6 +82,8 @@ type UserLikeServer interface {
 	AddUserLike(context.Context, *AddUserLikeRequest) (*AddUserLikeReply, error)
 	// CancelUserLike 取消用户喜欢
 	CancelUserLike(context.Context, *CancelUserLikeRequest) (*CancelUserLikeReply, error)
+	// GetUserLikeStatus 查询用户喜欢状态
+	GetUserLikeStatus(context.Context, *GetUserLikeStatusRequest) (*GetUserLikeStatusReply, error)
 	mustEmbedUnimplementedUserLikeServer()
 }
 
@@ -84,6 +99,9 @@ func (UnimplementedUserLikeServer) AddUserLike(context.Context, *AddUserLikeRequ
 }
 func (UnimplementedUserLikeServer) CancelUserLike(context.Context, *CancelUserLikeRequest) (*CancelUserLikeReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method CancelUserLike not implemented")
+}
+func (UnimplementedUserLikeServer) GetUserLikeStatus(context.Context, *GetUserLikeStatusRequest) (*GetUserLikeStatusReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetUserLikeStatus not implemented")
 }
 func (UnimplementedUserLikeServer) mustEmbedUnimplementedUserLikeServer() {}
 func (UnimplementedUserLikeServer) testEmbeddedByValue()                  {}
@@ -142,6 +160,24 @@ func _UserLike_CancelUserLike_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserLike_GetUserLikeStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserLikeStatusRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserLikeServer).GetUserLikeStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserLike_GetUserLikeStatus_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserLikeServer).GetUserLikeStatus(ctx, req.(*GetUserLikeStatusRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserLike_ServiceDesc is the grpc.ServiceDesc for UserLike service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -156,6 +192,10 @@ var UserLike_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CancelUserLike",
 			Handler:    _UserLike_CancelUserLike_Handler,
+		},
+		{
+			MethodName: "GetUserLikeStatus",
+			Handler:    _UserLike_GetUserLikeStatus_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

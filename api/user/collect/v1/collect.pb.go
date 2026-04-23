@@ -713,6 +713,162 @@ func (x *CancelUserCollectReply) GetData() string {
 	return ""
 }
 
+type GetUserCollectStatusRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUserCollectStatusRequest) Reset() {
+	*x = GetUserCollectStatusRequest{}
+	mi := &file_user_collect_v1_collect_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUserCollectStatusRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserCollectStatusRequest) ProtoMessage() {}
+
+func (x *GetUserCollectStatusRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_collect_v1_collect_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserCollectStatusRequest.ProtoReflect.Descriptor instead.
+func (*GetUserCollectStatusRequest) Descriptor() ([]byte, []int) {
+	return file_user_collect_v1_collect_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *GetUserCollectStatusRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type UserCollectStatus struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Collect       int32                  `protobuf:"varint,1,opt,name=collect,proto3" json:"collect,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UserCollectStatus) Reset() {
+	*x = UserCollectStatus{}
+	mi := &file_user_collect_v1_collect_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserCollectStatus) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserCollectStatus) ProtoMessage() {}
+
+func (x *UserCollectStatus) ProtoReflect() protoreflect.Message {
+	mi := &file_user_collect_v1_collect_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserCollectStatus.ProtoReflect.Descriptor instead.
+func (*UserCollectStatus) Descriptor() ([]byte, []int) {
+	return file_user_collect_v1_collect_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *UserCollectStatus) GetCollect() int32 {
+	if x != nil {
+		return x.Collect
+	}
+	return 0
+}
+
+type GetUserCollectStatusReply struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Code          int32                  `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Success       bool                   `protobuf:"varint,3,opt,name=success,proto3" json:"success,omitempty"`
+	Data          *UserCollectStatus     `protobuf:"bytes,4,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUserCollectStatusReply) Reset() {
+	*x = GetUserCollectStatusReply{}
+	mi := &file_user_collect_v1_collect_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUserCollectStatusReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserCollectStatusReply) ProtoMessage() {}
+
+func (x *GetUserCollectStatusReply) ProtoReflect() protoreflect.Message {
+	mi := &file_user_collect_v1_collect_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserCollectStatusReply.ProtoReflect.Descriptor instead.
+func (*GetUserCollectStatusReply) Descriptor() ([]byte, []int) {
+	return file_user_collect_v1_collect_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *GetUserCollectStatusReply) GetCode() int32 {
+	if x != nil {
+		return x.Code
+	}
+	return 0
+}
+
+func (x *GetUserCollectStatusReply) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *GetUserCollectStatusReply) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetUserCollectStatusReply) GetData() *UserCollectStatus {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
 var File_user_collect_v1_collect_proto protoreflect.FileDescriptor
 
 const file_user_collect_v1_collect_proto_rawDesc = "" +
@@ -767,12 +923,22 @@ const file_user_collect_v1_collect_proto_rawDesc = "" +
 	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12\x18\n" +
 	"\asuccess\x18\x03 \x01(\bR\asuccess\x12\x12\n" +
-	"\x04data\x18\x04 \x01(\tR\x04data2\xe9\x04\n" +
+	"\x04data\x18\x04 \x01(\tR\x04data\"6\n" +
+	"\x1bGetUserCollectStatusRequest\x12\x17\n" +
+	"\x02id\x18\x01 \x01(\x03B\a\xfaB\x04\"\x02 \x00R\x02id\"-\n" +
+	"\x11UserCollectStatus\x12\x18\n" +
+	"\acollect\x18\x01 \x01(\x05R\acollect\"\x9f\x01\n" +
+	"\x19GetUserCollectStatusReply\x12\x12\n" +
+	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12\x18\n" +
+	"\asuccess\x18\x03 \x01(\bR\asuccess\x12:\n" +
+	"\x04data\x18\x04 \x01(\v2&.api.user.collect.v1.UserCollectStatusR\x04data2\x89\x06\n" +
 	"\vUserCollect\x12\x95\x01\n" +
 	"\x12GetUserCollectList\x12..api.user.collect.v1.GetUserCollectListRequest\x1a,.api.user.collect.v1.GetUserCollectListReply\"!\x82\xd3\xe4\x93\x02\x1b\x12\x19/api/v1/user/collect/list\x12\x99\x01\n" +
 	"\x13GetUserCollectTypes\x12/.api.user.collect.v1.GetUserCollectTypesRequest\x1a-.api.user.collect.v1.GetUserCollectTypesReply\"\"\x82\xd3\xe4\x93\x02\x1c\x12\x1a/api/v1/user/collect/types\x12\x8b\x01\n" +
 	"\x0eAddUserCollect\x12*.api.user.collect.v1.AddUserCollectRequest\x1a(.api.user.collect.v1.AddUserCollectReply\"#\x82\xd3\xe4\x93\x02\x1d:\x01*\"\x18/api/v1/user/collect/add\x12\x97\x01\n" +
-	"\x11CancelUserCollect\x12-.api.user.collect.v1.CancelUserCollectRequest\x1a+.api.user.collect.v1.CancelUserCollectReply\"&\x82\xd3\xe4\x93\x02 :\x01*\"\x1b/api/v1/user/collect/cancelBX\n" +
+	"\x11CancelUserCollect\x12-.api.user.collect.v1.CancelUserCollectRequest\x1a+.api.user.collect.v1.CancelUserCollectReply\"&\x82\xd3\xe4\x93\x02 :\x01*\"\x1b/api/v1/user/collect/cancel\x12\x9d\x01\n" +
+	"\x14GetUserCollectStatus\x120.api.user.collect.v1.GetUserCollectStatusRequest\x1a..api.user.collect.v1.GetUserCollectStatusReply\"#\x82\xd3\xe4\x93\x02\x1d\x12\x1b/api/v1/user/collect/statusBX\n" +
 	"\x13api.user.collect.v1B\x12UserCollectProtoV1P\x01Z+xiaomiao-home-system/api/user/collect/v1;v1b\x06proto3"
 
 var (
@@ -787,37 +953,43 @@ func file_user_collect_v1_collect_proto_rawDescGZIP() []byte {
 	return file_user_collect_v1_collect_proto_rawDescData
 }
 
-var file_user_collect_v1_collect_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_user_collect_v1_collect_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_user_collect_v1_collect_proto_goTypes = []any{
-	(*BaseRequest)(nil),                // 0: api.user.collect.v1.BaseRequest
-	(*BaseResponse)(nil),               // 1: api.user.collect.v1.BaseResponse
-	(*GetUserCollectListRequest)(nil),  // 2: api.user.collect.v1.GetUserCollectListRequest
-	(*UserCollectListItem)(nil),        // 3: api.user.collect.v1.UserCollectListItem
-	(*UserCollectList)(nil),            // 4: api.user.collect.v1.UserCollectList
-	(*GetUserCollectListReply)(nil),    // 5: api.user.collect.v1.GetUserCollectListReply
-	(*GetUserCollectTypesRequest)(nil), // 6: api.user.collect.v1.GetUserCollectTypesRequest
-	(*GetUserCollectTypesReply)(nil),   // 7: api.user.collect.v1.GetUserCollectTypesReply
-	(*AddUserCollectRequest)(nil),      // 8: api.user.collect.v1.AddUserCollectRequest
-	(*AddUserCollectReply)(nil),        // 9: api.user.collect.v1.AddUserCollectReply
-	(*CancelUserCollectRequest)(nil),   // 10: api.user.collect.v1.CancelUserCollectRequest
-	(*CancelUserCollectReply)(nil),     // 11: api.user.collect.v1.CancelUserCollectReply
+	(*BaseRequest)(nil),                 // 0: api.user.collect.v1.BaseRequest
+	(*BaseResponse)(nil),                // 1: api.user.collect.v1.BaseResponse
+	(*GetUserCollectListRequest)(nil),   // 2: api.user.collect.v1.GetUserCollectListRequest
+	(*UserCollectListItem)(nil),         // 3: api.user.collect.v1.UserCollectListItem
+	(*UserCollectList)(nil),             // 4: api.user.collect.v1.UserCollectList
+	(*GetUserCollectListReply)(nil),     // 5: api.user.collect.v1.GetUserCollectListReply
+	(*GetUserCollectTypesRequest)(nil),  // 6: api.user.collect.v1.GetUserCollectTypesRequest
+	(*GetUserCollectTypesReply)(nil),    // 7: api.user.collect.v1.GetUserCollectTypesReply
+	(*AddUserCollectRequest)(nil),       // 8: api.user.collect.v1.AddUserCollectRequest
+	(*AddUserCollectReply)(nil),         // 9: api.user.collect.v1.AddUserCollectReply
+	(*CancelUserCollectRequest)(nil),    // 10: api.user.collect.v1.CancelUserCollectRequest
+	(*CancelUserCollectReply)(nil),      // 11: api.user.collect.v1.CancelUserCollectReply
+	(*GetUserCollectStatusRequest)(nil), // 12: api.user.collect.v1.GetUserCollectStatusRequest
+	(*UserCollectStatus)(nil),           // 13: api.user.collect.v1.UserCollectStatus
+	(*GetUserCollectStatusReply)(nil),   // 14: api.user.collect.v1.GetUserCollectStatusReply
 }
 var file_user_collect_v1_collect_proto_depIdxs = []int32{
 	3,  // 0: api.user.collect.v1.UserCollectList.items:type_name -> api.user.collect.v1.UserCollectListItem
 	4,  // 1: api.user.collect.v1.GetUserCollectListReply.data:type_name -> api.user.collect.v1.UserCollectList
-	2,  // 2: api.user.collect.v1.UserCollect.GetUserCollectList:input_type -> api.user.collect.v1.GetUserCollectListRequest
-	6,  // 3: api.user.collect.v1.UserCollect.GetUserCollectTypes:input_type -> api.user.collect.v1.GetUserCollectTypesRequest
-	8,  // 4: api.user.collect.v1.UserCollect.AddUserCollect:input_type -> api.user.collect.v1.AddUserCollectRequest
-	10, // 5: api.user.collect.v1.UserCollect.CancelUserCollect:input_type -> api.user.collect.v1.CancelUserCollectRequest
-	5,  // 6: api.user.collect.v1.UserCollect.GetUserCollectList:output_type -> api.user.collect.v1.GetUserCollectListReply
-	7,  // 7: api.user.collect.v1.UserCollect.GetUserCollectTypes:output_type -> api.user.collect.v1.GetUserCollectTypesReply
-	9,  // 8: api.user.collect.v1.UserCollect.AddUserCollect:output_type -> api.user.collect.v1.AddUserCollectReply
-	11, // 9: api.user.collect.v1.UserCollect.CancelUserCollect:output_type -> api.user.collect.v1.CancelUserCollectReply
-	6,  // [6:10] is the sub-list for method output_type
-	2,  // [2:6] is the sub-list for method input_type
-	2,  // [2:2] is the sub-list for extension type_name
-	2,  // [2:2] is the sub-list for extension extendee
-	0,  // [0:2] is the sub-list for field type_name
+	13, // 2: api.user.collect.v1.GetUserCollectStatusReply.data:type_name -> api.user.collect.v1.UserCollectStatus
+	2,  // 3: api.user.collect.v1.UserCollect.GetUserCollectList:input_type -> api.user.collect.v1.GetUserCollectListRequest
+	6,  // 4: api.user.collect.v1.UserCollect.GetUserCollectTypes:input_type -> api.user.collect.v1.GetUserCollectTypesRequest
+	8,  // 5: api.user.collect.v1.UserCollect.AddUserCollect:input_type -> api.user.collect.v1.AddUserCollectRequest
+	10, // 6: api.user.collect.v1.UserCollect.CancelUserCollect:input_type -> api.user.collect.v1.CancelUserCollectRequest
+	12, // 7: api.user.collect.v1.UserCollect.GetUserCollectStatus:input_type -> api.user.collect.v1.GetUserCollectStatusRequest
+	5,  // 8: api.user.collect.v1.UserCollect.GetUserCollectList:output_type -> api.user.collect.v1.GetUserCollectListReply
+	7,  // 9: api.user.collect.v1.UserCollect.GetUserCollectTypes:output_type -> api.user.collect.v1.GetUserCollectTypesReply
+	9,  // 10: api.user.collect.v1.UserCollect.AddUserCollect:output_type -> api.user.collect.v1.AddUserCollectReply
+	11, // 11: api.user.collect.v1.UserCollect.CancelUserCollect:output_type -> api.user.collect.v1.CancelUserCollectReply
+	14, // 12: api.user.collect.v1.UserCollect.GetUserCollectStatus:output_type -> api.user.collect.v1.GetUserCollectStatusReply
+	8,  // [8:13] is the sub-list for method output_type
+	3,  // [3:8] is the sub-list for method input_type
+	3,  // [3:3] is the sub-list for extension type_name
+	3,  // [3:3] is the sub-list for extension extendee
+	0,  // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_user_collect_v1_collect_proto_init() }
@@ -831,7 +1003,7 @@ func file_user_collect_v1_collect_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_collect_v1_collect_proto_rawDesc), len(file_user_collect_v1_collect_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   12,
+			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -201,3 +201,26 @@ func (u *userLikeRepo) checkUserAddUserLikeCountLimit(ctx context.Context, userI
 
 	return nil
 }
+
+// GetUserLikeStatus 查询用户喜欢状态
+func (u *userLikeRepo) GetUserLikeStatus(ctx context.Context, req *v1.GetUserLikeStatusRequest) (*v1.GetUserLikeStatusReply, error) {
+	isLike, err := u.GetUserPostLikeStatus(ctx, req.Id)
+	if err != nil {
+		u.log.Errorf("get user post like status failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	likeStatus := 0
+	if isLike {
+		likeStatus = 1
+	} else {
+		likeStatus = 0
+	}
+
+	return &v1.GetUserLikeStatusReply{
+		Code: 200, Success: true, Message: "查询成功",
+		Data: &v1.UserLikeStatus{
+			Like: int32(likeStatus),
+		},
+	}, nil
+}

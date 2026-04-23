@@ -117,7 +117,7 @@ func (u *userCollectRepo) GetUserCollectTypes(ctx context.Context, req *v1.GetUs
 	}
 
 	types, err := u.getUserCollectTypesCache(ctx, userId)
-	if err != nil  {
+	if err != nil {
 		if !errors.Is(err, redis.Nil) {
 			u.log.Errorf("get user collect types cache failed: %v", err)
 			return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
@@ -382,4 +382,27 @@ func (u *userCollectRepo) checkUserAddUserCollectCountLimit(ctx context.Context,
 	}
 
 	return nil
+}
+
+// GetUserCollectStatus 查询用户收藏状态
+func (u *userCollectRepo) GetUserCollectStatus(ctx context.Context, req *v1.GetUserCollectStatusRequest) (*v1.GetUserCollectStatusReply, error) {
+	isCollect, err := u.GetUserPostCollectStatus(ctx, req.Id)
+	if err != nil {
+		u.log.Errorf("get user post collect status failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	collectStatus := 0
+	if isCollect {
+		collectStatus = 1
+	} else {
+		collectStatus = 0
+	}
+
+	return &v1.GetUserCollectStatusReply{
+		Code: 200, Success: true, Message: "查询成功",
+		Data: &v1.UserCollectStatus{
+			Collect: int32(collectStatus),
+		},
+	}, nil
 }

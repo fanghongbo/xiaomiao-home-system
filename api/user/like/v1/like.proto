@@ -26,6 +26,13 @@ service UserLike {
 			body: "*"
 		};
 	};
+
+	// GetUserLikeStatus 查询用户喜欢状态
+	rpc GetUserLikeStatus (GetUserLikeStatusRequest) returns (GetUserLikeStatusReply) {
+		option (google.api.http) = {
+			get: "/api/v1/user/like/status",
+		};
+	}
 }
 
 // 基础请求体
@@ -54,4 +61,19 @@ message CancelUserLikeReply {
 	string message = 2;
 	bool success = 3;
 	string data = 4;
+}
+
+message GetUserLikeStatusRequest {
+	int64 id = 1 [(validate.rules).int64 = {gt: 0}];
+}
+
+message UserLikeStatus {
+	int32 like = 1;
+}
+
+message GetUserLikeStatusReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	UserLikeStatus data = 4;
 }
