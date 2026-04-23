@@ -19,8 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Discover_GetDiscoverList_FullMethodName = "/api.discover.v1.Discover/GetDiscoverList"
-	Discover_GetDiscover_FullMethodName     = "/api.discover.v1.Discover/GetDiscover"
+	Discover_GetDiscoverList_FullMethodName      = "/api.discover.v1.Discover/GetDiscoverList"
+	Discover_GetDiscover_FullMethodName          = "/api.discover.v1.Discover/GetDiscover"
+	Discover_GetDiscoverRecommend_FullMethodName = "/api.discover.v1.Discover/GetDiscoverRecommend"
 )
 
 // DiscoverClient is the client API for Discover service.
@@ -31,6 +32,8 @@ type DiscoverClient interface {
 	GetDiscoverList(ctx context.Context, in *GetDiscoverListRequest, opts ...grpc.CallOption) (*GetDiscoverListReply, error)
 	// GetDiscover 查询发现内容
 	GetDiscover(ctx context.Context, in *GetDiscoverRequest, opts ...grpc.CallOption) (*GetDiscoverReply, error)
+	// GetDiscoverRecommend 查询推荐内容
+	GetDiscoverRecommend(ctx context.Context, in *GetDiscoverRecommendRequest, opts ...grpc.CallOption) (*GetDiscoverRecommendReply, error)
 }
 
 type discoverClient struct {
@@ -61,6 +64,16 @@ func (c *discoverClient) GetDiscover(ctx context.Context, in *GetDiscoverRequest
 	return out, nil
 }
 
+func (c *discoverClient) GetDiscoverRecommend(ctx context.Context, in *GetDiscoverRecommendRequest, opts ...grpc.CallOption) (*GetDiscoverRecommendReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetDiscoverRecommendReply)
+	err := c.cc.Invoke(ctx, Discover_GetDiscoverRecommend_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DiscoverServer is the server API for Discover service.
 // All implementations must embed UnimplementedDiscoverServer
 // for forward compatibility.
@@ -69,6 +82,8 @@ type DiscoverServer interface {
 	GetDiscoverList(context.Context, *GetDiscoverListRequest) (*GetDiscoverListReply, error)
 	// GetDiscover 查询发现内容
 	GetDiscover(context.Context, *GetDiscoverRequest) (*GetDiscoverReply, error)
+	// GetDiscoverRecommend 查询推荐内容
+	GetDiscoverRecommend(context.Context, *GetDiscoverRecommendRequest) (*GetDiscoverRecommendReply, error)
 	mustEmbedUnimplementedDiscoverServer()
 }
 
@@ -84,6 +99,9 @@ func (UnimplementedDiscoverServer) GetDiscoverList(context.Context, *GetDiscover
 }
 func (UnimplementedDiscoverServer) GetDiscover(context.Context, *GetDiscoverRequest) (*GetDiscoverReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetDiscover not implemented")
+}
+func (UnimplementedDiscoverServer) GetDiscoverRecommend(context.Context, *GetDiscoverRecommendRequest) (*GetDiscoverRecommendReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetDiscoverRecommend not implemented")
 }
 func (UnimplementedDiscoverServer) mustEmbedUnimplementedDiscoverServer() {}
 func (UnimplementedDiscoverServer) testEmbeddedByValue()                  {}
@@ -142,6 +160,24 @@ func _Discover_GetDiscover_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Discover_GetDiscoverRecommend_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDiscoverRecommendRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DiscoverServer).GetDiscoverRecommend(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Discover_GetDiscoverRecommend_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DiscoverServer).GetDiscoverRecommend(ctx, req.(*GetDiscoverRecommendRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Discover_ServiceDesc is the grpc.ServiceDesc for Discover service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -156,6 +192,10 @@ var Discover_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetDiscover",
 			Handler:    _Discover_GetDiscover_Handler,
+		},
+		{
+			MethodName: "GetDiscoverRecommend",
+			Handler:    _Discover_GetDiscoverRecommend_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -789,6 +789,178 @@ func (x *GetDiscoverReply) GetData() *DiscoverInfo {
 	return nil
 }
 
+type GetDiscoverRecommendRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetDiscoverRecommendRequest) Reset() {
+	*x = GetDiscoverRecommendRequest{}
+	mi := &file_discover_v1_discover_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetDiscoverRecommendRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetDiscoverRecommendRequest) ProtoMessage() {}
+
+func (x *GetDiscoverRecommendRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_discover_v1_discover_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetDiscoverRecommendRequest.ProtoReflect.Descriptor instead.
+func (*GetDiscoverRecommendRequest) Descriptor() ([]byte, []int) {
+	return file_discover_v1_discover_proto_rawDescGZIP(), []int{11}
+}
+
+type DiscoverRecommendItem struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+	ProvinceId    int32                  `protobuf:"varint,3,opt,name=provinceId,proto3" json:"provinceId,omitempty"`
+	CityId        int32                  `protobuf:"varint,4,opt,name=cityId,proto3" json:"cityId,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DiscoverRecommendItem) Reset() {
+	*x = DiscoverRecommendItem{}
+	mi := &file_discover_v1_discover_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DiscoverRecommendItem) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DiscoverRecommendItem) ProtoMessage() {}
+
+func (x *DiscoverRecommendItem) ProtoReflect() protoreflect.Message {
+	mi := &file_discover_v1_discover_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DiscoverRecommendItem.ProtoReflect.Descriptor instead.
+func (*DiscoverRecommendItem) Descriptor() ([]byte, []int) {
+	return file_discover_v1_discover_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *DiscoverRecommendItem) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *DiscoverRecommendItem) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+func (x *DiscoverRecommendItem) GetProvinceId() int32 {
+	if x != nil {
+		return x.ProvinceId
+	}
+	return 0
+}
+
+func (x *DiscoverRecommendItem) GetCityId() int32 {
+	if x != nil {
+		return x.CityId
+	}
+	return 0
+}
+
+type GetDiscoverRecommendReply struct {
+	state         protoimpl.MessageState   `protogen:"open.v1"`
+	Code          int32                    `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
+	Message       string                   `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Success       bool                     `protobuf:"varint,3,opt,name=success,proto3" json:"success,omitempty"`
+	Data          []*DiscoverRecommendItem `protobuf:"bytes,4,rep,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetDiscoverRecommendReply) Reset() {
+	*x = GetDiscoverRecommendReply{}
+	mi := &file_discover_v1_discover_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetDiscoverRecommendReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetDiscoverRecommendReply) ProtoMessage() {}
+
+func (x *GetDiscoverRecommendReply) ProtoReflect() protoreflect.Message {
+	mi := &file_discover_v1_discover_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetDiscoverRecommendReply.ProtoReflect.Descriptor instead.
+func (*GetDiscoverRecommendReply) Descriptor() ([]byte, []int) {
+	return file_discover_v1_discover_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *GetDiscoverRecommendReply) GetCode() int32 {
+	if x != nil {
+		return x.Code
+	}
+	return 0
+}
+
+func (x *GetDiscoverRecommendReply) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *GetDiscoverRecommendReply) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetDiscoverRecommendReply) GetData() []*DiscoverRecommendItem {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
 var File_discover_v1_discover_proto protoreflect.FileDescriptor
 
 const file_discover_v1_discover_proto_rawDesc = "" +
@@ -862,10 +1034,24 @@ const file_discover_v1_discover_proto_rawDesc = "" +
 	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12\x18\n" +
 	"\asuccess\x18\x03 \x01(\bR\asuccess\x121\n" +
-	"\x04data\x18\x04 \x01(\v2\x1d.api.discover.v1.DiscoverInfoR\x04data2\x83\x02\n" +
+	"\x04data\x18\x04 \x01(\v2\x1d.api.discover.v1.DiscoverInfoR\x04data\"\x1d\n" +
+	"\x1bGetDiscoverRecommendRequest\"u\n" +
+	"\x15DiscoverRecommendItem\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x14\n" +
+	"\x05title\x18\x02 \x01(\tR\x05title\x12\x1e\n" +
+	"\n" +
+	"provinceId\x18\x03 \x01(\x05R\n" +
+	"provinceId\x12\x16\n" +
+	"\x06cityId\x18\x04 \x01(\x05R\x06cityId\"\x9f\x01\n" +
+	"\x19GetDiscoverRecommendReply\x12\x12\n" +
+	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12\x18\n" +
+	"\asuccess\x18\x03 \x01(\bR\asuccess\x12:\n" +
+	"\x04data\x18\x04 \x03(\v2&.api.discover.v1.DiscoverRecommendItemR\x04data2\x9a\x03\n" +
 	"\bDiscover\x12\x80\x01\n" +
 	"\x0fGetDiscoverList\x12'.api.discover.v1.GetDiscoverListRequest\x1a%.api.discover.v1.GetDiscoverListReply\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/api/v1/discover/list\x12t\n" +
-	"\vGetDiscover\x12#.api.discover.v1.GetDiscoverRequest\x1a!.api.discover.v1.GetDiscoverReply\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/api/v1/discover/{id}BM\n" +
+	"\vGetDiscover\x12#.api.discover.v1.GetDiscoverRequest\x1a!.api.discover.v1.GetDiscoverReply\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/api/v1/discover/{id}\x12\x94\x01\n" +
+	"\x14GetDiscoverRecommend\x12,.api.discover.v1.GetDiscoverRecommendRequest\x1a*.api.discover.v1.GetDiscoverRecommendReply\"\"\x82\xd3\xe4\x93\x02\x1c\x12\x1a/api/v1/discover/recommendBM\n" +
 	"\x0fapi.discover.v1B\x0fDiscoverProtoV1P\x01Z'xiaomiao-home-system/api/discover/v1;v1b\x06proto3"
 
 var (
@@ -880,19 +1066,22 @@ func file_discover_v1_discover_proto_rawDescGZIP() []byte {
 	return file_discover_v1_discover_proto_rawDescData
 }
 
-var file_discover_v1_discover_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_discover_v1_discover_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_discover_v1_discover_proto_goTypes = []any{
-	(*BaseRequest)(nil),            // 0: api.discover.v1.BaseRequest
-	(*BaseResponse)(nil),           // 1: api.discover.v1.BaseResponse
-	(*GetDiscoverListRequest)(nil), // 2: api.discover.v1.GetDiscoverListRequest
-	(*DiscoverListItem)(nil),       // 3: api.discover.v1.DiscoverListItem
-	(*DiscoverList)(nil),           // 4: api.discover.v1.DiscoverList
-	(*GetDiscoverListReply)(nil),   // 5: api.discover.v1.GetDiscoverListReply
-	(*GetDiscoverRequest)(nil),     // 6: api.discover.v1.GetDiscoverRequest
-	(*CatInfo)(nil),                // 7: api.discover.v1.CatInfo
-	(*UserInfo)(nil),               // 8: api.discover.v1.UserInfo
-	(*DiscoverInfo)(nil),           // 9: api.discover.v1.DiscoverInfo
-	(*GetDiscoverReply)(nil),       // 10: api.discover.v1.GetDiscoverReply
+	(*BaseRequest)(nil),                 // 0: api.discover.v1.BaseRequest
+	(*BaseResponse)(nil),                // 1: api.discover.v1.BaseResponse
+	(*GetDiscoverListRequest)(nil),      // 2: api.discover.v1.GetDiscoverListRequest
+	(*DiscoverListItem)(nil),            // 3: api.discover.v1.DiscoverListItem
+	(*DiscoverList)(nil),                // 4: api.discover.v1.DiscoverList
+	(*GetDiscoverListReply)(nil),        // 5: api.discover.v1.GetDiscoverListReply
+	(*GetDiscoverRequest)(nil),          // 6: api.discover.v1.GetDiscoverRequest
+	(*CatInfo)(nil),                     // 7: api.discover.v1.CatInfo
+	(*UserInfo)(nil),                    // 8: api.discover.v1.UserInfo
+	(*DiscoverInfo)(nil),                // 9: api.discover.v1.DiscoverInfo
+	(*GetDiscoverReply)(nil),            // 10: api.discover.v1.GetDiscoverReply
+	(*GetDiscoverRecommendRequest)(nil), // 11: api.discover.v1.GetDiscoverRecommendRequest
+	(*DiscoverRecommendItem)(nil),       // 12: api.discover.v1.DiscoverRecommendItem
+	(*GetDiscoverRecommendReply)(nil),   // 13: api.discover.v1.GetDiscoverRecommendReply
 }
 var file_discover_v1_discover_proto_depIdxs = []int32{
 	3,  // 0: api.discover.v1.DiscoverList.items:type_name -> api.discover.v1.DiscoverListItem
@@ -900,15 +1089,18 @@ var file_discover_v1_discover_proto_depIdxs = []int32{
 	7,  // 2: api.discover.v1.DiscoverInfo.cat:type_name -> api.discover.v1.CatInfo
 	8,  // 3: api.discover.v1.DiscoverInfo.user:type_name -> api.discover.v1.UserInfo
 	9,  // 4: api.discover.v1.GetDiscoverReply.data:type_name -> api.discover.v1.DiscoverInfo
-	2,  // 5: api.discover.v1.Discover.GetDiscoverList:input_type -> api.discover.v1.GetDiscoverListRequest
-	6,  // 6: api.discover.v1.Discover.GetDiscover:input_type -> api.discover.v1.GetDiscoverRequest
-	5,  // 7: api.discover.v1.Discover.GetDiscoverList:output_type -> api.discover.v1.GetDiscoverListReply
-	10, // 8: api.discover.v1.Discover.GetDiscover:output_type -> api.discover.v1.GetDiscoverReply
-	7,  // [7:9] is the sub-list for method output_type
-	5,  // [5:7] is the sub-list for method input_type
-	5,  // [5:5] is the sub-list for extension type_name
-	5,  // [5:5] is the sub-list for extension extendee
-	0,  // [0:5] is the sub-list for field type_name
+	12, // 5: api.discover.v1.GetDiscoverRecommendReply.data:type_name -> api.discover.v1.DiscoverRecommendItem
+	2,  // 6: api.discover.v1.Discover.GetDiscoverList:input_type -> api.discover.v1.GetDiscoverListRequest
+	6,  // 7: api.discover.v1.Discover.GetDiscover:input_type -> api.discover.v1.GetDiscoverRequest
+	11, // 8: api.discover.v1.Discover.GetDiscoverRecommend:input_type -> api.discover.v1.GetDiscoverRecommendRequest
+	5,  // 9: api.discover.v1.Discover.GetDiscoverList:output_type -> api.discover.v1.GetDiscoverListReply
+	10, // 10: api.discover.v1.Discover.GetDiscover:output_type -> api.discover.v1.GetDiscoverReply
+	13, // 11: api.discover.v1.Discover.GetDiscoverRecommend:output_type -> api.discover.v1.GetDiscoverRecommendReply
+	9,  // [9:12] is the sub-list for method output_type
+	6,  // [6:9] is the sub-list for method input_type
+	6,  // [6:6] is the sub-list for extension type_name
+	6,  // [6:6] is the sub-list for extension extendee
+	0,  // [0:6] is the sub-list for field type_name
 }
 
 func init() { file_discover_v1_discover_proto_init() }
@@ -922,7 +1114,7 @@ func file_discover_v1_discover_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_discover_v1_discover_proto_rawDesc), len(file_discover_v1_discover_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   11,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

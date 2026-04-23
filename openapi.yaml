@@ -69,6 +69,19 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.discover.v1.GetDiscoverListReply'
+    /api/v1/discover/recommend:
+        get:
+            tags:
+                - Discover
+            description: GetDiscoverRecommend 查询推荐内容
+            operationId: Discover_GetDiscoverRecommend
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.discover.v1.GetDiscoverRecommendReply'
     /api/v1/discover/{id}:
         get:
             tags:
@@ -1101,6 +1114,19 @@ components:
                     type: string
                 updatedTime:
                     type: string
+        api.discover.v1.DiscoverRecommendItem:
+            type: object
+            properties:
+                id:
+                    type: string
+                title:
+                    type: string
+                provinceId:
+                    type: integer
+                    format: int32
+                cityId:
+                    type: integer
+                    format: int32
         api.discover.v1.GetDiscoverListReply:
             type: object
             properties:
@@ -1113,6 +1139,20 @@ components:
                     type: boolean
                 data:
                     $ref: '#/components/schemas/api.discover.v1.DiscoverList'
+        api.discover.v1.GetDiscoverRecommendReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+                success:
+                    type: boolean
+                data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.discover.v1.DiscoverRecommendItem'
         api.discover.v1.GetDiscoverReply:
             type: object
             properties:

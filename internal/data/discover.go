@@ -288,3 +288,69 @@ func (u *discoverRepo) setDiscoverInfoCache(ctx context.Context, req *v1.GetDisc
 
 	return nil
 }
+
+// GetDiscoverRecommend 查询推荐内容
+func (u *discoverRepo) GetDiscoverRecommend(ctx context.Context, req *v1.GetDiscoverRecommendRequest) (*v1.GetDiscoverRecommendReply, error) {
+	res := &v1.GetDiscoverRecommendReply{
+		Code: 200, Success: true, Message: "查询成功",
+		Data: []*v1.DiscoverRecommendItem{},
+	}
+
+	cacheData, err := u.getDiscoverRecommendCache(ctx)
+	if err != nil {
+		u.log.Errorf("get discover recommend cache failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	if cacheData != nil {
+		res.Data = cacheData
+		return res, nil
+	}
+
+
+	
+
+	return res, nil
+}
+
+// getDiscoverRecommendCacheKey 获取推荐内容缓存key
+func (u *discoverRepo) getDiscoverRecommendCacheKey() string {
+	return "discover:recommend"
+}
+
+// getDiscoverRecommendCache 获取推荐内容缓存
+func (u *discoverRepo) getDiscoverRecommendCache(ctx context.Context) ([]*v1.DiscoverRecommendItem, error) {
+	redisKey := u.getDiscoverRecommendCacheKey()
+
+	jsonData, err := u.data.cache.Get(ctx, redisKey).Result()
+	if err != nil {
+		if err == redis.Nil {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	var data []*v1.DiscoverRecommendItem
+	if err := json.Unmarshal([]byte(jsonData), &data); err != nil {
+		return nil, err
+	}
+
+	return data, nil
+}
+
+// setDiscoverRecommendCache 设置推荐内容缓存
+func (u *discoverRepo) setDiscoverRecommendCache(ctx context.Context, data []*v1.DiscoverRecommendItem) error {
+	redisKey := u.getDiscoverRecommendCacheKey()
+
+	jsonData, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+
+	ttl := time.Minute * 1
+	if err := u.data.cache.Set(ctx, redisKey, jsonData, ttl).Err(); err != nil {
+		return err
+	}
+
+	return nil
+}

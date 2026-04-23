@@ -24,6 +24,13 @@ service Discover {
 			get: "/api/v1/discover/{id}"
 		};	
 	}
+
+	// GetDiscoverRecommend 查询推荐内容
+	rpc GetDiscoverRecommend (GetDiscoverRecommendRequest) returns (GetDiscoverRecommendReply) {
+		option (google.api.http) = {
+			get: "/api/v1/discover/recommend"
+		};	
+	}
 }
 
 // 基础请求体
@@ -103,4 +110,20 @@ message GetDiscoverReply {
 	string message = 2;
 	bool success = 3;
 	DiscoverInfo data = 4;
+}
+
+message GetDiscoverRecommendRequest {}
+
+message DiscoverRecommendItem {
+	int64 id = 1;
+	string title = 2;
+	int32 provinceId = 3;
+	int32 cityId = 4;
+}
+
+message GetDiscoverRecommendReply {
+	int32 code = 1;
+	string message = 2;
+	bool success = 3;
+	repeated DiscoverRecommendItem data = 4;
 }

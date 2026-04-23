@@ -13,6 +13,8 @@ type DiscoverRepo interface {
 	GetDiscoverList(ctx context.Context, req *v1.GetDiscoverListRequest) (*v1.GetDiscoverListReply, error)
 	// GetDiscover 查询发现内容
 	GetDiscover(ctx context.Context, req *v1.GetDiscoverRequest) (*v1.GetDiscoverReply, error)
+	// GetDiscoverRecommend 查询推荐内容
+	GetDiscoverRecommend(ctx context.Context, req *v1.GetDiscoverRecommendRequest) (*v1.GetDiscoverRecommendReply, error)
 }
 
 // DiscoverUsecase is a Discover usecase.
@@ -40,6 +42,17 @@ func (u *DiscoverUsecase) GetDiscoverList(ctx context.Context, req *v1.GetDiscov
 // GetDiscover 查询发现内容
 func (u *DiscoverUsecase) GetDiscover(ctx context.Context, req *v1.GetDiscoverRequest) (*v1.GetDiscoverReply, error) {
 	res, err := u.repo.GetDiscover(ctx, req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+// GetDiscoverRecommend 查询推荐内容
+func (u *DiscoverUsecase) GetDiscoverRecommend(ctx context.Context, req *v1.GetDiscoverRecommendRequest) (*v1.GetDiscoverRecommendReply, error) {
+	res, err := u.repo.GetDiscoverRecommend(ctx, req)
 
 	if err != nil {
 		return nil, err
