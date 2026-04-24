@@ -99,14 +99,22 @@ func (u *discoverRepo) GetDiscoverList(ctx context.Context, req *v1.GetDiscoverL
 		return res, nil
 	}
 
-	baseQuery := u.data.db.Table("t_post as t1").Joins("inner join t_post_cat as t2 on t1.id = t2.post_id").Joins("inner join t_cat as t3 on t2.cat_id = t3.id").Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0).Where("t3.deleted_flag = ?", 0).Where("t1.audit_status = ?", 1)
+	baseQuery := u.data.db.Table("t_post as t1").Joins("inner join t_post_version as t2 on t1.id = t2.post_id and t1.version = t2.version").
+		Joins("inner join t_post_cat as t3 on t1.id = t3.post_id").Joins("inner join t_cat as t4 on t3.cat_id = t4.id").
+		Joins("inner join t_cat_version as t5 on t4.id = t5.cat_id and t4.version = t5.version").
+		Where("t1.deleted_flag = ?", 0).
+		Where("t2.deleted_flag = ?", 0).
+		Where("t3.deleted_flag = ?", 0).
+		Where("t4.deleted_flag = ?", 0).
+		Where("t5.deleted_flag = ?", 0).
+		Where("t2.audit_status = ?", 1)
 
 	if req.PType > 0 {
-		baseQuery = baseQuery.Where("t1.post_type = ?", req.PType)
+		baseQuery = baseQuery.Where("t2.post_type = ?", req.PType)
 	}
 
 	if req.CBreed > 0 {
-		baseQuery = baseQuery.Where("t3.breed_type = ?", req.CBreed)
+		baseQuery = baseQuery.Where("t5.breed_type = ?", req.CBreed)
 	}
 
 	if err := baseQuery.Count(&total).Error; err != nil {
@@ -114,7 +122,7 @@ func (u *discoverRepo) GetDiscoverList(ctx context.Context, req *v1.GetDiscoverL
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	result := baseQuery.Select("t1.id", "t1.title", "t1.post_status", "t1.remark", "t1.created_time", "t1.updated_time").Order("t1.created_time DESC").
+	result := baseQuery.Select("t1.id", "t2.title", "t2.post_status", "t2.remark", "t1.created_time", "t1.updated_time").Order("t1.created_time DESC").
 		Limit(int(req.Size)).
 		Offset(int((req.Page - 1) * req.Size))
 
@@ -169,7 +177,7 @@ func (u *discoverRepo) GetDiscoverList(ctx context.Context, req *v1.GetDiscoverL
 
 // GetDiscover 查询发现内容
 func (u *discoverRepo) GetDiscover(ctx context.Context, req *v1.GetDiscoverRequest) (*v1.GetDiscoverReply, error) {
-	post := &Post{}
+	post := &PostVersion{}
 
 	res := &v1.GetDiscoverReply{
 		Code: 200, Success: true, Message: "查询成功",
@@ -187,7 +195,9 @@ func (u *discoverRepo) GetDiscover(ctx context.Context, req *v1.GetDiscoverReque
 		return res, nil
 	}
 
-	if err := u.data.db.Model(&Post{}).Where("id = ?", req.Id).Where("deleted_flag = ?", 0).First(post).Error; err != nil {
+	query := u.data.db.Table("t_post as t1").Joins("inner join t_post_version as t2 on t1.id = t2.post_id and t1.version = t2.version").Where("t1.id = ?", req.Id).Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0)
+
+	if err := query.Select("t1.id", "t2.title", "t2.post_type", "t2.province_id", "t2.city_id", "t2.address", "t2.lost_time", "t2.remark", "t1.created_time", "t1.updated_time").First(post).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "发现内容不存在")
 		}
@@ -308,13 +318,13 @@ func (u *discoverRepo) GetDiscoverRecommend(ctx context.Context, req *v1.GetDisc
 		return res, nil
 	}
 
-	query := u.data.db.Table("t_post as t1").Joins("inner join t_post_cat as t2 on t1.id = t2.post_id").Joins("inner join t_cat as t3 on t2.cat_id = t3.id").Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0).Where("t3.deleted_flag = ?", 0).Where("t1.audit_status = ?", 1).Order("t1.created_time DESC").Limit(20)
+	query := u.data.db.Table("t_post as t1").Joins("inner join t_post_version as t2 on t1.id = t2.post_id and t1.version = t2.version").Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0).Where("t2.audit_status = ?", 1).Order("t1.created_time DESC").Limit(20)
 
 	if req.Id > 0 {
 		query = query.Where("t1.id != ?", req.Id)
 	}
 
-	rows, err := query.Select("t1.id", "t1.title", "t1.province_id", "t1.city_id").Rows()
+	rows, err := query.Select("t1.id", "t2.title", "t2.province_id", "t2.city_id").Rows()
 	if err != nil {
 		u.log.Errorf("get discover recommend failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")

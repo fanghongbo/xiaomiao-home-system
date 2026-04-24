@@ -8,7 +8,6 @@ CREATE TABLE
 (
     id           bigint PRIMARY KEY COMMENT '用户id',
     version      int NOT NULL COMMENT '版本号',
-    status       tinyint(1)  default 0 COMMENT '账户状态, 0: 禁用, 1: 启用',
     deleted_flag tinyint(1)                   DEFAULT 0 COMMENT '删除标记, 0: 未删除,  1: 已删除',
     created_time datetime    NOT NULL         DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     updated_time datetime    NOT NULL         DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -34,6 +33,7 @@ CREATE TABLE
     address      varchar(255) DEFAULT NULL COMMENT '详细地址',
     avatar       varchar(255) COMMENT '头像地址',
     signature    varchar(100) COMMENT '个人签名',
+    status       tinyint(1)  default 0 COMMENT '账户状态, 0: 禁用, 1: 启用',
     remark  longtext COMMENT '描述',
     deleted_flag tinyint(1)                   DEFAULT 0 COMMENT '删除标记, 0: 未删除,  1: 已删除',
     created_time datetime    NOT NULL         DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

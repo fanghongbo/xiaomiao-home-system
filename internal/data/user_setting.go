@@ -86,18 +86,41 @@ func (u *userSettingRepo) UpdateUserBaseSetting(ctx context.Context, req *v1.Upd
 		return nil, err
 	}
 
-	userInfo := map[string]interface{}{
+	currentUserVersionInfo, err := u.GetUserVersionInfo(ctx, userId)
+	if err != nil {
+		u.log.Errorf("get user version info failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	userVersionId, err := u.data.gid.NextID()
+	if err != nil {
+		u.log.Errorf("generate user version id failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	userAvatar, err := u.GetUserAvatarSetting(ctx, userId)
+	if err != nil {
+		u.log.Errorf("get user avatar setting failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	userVersionInfo := map[string]interface{}{
+		"id":          userVersionId,
+		"version":     currentUserVersionInfo.Version + 1,
+		"user_id":     userId,
 		"nickname":    req.Nickname,
 		"gender":      req.Gender,
 		"birthday":    req.Birthday,
+		"avatar":      userAvatar,
 		"province_id": req.ProvinceId,
 		"city_id":     req.CityId,
 		"address":     req.Address,
 		"signature":   req.Signature,
+		"status":      1,
 	}
 
-	if err := u.data.db.Table("t_user").Where("id = ?", userId).Updates(userInfo).Error; err != nil {
-		u.log.Errorf("update user base setting failed: %v", err)
+	if err := u.data.db.Table("t_user_version").Create(userVersionInfo).Error; err != nil {
+		u.log.Errorf("create user version failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -358,4 +381,28 @@ func (u *userSettingRepo) GetUserNotifySetting(ctx context.Context, req *v1.GetU
 			Email:    emailVal,
 		},
 	}, nil
+}
+
+// GetUserVersionInfo 获取用户版本信息
+func (u *userSettingRepo) GetUserVersionInfo(ctx context.Context, userId int64) (*User, error) {
+	var user *User
+
+	err := u.data.db.Model(&User{}).Select("id", "version").Where("id = ?", userId).Where("deleted_flag = ?", 0).First(&user).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
+
+// GetUserAvatarSetting 获取用户头像设置
+func (u *userSettingRepo) GetUserAvatarSetting(ctx context.Context, userId int64) (string, error) {
+	var userVersion *UserVersion
+
+	if err := u.data.db.Table("t_user as t1").Joins("inner join t_user_version as t2 on t1.id = t2.user_id and t1.version = t2.version").Select("t2.avatar").Where("t1.id = ?", userId).Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0).First(&userVersion).Error; err != nil {
+		u.log.Errorf("get user avatar setting failed: %v", err)
+		return "", err
+	}
+
+	return userVersion.Avatar, nil
 }

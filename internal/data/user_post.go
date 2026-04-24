@@ -38,10 +38,15 @@ func (u *userPostRepo) GetUserPostList(ctx context.Context, req *v1.GetUserPostL
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	baseQuery := u.data.db.Table("t_post as t1").Joins("inner join t_user_post as t2 on t1.id = t2.post_id").Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0).Where("t2.user_id = ?", userId)
+	baseQuery := u.data.db.Table("t_post as t1").Joins("inner join t_post_version as t2 on t1.id = t2.post_id and t1.version = t2.version").
+		Joins("inner join t_user_post as t3 on t1.id = t3.post_id").
+		Where("t1.deleted_flag = ?", 0).
+		Where("t2.deleted_flag = ?", 0).
+		Where("t3.deleted_flag = ?", 0).
+		Where("t3.user_id = ?", userId)
 
 	if req.PType > 0 {
-		baseQuery = baseQuery.Where("t1.post_type = ?", req.PType)
+		baseQuery = baseQuery.Where("t2.post_type = ?", req.PType)
 	}
 
 	if err := baseQuery.Count(&total).Error; err != nil {
@@ -49,7 +54,7 @@ func (u *userPostRepo) GetUserPostList(ctx context.Context, req *v1.GetUserPostL
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	result := baseQuery.Select("t1.id", "t1.title", "t1.post_status", "t1.audit_status", "t1.remark", "t1.created_time", "t1.updated_time").Order("t1.created_time DESC").
+	result := baseQuery.Select("t1.id", "t2.title", "t2.post_status", "t2.audit_status", "t2.remark", "t1.created_time", "t1.updated_time").Order("t1.created_time DESC").
 		Limit(int(req.Size)).
 		Offset(int((req.Page - 1) * req.Size))
 
@@ -206,12 +211,6 @@ func (u *userPostRepo) CheckCreateUserPostParams(req *v1.CreateUserPostRequest) 
 
 // CreatePost 创建发布内容
 func (u *userPostRepo) CreateUserPost(ctx context.Context, req *v1.CreateUserPostRequest) (*v1.CreateUserPostReply, error) {
-	postId, err := u.data.gid.NextID()
-	if err != nil {
-		u.log.Errorf("generate id failed: %v", err)
-		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
-	}
-
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
 		u.log.Errorf("get current user id failed: %v", err)
@@ -237,8 +236,31 @@ func (u *userPostRepo) CreateUserPost(ctx context.Context, req *v1.CreateUserPos
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), fmt.Sprintf("备注包含敏感词: %s, 请修改备注", word))
 	}
 
+	postId, err := u.data.gid.NextID()
+	if err != nil {
+		u.log.Errorf("generate id failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	postVersionId, err := u.data.gid.NextID()
+	if err != nil {
+		u.log.Errorf("generate id failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	version := 1
+
 	postInfo := map[string]interface{}{
 		"id":           postId,
+		"version":      version,
+		"created_time": time.Now(),
+		"updated_time": time.Now(),
+	}
+
+	postVersionInfo := map[string]interface{}{
+		"id":           postVersionId,
+		"post_id":      postId,
+		"version":      version,
 		"title":        req.Title,
 		"post_type":    req.PostType,
 		"remark":       req.Remark,
@@ -250,25 +272,25 @@ func (u *userPostRepo) CreateUserPost(ctx context.Context, req *v1.CreateUserPos
 
 	switch req.PostType {
 	case 1: // 领养
-		postInfo["city_id"] = req.CityId
-		postInfo["province_id"] = req.ProvinceId
-		postInfo["address"] = req.Address
-		postInfo["lost_time"] = nil
+		postVersionInfo["city_id"] = req.CityId
+		postVersionInfo["province_id"] = req.ProvinceId
+		postVersionInfo["address"] = req.Address
+		postVersionInfo["lost_time"] = nil
 	case 2: // 寻猫
-		postInfo["lost_time"] = req.LostTime
-		postInfo["city_id"] = req.CityId
-		postInfo["province_id"] = req.ProvinceId
-		postInfo["address"] = req.Address
+		postVersionInfo["lost_time"] = req.LostTime
+		postVersionInfo["city_id"] = req.CityId
+		postVersionInfo["province_id"] = req.ProvinceId
+		postVersionInfo["address"] = req.Address
 	case 3: // 日常
-		postInfo["lost_time"] = nil
-		postInfo["city_id"] = 0
-		postInfo["province_id"] = 0
-		postInfo["address"] = nil
+		postVersionInfo["lost_time"] = nil
+		postVersionInfo["city_id"] = 0
+		postVersionInfo["province_id"] = 0
+		postVersionInfo["address"] = nil
 	case 4: // 求助
-		postInfo["lost_time"] = nil
-		postInfo["city_id"] = 0
-		postInfo["province_id"] = 0
-		postInfo["address"] = nil
+		postVersionInfo["lost_time"] = nil
+		postVersionInfo["city_id"] = 0
+		postVersionInfo["province_id"] = 0
+		postVersionInfo["address"] = nil
 	default:
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "发布类型错误")
 	}
@@ -279,6 +301,12 @@ func (u *userPostRepo) CreateUserPost(ctx context.Context, req *v1.CreateUserPos
 	if err := tx.Model(&Post{}).Create(postInfo).Error; err != nil {
 		tx.Rollback()
 		u.log.Errorf("create post failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	if err := tx.Model(&PostVersion{}).Create(postVersionInfo).Error; err != nil {
+		tx.Rollback()
+		u.log.Errorf("create post version failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -491,7 +519,22 @@ func (u *userPostRepo) UpdateUserPost(ctx context.Context, req *v1.UpdateUserPos
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), fmt.Sprintf("备注包含敏感词: %s, 请修改备注", word))
 	}
 
-	postInfo := map[string]interface{}{
+	currentPostVersionInfo, err := u.GetPostVersionInfo(ctx, req.Id)
+	if err != nil {
+		u.log.Errorf("get post version info failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	postVersionId, err := u.data.gid.NextID()
+	if err != nil {
+		u.log.Errorf("generate post version id failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	postVersionInfo := map[string]interface{}{
+		"id":           postVersionId,
+		"version":      currentPostVersionInfo.Version + 1,
+		"post_id":      req.Id,
 		"title":        req.Title,
 		"post_type":    req.PostType,
 		"remark":       req.Remark,
@@ -502,25 +545,25 @@ func (u *userPostRepo) UpdateUserPost(ctx context.Context, req *v1.UpdateUserPos
 
 	switch req.PostType {
 	case 1: // 领养
-		postInfo["city_id"] = req.CityId
-		postInfo["province_id"] = req.ProvinceId
-		postInfo["address"] = req.Address
-		postInfo["lost_time"] = nil
+		postVersionInfo["city_id"] = req.CityId
+		postVersionInfo["province_id"] = req.ProvinceId
+		postVersionInfo["address"] = req.Address
+		postVersionInfo["lost_time"] = nil
 	case 2: // 寻猫
-		postInfo["lost_time"] = req.LostTime
-		postInfo["city_id"] = req.CityId
-		postInfo["province_id"] = req.ProvinceId
-		postInfo["address"] = req.Address
+		postVersionInfo["lost_time"] = req.LostTime
+		postVersionInfo["city_id"] = req.CityId
+		postVersionInfo["province_id"] = req.ProvinceId
+		postVersionInfo["address"] = req.Address
 	case 3: // 日常
-		postInfo["lost_time"] = nil
-		postInfo["city_id"] = 0
-		postInfo["province_id"] = 0
-		postInfo["address"] = nil
+		postVersionInfo["lost_time"] = nil
+		postVersionInfo["city_id"] = 0
+		postVersionInfo["province_id"] = 0
+		postVersionInfo["address"] = nil
 	case 4: // 求助
-		postInfo["lost_time"] = nil
-		postInfo["city_id"] = 0
-		postInfo["province_id"] = 0
-		postInfo["address"] = nil
+		postVersionInfo["lost_time"] = nil
+		postVersionInfo["city_id"] = 0
+		postVersionInfo["province_id"] = 0
+		postVersionInfo["address"] = nil
 	default:
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "发布类型错误")
 	}
@@ -535,9 +578,9 @@ func (u *userPostRepo) UpdateUserPost(ctx context.Context, req *v1.UpdateUserPos
 	// 启动MySQL事务
 	tx := u.data.db.Begin()
 
-	if err := tx.Model(&Post{}).Where("id = ?", req.Id).Updates(postInfo).Error; err != nil {
+	if err := tx.Model(&PostVersion{}).Create(postVersionInfo).Error; err != nil {
 		tx.Rollback()
-		u.log.Errorf("create post failed: %v", err)
+		u.log.Errorf("create post version failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -545,7 +588,7 @@ func (u *userPostRepo) UpdateUserPost(ctx context.Context, req *v1.UpdateUserPos
 	if req.PostType == 1 && req.CatType == 1 {
 		// 历史关联的小猫信息如果是流浪猫类型，则直接更新这个小猫信息
 		if catInfo.CatType == 1 {
-			updateCatInfo := map[string]interface{}{
+			updateCatVersionInfo := map[string]interface{}{
 				"name":         "流浪猫",
 				"gender":       req.Gender,
 				"cat_type":     1,
@@ -553,7 +596,7 @@ func (u *userPostRepo) UpdateUserPost(ctx context.Context, req *v1.UpdateUserPos
 				"updated_time": time.Now(),
 			}
 
-			if err := tx.Model(&Cat{}).Where("id = ?", catInfo.Id).Updates(updateCatInfo).Error; err != nil {
+			if err := tx.Table("t_cat as t1").Joins("inner join t_cat_version as t2 on t1.id = t2.cat_id and t1.version = t2.version").Where("t1.id = ?", catInfo.Id).Where("t2.deleted_flag = ?", 0).Updates(updateCatVersionInfo).Error; err != nil {
 				tx.Rollback()
 				u.log.Errorf("update cat failed: %v", err)
 				return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
@@ -569,8 +612,25 @@ func (u *userPostRepo) UpdateUserPost(ctx context.Context, req *v1.UpdateUserPos
 				return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 			}
 
-			catInfo := map[string]interface{}{
+			catVersionId, err := u.data.gid.NextID()
+			if err != nil {
+				tx.Rollback()
+				u.log.Errorf("generate cat version id failed: %v", err)
+				return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+			}
+
+			newCatInfo := map[string]interface{}{
 				"id":           catId,
+				"version":      1,
+				"deleted_flag": 0,
+				"created_time": time.Now(),
+				"updated_time": time.Now(),
+			}
+
+			newCatVersionInfo := map[string]interface{}{
+				"id":           catVersionId,
+				"version":      1,
+				"cat_id":       catId,
 				"name":         "流浪猫",
 				"gender":       req.Gender,
 				"cat_type":     1,
@@ -579,9 +639,15 @@ func (u *userPostRepo) UpdateUserPost(ctx context.Context, req *v1.UpdateUserPos
 				"updated_time": time.Now(),
 			}
 
-			if err := tx.Model(&Cat{}).Create(catInfo).Error; err != nil {
+			if err := tx.Model(&Cat{}).Create(newCatInfo).Error; err != nil {
 				tx.Rollback()
 				u.log.Errorf("create cat failed: %v", err)
+				return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+			}
+
+			if err := tx.Model(&CatVersion{}).Create(newCatVersionInfo).Error; err != nil {
+				tx.Rollback()
+				u.log.Errorf("create cat version failed: %v", err)
 				return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 			}
 
@@ -602,6 +668,12 @@ func (u *userPostRepo) UpdateUserPost(ctx context.Context, req *v1.UpdateUserPos
 			if err := tx.Model(&Cat{}).Where("id = ?", catInfo.Id).Where("deleted_flag = ?", 0).Updates(updateInfo).Error; err != nil {
 				tx.Rollback()
 				u.log.Errorf("delete cat failed: %v", err)
+				return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+			}
+
+			if err := tx.Model(&CatVersion{}).Where("cat_id = ?", catInfo.Id).Where("deleted_flag = ?", 0).Updates(updateInfo).Error; err != nil {
+				tx.Rollback()
+				u.log.Errorf("delete cat version failed: %v", err)
 				return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 			}
 		}
@@ -695,38 +767,36 @@ func (u *userPostRepo) DeleteUserPost(ctx context.Context, req *v1.DeleteUserPos
 		return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "发布内容不存在或无权限")
 	}
 
-	// 删除用户发布内容关联信息
-	result = tx.Model(&UserPost{}).Where("post_id = ?", req.Id).Where("user_id = ?", userId).Where("deleted_flag = ?", 0).Updates(updateInfo)
-	if result.Error != nil {
+	// 删除发布内容版本信息
+	err = tx.Model(&PostVersion{}).Where("post_id = ?", req.Id).Where("deleted_flag = ?", 0).Updates(updateInfo).Error
+	if err != nil {
 		tx.Rollback()
-		u.log.Errorf("delete user post failed: %v", result.Error)
+		u.log.Errorf("delete post version failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	if result.RowsAffected == 0 {
+	// 删除用户发布内容关联信息
+	err = tx.Model(&UserPost{}).Where("post_id = ?", req.Id).Where("user_id = ?", userId).Where("deleted_flag = ?", 0).Updates(updateInfo).Error
+	if err != nil {
 		tx.Rollback()
-		return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "发布内容不存在或无权限")
+		u.log.Errorf("delete user post failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	// 删除发布内容和小猫关联
-	result = tx.Model(&PostCat{}).Where("post_id = ?", req.Id).Where("cat_id = ?", catInfo.Id).Where("deleted_flag = ?", 0).Updates(updateInfo)
-	if result.Error != nil {
+	err = tx.Model(&PostCat{}).Where("post_id = ?", req.Id).Where("cat_id = ?", catInfo.Id).Where("deleted_flag = ?", 0).Updates(updateInfo).Error
+	if err != nil {
 		tx.Rollback()
-		u.log.Errorf("delete post cat failed: %v", result.Error)
+		u.log.Errorf("delete post cat failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
-	}
-
-	if result.RowsAffected == 0 {
-		tx.Rollback()
-		return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "发布内容和小猫关联不存在或无权限")
 	}
 
 	// 删除小猫信息
 	if catInfo.CatType == 1 {
-		result = tx.Model(&Cat{}).Where("id = ?", catInfo.Id).Where("deleted_flag = ?", 0).Updates(updateInfo)
-		if result.Error != nil {
+		err = tx.Model(&Cat{}).Where("id = ?", catInfo.Id).Where("deleted_flag = ?", 0).Updates(updateInfo).Error
+		if err != nil {
 			tx.Rollback()
-			u.log.Errorf("delete cat failed: %v", result.Error)
+			u.log.Errorf("delete cat failed: %v", err)
 			return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 		}
 	}
@@ -762,14 +832,14 @@ func (u *userPostRepo) UpdateUserPostStatus(ctx context.Context, req *v1.UpdateU
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "发布内容不存在或无权限")
 	}
 
-	post := map[string]interface{}{
+	postVersionInfo := map[string]interface{}{
 		"status": int(req.Status),
 	}
 
-	result := u.data.db.Model(&Post{}).Where("id = ?", req.Id).Where("deleted_flag = ?", 0).Updates(post)
-
-	if result.Error != nil {
-		return nil, result.Error
+	err = u.data.db.Table("t_post as t1").Joins("inner join t_post_version as t2 on t1.id = t2.post_id and t1.version = t2.version").Where("t1.id = ?", req.Id).Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0).Updates(postVersionInfo).Error
+	if err != nil {
+		u.log.Errorf("update post status failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
 	return &v1.UpdateUserPostStatusReply{
@@ -779,7 +849,7 @@ func (u *userPostRepo) UpdateUserPostStatus(ctx context.Context, req *v1.UpdateU
 
 // GetUserPost 查询发布内容
 func (u *userPostRepo) GetUserPost(ctx context.Context, req *v1.GetUserPostRequest) (*v1.GetUserPostReply, error) {
-	post := &Post{}
+	post := &PostVersion{}
 
 	userId, err := utils.GetCurrentUserId(ctx)
 	if err != nil {
@@ -799,7 +869,7 @@ func (u *userPostRepo) GetUserPost(ctx context.Context, req *v1.GetUserPostReque
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "发布内容不存在或无权限")
 	}
 
-	if err := u.data.db.Model(&Post{}).Where("id = ?", req.Id).Where("deleted_flag = ?", 0).First(post).Error; err != nil {
+	if err := u.data.db.Table("t_post as t1").Joins("inner join t_post_version as t2 on t1.id = t2.post_id and t1.version = t2.version").Where("t1.id = ?", req.Id).Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0).First(post).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "发布内容不存在")
 		}
@@ -881,7 +951,13 @@ func (u *userPostRepo) GetPostCatInfo(ctx context.Context, postId int64) (*v1.Ca
 		weight    float32
 	)
 
-	row := u.data.db.Table("t_cat as t1").Joins("inner join t_post_cat as t2 on t1.id = t2.cat_id").Where("t2.post_id = ?", postId).Where("t2.deleted_flag = ?", 0).Where("t1.deleted_flag = ?", 0).Select("t1.id", "t1.name", "t1.cat_type", "t1.breed_type", "t1.gender", "t1.weight").Limit(1).Row()
+	row := u.data.db.Table("t_cat as t1").Joins("inner join t_cat_version as t2 on t1.id = t2.cat_id and t1.version = t2.version").
+		Joins("inner join t_post_cat as t3 on t2.id = t3.cat_id").
+		Where("t3.post_id = ?", postId).
+		Where("t3.deleted_flag = ?", 0).
+		Where("t2.deleted_flag = ?", 0).
+		Where("t1.deleted_flag = ?", 0).
+		Select("t1.id", "t2.name", "t2.cat_type", "t2.breed_type", "t2.gender", "t2.weight").Limit(1).Row()
 
 	if err := row.Scan(&id, &name, &catType, &breedType, &gender, &weight); err != nil {
 		if err == gorm.ErrRecordNotFound {
@@ -909,7 +985,13 @@ func (u *userPostRepo) GetPostUserInfo(ctx context.Context, postId int64) (*v1.U
 		cityId     int64
 	)
 
-	row := u.data.db.Table("t_user as t1").Joins("inner join t_user_post as t2 on t1.id = t2.user_id").Where("t2.post_id = ?", postId).Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0).Select("t1.id", "t1.nickname", "t1.province_id", "t1.city_id").Limit(1).Row()
+	row := u.data.db.Table("t_user as t1").Joins("inner join t_user_version as t2 on t1.id = t2.user_id and t1.version = t2.version").
+		Joins("inner join t_user_post as t3 on t2.id = t3.user_id").
+		Where("t3.post_id = ?", postId).
+		Where("t1.deleted_flag = ?", 0).
+		Where("t2.deleted_flag = ?", 0).
+		Where("t3.deleted_flag = ?", 0).
+		Select("t1.id", "t2.nickname", "t2.province_id", "t2.city_id").Limit(1).Row()
 	if err := row.Scan(&id, &name, &provinceId, &cityId); err != nil {
 		u.log.Errorf("get post user info failed: %v", err)
 		if err == gorm.ErrRecordNotFound {
@@ -924,4 +1006,16 @@ func (u *userPostRepo) GetPostUserInfo(ctx context.Context, postId int64) (*v1.U
 		ProvinceId: int32(provinceId),
 		CityId:     int32(cityId),
 	}, nil
+}
+
+// GetPostVersionInfo 查询发布内容版本信息
+func (u *userPostRepo) GetPostVersionInfo(ctx context.Context, postId int64) (*Post, error) {
+	var post *Post
+
+	err := u.data.db.Table("t_post").Select("id", "version").Where("id = ?", postId).Where("deleted_flag = ?", 0).First(&post).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return post, nil
 }

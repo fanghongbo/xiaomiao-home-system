@@ -4,6 +4,21 @@ import "time"
 
 type User struct {
 	Id          int64     `gorm:"column:id"`
+	Version     int       `gorm:"column:version"`
+	CreatedTime time.Time `gorm:"column:created_time"`
+	UpdatedTime time.Time `gorm:"column:updated_time"`
+	DeletedFlag int       `gorm:"column:deleted_flag"`
+	DeletedTime time.Time `gorm:"column:deleted_time"`
+}
+
+func (u User) TableName() string {
+	return "t_user"
+}
+
+type UserVersion struct {
+	Id          int64     `gorm:"column:id"`
+	Version     int       `gorm:"column:version"`
+	UserId      int64     `gorm:"column:user_id"`
 	Nickname    string    `gorm:"column:nickname"`
 	Gender      int       `gorm:"column:gender"`
 	Birthday    time.Time `gorm:"column:birthday"`
@@ -20,8 +35,8 @@ type User struct {
 	DeletedTime time.Time `gorm:"column:deleted_time"`
 }
 
-func (u User) TableName() string {
-	return "t_user"
+func (u UserVersion) TableName() string {
+	return "t_user_version"
 }
 
 // UserPassword 账号密码凭据；无密码登录方式的用户可无对应行。
@@ -55,51 +70,6 @@ type UserIdentity struct {
 
 func (u UserIdentity) TableName() string {
 	return "t_user_identity"
-}
-
-type UserRoles struct {
-	Id          int64     `gorm:"column:id"`
-	UserId      int64     `gorm:"column:user_id"`
-	RoleId      int64     `gorm:"column:role_id"`
-	CreatedTime time.Time `gorm:"column:created_time"`
-	UpdatedTime time.Time `gorm:"column:updated_time"`
-	DeletedFlag int       `gorm:"column:deleted_flag"`
-	DeletedTime time.Time `gorm:"column:deleted_time"`
-}
-
-func (u UserRoles) TableName() string {
-	return "t_user_role"
-}
-
-type Role struct {
-	Id          int64     `gorm:"column:id"`
-	RoleName    string    `gorm:"column:role_name"`
-	Remark      string    `gorm:"column:remark"`
-	Status      int       `gorm:"column:status"` // 0: 正常 1: 禁用
-	CreatedUser string    `gorm:"column:created_user"`
-	UpdatedUser string    `gorm:"column:updated_user"`
-	CreatedTime time.Time `gorm:"column:created_time"`
-	UpdatedTime time.Time `gorm:"column:updated_time"`
-	DeletedFlag int       `gorm:"column:deleted_flag"`
-	DeletedTime time.Time `gorm:"column:deleted_time"`
-}
-
-func (u Role) TableName() string {
-	return "t_role"
-}
-
-type RolePermission struct {
-	Id             int64      `gorm:"column:id"`
-	RoleId         int64      `gorm:"column:role_id"`
-	PermissionCode string     `gorm:"column:permission_code"`
-	CreatedTime    time.Time  `gorm:"column:created_time"`
-	UpdatedTime    time.Time  `gorm:"column:updated_time"`
-	DeletedFlag    int        `gorm:"column:deleted_flag"`
-	DeletedTime    *time.Time `gorm:"column:deleted_time"`
-}
-
-func (u RolePermission) TableName() string {
-	return "t_role_permission"
 }
 
 type UserNotification struct {
@@ -156,6 +126,21 @@ func (u UserSetting) TableName() string {
 
 type Post struct {
 	Id          int64      `gorm:"column:id"`
+	Version     int        `gorm:"column:version"`
+	DeletedFlag int        `gorm:"column:deleted_flag"`
+	CreatedTime time.Time  `gorm:"column:created_time"`
+	UpdatedTime time.Time  `gorm:"column:updated_time"`
+	DeletedTime *time.Time `gorm:"column:deleted_time"`
+}
+
+func (u Post) TableName() string {
+	return "t_post"
+}
+
+type PostVersion struct {
+	Id          int64      `gorm:"column:id"`
+	Version     int        `gorm:"column:version"`
+	PostId      int64      `gorm:"column:post_id"`
 	Title       string     `gorm:"column:title"`
 	PostType    int        `gorm:"column:post_type"`
 	ProvinceId  int64      `gorm:"column:province_id"`
@@ -173,8 +158,8 @@ type Post struct {
 	DeletedTime *time.Time `gorm:"column:deleted_time"`
 }
 
-func (u Post) TableName() string {
-	return "t_post"
+func (u PostVersion) TableName() string {
+	return "t_post_version"
 }
 
 type UserPost struct {
@@ -192,7 +177,22 @@ func (u UserPost) TableName() string {
 }
 
 type Cat struct {
+	Id          int64     `gorm:"column:id"`
+	Version     int       `gorm:"column:version"`
+	DeletedFlag int       `gorm:"column:deleted_flag"`
+	CreatedTime time.Time `gorm:"column:created_time"`
+	UpdatedTime time.Time `gorm:"column:updated_time"`
+	DeletedTime time.Time `gorm:"column:deleted_time"`
+}
+
+func (u Cat) TableName() string {
+	return "t_cat"
+}
+
+type CatVersion struct {
 	Id               int64     `gorm:"column:id"`
+	Version          int       `gorm:"column:version"`
+	CatId            int64     `gorm:"column:cat_id"`
 	Name             string    `gorm:"column:name"`
 	Gender           int       `gorm:"column:gender"`
 	CatType          int       `gorm:"column:cat_type"`
@@ -214,8 +214,8 @@ type Cat struct {
 	DeletedTime      time.Time `gorm:"column:deleted_time"`
 }
 
-func (u Cat) TableName() string {
-	return "t_cat"
+func (u CatVersion) TableName() string {
+	return "t_cat_version"
 }
 
 type UserCat struct {

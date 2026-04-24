@@ -1,2 +1,2 @@
-INSERT INTO xiaomiao_home.t_user_version (id,version,user_id,nickname,gender,birthday,province_id,city_id,address,avatar,signature,remark,deleted_flag,created_time,updated_time,deleted_time) VALUES
-	 (601183004563352290,1,601183004563351291,'方洪波',0,'2026-02-04',440000,440300,NULL,'avatar/601183004563351291/user.jpg',NULL,NULL,0,'2026-03-26 08:00:00','2026-03-26 08:00:00','1970-01-01 08:00:00');
+INSERT INTO xiaomiao_home.t_user_version (id,version,user_id,nickname,gender,birthday,province_id,city_id,address,avatar,signature,status,remark,deleted_flag,created_time,updated_time,deleted_time) VALUES
+	 (601183004563352290,1,601183004563351291,'方洪波',0,'2026-02-04',440000,440300,NULL,'avatar/601183004563351291/user.jpg',NULL,1,NULL,0,'2026-03-26 08:00:00','2026-03-26 08:00:00','1970-01-01 08:00:00');

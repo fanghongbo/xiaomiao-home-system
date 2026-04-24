@@ -3,7 +3,6 @@ package server
 import (
 	"context"
 	discoverV1 "xiaomiao-home-system/api/discover/v1"
-	roleV1 "xiaomiao-home-system/api/role/v1"
 	userCatV1 "xiaomiao-home-system/api/user/cat/v1"
 	userCollectV1 "xiaomiao-home-system/api/user/collect/v1"
 	userLikeV1 "xiaomiao-home-system/api/user/like/v1"
@@ -48,7 +47,7 @@ func NewWhiteListMatcher() selector.MatchFunc {
 }
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Server, jwtConfig *conf.Jwt, staticConfig *conf.Static, user *service.UserService, role *service.RoleService, userNotification *service.UserNotificationService, userSetting *service.UserSettingService, file *service.FileService, userPost *service.UserPostService, userCollect *service.UserCollectService, discover *service.DiscoverService, userCat *service.UserCatService, userLike *service.UserLikeService, logger log.Logger) *http.Server {
+func NewHTTPServer(c *conf.Server, jwtConfig *conf.Jwt, staticConfig *conf.Static, user *service.UserService, userNotification *service.UserNotificationService, userSetting *service.UserSettingService, file *service.FileService, userPost *service.UserPostService, userCollect *service.UserCollectService, discover *service.DiscoverService, userCat *service.UserCatService, userLike *service.UserLikeService, logger log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
@@ -83,7 +82,6 @@ func NewHTTPServer(c *conf.Server, jwtConfig *conf.Jwt, staticConfig *conf.Stati
 	route.POST("/api/v1/user/avatar/upload", file.UploadAvatarHandler)
 
 	userV1.RegisterUserHTTPServer(srv, user)
-	roleV1.RegisterRoleHTTPServer(srv, role)
 	userNotificationV1.RegisterUserNotificationHTTPServer(srv, userNotification)
 	userSettingV1.RegisterUserSettingHTTPServer(srv, userSetting)
 	userPostV1.RegisterUserPostHTTPServer(srv, userPost)

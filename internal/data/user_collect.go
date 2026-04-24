@@ -39,7 +39,18 @@ func (u *userCollectRepo) GetUserCollectList(ctx context.Context, req *v1.GetUse
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	baseQuery := u.data.db.Table("t_user_collect as t1").Joins("inner join t_post as t2 on t1.post_id = t2.id").Joins("inner join t_post_cat as t3 on t2.id = t3.post_id").Joins("inner join t_cat as t4 on t3.cat_id = t4.id").Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0).Where("t3.deleted_flag = ?", 0).Where("t4.deleted_flag = ?", 0).Where("t1.user_id = ?", userId)
+	baseQuery := u.data.db.Table("t_user_collect as t1").Joins("inner join t_post as t2 on t1.post_id = t2.id").
+		Joins("inner join t_post_version as t3 on t2.id = t3.post_id and t2.version = t3.version").
+		Joins("inner join t_post_cat as t4 on t2.id = t4.post_id").
+		Joins("inner join t_cat as t5 on t4.cat_id = t5.id").
+		Joins("inner join t_cat_version as t6 on t5.id = t6.cat_id and t5.version = t6.version").
+		Where("t1.deleted_flag = ?", 0).
+		Where("t2.deleted_flag = ?", 0).
+		Where("t3.deleted_flag = ?", 0).
+		Where("t4.deleted_flag = ?", 0).
+		Where("t5.deleted_flag = ?", 0).
+		Where("t6.deleted_flag = ?", 0).
+		Where("t1.user_id = ?", userId)
 
 	if req.CType > 0 {
 		baseQuery = baseQuery.Where("t4.cat_type = ?", req.CType)
@@ -50,7 +61,7 @@ func (u *userCollectRepo) GetUserCollectList(ctx context.Context, req *v1.GetUse
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	result := baseQuery.Select("t2.id", "t2.title", "t2.post_status", "t2.audit_status", "t2.remark", "t1.created_time", "t1.updated_time").Order("t1.created_time DESC").
+	result := baseQuery.Select("t2.id", "t3.title", "t3.post_status", "t3.audit_status", "t3.remark", "t1.created_time", "t1.updated_time").Order("t1.created_time DESC").
 		Limit(int(req.Size)).
 		Offset(int((req.Page - 1) * req.Size))
 
@@ -127,9 +138,17 @@ func (u *userCollectRepo) GetUserCollectTypes(ctx context.Context, req *v1.GetUs
 		return res, nil
 	}
 
-	baseQuery := u.data.db.Table("t_user_collect as t1").Joins("inner join t_post_cat as t2 on t1.post_id = t2.post_id").Joins("inner join t_cat as t3 on t2.cat_id = t3.id").Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0).Where("t3.deleted_flag = ?", 0).Where("t1.user_id = ?", userId)
+	baseQuery := u.data.db.Table("t_user_collect as t1").
+		Joins("inner join t_post_cat as t2 on t1.post_id = t2.post_id").
+		Joins("inner join t_cat as t3 on t2.cat_id = t3.id").
+		Joins("inner join t_cat_version as t4 on t3.id = t4.cat_id and t3.version = t4.version").
+		Where("t1.deleted_flag = ?", 0).
+		Where("t2.deleted_flag = ?", 0).
+		Where("t3.deleted_flag = ?", 0).
+		Where("t4.deleted_flag = ?", 0).
+		Where("t1.user_id = ?", userId)
 
-	if err := baseQuery.Distinct("t3.cat_type").Find(&items).Error; err != nil {
+	if err := baseQuery.Distinct("t4.cat_type").Find(&items).Error; err != nil {
 		u.log.Errorf("get user collect types failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}

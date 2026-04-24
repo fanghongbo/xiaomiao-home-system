@@ -175,7 +175,7 @@ func (u *userRepo) clearLoginErrorCount(ctx context.Context, loginType v1.LoginT
 func (u *userRepo) GetUserPasswordInfo(ctx context.Context, accountType AccountType, req *v1.WebLoginRequest) (*v1.UserPasswordInfo, error) {
 	var userPassword UserPassword
 
-	query := u.data.db.Table("t_user_password as t1").Joins("inner join t_user_identity as t2 on t1.user_id = t2.user_id").Select("t1.salt, t1.password").Where("t2.identity_id = ?", req.LoginIdentity).Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0)
+	query := u.data.db.Table("t_user_password as t1").Joins("inner join t_user_identity as t2 on t1.user_id = t2.user_id").Where("t2.identity_id = ?", req.LoginIdentity).Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0)
 
 	switch accountType {
 	case ACCOUNT_TYPE_EMAIL:
@@ -186,7 +186,7 @@ func (u *userRepo) GetUserPasswordInfo(ctx context.Context, accountType AccountT
 		query = query.Where("t2.identity_type = ?", "password")
 	}
 
-	if err := query.First(&userPassword).Error; err != nil {
+	if err := query.Select("t1.salt, t1.password").First(&userPassword).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "密码凭证不存在")
 		}
@@ -215,22 +215,22 @@ func (u *userRepo) CheckUserPassword(ctx context.Context, accountType AccountTyp
 func (u *userRepo) GetWebLoginAccountInfo(ctx context.Context, accountType AccountType, req *v1.WebLoginRequest) (*UserInfo, error) {
 	var userInfo *UserInfo
 
-	query := u.data.db.Table("t_user as t1").Joins("inner join t_user_identity as t2 on t1.id = t2.user_id").
-		Select("t1.id, t1.nickname").
-		Where("t2.identity_id = ?", req.LoginIdentity).
+	query := u.data.db.Table("t_user as t1").Joins("inner join t_user_version as t2 on t1.id = t2.user_id and t1.version = t2.version").Joins("inner join t_user_identity as t3 on t1.id = t3.user_id").
+		Where("t3.identity_id = ?", req.LoginIdentity).
 		Where("t1.deleted_flag = ?", 0).
-		Where("t2.deleted_flag = ?", 0)
+		Where("t2.deleted_flag = ?", 0).
+		Where("t3.deleted_flag = ?", 0)
 
 	switch accountType {
 	case ACCOUNT_TYPE_EMAIL:
-		query = query.Where("t2.identity_type = ?", "email")
+		query = query.Where("t3.identity_type = ?", "email")
 	case ACCOUNT_TYPE_SMS:
-		query = query.Where("t2.identity_type = ?", "sms")
+		query = query.Where("t3.identity_type = ?", "sms")
 	case ACCOUNT_TYPE_USERNAME:
-		query = query.Where("t2.identity_type = ?", "password")
+		query = query.Where("t3.identity_type = ?", "password")
 	}
 
-	if err := query.First(&userInfo).Error; err != nil {
+	if err := query.Select("t1.id, t2.nickname").First(&userInfo).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "用户不存在")
 		}
@@ -292,9 +292,11 @@ func (u *userRepo) WebLoginSms(ctx context.Context, req *v1.WebLoginRequest) (*v
 }
 
 func (u *userRepo) GetUserByNickname(ctx context.Context, nickname string) (*v1.UserInfo, error) {
-	var user User
+	var user UserVersion
 
-	if err := u.data.db.Table("t_user as t1").Joins("inner join t_user_password as t2 on t1.id = t2.user_id").Select("t1.id, t1.nickname, t1.avatar, t1.gender, t1.birthday, t1.signature, t1.status").Where("t1.nickname = ?", nickname).Where("t1.deleted_flag = ?", 0).First(&user).Error; err != nil {
+	query := u.data.db.Table("t_user as t1").Joins("inner join t_user_version as t2 on t1.id = t2.user_id and t1.version = t2.version").Where("t2.nickname = ?", nickname).Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0)
+
+	if err := query.Select("t1.id, t2.nickname, t2.avatar, t2.gender, t2.birthday, t2.signature, t2.status").First(&user).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			u.log.Errorf("user not found: %v", err)
 			return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "用户不存在")
@@ -326,8 +328,11 @@ func (u *userRepo) MpLogin(ctx context.Context, req *v1.MpLoginRequest) (*v1.MpL
 
 // 查询用户信息
 func (u *userRepo) GetUserInfo(ctx context.Context, userId int64) (*v1.UserInfo, error) {
-	var user User
-	if err := u.data.db.Table("t_user").Select("id, nickname, avatar, gender, birthday, signature, province_id, city_id, address, status").Where("id = ?", userId).Where("deleted_flag = ?", 0).First(&user).Error; err != nil {
+	var user UserVersion
+
+	query := u.data.db.Table("t_user as t1").Joins("inner join t_user_version as t2 on t1.id = t2.user_id and t1.version = t2.version").Where("t1.id = ?", userId).Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0)
+
+	if err := query.Select("t1.id, t2.nickname, t2.avatar, t2.gender, t2.birthday, t2.signature, t2.province_id, t2.city_id, t2.address, t2.status").First(&user).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, errors.NotFound(v1.ErrorReason_ERR_BAD_REQUEST.String(), "用户不存在")
 		}

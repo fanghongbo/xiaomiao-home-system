@@ -49,14 +49,19 @@ func (u *userCatRepo) GetUserCatList(ctx context.Context, req *v1.GetUserCatList
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	baseQuery := u.data.db.Table("t_cat as t1").Joins("inner join t_user_cat as t2 on t1.id = t2.cat_id").Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0).Where("t2.user_id = ?", userId)
+	baseQuery := u.data.db.Table("t_cat as t1").Joins("inner join t_cat_version as t2 on t1.id = t2.cat_id and t1.version = t2.version").
+		Joins("inner join t_user_cat as t3 on t1.id = t3.cat_id").
+		Where("t1.deleted_flag = ?", 0).
+		Where("t2.deleted_flag = ?", 0).
+		Where("t3.user_id = ?", userId).
+		Where("t3.deleted_flag = ?", 0)
 
 	if err := baseQuery.Count(&total).Error; err != nil {
 		u.log.Errorf("get user cat list failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	result := baseQuery.Select("t1.id", "t1.name", "t1.gender", "t1.breed_type", "t1.weight", "t1.birthday", "t1.neuter_status", "t1.health_status", "t1.dewormed_status", "t1.vaccine_status", "t1.remark", "t1.created_time", "t1.updated_time").Order("t1.created_time DESC").
+	result := baseQuery.Select("t1.id", "t2.name", "t2.gender", "t2.breed_type", "t2.weight", "t2.birthday", "t2.neuter_status", "t2.health_status", "t2.dewormed_status", "t2.vaccine_status", "t2.remark", "t1.created_time", "t1.updated_time").Order("t1.created_time DESC").
 		Limit(int(req.Size)).
 		Offset(int((req.Page - 1) * req.Size))
 
@@ -149,14 +154,31 @@ func (u *userCatRepo) CreateUserCat(ctx context.Context, req *v1.CreateUserCatRe
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
+	catVersionId, err := u.data.gid.NextID()
+	if err != nil {
+		u.log.Errorf("generate user cat id failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
 	birthday, err := time.Parse("2006-01-02", req.Birthday)
 	if err != nil {
 		u.log.Errorf("parse birthday failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
+	version := 1
+
 	catInfo := map[string]interface{}{
-		"id":              catId,
+		"id":           catId,
+		"version":      version,
+		"created_time": time.Now(),
+		"updated_time": time.Now(),
+	}
+
+	catVersionInfo := map[string]interface{}{
+		"id":              catVersionId,
+		"cat_id":          catId,
+		"version":         version,
 		"name":            req.Name,
 		"gender":          req.Gender,
 		"cat_type":        2,
@@ -174,12 +196,12 @@ func (u *userCatRepo) CreateUserCat(ctx context.Context, req *v1.CreateUserCatRe
 
 	// 健康状态为: 2: 生病, 3: 残疾, 4: 其他, 需要配置健康状态信息
 	if req.HealthStatus == 2 || req.HealthStatus == 3 || req.HealthStatus == 4 {
-		catInfo["health_desc"] = req.HealthDesc
+		catVersionInfo["health_desc"] = req.HealthDesc
 	}
 
 	// 疫苗状态为: 1: 全程接种, 2: 部分接种, 需要配置疫苗欸写，最近接种日期，疫苗本凭证图片
 	if req.VaccineStatus == 1 || req.VaccineStatus == 2 {
-		catInfo["vaccine_cert_image"] = req.VaccineCertImage
+		catVersionInfo["vaccine_cert_image"] = req.VaccineCertImage
 
 		if len(req.VaccineTypes) > 0 {
 			vaccineTypes := []string{}
@@ -187,7 +209,7 @@ func (u *userCatRepo) CreateUserCat(ctx context.Context, req *v1.CreateUserCatRe
 				vaccineTypes = append(vaccineTypes, fmt.Sprintf("%d", vaccineType))
 			}
 
-			catInfo["vaccine_types"] = strings.Join(vaccineTypes, ",")
+			catVersionInfo["vaccine_types"] = strings.Join(vaccineTypes, ",")
 		}
 
 		if req.VaccineLastDate != "" {
@@ -197,7 +219,7 @@ func (u *userCatRepo) CreateUserCat(ctx context.Context, req *v1.CreateUserCatRe
 				return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 			}
 
-			catInfo["vaccine_last_date"] = vaccineLastDate
+			catVersionInfo["vaccine_last_date"] = vaccineLastDate
 		}
 	}
 
@@ -206,6 +228,12 @@ func (u *userCatRepo) CreateUserCat(ctx context.Context, req *v1.CreateUserCatRe
 	if err := tx.Model(&Cat{}).Create(catInfo).Error; err != nil {
 		tx.Rollback()
 		u.log.Errorf("create user cat failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	if err := tx.Model(&CatVersion{}).Create(catVersionInfo).Error; err != nil {
+		tx.Rollback()
+		u.log.Errorf("create cat version failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -285,7 +313,22 @@ func (u *userCatRepo) UpdateUserCat(ctx context.Context, req *v1.UpdateUserCatRe
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	userCatInfo := map[string]interface{}{
+	currentCatVersionInfo, err := u.GetUserCatVersionInfo(ctx, req.Id)
+	if err != nil {
+		u.log.Errorf("get user cat version failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	newCatVersionId, err := u.data.gid.NextID()
+	if err != nil {
+		u.log.Errorf("generate user cat version id failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	catVersionInfo := map[string]interface{}{
+		"id":              newCatVersionId,
+		"version":         currentCatVersionInfo.Version + 1,
+		"cat_id":          req.Id,
 		"name":            req.Name,
 		"gender":          req.Gender,
 		"cat_type":        2,
@@ -302,12 +345,12 @@ func (u *userCatRepo) UpdateUserCat(ctx context.Context, req *v1.UpdateUserCatRe
 
 	// 健康状态为: 2: 生病, 3: 残疾, 4: 其他, 需要配置健康状态信息
 	if req.HealthStatus == 2 || req.HealthStatus == 3 || req.HealthStatus == 4 {
-		userCatInfo["health_desc"] = req.HealthDesc
+		catVersionInfo["health_desc"] = req.HealthDesc
 	}
 
 	// 疫苗状态为: 1: 全程接种, 2: 部分接种, 需要配置疫苗欸写，最近接种日期，疫苗本凭证图片
 	if req.VaccineStatus == 1 || req.VaccineStatus == 2 {
-		userCatInfo["vaccine_cert_image"] = req.VaccineCertImage
+		catVersionInfo["vaccine_cert_image"] = req.VaccineCertImage
 
 		if len(req.VaccineTypes) > 0 {
 			vaccineTypes := []string{}
@@ -315,7 +358,7 @@ func (u *userCatRepo) UpdateUserCat(ctx context.Context, req *v1.UpdateUserCatRe
 				vaccineTypes = append(vaccineTypes, fmt.Sprintf("%d", vaccineType))
 			}
 
-			userCatInfo["vaccine_types"] = strings.Join(vaccineTypes, ",")
+			catVersionInfo["vaccine_types"] = strings.Join(vaccineTypes, ",")
 		}
 
 		if req.VaccineLastDate != "" {
@@ -325,15 +368,15 @@ func (u *userCatRepo) UpdateUserCat(ctx context.Context, req *v1.UpdateUserCatRe
 				return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 			}
 
-			userCatInfo["vaccine_last_date"] = vaccineLastDate
+			catVersionInfo["vaccine_last_date"] = vaccineLastDate
 		}
 	}
 
 	tx := u.data.db.Begin()
 
-	if err := tx.Model(&Cat{}).Where("id = ?", req.Id).Where("deleted_flag = ?", 0).Updates(userCatInfo).Error; err != nil {
+	if err := tx.Model(&CatVersion{}).Where("id = ?", currentCatVersionInfo.Id).Where("deleted_flag = ?", 0).Create(catVersionInfo).Error; err != nil {
 		tx.Rollback()
-		u.log.Errorf("update user cat failed: %v", err)
+		u.log.Errorf("update user cat version failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -379,6 +422,12 @@ func (u *userCatRepo) DeleteUserCat(ctx context.Context, req *v1.DeleteUserCatRe
 	if err := tx.Model(&Cat{}).Where("id = ?", req.Id).Where("deleted_flag = ?", 0).Updates(updateInfo).Error; err != nil {
 		tx.Rollback()
 		u.log.Errorf("delete user cat failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	if err := tx.Model(&CatVersion{}).Where("cat_id = ?", req.Id).Where("deleted_flag = ?", 0).Updates(updateInfo).Error; err != nil {
+		tx.Rollback()
+		u.log.Errorf("delete cat version failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
@@ -448,7 +497,12 @@ func (u *userCatRepo) GetUserCat(ctx context.Context, req *v1.GetUserCatRequest)
 		return nil, errors.BadRequest(v1.ErrorReason_ERR_BAD_REQUEST.String(), "小猫不存在或无权限")
 	}
 
-	row := u.data.db.Model(&Cat{}).Select("id", "name", "gender", "breed_type", "weight", "birthday", "neuter_status", "health_status", "health_desc", "dewormed_status", "vaccine_status", "vaccine_types", "vaccine_last_date", "vaccine_cert_image", "remark").Where("id = ?", req.Id).Where("deleted_flag = ?", 0).Limit(1).Row()
+	row := u.data.db.Table("t_cat as t1").Joins("inner join t_cat_version as t2 on t1.id = t2.cat_id and t1.version = t2.version").
+		Select("t1.id", "t2.name", "t2.gender", "t2.breed_type", "t2.weight", "t2.birthday", "t2.neuter_status", "t2.health_status", "t2.health_desc", "t2.dewormed_status", "t2.vaccine_status", "t2.vaccine_types", "t2.vaccine_last_date", "t2.vaccine_cert_image", "t2.remark").
+		Where("t1.id = ?", req.Id).
+		Where("t2.deleted_flag = ?", 0).
+		Where("t1.deleted_flag = ?", 0).
+		Limit(1).Row()
 
 	var (
 		id               int64
@@ -566,14 +620,19 @@ func (u *userCatRepo) GetUserCats(ctx context.Context, req *v1.GetUserCatsReques
 	items := make([]*v1.CatItem, 0)
 	total := int64(0)
 
-	baseQuery := u.data.db.Table("t_cat as t1").Joins("inner join t_user_cat as t2 on t1.id = t2.cat_id").Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0).Where("t2.user_id = ?", userId)
+	baseQuery := u.data.db.Table("t_cat as t1").Joins("inner join t_cat_version as t2 on t1.id = t2.cat_id and t1.version = t2.version").
+		Joins("inner join t_user_cat as t3 on t1.id = t3.cat_id").
+		Where("t1.deleted_flag = ?", 0).
+		Where("t2.deleted_flag = ?", 0).
+		Where("t3.deleted_flag = ?", 0).
+		Where("t3.user_id = ?", userId)
 
 	if err := baseQuery.Count(&total).Error; err != nil {
 		u.log.Errorf("get user cats failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
 	}
 
-	result := baseQuery.Select("t1.id", "t1.name", "t1.gender", "t1.breed_type").Order("t1.created_time DESC")
+	result := baseQuery.Select("t1.id", "t2.name", "t2.gender", "t2.breed_type").Order("t1.created_time DESC")
 
 	rows, err := result.Rows()
 	if err != nil {
@@ -613,4 +672,16 @@ func (u *userCatRepo) GetUserCats(ctx context.Context, req *v1.GetUserCatsReques
 		Code: 200, Success: true, Message: "查询成功",
 		Data: items,
 	}, nil
+}
+
+// GetUserCatVersion 查询小猫版本信息
+func (u *userCatRepo) GetUserCatVersionInfo(ctx context.Context, catId int64) (*CatVersion, error) {
+	var cat *CatVersion
+
+	err := u.data.db.Model(&Cat{}).Select("id", "version").Where("id = ?", catId).Where("deleted_flag = ?", 0).First(&cat).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return cat, nil
 }
