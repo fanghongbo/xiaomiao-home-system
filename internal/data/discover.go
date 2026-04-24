@@ -99,7 +99,7 @@ func (u *discoverRepo) GetDiscoverList(ctx context.Context, req *v1.GetDiscoverL
 		return res, nil
 	}
 
-	baseQuery := u.data.db.Table("t_post as t1").Joins("inner join t_post_cat as t2 on t1.id = t2.post_id").Joins("inner join t_cat as t3 on t2.cat_id = t3.id").Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0).Where("t3.deleted_flag = ?", 0)
+	baseQuery := u.data.db.Table("t_post as t1").Joins("inner join t_post_cat as t2 on t1.id = t2.post_id").Joins("inner join t_cat as t3 on t2.cat_id = t3.id").Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0).Where("t3.deleted_flag = ?", 0).Where("t1.audit_status = ?", 1)
 
 	if req.PType > 0 {
 		baseQuery = baseQuery.Where("t1.post_type = ?", req.PType)
