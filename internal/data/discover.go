@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"math/rand"
 	"time"
 	v1 "xiaomiao-home-system/api/discover/v1"
 	"xiaomiao-home-system/internal/biz"
@@ -296,7 +297,7 @@ func (u *discoverRepo) GetDiscoverRecommend(ctx context.Context, req *v1.GetDisc
 		Data: []*v1.DiscoverRecommendItem{},
 	}
 
-	cacheData, err := u.getDiscoverRecommendCache(ctx)
+	cacheData, err := u.getDiscoverRecommendCache(ctx, req)
 	if err != nil {
 		u.log.Errorf("get discover recommend cache failed: %v", err)
 		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
@@ -307,20 +308,90 @@ func (u *discoverRepo) GetDiscoverRecommend(ctx context.Context, req *v1.GetDisc
 		return res, nil
 	}
 
+	query := u.data.db.Table("t_post as t1").Joins("inner join t_post_cat as t2 on t1.id = t2.post_id").Joins("inner join t_cat as t3 on t2.cat_id = t3.id").Where("t1.deleted_flag = ?", 0).Where("t2.deleted_flag = ?", 0).Where("t3.deleted_flag = ?", 0).Where("t1.audit_status = ?", 1).Order("t1.created_time DESC").Limit(20)
 
-	
+	if req.Id > 0 {
+		query = query.Where("t1.id != ?", req.Id)
+	}
+
+	rows, err := query.Select("t1.id", "t1.title", "t1.province_id", "t1.city_id").Rows()
+	if err != nil {
+		u.log.Errorf("get discover recommend failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	defer rows.Close()
+
+	var items []*v1.DiscoverRecommendItem
+
+	for rows.Next() {
+		var (
+			id         int64
+			title      string
+			provinceId int32
+			cityId     int32
+		)
+
+		if err := rows.Scan(&id, &title, &provinceId, &cityId); err != nil {
+			u.log.Errorf("get discover recommend failed: %v", err)
+			return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+		}
+
+		if provinceId == 0 || cityId == 0 {
+			// 使用主人的省份和城市
+			userPostRepo := NewUserPostRepo(u.data, u.log.Logger())
+			userInfo, err := userPostRepo.GetPostUserInfo(ctx, id)
+			if err != nil {
+				u.log.Errorf("get post user info failed: %v", err)
+				return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+			}
+			provinceId = userInfo.ProvinceId
+			cityId = userInfo.CityId
+		}
+
+		items = append(items, &v1.DiscoverRecommendItem{
+			Id:         id,
+			Title:      title,
+			ProvinceId: provinceId,
+			CityId:     cityId,
+		})
+	}
+
+	if len(items) > 5 {
+		// 随机获取5个
+		r := rand.New(rand.NewSource(time.Now().UnixNano()))
+		r.Shuffle(len(items), func(i, j int) {
+			items[i], items[j] = items[j], items[i]
+		})
+		res.Data = items[:5]
+	} else {
+		res.Data = items
+	}
+
+	if err := rows.Err(); err != nil {
+		u.log.Errorf("get discover recommend failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
+
+	if err := u.setDiscoverRecommendCache(ctx, req, res.Data); err != nil {
+		u.log.Errorf("set discover recommend cache failed: %v", err)
+		return nil, errors.InternalServer(v1.ErrorReason_ERR_SYSTEM_EXCEPTION.String(), "系统错误, 请稍后再试")
+	}
 
 	return res, nil
 }
 
 // getDiscoverRecommendCacheKey 获取推荐内容缓存key
-func (u *discoverRepo) getDiscoverRecommendCacheKey() string {
+func (u *discoverRepo) getDiscoverRecommendCacheKey(req *v1.GetDiscoverRecommendRequest) string {
+	if req.Id > 0 {
+		return fmt.Sprintf("discover:recommend:%d", req.Id)
+	}
 	return "discover:recommend"
 }
 
 // getDiscoverRecommendCache 获取推荐内容缓存
-func (u *discoverRepo) getDiscoverRecommendCache(ctx context.Context) ([]*v1.DiscoverRecommendItem, error) {
-	redisKey := u.getDiscoverRecommendCacheKey()
+func (u *discoverRepo) getDiscoverRecommendCache(ctx context.Context, req *v1.GetDiscoverRecommendRequest) ([]*v1.DiscoverRecommendItem, error) {
+	redisKey := u.getDiscoverRecommendCacheKey(req)
 
 	jsonData, err := u.data.cache.Get(ctx, redisKey).Result()
 	if err != nil {
@@ -339,8 +410,8 @@ func (u *discoverRepo) getDiscoverRecommendCache(ctx context.Context) ([]*v1.Dis
 }
 
 // setDiscoverRecommendCache 设置推荐内容缓存
-func (u *discoverRepo) setDiscoverRecommendCache(ctx context.Context, data []*v1.DiscoverRecommendItem) error {
-	redisKey := u.getDiscoverRecommendCacheKey()
+func (u *discoverRepo) setDiscoverRecommendCache(ctx context.Context, req *v1.GetDiscoverRecommendRequest, data []*v1.DiscoverRecommendItem) error {
+	redisKey := u.getDiscoverRecommendCacheKey(req)
 
 	jsonData, err := json.Marshal(data)
 	if err != nil {

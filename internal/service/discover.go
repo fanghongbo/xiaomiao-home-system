@@ -54,3 +54,13 @@ func (s *DiscoverService) GetDiscoverRecommend(ctx context.Context, req *pb.GetD
 
 	return res, nil
 }
+
+// GetDiscoverRecommendExcludePostId 查询推荐内容，排除指定id
+func (s *DiscoverService) GetDiscoverRecommendExcludePostId(ctx context.Context, req *pb.GetDiscoverRecommendRequest) (*pb.GetDiscoverRecommendReply, error) {
+	res, err := s.discover.GetDiscoverRecommend(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}

@@ -22,21 +22,25 @@ const _ = http.SupportPackageIsVersion1
 const OperationDiscoverGetDiscover = "/api.discover.v1.Discover/GetDiscover"
 const OperationDiscoverGetDiscoverList = "/api.discover.v1.Discover/GetDiscoverList"
 const OperationDiscoverGetDiscoverRecommend = "/api.discover.v1.Discover/GetDiscoverRecommend"
+const OperationDiscoverGetDiscoverRecommendExcludePostId = "/api.discover.v1.Discover/GetDiscoverRecommendExcludePostId"
 
 type DiscoverHTTPServer interface {
 	// GetDiscover GetDiscover 查询发现内容
 	GetDiscover(context.Context, *GetDiscoverRequest) (*GetDiscoverReply, error)
 	// GetDiscoverList GetDiscoverList 查询发现列表
 	GetDiscoverList(context.Context, *GetDiscoverListRequest) (*GetDiscoverListReply, error)
-	// GetDiscoverRecommend GetDiscoverRecommend 查询推荐内容
+	// GetDiscoverRecommend GetDiscoverRecommend 获取发现页推荐
 	GetDiscoverRecommend(context.Context, *GetDiscoverRecommendRequest) (*GetDiscoverRecommendReply, error)
+	// GetDiscoverRecommendExcludePostId GetDiscoverRecommendExcludePostId 获取发现页推荐（排除指定帖子）
+	GetDiscoverRecommendExcludePostId(context.Context, *GetDiscoverRecommendRequest) (*GetDiscoverRecommendReply, error)
 }
 
 func RegisterDiscoverHTTPServer(s *http.Server, srv DiscoverHTTPServer) {
 	r := s.Route("/")
 	r.GET("/api/v1/discover/list", _Discover_GetDiscoverList0_HTTP_Handler(srv))
-	r.GET("/api/v1/discover/{id}", _Discover_GetDiscover0_HTTP_Handler(srv))
 	r.GET("/api/v1/discover/recommend", _Discover_GetDiscoverRecommend0_HTTP_Handler(srv))
+	r.GET("/api/v1/discover/recommend/{id}", _Discover_GetDiscoverRecommendExcludePostId0_HTTP_Handler(srv))
+	r.GET("/api/v1/discover/{id}", _Discover_GetDiscover0_HTTP_Handler(srv))
 }
 
 func _Discover_GetDiscoverList0_HTTP_Handler(srv DiscoverHTTPServer) func(ctx http.Context) error {
@@ -54,6 +58,47 @@ func _Discover_GetDiscoverList0_HTTP_Handler(srv DiscoverHTTPServer) func(ctx ht
 			return err
 		}
 		reply := out.(*GetDiscoverListReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Discover_GetDiscoverRecommend0_HTTP_Handler(srv DiscoverHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetDiscoverRecommendRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationDiscoverGetDiscoverRecommend)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetDiscoverRecommend(ctx, req.(*GetDiscoverRecommendRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetDiscoverRecommendReply)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Discover_GetDiscoverRecommendExcludePostId0_HTTP_Handler(srv DiscoverHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetDiscoverRecommendRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationDiscoverGetDiscoverRecommendExcludePostId)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetDiscoverRecommendExcludePostId(ctx, req.(*GetDiscoverRecommendRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetDiscoverRecommendReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -80,32 +125,15 @@ func _Discover_GetDiscover0_HTTP_Handler(srv DiscoverHTTPServer) func(ctx http.C
 	}
 }
 
-func _Discover_GetDiscoverRecommend0_HTTP_Handler(srv DiscoverHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in GetDiscoverRecommendRequest
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationDiscoverGetDiscoverRecommend)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.GetDiscoverRecommend(ctx, req.(*GetDiscoverRecommendRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*GetDiscoverRecommendReply)
-		return ctx.Result(200, reply)
-	}
-}
-
 type DiscoverHTTPClient interface {
 	// GetDiscover GetDiscover 查询发现内容
 	GetDiscover(ctx context.Context, req *GetDiscoverRequest, opts ...http.CallOption) (rsp *GetDiscoverReply, err error)
 	// GetDiscoverList GetDiscoverList 查询发现列表
 	GetDiscoverList(ctx context.Context, req *GetDiscoverListRequest, opts ...http.CallOption) (rsp *GetDiscoverListReply, err error)
-	// GetDiscoverRecommend GetDiscoverRecommend 查询推荐内容
+	// GetDiscoverRecommend GetDiscoverRecommend 获取发现页推荐
 	GetDiscoverRecommend(ctx context.Context, req *GetDiscoverRecommendRequest, opts ...http.CallOption) (rsp *GetDiscoverRecommendReply, err error)
+	// GetDiscoverRecommendExcludePostId GetDiscoverRecommendExcludePostId 获取发现页推荐（排除指定帖子）
+	GetDiscoverRecommendExcludePostId(ctx context.Context, req *GetDiscoverRecommendRequest, opts ...http.CallOption) (rsp *GetDiscoverRecommendReply, err error)
 }
 
 type DiscoverHTTPClientImpl struct {
@@ -144,12 +172,26 @@ func (c *DiscoverHTTPClientImpl) GetDiscoverList(ctx context.Context, in *GetDis
 	return &out, nil
 }
 
-// GetDiscoverRecommend GetDiscoverRecommend 查询推荐内容
+// GetDiscoverRecommend GetDiscoverRecommend 获取发现页推荐
 func (c *DiscoverHTTPClientImpl) GetDiscoverRecommend(ctx context.Context, in *GetDiscoverRecommendRequest, opts ...http.CallOption) (*GetDiscoverRecommendReply, error) {
 	var out GetDiscoverRecommendReply
 	pattern := "/api/v1/discover/recommend"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationDiscoverGetDiscoverRecommend))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+// GetDiscoverRecommendExcludePostId GetDiscoverRecommendExcludePostId 获取发现页推荐（排除指定帖子）
+func (c *DiscoverHTTPClientImpl) GetDiscoverRecommendExcludePostId(ctx context.Context, in *GetDiscoverRecommendRequest, opts ...http.CallOption) (*GetDiscoverRecommendReply, error) {
+	var out GetDiscoverRecommendReply
+	pattern := "/api/v1/discover/recommend/{id}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationDiscoverGetDiscoverRecommendExcludePostId))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

@@ -791,6 +791,7 @@ func (x *GetDiscoverReply) GetData() *DiscoverInfo {
 
 type GetDiscoverRecommendRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -823,6 +824,13 @@ func (x *GetDiscoverRecommendRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetDiscoverRecommendRequest.ProtoReflect.Descriptor instead.
 func (*GetDiscoverRecommendRequest) Descriptor() ([]byte, []int) {
 	return file_discover_v1_discover_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *GetDiscoverRecommendRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
 }
 
 type DiscoverRecommendItem struct {
@@ -1034,8 +1042,9 @@ const file_discover_v1_discover_proto_rawDesc = "" +
 	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12\x18\n" +
 	"\asuccess\x18\x03 \x01(\bR\asuccess\x121\n" +
-	"\x04data\x18\x04 \x01(\v2\x1d.api.discover.v1.DiscoverInfoR\x04data\"\x1d\n" +
-	"\x1bGetDiscoverRecommendRequest\"u\n" +
+	"\x04data\x18\x04 \x01(\v2\x1d.api.discover.v1.DiscoverInfoR\x04data\"6\n" +
+	"\x1bGetDiscoverRecommendRequest\x12\x17\n" +
+	"\x02id\x18\x01 \x01(\x03B\a\xfaB\x04\"\x02(\x00R\x02id\"u\n" +
 	"\x15DiscoverRecommendItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x14\n" +
 	"\x05title\x18\x02 \x01(\tR\x05title\x12\x1e\n" +
@@ -1047,11 +1056,12 @@ const file_discover_v1_discover_proto_rawDesc = "" +
 	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12\x18\n" +
 	"\asuccess\x18\x03 \x01(\bR\asuccess\x12:\n" +
-	"\x04data\x18\x04 \x03(\v2&.api.discover.v1.DiscoverRecommendItemR\x04data2\x9a\x03\n" +
+	"\x04data\x18\x04 \x03(\v2&.api.discover.v1.DiscoverRecommendItemR\x04data2\xc3\x04\n" +
 	"\bDiscover\x12\x80\x01\n" +
-	"\x0fGetDiscoverList\x12'.api.discover.v1.GetDiscoverListRequest\x1a%.api.discover.v1.GetDiscoverListReply\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/api/v1/discover/list\x12t\n" +
-	"\vGetDiscover\x12#.api.discover.v1.GetDiscoverRequest\x1a!.api.discover.v1.GetDiscoverReply\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/api/v1/discover/{id}\x12\x94\x01\n" +
-	"\x14GetDiscoverRecommend\x12,.api.discover.v1.GetDiscoverRecommendRequest\x1a*.api.discover.v1.GetDiscoverRecommendReply\"\"\x82\xd3\xe4\x93\x02\x1c\x12\x1a/api/v1/discover/recommendBM\n" +
+	"\x0fGetDiscoverList\x12'.api.discover.v1.GetDiscoverListRequest\x1a%.api.discover.v1.GetDiscoverListReply\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/api/v1/discover/list\x12\x94\x01\n" +
+	"\x14GetDiscoverRecommend\x12,.api.discover.v1.GetDiscoverRecommendRequest\x1a*.api.discover.v1.GetDiscoverRecommendReply\"\"\x82\xd3\xe4\x93\x02\x1c\x12\x1a/api/v1/discover/recommend\x12\xa6\x01\n" +
+	"!GetDiscoverRecommendExcludePostId\x12,.api.discover.v1.GetDiscoverRecommendRequest\x1a*.api.discover.v1.GetDiscoverRecommendReply\"'\x82\xd3\xe4\x93\x02!\x12\x1f/api/v1/discover/recommend/{id}\x12t\n" +
+	"\vGetDiscover\x12#.api.discover.v1.GetDiscoverRequest\x1a!.api.discover.v1.GetDiscoverReply\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/api/v1/discover/{id}BM\n" +
 	"\x0fapi.discover.v1B\x0fDiscoverProtoV1P\x01Z'xiaomiao-home-system/api/discover/v1;v1b\x06proto3"
 
 var (
@@ -1091,13 +1101,15 @@ var file_discover_v1_discover_proto_depIdxs = []int32{
 	9,  // 4: api.discover.v1.GetDiscoverReply.data:type_name -> api.discover.v1.DiscoverInfo
 	12, // 5: api.discover.v1.GetDiscoverRecommendReply.data:type_name -> api.discover.v1.DiscoverRecommendItem
 	2,  // 6: api.discover.v1.Discover.GetDiscoverList:input_type -> api.discover.v1.GetDiscoverListRequest
-	6,  // 7: api.discover.v1.Discover.GetDiscover:input_type -> api.discover.v1.GetDiscoverRequest
-	11, // 8: api.discover.v1.Discover.GetDiscoverRecommend:input_type -> api.discover.v1.GetDiscoverRecommendRequest
-	5,  // 9: api.discover.v1.Discover.GetDiscoverList:output_type -> api.discover.v1.GetDiscoverListReply
-	10, // 10: api.discover.v1.Discover.GetDiscover:output_type -> api.discover.v1.GetDiscoverReply
+	11, // 7: api.discover.v1.Discover.GetDiscoverRecommend:input_type -> api.discover.v1.GetDiscoverRecommendRequest
+	11, // 8: api.discover.v1.Discover.GetDiscoverRecommendExcludePostId:input_type -> api.discover.v1.GetDiscoverRecommendRequest
+	6,  // 9: api.discover.v1.Discover.GetDiscover:input_type -> api.discover.v1.GetDiscoverRequest
+	5,  // 10: api.discover.v1.Discover.GetDiscoverList:output_type -> api.discover.v1.GetDiscoverListReply
 	13, // 11: api.discover.v1.Discover.GetDiscoverRecommend:output_type -> api.discover.v1.GetDiscoverRecommendReply
-	9,  // [9:12] is the sub-list for method output_type
-	6,  // [6:9] is the sub-list for method input_type
+	13, // 12: api.discover.v1.Discover.GetDiscoverRecommendExcludePostId:output_type -> api.discover.v1.GetDiscoverRecommendReply
+	10, // 13: api.discover.v1.Discover.GetDiscover:output_type -> api.discover.v1.GetDiscoverReply
+	10, // [10:14] is the sub-list for method output_type
+	6,  // [6:10] is the sub-list for method input_type
 	6,  // [6:6] is the sub-list for extension type_name
 	6,  // [6:6] is the sub-list for extension extendee
 	0,  // [0:6] is the sub-list for field type_name

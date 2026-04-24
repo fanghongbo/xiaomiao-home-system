@@ -18,17 +18,24 @@ service Discover {
 		};
 	}
 
+	// GetDiscoverRecommend 获取发现页推荐
+	rpc GetDiscoverRecommend (GetDiscoverRecommendRequest) returns (GetDiscoverRecommendReply) {
+		option (google.api.http) = {
+			get: "/api/v1/discover/recommend"
+		};	
+	}
+
+	// GetDiscoverRecommendExcludePostId 获取发现页推荐（排除指定帖子）
+	rpc GetDiscoverRecommendExcludePostId (GetDiscoverRecommendRequest) returns (GetDiscoverRecommendReply) {
+		option (google.api.http) = {
+			get: "/api/v1/discover/recommend/{id}"
+		};	
+	}
+
 	// GetDiscover 查询发现内容
 	rpc GetDiscover (GetDiscoverRequest) returns (GetDiscoverReply) {
 		option (google.api.http) = {
 			get: "/api/v1/discover/{id}"
-		};	
-	}
-
-	// GetDiscoverRecommend 查询推荐内容
-	rpc GetDiscoverRecommend (GetDiscoverRecommendRequest) returns (GetDiscoverRecommendReply) {
-		option (google.api.http) = {
-			get: "/api/v1/discover/recommend"
 		};	
 	}
 }
@@ -112,7 +119,9 @@ message GetDiscoverReply {
 	DiscoverInfo data = 4;
 }
 
-message GetDiscoverRecommendRequest {}
+message GetDiscoverRecommendRequest {
+	int64 id = 1 [(validate.rules).int64 = {gte: 0}];
+}
 
 message DiscoverRecommendItem {
 	int64 id = 1;

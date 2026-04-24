@@ -73,8 +73,32 @@ paths:
         get:
             tags:
                 - Discover
-            description: GetDiscoverRecommend 查询推荐内容
+            description: GetDiscoverRecommend 获取发现页推荐
             operationId: Discover_GetDiscoverRecommend
+            parameters:
+                - name: id
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.discover.v1.GetDiscoverRecommendReply'
+    /api/v1/discover/recommend/{id}:
+        get:
+            tags:
+                - Discover
+            description: GetDiscoverRecommendExcludePostId 获取发现页推荐（排除指定帖子）
+            operationId: Discover_GetDiscoverRecommendExcludePostId
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
             responses:
                 "200":
                     description: OK

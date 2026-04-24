@@ -19,9 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Discover_GetDiscoverList_FullMethodName      = "/api.discover.v1.Discover/GetDiscoverList"
-	Discover_GetDiscover_FullMethodName          = "/api.discover.v1.Discover/GetDiscover"
-	Discover_GetDiscoverRecommend_FullMethodName = "/api.discover.v1.Discover/GetDiscoverRecommend"
+	Discover_GetDiscoverList_FullMethodName                   = "/api.discover.v1.Discover/GetDiscoverList"
+	Discover_GetDiscoverRecommend_FullMethodName              = "/api.discover.v1.Discover/GetDiscoverRecommend"
+	Discover_GetDiscoverRecommendExcludePostId_FullMethodName = "/api.discover.v1.Discover/GetDiscoverRecommendExcludePostId"
+	Discover_GetDiscover_FullMethodName                       = "/api.discover.v1.Discover/GetDiscover"
 )
 
 // DiscoverClient is the client API for Discover service.
@@ -30,10 +31,12 @@ const (
 type DiscoverClient interface {
 	// GetDiscoverList 查询发现列表
 	GetDiscoverList(ctx context.Context, in *GetDiscoverListRequest, opts ...grpc.CallOption) (*GetDiscoverListReply, error)
+	// GetDiscoverRecommend 获取发现页推荐
+	GetDiscoverRecommend(ctx context.Context, in *GetDiscoverRecommendRequest, opts ...grpc.CallOption) (*GetDiscoverRecommendReply, error)
+	// GetDiscoverRecommendExcludePostId 获取发现页推荐（排除指定帖子）
+	GetDiscoverRecommendExcludePostId(ctx context.Context, in *GetDiscoverRecommendRequest, opts ...grpc.CallOption) (*GetDiscoverRecommendReply, error)
 	// GetDiscover 查询发现内容
 	GetDiscover(ctx context.Context, in *GetDiscoverRequest, opts ...grpc.CallOption) (*GetDiscoverReply, error)
-	// GetDiscoverRecommend 查询推荐内容
-	GetDiscoverRecommend(ctx context.Context, in *GetDiscoverRecommendRequest, opts ...grpc.CallOption) (*GetDiscoverRecommendReply, error)
 }
 
 type discoverClient struct {
@@ -54,20 +57,30 @@ func (c *discoverClient) GetDiscoverList(ctx context.Context, in *GetDiscoverLis
 	return out, nil
 }
 
-func (c *discoverClient) GetDiscover(ctx context.Context, in *GetDiscoverRequest, opts ...grpc.CallOption) (*GetDiscoverReply, error) {
+func (c *discoverClient) GetDiscoverRecommend(ctx context.Context, in *GetDiscoverRecommendRequest, opts ...grpc.CallOption) (*GetDiscoverRecommendReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetDiscoverReply)
-	err := c.cc.Invoke(ctx, Discover_GetDiscover_FullMethodName, in, out, cOpts...)
+	out := new(GetDiscoverRecommendReply)
+	err := c.cc.Invoke(ctx, Discover_GetDiscoverRecommend_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *discoverClient) GetDiscoverRecommend(ctx context.Context, in *GetDiscoverRecommendRequest, opts ...grpc.CallOption) (*GetDiscoverRecommendReply, error) {
+func (c *discoverClient) GetDiscoverRecommendExcludePostId(ctx context.Context, in *GetDiscoverRecommendRequest, opts ...grpc.CallOption) (*GetDiscoverRecommendReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetDiscoverRecommendReply)
-	err := c.cc.Invoke(ctx, Discover_GetDiscoverRecommend_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Discover_GetDiscoverRecommendExcludePostId_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *discoverClient) GetDiscover(ctx context.Context, in *GetDiscoverRequest, opts ...grpc.CallOption) (*GetDiscoverReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetDiscoverReply)
+	err := c.cc.Invoke(ctx, Discover_GetDiscover_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -80,10 +93,12 @@ func (c *discoverClient) GetDiscoverRecommend(ctx context.Context, in *GetDiscov
 type DiscoverServer interface {
 	// GetDiscoverList 查询发现列表
 	GetDiscoverList(context.Context, *GetDiscoverListRequest) (*GetDiscoverListReply, error)
+	// GetDiscoverRecommend 获取发现页推荐
+	GetDiscoverRecommend(context.Context, *GetDiscoverRecommendRequest) (*GetDiscoverRecommendReply, error)
+	// GetDiscoverRecommendExcludePostId 获取发现页推荐（排除指定帖子）
+	GetDiscoverRecommendExcludePostId(context.Context, *GetDiscoverRecommendRequest) (*GetDiscoverRecommendReply, error)
 	// GetDiscover 查询发现内容
 	GetDiscover(context.Context, *GetDiscoverRequest) (*GetDiscoverReply, error)
-	// GetDiscoverRecommend 查询推荐内容
-	GetDiscoverRecommend(context.Context, *GetDiscoverRecommendRequest) (*GetDiscoverRecommendReply, error)
 	mustEmbedUnimplementedDiscoverServer()
 }
 
@@ -97,11 +112,14 @@ type UnimplementedDiscoverServer struct{}
 func (UnimplementedDiscoverServer) GetDiscoverList(context.Context, *GetDiscoverListRequest) (*GetDiscoverListReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetDiscoverList not implemented")
 }
-func (UnimplementedDiscoverServer) GetDiscover(context.Context, *GetDiscoverRequest) (*GetDiscoverReply, error) {
-	return nil, status.Error(codes.Unimplemented, "method GetDiscover not implemented")
-}
 func (UnimplementedDiscoverServer) GetDiscoverRecommend(context.Context, *GetDiscoverRecommendRequest) (*GetDiscoverRecommendReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetDiscoverRecommend not implemented")
+}
+func (UnimplementedDiscoverServer) GetDiscoverRecommendExcludePostId(context.Context, *GetDiscoverRecommendRequest) (*GetDiscoverRecommendReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetDiscoverRecommendExcludePostId not implemented")
+}
+func (UnimplementedDiscoverServer) GetDiscover(context.Context, *GetDiscoverRequest) (*GetDiscoverReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetDiscover not implemented")
 }
 func (UnimplementedDiscoverServer) mustEmbedUnimplementedDiscoverServer() {}
 func (UnimplementedDiscoverServer) testEmbeddedByValue()                  {}
@@ -142,24 +160,6 @@ func _Discover_GetDiscoverList_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Discover_GetDiscover_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetDiscoverRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(DiscoverServer).GetDiscover(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Discover_GetDiscover_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DiscoverServer).GetDiscover(ctx, req.(*GetDiscoverRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Discover_GetDiscoverRecommend_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetDiscoverRecommendRequest)
 	if err := dec(in); err != nil {
@@ -178,6 +178,42 @@ func _Discover_GetDiscoverRecommend_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Discover_GetDiscoverRecommendExcludePostId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDiscoverRecommendRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DiscoverServer).GetDiscoverRecommendExcludePostId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Discover_GetDiscoverRecommendExcludePostId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DiscoverServer).GetDiscoverRecommendExcludePostId(ctx, req.(*GetDiscoverRecommendRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Discover_GetDiscover_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDiscoverRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DiscoverServer).GetDiscover(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Discover_GetDiscover_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DiscoverServer).GetDiscover(ctx, req.(*GetDiscoverRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Discover_ServiceDesc is the grpc.ServiceDesc for Discover service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -190,12 +226,16 @@ var Discover_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Discover_GetDiscoverList_Handler,
 		},
 		{
-			MethodName: "GetDiscover",
-			Handler:    _Discover_GetDiscover_Handler,
-		},
-		{
 			MethodName: "GetDiscoverRecommend",
 			Handler:    _Discover_GetDiscoverRecommend_Handler,
+		},
+		{
+			MethodName: "GetDiscoverRecommendExcludePostId",
+			Handler:    _Discover_GetDiscoverRecommendExcludePostId_Handler,
+		},
+		{
+			MethodName: "GetDiscover",
+			Handler:    _Discover_GetDiscover_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
