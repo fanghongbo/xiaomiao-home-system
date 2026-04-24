@@ -7,13 +7,31 @@ CREATE TABLE
     IF NOT EXISTS t_user
 (
     id           bigint PRIMARY KEY COMMENT '用户id',
+    version      int NOT NULL COMMENT '版本号',
+    status       tinyint(1)  default 0 COMMENT '账户状态, 0: 禁用, 1: 启用',
+    deleted_flag tinyint(1)                   DEFAULT 0 COMMENT '删除标记, 0: 未删除,  1: 已删除',
+    created_time datetime    NOT NULL         DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_time datetime    NOT NULL         DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    deleted_time datetime                     DEFAULT  '1970-01-01 08:00:00' COMMENT '删除时间',
+    KEY idx_id_version (id, version) USING BTREE
+) ENGINE = innodb
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci
+  ROW_FORMAT = DYNAMIC COMMENT ='用户表';
+
+  -- 用户信息版本表
+CREATE TABLE
+    IF NOT EXISTS t_user_version
+(
+    id           bigint PRIMARY KEY COMMENT '用户信息版本id',
+    version      int NOT NULL COMMENT '版本号',
+    user_id      bigint NOT NULL COMMENT '用户id',
     nickname     varchar(64) NOT NULL COMMENT '昵称',
     gender       tinyint(1)  default 0 COMMENT '性别, 0: 保密, 1: 男, 2: 女',
     birthday     date DEFAULT NULL COMMENT '生日',
     province_id  bigint DEFAULT NULL COMMENT '省份id',
     city_id      bigint DEFAULT NULL COMMENT '城市id',
     address      varchar(255) DEFAULT NULL COMMENT '详细地址',
-    status       tinyint(1)  default 0 COMMENT '账户状态, 0: 禁用, 1: 启用',
     avatar       varchar(255) COMMENT '头像地址',
     signature    varchar(100) COMMENT '个人签名',
     remark  longtext COMMENT '描述',
@@ -21,11 +39,11 @@ CREATE TABLE
     created_time datetime    NOT NULL         DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     updated_time datetime    NOT NULL         DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     deleted_time datetime                     DEFAULT  '1970-01-01 08:00:00' COMMENT '删除时间',
-    KEY idx_nickname (nickname) USING BTREE
+    KEY idx_user_id_version (user_id, version) USING BTREE
 ) ENGINE = innodb
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci
-  ROW_FORMAT = DYNAMIC COMMENT ='用户表';
+  ROW_FORMAT = DYNAMIC COMMENT ='用户信息版本表';
 
 -- 用户密码凭据（仅开通账号密码登录的用户有记录，与 t_user 一对一）
 CREATE TABLE
@@ -66,47 +84,6 @@ CREATE TABLE
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci
   ROW_FORMAT = DYNAMIC COMMENT ='用户身份表';
-
--- 角色表
-CREATE TABLE
-    IF NOT EXISTS t_role
-(
-    id           bigint PRIMARY KEY COMMENT '角色id',
-    name         varchar(64) NOT NULL COMMENT '角色名',
-    status       tinyint(1)  default 0 COMMENT '角色状态, 0-禁用, 1-启用',
-    remark  longtext COMMENT '描述',
-    deleted_flag tinyint(1)                   DEFAULT 0 COMMENT '删除标记, 0: 未删除,  1: 已删除',
-    created_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    updated_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    deleted_time datetime             DEFAULT '1970-01-01 08:00:00' COMMENT '删除时间',
-    KEY idx_role_name (name) USING BTREE,
-    UNIQUE KEY uk_role_name (name, deleted_flag, deleted_time) USING BTREE
-) ENGINE = innodb
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_unicode_ci
-  ROW_FORMAT = DYNAMIC COMMENT ='角色表';
-
--- 角色权限表
-CREATE TABLE
-    IF NOT EXISTS t_role_permission
-(
-    id           bigint PRIMARY KEY COMMENT '主键',
-    role_id   bigint NOT NULL COMMENT '角色ID',
-    permission_code VARCHAR(255) NOT NULL COMMENT '权限编码',
-    created_user bigint NOT NULL COMMENT '创建用户',
-    updated_user bigint NOT NULL COMMENT '更新用户',
-    deleted_user bigint DEFAULT NULL COMMENT '删除用户',
-    deleted_flag tinyint(1)           DEFAULT 0 COMMENT '删除标记; 0 未删除；1 已删除',
-    created_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    updated_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    deleted_time datetime             DEFAULT '1970-01-01 08:00:00' COMMENT '删除时间',
-    KEY idx_role_id (role_id) USING BTREE,
-    KEY idx_permission_code (permission_code) USING BTREE,
-    UNIQUE KEY uk_role_id_permission_code (role_id, permission_code, deleted_flag, deleted_time)
-) ENGINE = innodb
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_unicode_ci
-  ROW_FORMAT = DYNAMIC COMMENT ='角色权限表';
 
 -- 消息通知表
 CREATE TABLE
@@ -173,6 +150,24 @@ CREATE TABLE
     IF NOT EXISTS t_cat
 (
     id           bigint PRIMARY KEY COMMENT '小猫id',
+    version      int NOT NULL COMMENT '版本号',
+    deleted_flag tinyint(1)           DEFAULT 0 COMMENT '删除标记, 0: 未删除,  1: 已删除',
+    created_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    deleted_time datetime                     DEFAULT  '1970-01-01 08:00:00' COMMENT '删除时间',
+    KEY idx_id_version (id, version) USING BTREE
+) ENGINE = innodb
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci
+  ROW_FORMAT = DYNAMIC COMMENT ='小猫信息表';
+
+  -- 小猫信息版本表
+CREATE TABLE
+    IF NOT EXISTS t_cat_version
+(
+    id           bigint PRIMARY KEY COMMENT '小猫信息版本id',
+    version      int NOT NULL COMMENT '版本号',
+    cat_id       bigint NOT NULL COMMENT '小猫id',
     name         varchar(64) NOT NULL COMMENT '小猫名称',
     gender       tinyint(1)  DEFAULT 0 COMMENT '性别, 0: 未知, 1: 弟弟, 2: 妹妹',
     cat_type     tinyint(1) DEFAULT 0 COMMENT '类型, 0: 未知, 1: 流浪猫, 2: 我的小猫',
@@ -206,7 +201,7 @@ CREATE TABLE
     IF NOT EXISTS t_cat_image
 (
     id           bigint PRIMARY KEY COMMENT '关联id',
-    cat_id   bigint NOT NULL COMMENT '小猫id',
+    cat_id   bigint NOT NULL COMMENT '小猫版本id',
     image    varchar(500) NOT NULL COMMENT '图片url',
     deleted_flag tinyint(1)           DEFAULT 0 COMMENT '删除标记, 0: 未删除,  1: 已删除',
     created_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -225,6 +220,24 @@ CREATE TABLE
     IF NOT EXISTS t_post
 (
     id           bigint PRIMARY KEY COMMENT '发布信息id',
+    version      int NOT NULL COMMENT '版本号',
+    deleted_flag tinyint(1)           DEFAULT 0 COMMENT '删除标记, 0: 未删除,  1: 已删除',
+    created_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    deleted_time datetime                     DEFAULT  '1970-01-01 08:00:00' COMMENT '删除时间',
+    KEY idx_id_version (id, version) USING BTREE
+) ENGINE = innodb
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci
+  ROW_FORMAT = DYNAMIC COMMENT ='发布内容表';
+
+  -- 发布内容版本表
+CREATE TABLE
+    IF NOT EXISTS t_post_version
+(
+    id           bigint PRIMARY KEY COMMENT '发布信息版本id',
+    version      int NOT NULL COMMENT '版本号',
+    post_id      bigint NOT NULL COMMENT '发布id',
     title         varchar(64) NOT NULL COMMENT '标题',
     post_type  tinyint(1) NOT NULL COMMENT '发布类型, 1: 领养, 2: 寻猫, 3: 日常, 4: 求助',
     province_id  bigint DEFAULT NULL COMMENT '省份id',
@@ -313,7 +326,7 @@ CREATE TABLE
 (
     id           bigint PRIMARY KEY COMMENT '关联id',
     post_id   bigint NOT NULL COMMENT '发布id',
-    cat_id       bigint NOT NULL COMMENT '小猫id',
+    cat_id       bigint NOT NULL COMMENT '小猫版本id',
     deleted_flag tinyint(1)           DEFAULT 0 COMMENT '删除标记, 0: 未删除,  1: 已删除',
     created_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     updated_time datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
